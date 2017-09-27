@@ -48,7 +48,7 @@ export default class BaseComponent extends React.Component {
       webHttp,
       ...help,
       toast: (msg) => {
-        Toast.info(msg, 1, null, false);
+        Toast.info(msg || '未知错误', 1, null, false);
       },
       routerRedux,
     };

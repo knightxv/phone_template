@@ -77,14 +77,16 @@ const itemRender = (current, type, originalElement) => {
   return originalElement;
 };
 
-const DefalutTable = ({ dataSource, ...props }) => {
+const DefalutTable = ({ dataSource, columns, ...props }) => {
   const resolveDataSource = dataSource.map((item, i) => ({ key: i, ...item }));
   return (
     <Table
       pagination={{
         itemRender,
       }}
+
       dataSource={resolveDataSource}
+      columns={columns.map(item => ({ ...item, className: 'tableCol' }))}
       {...props}
     />
   );

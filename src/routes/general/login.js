@@ -38,8 +38,8 @@ class Login extends BaseComponent {
   render() {
     const { loginLoading } = this.state;
     return (
-      <div className="alignCenterContainer">
-        <Title>总代理登录</Title>
+      <div className="alignCenterContainer" style={{ maxWidth: 750 }}>
+        <Title>合伙人登陆</Title>
         <div className="contentContainer">
           <div className={styles.logoWrap}>
             <IconImg className={styles.logo} src={logoSource} />

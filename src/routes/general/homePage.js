@@ -71,7 +71,7 @@ class HomePage extends BaseComponent {
       commissionOfToday, // 今日提成（元）
       commissionOfYesterDay,
      } = this.props;
-    const canCashCountFloat = parseFloat(canCashCount / 100);
+    const canCashCountFloat = parseFloat(canCashCount / 100).toFixed(2);
     const commissionByAgentFloat = parseFloat(commissionByAgent / 100);
     const commissionOfTodayFloat = parseFloat(commissionOfToday / 100);
     const commissionOfYesterDayFloat = parseFloat(commissionOfYesterDay / 100);
@@ -80,7 +80,7 @@ class HomePage extends BaseComponent {
     const noticeHtml = this.helps.createMarkup(notice);
     return (
       <div className="alignCenterContainer">
-        <Title>总代理商</Title>
+        <Title>合伙人</Title>
         <WingBlank className={`${styles.optionBtnWrap} borderBottom`}>
           <div className={styles.title}></div>
           <FlexRow>

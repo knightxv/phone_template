@@ -101,6 +101,11 @@ export default {
                 cashCount: 34, // 提现金额
                 result: 0, // 0待审核 1已通过 2已拒绝
             },
+            {
+                createTime: 1506498557344, //提取时间（时间戳）
+                cashCount: 34, // 提现金额
+                result: 0, // 0待审核 1已通过 2已拒绝
+            },
         ]
     },
 

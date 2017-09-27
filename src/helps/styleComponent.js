@@ -44,7 +44,7 @@ exports.Flex = styled.div`
 `;
 
 exports.WingBlank = styled.div`
-    padding: 8px 10px;
+    padding: 8px 12px;
 `;
 
 exports.WhiteSpace = styled.div`

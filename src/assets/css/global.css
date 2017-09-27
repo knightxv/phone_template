@@ -61,6 +61,9 @@ html{font-size: 40px;}
     margin: 6px 6px 0;
     cursor: pointer;
 }
+:global(.tableCol) {
+    text-align: center!important;
+}
 
 @media screen and (max-width: 768px) {
     :global(.contentContainer) {

@@ -58,9 +58,9 @@ class MyAgents extends BaseComponent {
     const { tableData } = this.state;
     return (
       <div className="background">
-        <Title>我的代理</Title>
+        <Title>我的下级代理</Title>
         <NavBar
-          title="我的代理"
+          title="我的下级代理"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
         <Table

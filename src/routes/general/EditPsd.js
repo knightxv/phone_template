@@ -47,10 +47,10 @@ class EditPsd extends BaseComponent {
     const { editLoading } = this.state;
     return (
       <div className="alignCenterContainer">
-        <Title>总代理登录</Title>
+        <Title>修改密码</Title>
         <div className="contentContainer">
           <NavBar
-            title="总代理登录"
+            title="修改密码"
             onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
           />
           <div>
@@ -81,7 +81,7 @@ class EditPsd extends BaseComponent {
             </FlexRow>
           </div>
           <WhiteSpace />
-          <Button className={styles.editBtn} loading={editLoading} onClick={this.editPsd}>登录</Button>
+          <Button className={styles.editBtn} loading={editLoading} onClick={this.editPsd}>修改</Button>
         </div>
       </div>
     );

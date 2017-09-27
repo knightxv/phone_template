@@ -56,15 +56,18 @@ class CashRecord extends BaseComponent {
   }
   render() {
     const { tableData } = this.state;
+    const sortTableData = tableData.sort((item1, item2) => {
+      return item2.createTime - item1.createTime;
+    });
     return (
       <div className="background">
-        <Title>提现</Title>
+        <Title>合伙人提成记录</Title>
         <NavBar
-          title="提现记录"
+          title="合伙人提成记录"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
         <Table
-          dataSource={tableData}
+          dataSource={sortTableData}
           columns={columns}
         />
       </div>

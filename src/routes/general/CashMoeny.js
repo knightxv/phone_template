@@ -89,19 +89,21 @@ class CashMoeny extends BaseComponent {
       wechatNumber: wechat_acc,
       cashCount,
     };
+    if (!isNaN(cashCount)) {
+      this.helps.toast('输入的提现金额格式错误');
+      return false;
+    }
     const res = await this.helps.webHttp.get('/spreadApi/general/cash', params);
     if (res.isSuccess) {
       this.helps.toast(res.info || '提现成功');
       this.props.dispatch(this.helps.routerRedux.goBack());
     } else {
-      this.helps.toast(res.message);
+      this.helps.toast(res.info);
     }
     // 更新用户数据
     const updateRes = await this.helps.webHttp.get('/spreadApi/general/getUserInfo');
     if (updateRes.isSuccess) {
       this.props.dispatch({ type: 'general/updateInfo', payload: { ...updateRes.data } });
-    } else {
-      this.helps.toast(updateRes.message);
     }
   }
   render() {
@@ -209,10 +211,10 @@ class CashMoeny extends BaseComponent {
             onClick={this.cashMoeny}
             size="large"
           >
-          申请代理
+          确认提取
           </Button>
         </Flex>
-        <p className={styles.countTip}>工作日9:00-18:00可提现1次</p>
+        <p className={styles.countTip}>每个工作日9:00-18:00最多可提现1次</p>
       </div>
     );
   }
