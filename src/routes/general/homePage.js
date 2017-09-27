@@ -140,8 +140,9 @@ class HomePage extends BaseComponent {
               </FlexRow>
             </WingBlank>
           </Col>
-          <Col xs={24} sm={12}>
-            <WingBlank>
+          <Col xs={24} sm={12} style={{ background: '#f8f8f8' }}>
+            <WhiteSpace className={styles.priceWhiteSpace} />
+            <WingBlank className={styles.priceModuleWrap}>
               <TitleIcon />推广人数奖励（元）
               <p><span className={styles.priceMoeny}>{ prizeByExtensionFloat }</span>元</p>
             </WingBlank>

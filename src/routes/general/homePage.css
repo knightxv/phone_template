@@ -83,7 +83,12 @@
     padding: 10px 20px;
     border-bottom: 1px solid #dedede;
 }
-
+.priceWhiteSpace {
+    display: none;
+}
+.priceModuleWrap {
+    background: none;
+}
 /* 小屏 */
 @media screen and (max-width: 768px) {
     .title {
@@ -134,6 +139,12 @@
     }
     .itemContainer {
         padding: 0px;
+        background: #fff;
+    }
+    .priceWhiteSpace {
+        display: block;
+    }
+    .priceModuleWrap {
         background: #fff;
     }
 }
