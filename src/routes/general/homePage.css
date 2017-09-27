@@ -1,0 +1,139 @@
+
+.title {
+    font-size: 28px;
+    color: #242424;
+}
+.notice {
+    text-indent: 28px;
+}
+.noticeTitle {
+    padding: 0 0 10px;
+}
+.borderDashRight {
+    border-right: 1px dashed #8B8181;
+}
+.optionBtn {
+    cursor: pointer;
+}
+.optionBtnWrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px 6px;
+}
+
+.inviteOptionWrap {
+    padding: 8px 0;
+}
+
+.agentOptionBtnWrap {
+    justify-content: flex-end;
+}
+
+.priceMoeny {
+    padding: 8px 6px;
+    font-size: 24px;
+    color: #fecd84;
+}
+
+.prizeWrap {
+    /* border-bottom: 1px solid #dedede; */
+}
+
+.priceItem {
+    flex: 1;
+    text-align: center;
+}
+
+.cashBtn {
+    margin: 0 3px;
+}
+
+.optionBtn {
+    margin: 0 6px;
+    color: #1E7DF1;
+}
+
+.cashWrap {
+    display: flex;
+    justify-content: flex-start;
+    padding: 16px 0;
+}
+.commissionCountText {
+    color: #fc4747;
+}
+.commissionTip {
+    color: #9e9e9e;
+}
+.inviteCodeOptionWrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.agentOptionBtn {
+    background: #108ee9;
+    cursor: pointer;
+    color: #fff;
+    padding: 6px;
+    border-radius: 3px;
+    margin: 0 6px;
+}
+.itemContainer {
+    padding: 10px 20px;
+    border-bottom: 1px solid #dedede;
+}
+
+/* 小屏 */
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: 0px;
+    }
+    .notice {
+        padding: 10px;
+    }
+    .noticeTitle {
+        padding: 10px 0 0 10px;
+    }
+    .borderDashRight {
+        border-right: none;
+    }
+    .agentOptionBtnWrap {
+        justify-content: center;
+    }
+    .inviteOptionWrap {
+        border-bottom: 1px solid #dedede;
+    }
+
+    .prizeWrap {
+        border-bottom: 1px solid #dedede;
+    }
+    .priceItem {
+        border-right: 1px solid #dedede;
+    }
+    .cashWrap {
+        justify-content: space-between;
+        padding: 0;
+    }
+
+    .optionBtnWrap {
+        background: #fff;
+    }
+    .agentOptionBtn {
+        background: none;
+        color: #1E7DF1;
+        flex: 1;
+        text-align: center;
+    }
+    .phoneBorderRight {
+        border-right: 1px solid #dedede;
+    }
+
+    .inviteCodeOptionWrap {
+        justify-content: space-between;
+    }
+    .itemContainer {
+        padding: 0px;
+        background: #fff;
+    }
+}

@@ -1,0 +1,46 @@
+
+.gameItemContainer {
+    padding: 0.3rem 0.1rem;
+}
+
+.gameItemWrap {
+    margin-bottom: 0.3rem;
+}
+
+.gameInfoWrap {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.2rem;
+    justify-content: space-between;
+    align-self: stretch;
+}
+
+.gameIcon {
+    width: 1.4rem;
+    height: 1.4rem;
+    display: block;
+}
+
+.gameName {
+    color: #0E90D2;
+    cursor: pointer;
+}
+
+.gameInfo {
+    font-size: 0.3rem;
+    color: #999;
+    padding-bottom: 0.1rem;
+}
+
+.recommendIcon {
+    width: 0.64rem;
+    height: 0.28rem;
+    display: block;
+}
+
+.startIcon {
+    display: block;
+    margin-top: 0.2rem;
+    width: 1.26rem;
+    height: 0.22rem;
+}

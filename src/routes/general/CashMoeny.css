@@ -1,0 +1,32 @@
+
+.itemWrap {
+    padding: 10px 8px;
+}
+
+.label {
+    padding: 0 6px;
+}
+
+.tip {
+    padding: 6px 6px 0;
+}
+
+.cashBtn {
+    width: 100%;
+    flex: 1;
+    display: block;
+    margin: 10px 15px;
+}
+
+.countTip {
+    text-align: right;
+    padding: 0 16px;
+}
+
+/* 小屏 */
+@media screen and (max-width: 768px) {
+    .itemWrap {
+        border-bottom: 1px solid #dedede;
+        background: #fff;
+    }
+}

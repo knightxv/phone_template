@@ -1,0 +1,69 @@
+html{font-size: 40px;}
+@media only screen and (min-width: 320px) and (max-width:420px){html{font-size: 40px;}}
+@media only screen and (min-width: 420px) and (max-width:640px){html{font-size: 45px;}}
+@media only screen and (min-width: 640px){html{font-size: 50px;}}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: '微软雅黑','Microsoft Yahei','hiragino sans gb w3','Arial';
+    outline: none;
+    font-size: 14px;
+}
+:global(#root) {
+    min-height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* margin-bottom: -2rem; */
+    box-sizing: border-box;
+    /* overflow: hidden; */
+}
+:global(.routerContainer) {
+    background: #f8f8f8;
+    flex: 1;
+}
+:global(.container) {
+    background: #f2f2f2;
+    flex: 1;
+}
+:global(.background) {
+    background: #fff;
+}
+:global(.alignCenterContainer) {
+    flex: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    background: #f8f8f8;
+    height: 100%;
+}
+:global(.contentContainer) {
+    padding: 0 8px;
+    background: none;
+    height: 100%;
+}
+
+:global(.borderTop) {
+    border-top: 0.02rem solid #dedede;
+}
+:global(.borderRight) {
+    border-right: 0.02rem solid #dedede;
+}
+:global(.borderBottom) {
+    border-bottom: 1px solid #dedede;
+}
+:global(.moneyColor) {
+    color: #fecd84;
+}
+:global(.return_icon) {
+    padding: 6px 6px 0;
+    margin: 6px 6px 0;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    :global(.contentContainer) {
+        background: #fff;
+    }
+}

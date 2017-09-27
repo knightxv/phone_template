@@ -1,0 +1,42 @@
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.verifyBtn {
+    background: #0E90D2;
+    color: #fff;
+    line-height: 42px;
+    height: 42px;
+    padding: 0 10px;
+    border-radius: 0.1rem;
+}
+
+.verifyCodeBtnContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+}
+
+.verifyCodeBtn {
+    margin-left: 0px;
+}
+
+.ageenBtn {
+    color: #0E90D2!important;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.checkbox {
+    width: 15px;
+    height: 15px;
+    display: block;
+}
+
+.agreenWrap {
+    display: flex;
+    align-items: center;
+}

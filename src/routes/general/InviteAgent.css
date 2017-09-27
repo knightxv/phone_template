@@ -1,0 +1,17 @@
+
+.linkText {
+    color: #3EC0F8;
+    margin-right: 16px;
+}
+
+.linkInfoWrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* @media screen and (max-width: 768px) {
+    .linkInfoWrap {
+        justify-content: space-between;
+    }
+} */

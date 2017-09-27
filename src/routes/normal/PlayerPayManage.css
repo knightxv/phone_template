@@ -1,0 +1,29 @@
+
+.itemWrap {
+    border: 1px solid #dedede;
+    padding: 20px 20px;
+    font-size: 18px;
+}
+
+.link {
+    border: 1px solid #dedede;
+    padding: 10px 10px;
+    color: #0E90D2;
+}
+
+.tip {
+    color: red;
+    text-indent: 10px;
+    font-size: 14px;
+    padding: 0 6px;
+}
+
+.buttonItemWrap {
+    padding: 10px 0px;
+    display: flex;
+    margin-left: 20px;
+    justify-content: left;
+}
+.linkBtn {
+    margin-right: 20px;
+}
