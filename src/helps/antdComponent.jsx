@@ -33,7 +33,7 @@ import styled from 'styled-components';
 
 const DefaultButton = (props) => {
   return (
-    <Button type="primary" {...props} />
+    <Button type="primary" size="large" {...props} />
   );
 };
 
@@ -84,25 +84,36 @@ const DefalutTable = ({ dataSource, columns, ...props }) => {
       pagination={{
         itemRender,
       }}
-
       dataSource={resolveDataSource}
       columns={columns.map(item => ({ ...item, className: 'tableCol' }))}
       {...props}
     />
   );
 };
-const DefaultNavbar = ({ title, ...props }) => {
+
+const NavBarWrap = styled.div`
+  display: flex;
+  height: 45px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+`;
+
+const DefaultNavbar = ({ title, onClick }) => {
   const sys = system();
   if (sys === 'PC') {
     return null;
   }
   return (
-    <div>
-      <NavBar
-        mode="light"
-        {...props}
-      >{title}</NavBar>
-    </div>
+    <NavBarWrap onClick={onClick}>
+      <DefaultIcon
+        type="left"
+        color="#108ee9"
+      />
+      <div style={{ fontSize: 18 }}>{title}</div>
+      <div style={{ width: 36 }} />
+    </NavBarWrap>
   );
 };
 

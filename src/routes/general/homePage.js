@@ -111,7 +111,7 @@ class HomePage extends BaseComponent {
                 </WingBlank>
               </div>
             </Col>
-            <Col xs={24} sm={12} className={styles.inviteOptionWrap}>
+            <Col xs={24} sm={12} className={styles.inviteOptionWrap} style={{ border: 'none' }}>
               <FlexRow className={styles.agentOptionBtnWrap}>
                 <div className={`${styles.agentOptionBtn} ${styles.phoneBorderRight}`} onClick={this.navigateToLookMyAgents}>我的下级代理</div>
                 <div className={styles.agentOptionBtn} onClick={this.navigateToInviteAgents}>邀请成为代理</div>
@@ -162,6 +162,7 @@ class HomePage extends BaseComponent {
             </WingBlank>
           </Col>
         </Row>
+        <WhiteSpace />
       </div>
     );
   }

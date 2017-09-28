@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { province as provinceData, city as cityData } from '@/data/position';
 import styles from './CashMoeny.css';
-import { Input, Select, Button, Icon, NavBar } from '../../helps/antdComponent';
+import { Input, Select, Button, NavBar } from '../../helps/antdComponent';
 import BaseComponent from '../../helps/BaseComponent';
 import { FlexRow, Flex, WhiteSpace, Title } from '../../helps/styleComponent';
 
@@ -89,7 +89,7 @@ class CashMoeny extends BaseComponent {
       wechatNumber: wechat_acc,
       cashCount,
     };
-    if (!isNaN(cashCount)) {
+    if (isNaN(cashCount)) {
       this.helps.toast('输入的提现金额格式错误');
       return false;
     }
@@ -111,6 +111,8 @@ class CashMoeny extends BaseComponent {
     const filterCity = cityData.filter((item) => {
       return item.ProID === selectProId;
     });
+    const { canCashCount } = this.props;
+    const canCashCountFloat = parseFloat(canCashCount / 100).toFixed(2);
     return (
       <div className="alignCenterContainer">
         <Title>提现</Title>
@@ -203,7 +205,7 @@ class CashMoeny extends BaseComponent {
               value={cashCount}
             />
           </FlexRow>
-          <p className={styles.tip}>账号金额<span className="moneyColor">100元</span>(金额低于100元不可提取)</p>
+          <p className={styles.tip}>账号金额<span className="moneyColor">{canCashCountFloat}元</span>(金额低于100元不可提取)</p>
         </div>
         <Flex>
           <Button

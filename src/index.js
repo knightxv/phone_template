@@ -7,7 +7,6 @@ import Promise from 'promise';
 // import { useRouterHistory } from 'dva/router';
 // import { createHashHistory } from 'history';
 
-
 import './assets/css/global.css';
 import './index.css';
 import './assets/css/normal.css';

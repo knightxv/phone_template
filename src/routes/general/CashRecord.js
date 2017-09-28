@@ -61,9 +61,9 @@ class CashRecord extends BaseComponent {
     });
     return (
       <div className="background">
-        <Title>合伙人提成记录</Title>
+        <Title>提现记录</Title>
         <NavBar
-          title="合伙人提成记录"
+          title="提现记录"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
         <Table

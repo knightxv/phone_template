@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import styles from './MyAgents.css';
 import BaseComponent from '../../helps/BaseComponent';
 import { Table, NavBar } from '../../helps/antdComponent';
-import { Title } from '../../helps/styleComponent';
+import { Title, WingBlank } from '../../helps/styleComponent';
 
 
 const columns = [
@@ -56,6 +56,19 @@ class MyAgents extends BaseComponent {
   }
   render() {
     const { tableData } = this.state;
+    const agentNumber = tableData.length;
+    const allRechargeCount = tableData.reduce((beforeVal, currentVal) => {
+      return beforeVal + currentVal.allRechargeCount;
+    }, 0);
+    const rechargeCountOfToday = tableData.reduce((beforeVal, currentVal) => {
+      return beforeVal + currentVal.rechargeCountOfToday;
+    }, 0);
+    const CommissionOfAll = tableData.reduce((beforeVal, currentVal) => {
+      return beforeVal + currentVal.CommissionOfAll;
+    }, 0);
+    const CommissionOfToday = tableData.reduce((beforeVal, currentVal) => {
+      return beforeVal + currentVal.CommissionOfToday;
+    }, 0);
     return (
       <div className="background">
         <Title>我的下级代理</Title>
@@ -67,6 +80,10 @@ class MyAgents extends BaseComponent {
           dataSource={tableData}
           columns={columns}
         />
+        <WingBlank style={{ textAlign: 'center', fontSize: 12 }}>
+          {`我的下级代理：${agentNumber}人　总充值：${allRechargeCount}元
+          　今日充值：${rechargeCountOfToday}元　总提成：${CommissionOfAll}元　今日提成：${CommissionOfToday}元`}
+        </WingBlank>
       </div>
     );
   }

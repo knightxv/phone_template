@@ -2,7 +2,7 @@ import { connect } from 'dva';
 import styles from './login.css';
 import BaseComponent from '../../helps/BaseComponent';
 import { Input, Button } from '../../helps/antdComponent';
-import { Title, IconImg, WhiteSpace } from '../../helps/styleComponent';
+import { Title, IconImg, WhiteSpace, FlexRow } from '../../helps/styleComponent';
 
 const logoSource = require('../../assets/adang_logo.png');
 
@@ -46,21 +46,25 @@ class Login extends BaseComponent {
             <span className={styles.logoTitle}>阿当比鸡合伙人</span>
           </div>
           <div>
-            <Input
-              className={styles.loginInput}
-              onChange={(event) => this.setState({ loginID: event.target.value })}
-              placeholder="请输入账号名/姓名"
-            />
-            <Input
-              className={styles.loginInput}
-              type="password"
-              placeholder="请输入密码"
-              onPressEnter={this.login}
-              onChange={(event) => this.setState({ password: event.target.value })}
-            />
+            <FlexRow className={styles.loginInput}>
+              <p className={styles.inputLable}>账号:</p>
+              <Input
+                onChange={(event) => this.setState({ loginID: event.target.value })}
+                placeholder="请输入账号名/姓名"
+              />
+            </FlexRow>
+            <FlexRow className={styles.loginInput}>
+              <p className={styles.inputLable}>密码:</p>
+              <Input
+                type="password"
+                placeholder="请输入密码"
+                onPressEnter={this.login}
+                onChange={(event) => this.setState({ password: event.target.value })}
+              />
+            </FlexRow>
           </div>
           <WhiteSpace />
-          <Button className={styles.loginBtn} loading={loginLoading} onClick={this.login}>登录</Button>
+         <Button className={styles.loginBtn} loading={loginLoading} onClick={this.login}>登录</Button>
         </div>
       </div>
     );

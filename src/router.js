@@ -36,9 +36,9 @@ function RouterConfig({ history, app }) {
 
           {/* <Route path="/homePage" component={NormalHomePage} /> */}
           {/* <Route path="/login" component={NormalLogin} /> */}
+          {/* <Route path="/register" component={Register} /> */}
 
           <Route path="/general/login" component={Login} />
-          {/* <Route path="/register" component={Register} /> */}
           <Route path="/general/homePage" component={GeneralHomePage} />
 
           <Route path="/general/inviteAgent" component={InviteAgent} />

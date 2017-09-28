@@ -51,6 +51,9 @@ class CommissionRecord extends BaseComponent {
   }
   render() {
     const { tableData } = this.state;
+    const sortTableData = tableData.sort((item1, item2) => {
+      return item2.agentRechargeTime - item1.agentRechargeTime;
+    });
     return (
       <div className="background">
         <Title>提成记录</Title>
@@ -59,7 +62,7 @@ class CommissionRecord extends BaseComponent {
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
         <Table
-          dataSource={tableData}
+          dataSource={sortTableData}
           columns={columns}
         />
       </div>
