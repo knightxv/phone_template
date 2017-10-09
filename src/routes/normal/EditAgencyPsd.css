@@ -1,8 +1,14 @@
 
-.inputContainer {
-    padding: 10px 0;
+.inputLabel {
+    padding: 0 6px;
 }
 
-.inputLabel {
-    padding: 0 20px;
+.editBtn {
+    width: 100%;
+    display: block;
+    margin-top: 8px;
+}
+
+.inputWrap {
+    margin-top: 12px;
 }

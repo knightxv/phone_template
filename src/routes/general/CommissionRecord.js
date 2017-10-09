@@ -15,10 +15,10 @@ const columns = [
     dataIndex: 'agentCode',
   },
   {
-    title: '提成金额',
+    title: '提成金额/元',
     dataIndex: 'commissionCount',
     render: (text) => {
-      return parseFloat(text / 100);
+      return parseFloat(text / 100).toFixed(2);
     },
   },
   {

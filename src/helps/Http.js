@@ -77,6 +77,7 @@ const defaultOption = {
   },
   onGetHttpConfigSuccess: (config) => {  // 请求config数据成功
   },
+  resolveConfig: null, // 重新设置config
   onGetHttpConfigFail: () => {  // 请求config数据失败
   },
    // 得到response进行处理（当中间键用）
@@ -127,14 +128,15 @@ class Http {
     if (this.httpConfig) {
       return this.httpConfig;
     }
-    const { getConfigUrl } = this.configOption;
+    const { getConfigUrl, resolveConfig } = this.configOption;
     return new Promise((resolve) => {
       fetch(getConfigUrl)
         .then(parseJSON)
         .then(async (config) => {
-          self.httpConfig = config;
           await self._onGetConfigSuccess(config);
-          resolve(config);
+          const reConfig = isFunction(resolveConfig) ? resolveConfig(config) : config;
+          self.httpConfig = reConfig;
+          resolve(reConfig);
         })
         .catch(async () => {
           await self._onGetConfigFail();

@@ -1,16 +1,15 @@
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 
-import { Title, Toast } from '../utils/help';
+import { Button, NavBar } from '@/helps/antdComponent';
+import { NetImg, BaseFont, Title } from '@/helps/styleComponent';
+import BaseComponent from '@/helps/BaseComponent';
 import styles from './AgencyPay.css';
-import { BackgroundContainer, NetImg, Button, BaseFont } from '../utils/styleComponent';
-import http from '../utils/http';
 
 // const goodsIds = [1, 2, 3, 4, 5, 6];
 // const goodsSourceArr = goodsIds.map(index => require(`../resource/shop/${index}.png`));
 
-class AgencyPay extends React.Component {
+class AgencyPay extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,7 +17,7 @@ class AgencyPay extends React.Component {
     };
   }
   async componentWillMount() {
-    const res = await http.get('/spreadApi/getMasonryGoods');
+    const res = await this.helps.webHttp.get('/spreadApi/getMasonryGoods');
     if (res.isSuccess) {
       this.setState({
         goods: res.data,
@@ -28,7 +27,7 @@ class AgencyPay extends React.Component {
   // 跳转到支付页面
   navigateToPay = async (shopId) => {
     // window.open(chargeURL, '_self');
-    this.props.dispatch(routerRedux.push({
+    this.props.dispatch(this.helps.routerRedux.push({
       pathname: '/AgencyPayType',
       query: {
         shopId,
@@ -43,19 +42,22 @@ class AgencyPay extends React.Component {
     const params = {
       goodsId: shopId,
     };
-    const res = await http.get('/spreadApi/balanceRecharge', params);
+    const res = await this.helps.webHttp.get('/spreadApi/balanceRecharge', params);
     if (res.isSuccess) {
-      Toast.info(res.message || '充值成功');
+      this.helps.toast(res.info || '充值成功');
       return false;
     }
-    Toast.info(res.message || '充值失败，请重试');
+    this.helps.toast(res.info || '充值失败，请重试');
   }
   render() {
     const { goods } = this.state;
     return (
-      <BackgroundContainer>
+      <div>
         <Title>充值</Title>
-        <div className="return_btn" onClick={() => this.props.dispatch(routerRedux.goBack())}>&lt;返回</div>
+        <NavBar
+          title="充值"
+          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+        />
         <div className={styles.goodsContainer}>
           {
             goods.map(({ shopId, goodsInfo, goodsIco }, i) => (
@@ -70,7 +72,7 @@ class AgencyPay extends React.Component {
             ))
           }
         </div>
-      </BackgroundContainer>
+      </div>
     );
   }
 }

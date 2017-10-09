@@ -38,7 +38,7 @@ class Login extends BaseComponent {
         <div className="contentContainer">
           <div className={styles.logoWrap}>
             <IconImg className={styles.logo} src={logoSource} />
-            <span className={styles.logoTitle}>阿当比鸡</span>
+            <span className={styles.logoTitle}>博饼</span>
           </div>
           <div>
             <Input

@@ -23,7 +23,7 @@ const columns = [
     title: '提现金额',
     dataIndex: 'cashCount',
     render: (text) => {
-      return parseFloat(text / 100);
+      return parseFloat(text / 100).toFixed(2);
     },
   },
   {

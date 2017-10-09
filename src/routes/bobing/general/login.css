@@ -1,10 +1,6 @@
 
-.container {
-    
-    
-}
 
-.registerWrap {
+.logoWrap {
     margin: 0px auto 0px;
     padding-top: 20px;
     display: flex;
@@ -24,12 +20,8 @@
         display: inline-block;
     }
 } */
-.registerInput {
+.loginInput {
     margin-top: 12px;
-}
-
-.verifyBtn {
-    margin: 0 6px;
 }
 
 .logoTitle {
@@ -38,7 +30,12 @@
     padding-left: 10px;
 }
 
-.registerBtn {
+.loginBtn {
+    margin-top: 8px;
     display: block;
     width: 100%;
+}
+
+.inputLable {
+    padding: 0 6px;
 }

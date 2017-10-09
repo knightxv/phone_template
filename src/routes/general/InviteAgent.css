@@ -1,13 +1,19 @@
 
 .linkText {
     color: #3EC0F8;
-    margin-right: 16px;
+    max-width: 80%;
+    white-space: normal;
+    word-break: break-all;
+    /* white-space:  */
 }
 
 .linkInfoWrap {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+.linkBtn {
+    margin-left: 10px;
 }
 
 /* @media screen and (max-width: 768px) {

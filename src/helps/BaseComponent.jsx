@@ -14,6 +14,8 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { window } from 'global';
 import { Toast } from './antdComponent';
+import * as TypeDefine from './typeDefine';
+import querystring from 'querystring';
 
 // import * as ToolComponents from './styleComponent';
 import Http from './Http';
@@ -21,13 +23,18 @@ import './config';
 import help from './help';
 
 const webHttpConfig = {
-  getConfigUrl: '/config.json',
+  getConfigUrl: '/config',
   httpConfigKey: 'JavaWebPublicServerUrl',
   isDebug: true,
   responseHandle(res) {
     if (res.status === 'failed' && res.code === 2) {
       Toast.info(res.info, 1, null, false);
-      window.location.href = '#/general/login';
+      const hash = window.location.hash;
+      if (/general\//.test(hash)) {
+        window.location.href = '#/general/login';
+      } else {
+        window.location.href = '#/login';
+      }
     }
   },
   webResolveResult(res, Response) {
@@ -37,6 +44,19 @@ const webHttpConfig = {
       return new Response(false, res.info);
     }
   },
+  resolveConfig(config) {
+    const url = config[webHttpConfig.httpConfigKey];
+    if (/^http:\/\//.test(url)) {
+      return config;
+    }
+    const resolveUrl = `http://${url}`;
+    const httpConfig = {
+      ...config,
+      [webHttpConfig.httpConfigKey]: resolveUrl,
+    };
+    window.httpConfig = httpConfig;
+    return httpConfig;
+  },
 };
 const webHttp = new Http(webHttpConfig);
 
@@ -44,15 +64,27 @@ export default class BaseComponent extends React.Component {
   constructor(props) {
     super(props);
     // 提供工具类
+    const resolveRouterReduxPush = (obj) => {
+      const isObj = Object.prototype.toString.call(obj) === '[object Object]';
+      if (isObj && obj.query) {
+        obj.search = help.queryString.stringify(obj.query);
+      }
+      return routerRedux.push(obj);
+    };
     this.helps = {
       webHttp,
       ...help,
       toast: (msg) => {
         Toast.info(msg || '未知错误', 1, null, false);
       },
-      routerRedux,
+      querystring,
+      routerRedux: {
+        ...routerRedux,
+        push: resolveRouterReduxPush,
+      },
     };
 
+    this.TypeDefine = TypeDefine;
 
     // this.attribute = {
     //   system: help.system(),

@@ -1,25 +1,24 @@
 import React from 'react';
 import { connect } from 'dva';
-import { WhiteSpace, WingBlank } from 'antd-mobile';
-import { routerRedux } from 'dva/router';
 
+import { Button, Input } from '@/helps/antdComponent';
+import BaseComponent from '@/helps/BaseComponent';
+import { WhiteSpace, WingBlank, FlexRow, BaseFont, IconImg, Title } from '@/helps/styleComponent';
 import styles from './Pay.css';
-import { BackgroundContainer, TextInput, FlexRow, BaseFont, Button, IconImg, PayTip } from '../utils/styleComponent';
-import http from '../utils/http';
-import { Toast, payType, payEnum, Title, isWechat } from '../utils/help';
 
-class Pay extends React.Component {
+class Pay extends BaseComponent {
   constructor(props) {
     super(props);
-    const query = this.props.location.query;
-    const { heroID = '', serverID = '', code, price = '' } = query;
+    const searchText = this.props.location.search.substr(1);
+    const query = this.helps.querystring.parse(searchText);
+    const { heroID = '', serverID = '', code, price = '' } = query;;
     this.code = code;
     if (heroID && serverID) {
       // 说明是从游戏端那边过来的
       this.heroID = heroID;
       this.serverID = serverID;
       this.price = price;
-      window.location.hash = location.hash.split('?')[0];
+      window.location.hash = window.location.hash.split('?')[0];
       this.disabledUserEditId = true; // 禁止用户编辑id
     }
     this.state = {
@@ -27,11 +26,10 @@ class Pay extends React.Component {
       money: price, // 充值金额
       diamond: '', // 钻石
       userName: '', // 用户名
-      avatar: '', //用户头像
+      avatar: '', // 用户头像
     };
     this.idTimer = null;
     this.moneyTimer = null;
-    // this.disabledUserEditId = false;
   }
   async componentWillMount() {
     if (!this.heroID) {
@@ -42,14 +40,14 @@ class Pay extends React.Component {
   }
   // 充值
   recharge = async (type) => {
-    const chargeType = payType(type);
+    const chargeType = this.helps.payType(type);
     // HeroID 玩家ID Diamond充值数量  TimeTick 充值时间
     const { heroID: HeroID, money } = this.state;
     // const { code: pid, serverID } = this.props.location.query;
     const pid = this.code;
     const serverID = this.serverID;
     if (!pid) {
-      Toast.info('代理不存在，请联系代理重新分享链接');
+      this.helps.toast('代理不存在，请联系代理重新分享链接');
       return false;
     }
     const params = {
@@ -59,9 +57,9 @@ class Pay extends React.Component {
       money,
       chargeType,
     };
-    const res = await http.get('/spreadApi/recharge_for_player', params);
+    const res = await this.helps.webHttp.get('/spreadApi/recharge_for_player', params);
     if (!res.isSuccess) {
-      Toast.info(res.message || '购买失败');
+      this.helps.toast(res.info || '购买失败');
       return false;
     }
     const chargeURL = res.data.chargeURL;
@@ -76,7 +74,7 @@ class Pay extends React.Component {
         return false;
       }
       // 获取头像和名称
-      const res = await http.get('/spreadApi/getPlayerInfoById', { heroID: val });
+      const res = await this.helps.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val });
       if (res.isSuccess) {
         const { userName, avatar } = res.data;
         this.setState({
@@ -84,7 +82,7 @@ class Pay extends React.Component {
           avatar,
         });
       } else {
-        Toast.info(res.message);
+        this.helps.toast(res.info);
       }
     }, 500);
     this.setState({
@@ -97,11 +95,11 @@ class Pay extends React.Component {
     this.moneyTimer = setTimeout(async () => {
       if (!val || isNaN(val)) {
         this.setState({
-          diamond: ''
+          diamond: '',
         });
         return false;
       }
-      const res = await http.get('/spreadApi/getDiamondsByMoney', { money: val });
+      const res = await this.helps.webHttp.get('/spreadApi/getDiamondsByMoney', { money: val });
       if (res.isSuccess) {
         this.setState({
           diamond: res.data.diamond,
@@ -115,62 +113,69 @@ class Pay extends React.Component {
   render() {
     const { userName, diamond, heroID, avatar, money } = this.state;
     const disabledUserEditId = !!this.disabledUserEditId; // 是否禁止用户输入
+    const payEnum = this.helps;
     return (
-      <BackgroundContainer>
+      <div className="alignCenterContainer">
         <Title>充值</Title>
-        <div className="alignCenterContainer">
-          <WingBlank size="md">
-            <WhiteSpace size="md" />
-            {
-              avatar &&
-              (
-                <IconImg className={styles.userAvatar} src={avatar} />
-              )
-            }
-            <FlexRow className={styles.inputContainer}>
-              <BaseFont className={styles.inputLabel}>ID　　</BaseFont>
-              <TextInput
-                onChange={this.idValChange}
-                placeholder="请输入六位ID号"
-                maxLength={11}
-                disabled={disabledUserEditId}
-                value={heroID}
-              />
-            </FlexRow>
-            <FlexRow className={styles.inputContainer}>
-              <BaseFont className={styles.inputLabel}>用户名</BaseFont>
-              <TextInput
-                placeholder="根据ID自动检测"
-                value={userName}
-                disabled
-              />
-            </FlexRow>
-            <FlexRow className={styles.inputContainer}>
-              <BaseFont className={styles.inputLabel}>金额　</BaseFont>
-              <TextInput
-                onChange={this.moneyValChange}
-                placeholder="请输入金额数"
-                disabled={disabledUserEditId}
-                maxLength={11}
-                value={money}
-              />
-            </FlexRow>
-            <FlexRow className={styles.inputContainer}>
-              <BaseFont className={styles.inputLabel}>钻石　</BaseFont>
-              <TextInput
-                placeholder="根据金额自动检测"
-                value={diamond}
-                disabled
-              />
-            </FlexRow>
-            <WhiteSpace size="lg" />
-            <Button onClick={() => this.recharge(payEnum.WECHAT)}>微信支付</Button>
-            <WhiteSpace size="md" />
-            <Button onClick={() => this.recharge(payEnum.ALI)}>支付宝支付</Button>
-          </WingBlank>
-        </div>
-      <a ref={node => {this.link = node}} href="http://www.baidu.com" target="_blank"></a>
-      </BackgroundContainer>
+        <WingBlank>
+          <WhiteSpace size="md" />
+          {
+            avatar &&
+            (
+              <IconImg className={styles.userAvatar} src={avatar} />
+            )
+          }
+          <FlexRow className={styles.inputContainer}>
+            <BaseFont className={styles.inputLabel}>ID　　</BaseFont>
+            <Input
+              onChange={ev => this.idValChange(ev.target.value)}
+              placeholder="请输入六位ID号"
+              maxLength={11}
+              disabled={disabledUserEditId}
+              value={heroID}
+            />
+          </FlexRow>
+          <FlexRow className={styles.inputContainer}>
+            <BaseFont className={styles.inputLabel}>用户名</BaseFont>
+            <Input
+              placeholder="根据ID自动检测"
+              value={userName}
+              disabled
+            />
+          </FlexRow>
+          <FlexRow className={styles.inputContainer}>
+            <BaseFont className={styles.inputLabel}>金额　</BaseFont>
+            <Input
+              onChange={ev => this.moneyValChange(ev.target.value)}
+              placeholder="请输入金额数"
+              disabled={disabledUserEditId}
+              maxLength={11}
+              value={money}
+            />
+          </FlexRow>
+          <FlexRow className={styles.inputContainer}>
+            <BaseFont className={styles.inputLabel}>钻石　</BaseFont>
+            <Input
+              placeholder="根据金额自动检测"
+              value={diamond}
+              disabled
+            />
+          </FlexRow>
+          <WhiteSpace size="lg" />
+          <Button
+            className={styles.payBtn}
+            onClick={() => this.recharge(payEnum.WECHAT)}
+          >
+          微信支付
+          </Button>
+          <Button
+            className={styles.payBtn}
+            onClick={() => this.recharge(payEnum.ALI)}
+          >
+          支付宝支付
+          </Button>
+        </WingBlank>
+      </div>
     );
   }
 }

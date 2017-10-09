@@ -1,37 +1,36 @@
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 
-import BootStrapTable from '../components/Table';
-import http from '../utils/http';
+import { Table, NavBar } from '@/helps/antdComponent';
+import { Title } from '@/helps/styleComponent';
+import BaseComponent from '@/helps/BaseComponent';
 import styles from './PlayerMoneyRecord.css';
-// import { FlexRow, Flex, BaseFont, Button } from '../utils/styleComponent';
-import { Toast, Title } from '../utils/help';
+// import { Toast, Title } from '../utils/help';
 
 const columns = [
   {
-    key: 'heroID',
+    dataIndex: 'heroID',
     title: '玩家ID',
     isKey: true,
   },
   {
-    key: 'diamond',
+    dataIndex: 'diamond',
     title: '充钻数量/个',
   },
   {
-    key: 'timeTick',
+    dataIndex: 'timeTick',
     title: '充值时间',
-    dataFormat: (cell) => {
-      if (isNaN(cell)) {
-        return cell;
+    render: (text) => {
+      if (isNaN(text)) {
+        return text;
       }
-      const resolveTime = new Date(cell);
+      const resolveTime = new Date(text);
       return resolveTime.format('yyyy/MM/dd');
     },
   },
 ];
 
-class PlayerMoneyRecord extends React.Component {
+class PlayerMoneyRecord extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,7 +39,7 @@ class PlayerMoneyRecord extends React.Component {
     this.tableData = [];
   }
   async componentWillMount() {
-    const res = await http.get('/spreadApi/rechargeRecordOfMenber');
+    const res = await this.helps.webHttp.get('/spreadApi/rechargeRecordOfMenber');
     if (res.isSuccess) {
       this.tableData = res.data;
     }
@@ -51,14 +50,17 @@ class PlayerMoneyRecord extends React.Component {
   render() {
     const tableData = this.tableData;
     const sortTableData = tableData.sort((item1, item2) => {
-      return item2.timeTick - item1.timeTick
+      return item2.timeTick - item1.timeTick;
     });
     return (
       <div className={styles.normal}>
         <Title>会员充值记录</Title>
-        <div className="return_btn" onClick={() => this.props.dispatch(routerRedux.goBack())}>&lt;返回</div>
-        <BootStrapTable
-          data={sortTableData}
+        <NavBar
+          title="会员充值记录"
+          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+        />
+        <Table
+          dataSource={sortTableData}
           columns={columns}
         />
       </div>

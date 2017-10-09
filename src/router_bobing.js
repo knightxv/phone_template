@@ -8,7 +8,7 @@ function RouterConfig({ history, app }) {
   // 普通代理
   const NormalLogin = dynamic({
     app,
-    component: () => import('./routes/normal/Login'),
+    component: () => import('./routes/bobing/normal/Login'),
     models: () => [
       import('./models/agent'),
     ],
@@ -121,7 +121,7 @@ function RouterConfig({ history, app }) {
   // 总代理
   const GeneralLogin = dynamic({
     app,
-    component: () => import('./routes/general/login'),
+    component: () => import('./routes/bobing/general/login'),
     models: () => [
       import('./models/general'),
     ],

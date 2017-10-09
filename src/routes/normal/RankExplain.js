@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 
+import { NavBar } from '@/helps/antdComponent';
+import { Title } from '@/helps/styleComponent';
+import BaseComponent from '@/helps/BaseComponent';
 import styles from './RankExplain.css';
-import http from '../utils/http';
-import { createMarkup } from '../utils/help';
-import { htmlTextType } from '../utils/typeDefine';
 
 // const htmlText = require('../page/rankExplain');
 
-class RankExplain extends React.Component {
+class RankExplain extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,9 +17,9 @@ class RankExplain extends React.Component {
   }
   async componentWillMount() {
     const params = {
-      type: htmlTextType.page_prizeExplain,
+      type: this.TypeDefine.htmlTextType.page_prizeExplain,
     };
-    const res = await http.get('/ddm/phone/api/getHtmlText', params, { type: 'WEB2' });
+    const res = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', params);
     if (res.isSuccess) {
       const { htmlText } = res.data;
       this.setState({
@@ -31,9 +30,13 @@ class RankExplain extends React.Component {
   render() {
     const { htmlText } = this.state;
     return (
-      <div >
-        <div className="return_btn" onClick={() => this.props.dispatch(routerRedux.goBack())}>&lt;返回</div>
-        <div className={styles.container} dangerouslySetInnerHTML={createMarkup(htmlText)} />
+      <div>
+        <Title>奖励说明</Title>
+        <NavBar
+          title="奖励说明"
+          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+        />
+        <div className={styles.container} dangerouslySetInnerHTML={this.helps.createMarkup(htmlText)} />
       </div>
     );
   }

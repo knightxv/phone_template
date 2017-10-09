@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 
-import BootStrapTable from '../components/Table';
-import http from '../utils/http';
+import BaseComponent from '@/helps/BaseComponent';
+import { Table, NavBar } from '@/helps/antdComponent';
+import { Title } from '@/helps/styleComponent';
 import styles from './AgencyExtractMoneyRecord.css';
-// import { FlexRow, BaseFont } from '../utils/styleComponent';
-import { Toast, Title } from '../utils/help';
 
 const statusMap = {
   0: '审核中',
@@ -16,22 +14,24 @@ const statusMap = {
 
 const columns = [
   {
-    key: 'cashCount',
+    dataIndex: 'cashCount',
     title: '提现金额',
+    render(text) {
+      return parseFloat(text / 100).toFixed(2);
+    },
   },
   {
-    key: 'result',
+    dataIndex: 'result',
     title: '审核状态',
-    dataFormat: (cell) => {
+    render: (cell) => {
       const statusVal = cell;
       return statusMap[statusVal];
     },
   },
   {
-    key: 'createTime',
-    isKey: true,
+    dataIndex: 'createTime',
     title: '申请提现时间',
-    dataFormat: (cell) => {
+    render: (cell) => {
       if (!isNaN(cell)) {
         const resolveTime = new Date(cell);
         return resolveTime.format('yyyy/MM/dd');
@@ -40,7 +40,7 @@ const columns = [
     },
   },
 ];
-class AgencyExtractMoneyRecord extends React.Component {
+class AgencyExtractMoneyRecord extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,39 +51,27 @@ class AgencyExtractMoneyRecord extends React.Component {
     this.serchInput = null;
   }
   async componentWillMount() {
-    const res = await http.get('/spreadApi/cashRecord');
+    const res = await this.helps.webHttp.get('/spreadApi/cashRecord');
     if (res.isSuccess) {
       this.tableData = res.data;
     } else {
-      Toast.info(res.message || '请求错误');
+      this.helps.toast(res.info || '请求错误');
     }
     this.setState({
       isLoaded: true,
     });
   }
   render() {
-    // const { isLoaded } = this.state;
     const tableData = this.tableData;
-    // this.tableData = [
-    //   {
-    //     cashCount: 12,
-    //     result: 2,
-    //     createTime: 'fdsfsd3232',
-    //   },
-    // ];
-    // const tableData = [
-    //   ...this.tableData,
-    //   ...this.tableData,...this.tableData,...this.tableData,...this.tableData,...this.tableData,
-    //   ...this.tableData,...this.tableData,...this.tableData,...this.tableData,...this.tableData,
-    //   ...this.tableData,...this.tableData,...this.tableData,...this.tableData,...this.tableData,
-    //   ...this.tableData,...this.tableData,...this.tableData,...this.tableData,...this.tableData,
-    // ];
     return (
-      <div className={styles.normal}>
+      <div>
         <Title>余额提现记录</Title>
-        <div className="return_btn" onClick={() => this.props.dispatch(routerRedux.goBack())}>&lt;返回</div>
-        <BootStrapTable
-          data={tableData}
+        <NavBar
+          title="余额提现记录"
+          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+        />
+        <Table
+          dataSource={tableData}
           columns={columns}
         />
       </div>

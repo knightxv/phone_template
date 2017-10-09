@@ -2,7 +2,7 @@
 export default {
     // 本地用
     'GET /config': {
-        JavaWebPublicServerUrl: 'http://192.168.1.100:8000'
+        JavaWebPublicServerUrl: '192.168.2.101:8000', // 192.168.1.108:8080
     },
 
     /*
@@ -463,7 +463,7 @@ data: {
 status: 'success',
 Msg: '',
 data: {
-  htmlText: '介绍代理有奖励：在申请代理时介绍人邀请码填写您的邀请码， 您将获得该代理永久充值10%钻石石奖励！详询美女客服5200', // 公告信息
+  htmlText: 'hehe', // 公告信息
 },
 },
 

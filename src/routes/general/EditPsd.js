@@ -40,7 +40,7 @@ class EditPsd extends BaseComponent {
       this.props.dispatch(this.helps.routerRedux.goBack());
       this.helps.toast('修改成功');
     } else {
-      this.helps.toast(res.message);
+      this.helps.toast(res.info);
     }
   }
   render() {

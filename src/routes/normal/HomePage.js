@@ -53,6 +53,7 @@ class HomePage extends BaseComponent {
       gameList: [],
       loaded: false,
       noticeInfo: '', // 公告信息
+      priceInfoVisible: false, // 奖励说明是否显示
     };
   }
   async componentWillMount() {
@@ -64,15 +65,23 @@ class HomePage extends BaseComponent {
         loaded: true,
       });
     } else {
-      this.helps.toast(res.message);
+      this.helps.toast(res.info);
     }
-    const params = { type: 2 }; // htmlTextType.notice_normalAgency
+    const params = { type: this.TypeDefine.htmlTextType.notice_normalAgency }; // htmlTextType.notice_normalAgency
     // 获取首页额外数据
     const extraRes = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', params);
     if (extraRes.isSuccess) {
       // const { rankTipVisible, noticeVisible, noticeInfo } = res.data;
       this.setState({
         noticeInfo: extraRes.data.htmlText,
+      });
+    }
+    // 获取奖励说明
+    const priceStatu = this.TypeDefine.htmlTextType.page_prizeExplain;
+    const priceRes = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', { type: priceStatu });
+    if (priceRes.isSuccess && priceRes.data.htmlText) {
+      this.setState({
+        priceInfoVisible: true,
       });
     }
   }
@@ -84,7 +93,7 @@ class HomePage extends BaseComponent {
     this.props.dispatch(this.helps.routerRedux.push('/login'));
   }
   render() {
-    const { loaded, noticeInfo } = this.state;
+    const { loaded, noticeInfo, priceInfoVisible } = this.state;
     const noticeVisible = !!noticeInfo;
     const { inviteCode, masonry, rechargeOfToday, rechargeOfYesterDay, canCashCount, cashCountlog, ranking } = this.props;
     if (!loaded) {
@@ -111,7 +120,9 @@ class HomePage extends BaseComponent {
           ? (<span>月销钻<span className={styles.rankTip}>排名为第{ranking}名</span></span>)
           : (<span>当月销钻石<span className={styles.rankTip}>排名为50名之后</span></span>)
         }
-          <a href="javascript:;" onClick={() => this.navigate('/RankExplain')}>（点击查看奖励说明）</a>
+        {
+          priceInfoVisible && (<a href="javascript:;" onClick={() => this.navigate('/RankExplain')}>（点击查看奖励说明）</a>)
+        }
         </BaseFont>
         )
       }

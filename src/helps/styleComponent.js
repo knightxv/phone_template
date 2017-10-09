@@ -48,7 +48,10 @@ exports.WingBlank = styled.div`
 `;
 
 exports.WhiteSpace = styled.div`
-    height: 12px;
+    height: 0px;
+    @media screen and (max-width: 768px) {
+        height: 12px;
+    }
 `;
 
 export const Title = ({ children }) => {
@@ -65,7 +68,8 @@ export const TitleIcon = styled.span`
   height: 14px;
   background: #108ee9;
   display: inline-block;
-  margin: 2px 3px 0 0px;
+  vertical-align: middle;
+  margin: -2px 3px 0 0px;
 `;
 
 /*
@@ -77,3 +81,10 @@ font-size: .5rem;
 text-align: center;
 `;
 
+exports.NetImg = ({ src, ...props }) => {
+    const imgPrefix = window.httpConfig ? window.httpConfig.JavaWebPublicServerUrl : '';
+    return (
+        <img src={`${imgPrefix}${src}`} {...props} />
+    );
+};
+  

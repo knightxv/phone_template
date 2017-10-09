@@ -5,7 +5,15 @@ const svgSpriteDirs = [
   // path.resolve(__dirname, 'src/my-project-svg-foler'),  // 业务代码本地私有 svg 存放目录
 ];
 export default {
-  "entry": "src/index.js",
+  // // 阿当比鸡
+  // "entry": "src/index.js",
+  // "publicPath": "/generalManage/adangbiji/",
+  // "outputPath": "./dist",
+  // 博饼
+  "entry": "src/bobing.js",
+  "publicPath": "/generalManage/bobing/",
+  "outputPath": "./bobing",
+
   "env": {
     "development": {
       "extraBabelPlugins": [
@@ -19,8 +27,6 @@ export default {
       ]
     }
   },
-  "publicPath": "/",
-  "outputPath": "./dist",
   "extraBabelPlugins": [
     ["module-resolver", {
       "root": ["./src"],

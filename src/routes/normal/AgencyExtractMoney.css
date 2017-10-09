@@ -1,44 +1,33 @@
-.container {
-    margin: 0 10px;
-    padding-bottom: 10px;
-}
-.inputContainer {
-    border-top: 1px solid #dedede;
-    padding: 10px 0;
+
+.itemWrap {
+    padding: 10px 8px;
 }
 
-.inputLabel {
-    padding-right: 3px;
-}
-
-.canCashTip {
-    padding: 10px 0px;
-}
-
-.cashTip {
-    color: red;
-    padding-left: 0px;
-}
-
-.selectItemPicker {
-    flex: 1;
-}
-.bankSelect {
-    font-size: 20px;
-    margin-left: 10px;
-    width: 70%;
-}
-
-.select {
-    font-size: 20px;
-    margin-left: 10px;
-    width: 90%;
-    margin-top: 10px;
+.label {
+    padding: 0 6px;
 }
 
 .tip {
-    color: #999;
-    font-size: 12px;
+    padding: 6px 6px 0;
+}
+
+.cashBtn {
+    width: 100%;
+    flex: 1;
+    display: block;
+    margin: 15px 15px;
+}
+
+.countTip {
     text-align: right;
-    padding-top: 6px;
+    padding: 0 16px;
+    color: #ababab;
+}
+
+/* 小屏 */
+@media screen and (max-width: 768px) {
+    .itemWrap {
+        border-bottom: 1px solid #dedede;
+        background: #fff;
+    }
 }

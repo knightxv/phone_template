@@ -16,8 +16,7 @@ class InviteAgent extends BaseComponent {
     };
     const winLoc = window.location;
     const { proxyid } = props;
-    this.registerLink = `http://${winLoc.hostname}:3001#/register?code=${proxyid}`; // test
-    // this.registerLink = `${winLoc.origin}/wechat/index.html#/register?code=${proxyid}`; // public
+    this.registerLink = `${winLoc.origin}${winLoc.pathname}#/register?code=${proxyid}`;
   }
   // navigateToInvite = () => {
   // }
@@ -44,6 +43,8 @@ class InviteAgent extends BaseComponent {
             <a
               href={registerLink}
               className={styles.linkText}
+              rel="noopener noreferrer"
+              target="_blank"
             >
               {registerLink}
             </a>

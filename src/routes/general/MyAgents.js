@@ -16,25 +16,31 @@ const columns = [
     dataIndex: 'agentInviteCode',
   },
   {
-    title: '总充值数',
+    title: '总充值数/元',
     dataIndex: 'allRechargeCount',
-  },
-  {
-    title: '今日的充值数',
-    dataIndex: 'rechargeCountOfToday',
-  },
-  {
-    title: '总提成金额',
-    dataIndex: 'CommissionOfAll',
-    render: (text) => {
-      return parseFloat(text / 100);
+    render(text) {
+      return parseFloat(text / 100).toFixed(2);
     },
   },
   {
-    title: '今日提成金额',
+    title: '今日的充值数/元',
+    dataIndex: 'rechargeCountOfToday',
+    render(text) {
+      return parseFloat(text / 100).toFixed(2);
+    },
+  },
+  {
+    title: '总提成金额/元',
+    dataIndex: 'CommissionOfAll',
+    render: (text) => {
+      return parseFloat(text / 100).toFixed(2);
+    },
+  },
+  {
+    title: '今日提成金额/元',
     dataIndex: 'CommissionOfToday',
     render: (text) => {
-      return parseFloat(text / 100);
+      return parseFloat(text / 100).toFixed(2);
     },
   },
 ];
@@ -60,15 +66,22 @@ class MyAgents extends BaseComponent {
     const allRechargeCount = tableData.reduce((beforeVal, currentVal) => {
       return beforeVal + currentVal.allRechargeCount;
     }, 0);
+    const allRechargeCountFloat = parseFloat(allRechargeCount / 100).toFixed(2);
+
     const rechargeCountOfToday = tableData.reduce((beforeVal, currentVal) => {
       return beforeVal + currentVal.rechargeCountOfToday;
     }, 0);
+    const rechargeCountOfTodayFloat = parseFloat(rechargeCountOfToday / 100).toFixed(2);
+
     const CommissionOfAll = tableData.reduce((beforeVal, currentVal) => {
       return beforeVal + currentVal.CommissionOfAll;
     }, 0);
+    const CommissionOfAllFloat = parseFloat(CommissionOfAll / 100).toFixed(2);
+
     const CommissionOfToday = tableData.reduce((beforeVal, currentVal) => {
       return beforeVal + currentVal.CommissionOfToday;
     }, 0);
+    const CommissionOfTodayFloat = parseFloat(CommissionOfToday / 100).toFixed(2);
     return (
       <div className="background">
         <Title>我的下级代理</Title>
@@ -81,8 +94,8 @@ class MyAgents extends BaseComponent {
           columns={columns}
         />
         <WingBlank style={{ textAlign: 'center', fontSize: 12 }}>
-          {`我的下级代理：${agentNumber}人　总充值：${allRechargeCount}元
-          　今日充值：${rechargeCountOfToday}元　总提成：${CommissionOfAll}元　今日提成：${CommissionOfToday}元`}
+          {`我的下级代理：${agentNumber}人　总充值：${allRechargeCountFloat}元
+          　今日充值：${rechargeCountOfTodayFloat}元　总提成：${CommissionOfAllFloat}元　今日提成：${CommissionOfTodayFloat}元`}
         </WingBlank>
       </div>
     );

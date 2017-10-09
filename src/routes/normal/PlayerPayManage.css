@@ -1,8 +1,7 @@
 
 .itemWrap {
     border: 1px solid #dedede;
-    padding: 20px 20px;
-    font-size: 18px;
+    padding: 10px 10px;
 }
 
 .link {
@@ -15,7 +14,7 @@
     color: red;
     text-indent: 10px;
     font-size: 14px;
-    padding: 0 6px;
+    padding: 8px 6px;
 }
 
 .buttonItemWrap {
@@ -26,4 +25,22 @@
 }
 .linkBtn {
     margin-right: 20px;
+}
+
+
+.linkText {
+    color: #3EC0F8;
+    max-width: 80%;
+    white-space: normal;
+    word-break: break-all;
+    /* white-space:  */
+}
+
+.linkInfoWrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.linkBtn {
+    margin-left: 10px;
 }

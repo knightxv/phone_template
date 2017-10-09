@@ -65,7 +65,7 @@ export default {
       let isCountEnd = false;
       while (!isCountEnd) {
         const state = yield select();
-        const elseTime = state.app.getVerifyCodeElseTime;
+        const elseTime = state.agent.getVerifyCodeElseTime;
         if (elseTime > 0) {
           yield delay(1000);
           yield put({
@@ -82,6 +82,12 @@ export default {
   },
   subscriptions: {
       async setup({ dispatch, history }) {  // eslint-disable-line
+        dispatch({
+          type: 'updateAppInfo',
+          payload: {
+            getVerifyCodeElseTime: 0,
+          },
+        });
       },
   },
 };

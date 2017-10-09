@@ -1,35 +1,33 @@
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 
-import BootStrapTable from '../components/Table';
-import http from '../utils/http';
+import BaseComponent from '../../helps/BaseComponent';
+import { Table, NavBar } from '../../helps/antdComponent';
+import { Title } from '../../helps/styleComponent';
 import styles from './AgencyMoneyRecord.css';
-import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
-import { Toast, Title } from '../utils/help';
 
 const columns = [
   {
-    key: 'agentName',
+    dataIndex: 'agentName',
     title: '代理名称',
     isKey: true,
   },
   {
-    key: 'rechargeCount',
+    dataIndex: 'rechargeCount',
     title: '充值数量',
   },
   {
-    key: 'chargeMoney',
+    dataIndex: 'chargeMoney',
     title: '金额',
-    dataFormat: (cell) => {
+    render: (cell) => {
       const timeVal = cell;
       return parseFloat(timeVal / 100);
     },
   },
   {
-    key: 'rechargeTime',
+    dataIndex: 'rechargeTime',
     title: '充值时间',
-    dataFormat: (cell) => {
+    render: (cell) => {
       if (isNaN(cell)) {
         return cell;
       }
@@ -39,7 +37,7 @@ const columns = [
   },
 ];
 
-class AgencyMoneyRecord extends React.Component {
+class AgencyMoneyRecord extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,7 +48,7 @@ class AgencyMoneyRecord extends React.Component {
     this.serchInput = null;
   }
   async componentWillMount() {
-    const res = await http.get('/spreadApi/underAgentsChargeLog');
+    const res = await this.helps.webHttp.get('/spreadApi/underAgentsChargeLog');
     if (res.isSuccess) {
       this.tableData = res.data;
     }
@@ -64,9 +62,12 @@ class AgencyMoneyRecord extends React.Component {
     return (
       <div className={styles.normal}>
         <Title>充值记录</Title>
-        <div className="return_btn" onClick={() => this.props.dispatch(routerRedux.goBack())}>&lt;返回</div>
-        <BootStrapTable
-          data={tableData}
+        <NavBar
+          title="充值记录"
+          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+        />
+        <Table
+          dataSource={tableData}
           columns={columns}
         />
       </div>

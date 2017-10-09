@@ -1,223 +1,233 @@
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
-import { WhiteSpace } from 'antd-mobile';
 
-import { province, city } from '../config/position';
-import http from '../utils/http';
-import { Toast, Title } from '../utils/help';
-import { FlexRow, BaseFont, TextInput, BackgroundContainer, Button } from '../utils/styleComponent';
+import { province as provinceData, city as cityData } from '@/data/position';
+import { Input, Select, Button, NavBar } from '@/helps/antdComponent';
+import BaseComponent from '@/helps/BaseComponent';
+import { FlexRow, Flex, WhiteSpace, Title } from '@/helps/styleComponent';
 import styles from './AgencyExtractMoney.css';
 
+import bankData from '@/data/bank';
 
-const options = [
-  '中国工商银行', '招商银行', '中国农业银行', '中国银行', '中国建设银行', '中国民生银行', '中国光大银行',
-  '中信银行', '交通银行', '兴业银行', '上海浦东发展银行', '中国人民银行', '华夏银行', '深圳发展银行', '广东发展银行',
-  '国家开发银行', '中国邮政储蓄银行', '中国进出口银行', '中国农业发展银行', '其他',
-];
+const Option = Select.Option;
 
-class AgencyExtractMoney extends React.Component {
+class AgencyExtractMoney extends BaseComponent {
   constructor(props) {
     super(props);
-    const { bankName, bankOfDeposit, bankCardName, cardNumber, positionName, wechatacc = '' } = props;
-    const validPositionName = positionName || ''; // 非空判断防止报错
-    if (bankName) {
-      // 如果有开户姓名说明已经有改过了
-      this.hasCashed = true;
+    const {
+      wechat_acc, // 提现所用的微信号
+      positionName, // 位置
+      cardNumber, // 银行卡号
+      bankCardName, // 银行卡名字
+      bankName, // 银行
+      bankOfDeposit, // 开户银行
+     } = props;
+    const defaultPosition = positionName || '北京市 北京市';
+    const defaultPositionArr = defaultPosition.split(' ');
+    if (defaultPositionArr.length < 2) {
+      this.defaultProvince = '北京市';
+      this.defaultCity = '北京市';
+    } else {
+      this.defaultProvince = defaultPositionArr[0];
+      this.defaultCity = defaultPositionArr[1];
     }
-    const defaultSelectProvin = province.filter((item) => {
-      return validPositionName.indexOf(item.name) !== -1;
-    });
-    let defaultProId = 1;
-    if (defaultSelectProvin.length > 0) {
-      const defaultSelectProvinInfo = defaultSelectProvin[0];
-      defaultProId = defaultSelectProvinInfo.ProID;
-      this.defaultSelectProvinValue = defaultSelectProvinInfo.name; // 默认选择的省份
-      this.defaultSelectCityValue = validPositionName.replace(defaultSelectProvinInfo.name, ''); // 默认选择的市
-    }
+    const initBankName = bankName || bankData[0];
     this.state = {
-      cashCount: '', // 提现金额
-      userName: bankCardName, // 开户姓名
-      cardNumber, // 卡号
-      bankName: '', // 提现银行
-      bankOfDeposit, //  银行开户行
-      positionName: validPositionName, // 地区
-      wechatNumber: wechatacc, // 微信号
-
-      selectProId: defaultProId, // 默认选择的市
+      wechat_acc, // 提现所用的微信号
+      cardNumber, // 银行卡号
+      bankCardName, // 银行卡名字
+      bankName: initBankName, // 银行
+      bankOfDeposit, // 开户银行
+      province: this.defaultProvince,
+      city: this.defaultCity,
+      cashCount: '',
+      selectProId: this.getProIdByProName(this.defaultProvince), // 选择省份的id
     };
-    this.bankSelect = { selectedIndex: 0 }; // 银行选择
-    this.provinceSelect = null;
-    this.citySelect = null;
   }
-  cashMoney = async () => {
-    const { selectProId } = this.state;
-    const bankName = options[this.bankSelect.selectedIndex];
-    const provinceName = province[this.provinceSelect.selectedIndex].name;
-    const filterCity = city.filter(item => item.ProID === selectProId);
-    const cityName = filterCity[this.citySelect.selectedIndex].name;
-    const positionName = `${provinceName}${cityName}`;
-    const { cashCount, userName, cardNumber, bankOfDeposit, wechatNumber } = this.state;
-    if (!cashCount || !userName || !cardNumber || !bankOfDeposit || !wechatNumber) {
-      Toast.info('信息填写不完整');
-      return false;
+  handleBankSelectChange = (val) => {
+    this.setState({
+      bankName: val,
+    });
+  }
+  handleProvinceSelectChange = (val) => {
+    const selectProId = this.getProIdByProName(val);
+    const filterCity = cityData.filter((item) => {
+      return item.ProID === selectProId;
+    });
+    this.setState({
+      province: val,
+      selectProId,
+      city: [filterCity[0].name],
+    });
+  }
+  // 通过省级名称得到id
+  getProIdByProName = (val) => {
+    let proID = 1;
+    for (let index = 0; index < provinceData.length; index++) {
+      const element = provinceData[index];
+      if (element.name === val) {
+        proID = element.ProID;
+        break;
+      }
     }
-    if (cashCount < 100) {
-      Toast.info('账户余额未超过100元不允许提现');
-      return false;
-    }
+    return proID;
+  }
+  handleCitySelectChange = (val) => {
+    this.setState({
+      city: [val],
+    });
+  }
+  // 提现
+  cashMoeny = async () => {
+    const { wechat_acc, province, city, cardNumber, bankCardName, bankName, bankOfDeposit, cashCount } = this.state;
+    const positionName = `${province} ${city}`;
     const params = {
-      cashCount,
-      userName,
-      cardNumber,
       bankName,
+      userName: bankCardName,
+      cardNumber,
       bankOfDeposit,
       positionName,
-      wechatNumber,
-      cashType: 2,
+      wechatNumber: wechat_acc,
+      cashCount,
     };
-    const res = await http.get('/spreadApi/cash', params);
-    this.props.dispatch({ type: 'app/updateUserInfo' });
-    if (res.isSuccess) {
-      Toast.info('提现成功');
-      this.setState({
-        cashCount: '',
-      });
+    if (isNaN(cashCount) && !/^\d(\.\d{1,2})?$/.test(cashCount)) {
+      this.helps.toast('输入的提现金额格式错误');
       return false;
     }
-    Toast.info(res.message || '提现失败');
-  }
-  provinceSelectChange = (ev) => {
-    const selectProvince = province[ev.target.selectedIndex];
-    const selectProId = selectProvince.ProID;
-    this.setState({
-      selectProId,
-    });
+    const res = await this.helps.webHttp.get('/spreadApi/cash', params);
+    if (res.isSuccess) {
+      this.helps.toast(res.info || '提现成功');
+      this.props.dispatch(this.helps.routerRedux.goBack());
+    } else {
+      this.helps.toast(res.info);
+    }
+    // 更新用户数据
+    const updateRes = await this.helps.webHttp.get('/spreadApi/getUserInfo');
+    if (updateRes.isSuccess) {
+      this.props.dispatch({ type: 'agent/updateInfo', payload: { ...updateRes.data } });
+    }
   }
   render() {
+    const { wechat_acc: wechatAcc, cardNumber, bankCardName, province, city, bankName, bankOfDeposit, cashCount, selectProId } = this.state;
+    const filterCity = cityData.filter((item) => {
+      return item.ProID === selectProId;
+    });
     const { canCashCount } = this.props;
-    const { selectProId, cashCount, userName, cardNumber, bankOfDeposit, bankName, wechatNumber } = this.state;
-    const defaultProvin = this.defaultSelectProvinValue; // 默认选择的省份
-    const defaultCity = this.defaultSelectCityValue; // 默认选择的市
-    const filterCity = city.filter(item => item.ProID === selectProId);
-    const unitCanCashCount = parseFloat(canCashCount / 100);
-    const isDisabled = !!this.hasCashed;
-
+    const canCashCountFloat = parseFloat(canCashCount / 100).toFixed(2);
     return (
-      <BackgroundContainer className={styles.container}>
-        <Title>余额提现</Title>
-        <div className="return_btn" onClick={() => this.props.dispatch(routerRedux.goBack())}>&lt;返回</div>
-        <div className="alignCenterContainer">
-          <BaseFont className={styles.canCashTip}>可提现金额：<span className="redColor">{unitCanCashCount}</span></BaseFont>
-          <FlexRow className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>提现金额　</BaseFont>
-            <TextInput
-              onChange={val => this.setState({ cashCount: val })}
-              value={cashCount}
+      <div className="alignCenterContainer">
+        <Title>提现</Title>
+        <NavBar
+          title="提现"
+          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+        />
+        <WhiteSpace />
+        <FlexRow className={styles.itemWrap}>
+          <p className={styles.label}>微信号　</p>
+          <Input
+            placeholder="请输入微信号"
+            onChange={ev => this.setState({ wechat_acc: ev.target.value })}
+            value={wechatAcc}
+          />
+        </FlexRow>
+        <WhiteSpace />
+        <FlexRow className={styles.itemWrap}>
+          <p className={styles.label}>银行　　</p>
+          <Select
+            value={bankName}
+            style={{ width: 120 }}
+            onChange={this.handleBankSelectChange}
+          >
+            {
+              bankData.map(bankVal => (
+                <Option key={bankVal} value={bankVal}>{bankVal}</Option>
+              ))
+            }
+          </Select>
+        </FlexRow>
+        <WhiteSpace />
+        <FlexRow className={styles.itemWrap}>
+          <p className={styles.label}>城市　　</p>
+          <Select
+            value={province}
+            style={{ width: 120 }}
+            placeholder="请选择省份"
+            onChange={this.handleProvinceSelectChange}
+          >
+          {
+            provinceData.map(item => (
+              <Option key={item.ProID} value={item.name}>{item.name}</Option>
+            ))
+          }
+          </Select>
+          <Select
+            value={city}
+            style={{ width: 120 }}
+            onChange={this.handleCitySelectChange}
+          >
+          {
+            filterCity.map(item => (
+              <Option key={item.CityID} value={item.name}>{item.name}</Option>
+            ))
+          }
+          </Select>
+        </FlexRow>
+        <WhiteSpace />
+        <FlexRow className={styles.itemWrap}>
+          <p className={styles.label}>卡号　　</p>
+          <Input
+            placeholder="请输入银行卡号"
+            onChange={ev => this.setState({ cardNumber: ev.target.value })}
+            value={cardNumber}
+          />
+        </FlexRow>
+        <FlexRow className={styles.itemWrap}>
+          <p className={styles.label}>姓名　　</p>
+          <Input
+            placeholder="请输入姓名"
+            onChange={ev => this.setState({ bankCardName: ev.target.value })}
+            value={bankCardName}
+          />
+        </FlexRow>
+        <FlexRow className={styles.itemWrap}>
+          <p className={styles.label}>开户银行</p>
+          <Input
+            placeholder="请输入开户银行"
+            onChange={ev => this.setState({ bankOfDeposit: ev.target.value })}
+            value={bankOfDeposit}
+          />
+        </FlexRow>
+        <WhiteSpace />
+        <div className={styles.itemWrap}>
+          <p className={styles.label}>提现金额</p>
+          <FlexRow>
+            <p className={styles.label}>￥:</p>
+            <Input
               placeholder="请输入提现金额"
+              onChange={ev => this.setState({ cashCount: ev.target.value })}
+              value={cashCount}
             />
           </FlexRow>
-          <FlexRow className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>开户姓名　</BaseFont>
-            <TextInput
-              onChange={val => this.setState({ userName: val })}
-              value={userName}
-              placeholder="请输入开户姓名"
-              maxLength={6}
-              disabled={isDisabled}
-            />
-          </FlexRow>
-          <BaseFont className={styles.cashTip}>第一次提现申请成功后，开户姓名将无法更改，请仔细确认！</BaseFont>
-          <FlexRow className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>卡号　　　</BaseFont>
-            <TextInput
-              onChange={val => this.setState({ cardNumber: val })}
-              placeholder="请输入卡号"
-              value={cardNumber}
-            />
-          </FlexRow>
-          <FlexRow className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>选择银行</BaseFont>
-            <select
-              className={styles.bankSelect}
-              defaultValue={bankName}
-              ref={(node) => { this.bankSelect = node; }}
-            >
-              {
-                options.map(value => (
-                  <option key={value} value={value}>{value}</option>
-                ))
-              }
-            </select>
-          </FlexRow>
-          <div className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>选择地区</BaseFont>
-            <div>
-              <select
-                className={styles.select}
-                ref={(node) => { this.provinceSelect = node; }}
-                onChange={this.provinceSelectChange}
-                defaultValue={defaultProvin}
-              >
-                {
-                  province.map(provinceItem => (
-                    <option
-                      key={provinceItem.ProID}
-                      value={provinceItem.name}
-                    >
-                      {provinceItem.name}
-                    </option>
-                  ))
-                }
-              </select>
-            </div>
-            <div>
-              <select
-                className={styles.select}
-                ref={(node) => { this.citySelect = node; }}
-                defaultValue={defaultCity}
-              >
-                {
-                  filterCity.map(cityItem => (
-                    <option
-                      key={cityItem.CityID}
-                      value={cityItem.name}
-                    >
-                      {cityItem.name}
-                    </option>
-                  ))
-                }
-              </select>
-            </div>
-          </div>
-          <FlexRow className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>银行开户行</BaseFont>
-            <TextInput
-              onChange={val => this.setState({ bankOfDeposit: val })}
-              placeholder="请输入银行开户行"
-              value={bankOfDeposit}
-            />
-          </FlexRow>
-          <FlexRow className={`${styles.inputContainer} G_borderBottom`}>
-            <BaseFont className={styles.inputLabel}>微信号　　</BaseFont>
-            <TextInput
-              onChange={val => this.setState({ wechatNumber: val })}
-              placeholder="请输入微信号"
-              value={wechatNumber}
-            />
-          </FlexRow>
-          <div className={styles.tip}>工作日：9:00-18:00可提现1次 金额不得低于100元</div>
-          <WhiteSpace size="lg" />
-          <Button onClick={this.cashMoney}>确认</Button>
+          <p className={styles.tip}>账号金额<span className="moneyColor">{canCashCountFloat}元</span>(金额低于100元不可提取)</p>
         </div>
-      </BackgroundContainer>
+        <Flex>
+          <Button
+            className={styles.cashBtn}
+            onClick={this.cashMoeny}
+            size="large"
+          >
+          确认提取
+          </Button>
+        </Flex>
+        <p className={styles.countTip}>每天做多可提现一次，48小时内到账</p>
+      </div>
     );
   }
 }
 
 function mapStateToProps(state) {
   return {
-    ...state.app,
+    ...state.agent,
   };
 }
 

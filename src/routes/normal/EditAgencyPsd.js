@@ -1,83 +1,89 @@
 import React from 'react';
 import { connect } from 'dva';
-import { WhiteSpace, WingBlank } from 'antd-mobile';
-import { routerRedux } from 'dva/router';
 
-import http from '../utils/http';
-import { Toast, Title } from '../utils/help';
+import BaseComponent from '@/helps/BaseComponent';
+import { Input, Button, NavBar } from '@/helps/antdComponent';
+import { Title, WhiteSpace, FlexRow } from '@/helps/styleComponent';
 import styles from './EditAgencyPsd.css';
-import { BackgroundContainer, FlexRow, BaseFont, TextInput, Button } from '../utils/styleComponent';
 
-class EditAgencyPsd extends React.Component {
+class EditPsd extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
+      editLoading: false,
       oldPsd: '',
-      password: '',
+      newPsd: '',
       rePsd: '',
     };
   }
-  edit = async () => {
-    const { password, rePsd, oldPsd } = this.state;
-    if (password !== rePsd) {
-      Toast.info('两次密码不一致');
+  // 登录
+  editPsd = async () => {
+    console.log('登录');
+  }
+  // 修改新密码
+  editPsd = async () => {
+    const { oldPsd, newPsd, rePsd } = this.state;
+    if (!oldPsd || !newPsd || !rePsd) {
+      this.helps.toast('请完善填写内容');
+      return false;
+    }
+    if (newPsd !== rePsd) {
+      this.helps.toast('两次密码不一致');
       return false;
     }
     const params = {
       oldPsd,
-      newPsd: password,
+      newPsd,
     };
-    const res = await http.get('/spreadApi/editPassword', params);
+    const res = await this.helps.webHttp.get('/spreadApi/editPassword', params);
     if (res.isSuccess) {
-      this.props.dispatch(routerRedux.goBack());
-      Toast.info('修改密码成功');
-      return false;
+      this.props.dispatch(this.helps.routerRedux.goBack());
+      this.helps.toast('修改成功');
+    } else {
+      this.helps.toast(res.info);
     }
-    Toast.info('修改密码失败');
   }
   render() {
+    const { editLoading } = this.state;
     return (
-      <BackgroundContainer>
+      <div className="alignCenterContainer">
         <Title>修改密码</Title>
-        <div className="return_btn" onClick={() => this.props.dispatch(routerRedux.goBack())}>&lt;返回</div>
-        <WingBlank size="md">
-          <div className="alignCenterContainer">
-            <WhiteSpace size="md" />
-            <FlexRow className={styles.inputContainer}>
-              <BaseFont className={styles.inputLabel}>原密码　　</BaseFont>
-              <TextInput
-                onChange={val => this.setState({ oldPsd: val })}
+        <div className="contentContainer">
+          <NavBar
+            title="修改密码"
+            onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          />
+          <div>
+            <FlexRow className={styles.inputWrap}>
+              <span className={styles.inputLabel}>原密码　　</span>
+              <Input
+                type="password"
+                onChange={ev => this.setState({ oldPsd: ev.target.value })}
                 placeholder="请输入原密码"
-                maxLength={16}
-                type="password"
               />
             </FlexRow>
-            <FlexRow className={styles.inputContainer}>
-              <BaseFont className={styles.inputLabel}>密码　　　</BaseFont>
-              <TextInput
-                onChange={val => this.setState({ password: val })}
+            <FlexRow className={styles.inputWrap}>
+              <span className={styles.inputLabel}>新密码　　</span>
+              <Input
+                onChange={ev => this.setState({ newPsd: ev.target.value })}
+                type="password"
                 placeholder="请输入新密码"
-                maxLength={16}
-                type="password"
               />
             </FlexRow>
-            <FlexRow className={styles.inputContainer}>
-              <BaseFont className={styles.inputLabel}>确认新密码</BaseFont>
-              <TextInput
-                onChange={val => this.setState({ rePsd: val })}
+            <FlexRow className={styles.inputWrap}>
+              <span className={styles.inputLabel}>确认新密码</span>
+              <Input
                 placeholder="确认新密码"
-                maxLength={16}
+                onPressEnter={this.editPsd}
+                onChange={ev => this.setState({ rePsd: ev.target.value })}
                 type="password"
               />
             </FlexRow>
-            <WhiteSpace size="lg" />
-            <Button
-              onClick={this.edit}
-              maxLength={16}
-            >确认</Button>
           </div>
-        </WingBlank>
-      </BackgroundContainer>
+          <WhiteSpace />
+          <Button className={styles.editBtn} loading={editLoading} onClick={this.editPsd}>修改</Button>
+        </div>
+      </div>
     );
   }
 }
@@ -86,4 +92,4 @@ function mapStateToProps() {
   return {};
 }
 
-export default connect(mapStateToProps)(EditAgencyPsd);
+export default connect(mapStateToProps)(EditPsd);

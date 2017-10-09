@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'dva';
 import { province as provinceData, city as cityData } from '@/data/position';
 import styles from './CashMoeny.css';
-import { Input, Select, Button, NavBar } from '../../helps/antdComponent';
-import BaseComponent from '../../helps/BaseComponent';
-import { FlexRow, Flex, WhiteSpace, Title } from '../../helps/styleComponent';
+import { Input, Select, Button, NavBar } from '@/helps/antdComponent';
+import BaseComponent from '@/helps/BaseComponent';
+import { FlexRow, Flex, WhiteSpace, Title } from '@/helps/styleComponent';
 
 import bankData from '../../data/bank';
 
@@ -89,14 +89,14 @@ class CashMoeny extends BaseComponent {
       wechatNumber: wechat_acc,
       cashCount,
     };
-    if (isNaN(cashCount)) {
+    if (isNaN(cashCount) && !/^\d(\.\d{1,2})?$/.test(cashCount)) {
       this.helps.toast('输入的提现金额格式错误');
       return false;
     }
     const res = await this.helps.webHttp.get('/spreadApi/general/cash', params);
     if (res.isSuccess) {
-      this.helps.toast(res.info || '提现成功');
       this.props.dispatch(this.helps.routerRedux.goBack());
+      this.helps.toast(res.info || '提现成功');
     } else {
       this.helps.toast(res.info);
     }
@@ -216,14 +216,13 @@ class CashMoeny extends BaseComponent {
           确认提取
           </Button>
         </Flex>
-        <p className={styles.countTip}>每个工作日9:00-18:00最多可提现1次</p>
+        <p className={styles.countTip}>每天做多可提现一次，48小时内到账</p>
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  console.log(state.general);
   return {
     ...state.general,
   };

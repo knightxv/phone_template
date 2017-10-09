@@ -39,7 +39,7 @@ const app = dva({
 // app.model(require('./models/example'));
 
 // 4. Router
-app.router(require('./router'));
+app.router(require('./router_bobing'));
 
 // 5. Start
 app.start('#root');

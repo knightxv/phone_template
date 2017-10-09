@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
-import { WingBlank, WhiteSpace } from 'antd-mobile';
-import { routerRedux } from 'dva/router';
+
+import { WhiteSpace } from 'antd-mobile';
+import { Button, Input } from '@/helps/antdComponent';
+import BaseComponent from '@/helps/BaseComponent';
+import { BaseFont, FlexRow, NavTitle, Title } from '@/helps/styleComponent';
 import styles from './Register.css';
-
-import http from '../utils/http';
-import { Toast, Title } from '../utils/help';
-
-import { NavTitle, BackgroundContainer, TextInput, Button, BaseFont, FlexRow } from '../utils/styleComponent';
 
 
 //  /*
@@ -20,10 +18,12 @@ import { NavTitle, BackgroundContainer, TextInput, Button, BaseFont, FlexRow } f
 //       data: null,
 //   },
 
-class Register extends React.Component {
+class Register extends BaseComponent {
   constructor(props) {
     super(props);
-    this.code = this.props.location.query.code; // 上级代理的id
+    console.log(this.helps)
+    const { code } = this.helps.querystring.parse(this.props.location.search.substr(1));
+    this.code = code; // 上级代理的id
     this.hasCode = !!this.code;
     this.state = {
       phone: '',
@@ -35,20 +35,16 @@ class Register extends React.Component {
   }
   async componentWillMount() {
     if (this.code) {
-      const res = await http.get('/spreadApi/getinveteCodeById', { id: this.code });
+      const res = await this.helps.webHttp.get('/spreadApi/getinveteCodeById', { id: this.code });
       if (res.isSuccess) {
         const pCode = res.data.pCode;
         this.setState({
           pCode,
         });
       } else {
-        Toast.info(res.info);
+        this.helps.toast(res.info);
       }
     }
-    document.addEventListener('keydown', this.enterKey, false);
-  }
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.enterKey, false);
   }
   // 得到验证码
   getVerifyCode = async () => {
@@ -60,17 +56,12 @@ class Register extends React.Component {
     }
     // this.props.dispatch({ type: 'app/getVerifyCode' });
     const { phone } = this.state;
-    const res = await http.get('/spreadApi/getVerifyCode', { phone });
+    const res = await this.helps.webHttp.get('/spreadApi/getVerifyCode', { phone });
     if (res.isSuccess) {
-      this.props.dispatch({ type: 'app/getVerifyCode' });
-      Toast.info('验证码已发送，请查收');
+      this.props.dispatch({ type: 'agent/getVerifyCode' });
+      this.helps.toast('验证码已发送，请查收');
     } else {
-      Toast.info(res.message || '验证码失败，请重试');
-    }
-  }
-  enterKey = (ev) => {
-    if (ev.key === 'Enter') {
-      this.register();
+      this.helps.toast(res.info || '验证码失败，请重试');
     }
   }
   // 检查手机是否合法
@@ -83,35 +74,35 @@ class Register extends React.Component {
     const { phone, wechatCode, verifyCode, isAgreen, pCode } = this.state;
     const pid = this.code;
     if (!isAgreen) {
-      Toast.info('请同意阿当科技推广协议');
+      this.helps.toast('请同意阿当科技推广协议');
       return false;
     }
     if (!phone || !verifyCode) {
-      Toast.info('请完善信息填写');
+      this.helps.toast('请完善信息填写');
       return false;
     }
     const password = 123456; // 默认密码
     let res;
     if (pid) {
-      res = await http.get('/spreadApi/register', { phone, pid, pCode, wechatCode, verifyCode, password });
+      res = await this.helps.webHttp.get('/spreadApi/register', { phone, pid, pCode, wechatCode, verifyCode, password });
     } else {
-      res = await http.get('/spreadApi/register', { phone, pCode, wechatCode, verifyCode, password });
+      res = await this.helps.webHttp.get('/spreadApi/register', { phone, pCode, wechatCode, verifyCode, password });
     }
     if (res.isSuccess) {
       // Toast.info('注册成功');
-      const resLogin = await http.get('/spreadApi/login', { loginID: phone, password });
+      const resLogin = await this.helps.webHttp.get('/spreadApi/login', { loginID: phone, password });
       if (resLogin.isSuccess) {
-        alert('初始密码默认为：123456');
-        this.props.dispatch(routerRedux.push('/homePage'));
+        window.alert('初始密码默认为：123456');
+        this.props.dispatch(this.helps.routerRedux.push('/homePage'));
       } else {
-        Toast.info(resLogin.message || '登录失败');
+        this.helps.toast(resLogin.info || '登录失败');
       }
     } else {
-      Toast.info(res.message);
+      this.helps.toast(res.info);
     }
   }
   navigateToAgreen = () => {
-    this.props.dispatch(routerRedux.push('/AgreenDetail'));
+    this.props.dispatch(this.helps.routerRedux.push('/AgreenDetail'));
   }
   toggleAgreen = () => {
     this.setState({
@@ -126,41 +117,41 @@ class Register extends React.Component {
     const isCanGetVerifyCode = isCanReGetVerifyCode && this.checkPhoneValid();
     const hasCode = this.hasCode;
     return (
-      <BackgroundContainer>
+      <div className="alignCenterContainer">
         <Title>申请代理</Title>
         <div className={styles.container}>
           <NavTitle>申请代理</NavTitle>
           <WhiteSpace size="md" />
           <FlexRow className={styles.inputContainer}>
             <BaseFont className={styles.inputLabel}>联系电话：　</BaseFont>
-            <TextInput
-              onChange={val => this.setState({ phone: val })}
+            <Input
+              onChange={ev => this.setState({ phone: ev.target.value })}
               placeholder="将作为登录账号"
             />
           </FlexRow>
           <WhiteSpace size="md" />
           <FlexRow className={styles.inputContainer}>
             <BaseFont className={styles.inputLabel}>上级邀请码：</BaseFont>
-            <TextInput
+            <Input
               disabled={hasCode}
               value={pCode}
-              onChange={val => this.setState({ pCode: val })}
+              onChange={ev => this.setState({ pCode: ev.target.value })}
               placeholder="介绍人代理邀请码"
             />
           </FlexRow>
           <WhiteSpace size="md" />
           <FlexRow className={styles.inputContainer}>
             <BaseFont className={styles.inputLabel}>微信号：　　</BaseFont>
-            <TextInput
-              onChange={val => this.setState({ wechatCode: val })}
+            <Input
+              onChange={ev => this.setState({ wechatCode: ev.target.value })}
               placeholder="便于充值提现等疑问解答"
             />
           </FlexRow>
           <WhiteSpace size="md" />
           <FlexRow className={styles.inputContainer}>
             <BaseFont className={styles.inputLabel}>验证码：　　</BaseFont>
-            <TextInput
-              onChange={val => this.setState({ verifyCode: val })}
+            <Input
+              onChange={ev => this.setState({ verifyCode: ev.target.value })}
               placeholder="请输入验证码"
             />
             <Button
@@ -178,11 +169,12 @@ class Register extends React.Component {
           </div>
           <WhiteSpace size="md" />
           <Button
+            style={{ width: '100%' }}
             onClick={this.register}
           >申请代理</Button>
           <BaseFont style={{ textAlign: 'center', fontSize: '0.25rem', paddingTop: 16 }}>厦门当当猫网络科技有限公司</BaseFont>
         </div>
-      </BackgroundContainer>
+      </div>
     );
   }
 }
@@ -190,7 +182,7 @@ class Register extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    ...state.app,
+    ...state.agent,
   };
 }
 

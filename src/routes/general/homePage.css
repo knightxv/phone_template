@@ -5,9 +5,10 @@
 }
 .notice {
     text-indent: 28px;
+    padding: 0 10px;
 }
 .noticeTitle {
-    padding: 0 0 10px;
+    padding: 0  0 0 10px;
 }
 .borderDashRight {
     border-right: 1px dashed #8B8181;
@@ -23,7 +24,7 @@
 }
 
 .inviteOptionWrap {
-    padding: 8px 0;
+    /* padding: 8px 0; */
 }
 
 .agentOptionBtnWrap {
@@ -31,7 +32,7 @@
 }
 
 .priceMoeny {
-    padding: 8px 6px;
+    padding: 8px 0px;
     font-size: 24px;
     color: #fecd84;
 }
@@ -43,6 +44,7 @@
 .priceItem {
     flex: 1;
     text-align: center;
+    padding: .2rem 0;
 }
 
 .cashBtn {
@@ -52,6 +54,12 @@
 .optionBtn {
     margin: 0 6px;
     color: #1E7DF1;
+}
+
+.inviteWrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .cashWrap {
@@ -69,6 +77,12 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    align-items: center;
+}
+
+.copyBtn {
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .agentOptionBtn {
@@ -80,7 +94,7 @@
     margin: 0 6px;
 }
 .itemContainer {
-    padding: 10px 20px;
+    padding: 10px 0px;
     border-bottom: 1px solid #dedede;
 }
 .priceWhiteSpace {
@@ -146,5 +160,8 @@
     }
     .priceModuleWrap {
         background: #fff;
+    }
+    .inviteWrap {
+        flex-direction: column;
     }
 }

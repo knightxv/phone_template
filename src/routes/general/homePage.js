@@ -5,7 +5,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import styles from './homePage.css';
 import BaseComponent from '../../helps/BaseComponent';
 import { Button, Row, Col } from '../../helps/antdComponent';
-import { WingBlank, WhiteSpace, FlexRow, TitleIcon, Title } from '../../helps/styleComponent';
+import { WingBlank, WhiteSpace, FlexRow, FlexRowBetween, TitleIcon, Title } from '../../helps/styleComponent';
 
 class HomePage extends BaseComponent {
   constructor(props) {
@@ -97,9 +97,9 @@ class HomePage extends BaseComponent {
         }
         <WhiteSpace />
         <div className={`${styles.itemContainer}`}>
-          <Row>
+          <Row className={styles.inviteWrap}>
             <Col xs={24} sm={12} className={styles.inviteOptionWrap}>
-              <div className={styles.inviteCodeOptionWrap}>
+              <FlexRowBetween className={styles.inviteCodeOptionWrap}>
                 <WingBlank>邀请码:{inviteCode}</WingBlank>
                 <WingBlank>
                   <CopyToClipboard
@@ -109,7 +109,7 @@ class HomePage extends BaseComponent {
                     <Button className={styles.copyBtn}>复制</Button>
                   </CopyToClipboard>
                 </WingBlank>
-              </div>
+              </FlexRowBetween>
             </Col>
             <Col xs={24} sm={12} className={styles.inviteOptionWrap} style={{ border: 'none' }}>
               <FlexRow className={styles.agentOptionBtnWrap}>
@@ -123,14 +123,14 @@ class HomePage extends BaseComponent {
         <Row className={styles.itemContainer}>
           <Col xs={24} sm={12} className={styles.borderDashRight}>
             <WingBlank className={styles.prizeWrap}>
-              <TitleIcon />代理充值提成（元）
+              <TitleIcon />代理充值提成
               <p><span className={styles.priceMoeny}>{commissionByAgentFloat}</span>元</p>
               <p className={styles.commissionTip}>
                 当前提成比例：<span className={styles.commissionCountText}>{commissionRate}%</span>
                 (开通天数：<span className={styles.commissionCountText}>{openDay}</span>天)
               </p>
             </WingBlank>
-            <WingBlank className={styles.prizeWrap}>
+            <div className={styles.prizeWrap}>
               <FlexRow>
                 <div className={styles.priceItem}>今日提成：<span className="moneyColor">{ commissionOfTodayFloat }元</span></div>
                 <div className={styles.priceItem}>昨日提成：<span className="moneyColor">{ commissionOfYesterDayFloat }元</span></div>
@@ -138,12 +138,12 @@ class HomePage extends BaseComponent {
                   <Button onClick={this.navigateToLookCommissionRecord}>更多记录</Button>
                 </div>
               </FlexRow>
-            </WingBlank>
+            </div>
           </Col>
           <Col xs={24} sm={12} style={{ background: '#f8f8f8' }}>
             <WhiteSpace className={styles.priceWhiteSpace} />
             <WingBlank className={styles.priceModuleWrap}>
-              <TitleIcon />推广人数奖励（元）
+              <TitleIcon /><span>推广人数奖励</span>
               <p><span className={styles.priceMoeny}>{ prizeByExtensionFloat }</span>元</p>
             </WingBlank>
           </Col>
@@ -152,13 +152,13 @@ class HomePage extends BaseComponent {
         <Row className={styles.itemContainer}>
           <Col xs={24} sm={12}>
             <WingBlank>
-              <div className={styles.cashWrap}>
+              <FlexRowBetween className={styles.cashWrap}>
                 <div>余额：<span className="moneyColor">{canCashCountFloat}元</span></div>
                 <div style={{ marginLeft: 10 }}>
                   <Button className={styles.cashBtn} onClick={this.navigateToCashMoeny}>提现</Button>
                   <Button className={styles.cashBtn} onClick={this.navigateToCashMoenyRecord}>提现记录</Button>
                 </div>
-              </div>
+              </FlexRowBetween>
             </WingBlank>
           </Col>
         </Row>

@@ -2,7 +2,7 @@
 // yarn add antd styled-components
 import React from 'react';
 import { system } from './help';
-import { Icon, Toast, NavBar } from 'antd-mobile';
+import { Icon, Toast } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
 
 import 'antd/lib/pagination/style/css';
