@@ -8,7 +8,6 @@ import styles from './Login.css';
 
 const logoSource = require('@/assets/adang_logo.png');
 
-
 class Login extends BaseComponent {
   constructor(props) {
     super(props);

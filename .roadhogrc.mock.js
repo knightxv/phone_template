@@ -2,8 +2,71 @@
 export default {
     // 本地用
     'GET /config': {
-        JavaWebPublicServerUrl: '192.168.2.101:8000', // 192.168.1.108:8080
+        JavaWebPublicServerUrl: '192.168.2.108:8080', // 192.168.1.108:8080
     },
+
+    // /*
+    //     备注：返回的图片要是完成路径或者域名底下的相对路径 eg: /public/picture/banner-1.jpg
+    //  */
+    // /*
+    //     轮播的图片
+    //  */
+    // 'GET /gamePlatform/navbarSwiperList': [
+    //     {
+    //         gameId: 23,
+    //         gamePicture: '/picture/banner-1.jpg'
+    //     },
+    //     {
+    //         gameId: 23,
+    //         gamePicture: '/picture/banner-1.jpg'
+    //     },
+    //     {
+    //         gameId: 23,
+    //         gamePicture: '/picture/banner-1.jpg'
+    //     },
+    //     {
+    //         gameId: 23,
+    //         gamePicture: '/picture/banner-1.jpg'
+    //     }
+    // ],
+    // /*
+    //     推荐游戏
+    //  */
+    // 'GET /gamePlatform/gameRecommendList': [
+    //     {
+    //         gameIcon: '/picture/icon.png',
+    //         gameName: '阿当比鸡',
+    //         gameStar: 5,
+    //         gameSize: '35.5M',
+    //         gameStatu: '阿当比鸡玩的刺激d！',
+    //         gameId: 23
+    //     },
+    // ],
+    // /*
+    //     得到游戏详情
+    //     gameId
+    // */
+    // 'GET /gamePlatform/gameDetailInfo': {
+    //     gameName: '阿当比鸡',
+    //     gameIcon: '/picture/icon.png',
+    //     downAndroid: 'https://fir.im/ns3t', // 游戏第三方下载链接
+    //     downIos: 'https://itunes.apple.com/us/app/小吆湖南棋牌-湖南特色玩法-多种玩法集合/id1220747741', // ios的下载链接
+    //     reserve: 'http://cdn.xiaoyaogame.cn/apk/com.tencent.tmgp.xyhnqpg0322.apk_1.2.apk', // android下载包
+    //     gameSize: '39.5M',
+    //     downCount: '5万次',
+    //     gameVersion: '11.3.0',
+    //     gameStar: 5,
+    //     gameIntroduce: '游戏介绍',
+    //     characteristic: '新版特性',
+    //     publicDataTime: 1507531145366, // 发布日期
+    //     developer: '厦门当当猫网络科技有限公司', // 开发者
+    //     gameScreenshot: [
+    //         '/detail/picture/hnqp-banner01.jpg',
+    //         '/detail/picture/hnqp-banner02.jpg',
+    //         '/detail/picture/hnqp-banner03.jpg',
+    //         '/detail/picture/hnqp-banner04.jpg'
+    //     ] // 游戏截图
+    // },
 
     /*
         总管理登录
@@ -160,6 +223,8 @@ export default {
         @query : pCode ： 上级邀请码
         @query : wechatCode : 微信号码
         @query : verifyCode : 验证码
+        @query : registerProvince : 微信号码
+        @query : registerCity : 验证码
     */
     'GET /spreadApi/register': {
         status: 'success',

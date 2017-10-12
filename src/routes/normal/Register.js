@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
-
 import { WhiteSpace } from 'antd-mobile';
+import { Helmet } from 'react-helmet';
+
 import { Button, Input } from '@/helps/antdComponent';
 import BaseComponent from '@/helps/BaseComponent';
 import { BaseFont, FlexRow, NavTitle, Title } from '@/helps/styleComponent';
@@ -21,7 +22,6 @@ import styles from './Register.css';
 class Register extends BaseComponent {
   constructor(props) {
     super(props);
-    console.log(this.helps)
     const { code } = this.helps.querystring.parse(this.props.location.search.substr(1));
     this.code = code; // 上级代理的id
     this.hasCode = !!this.code;
@@ -81,12 +81,21 @@ class Register extends BaseComponent {
       this.helps.toast('请完善信息填写');
       return false;
     }
+    if (!window.remote_ip_info) {
+      this.helps.toast('申请失败，请重试');
+      return false;
+    }
+    const { province, city } = window.remote_ip_info;
+    const registerProvince = `${province}省`;
+    const registerCity = `${city}市`;
     const password = 123456; // 默认密码
     let res;
     if (pid) {
-      res = await this.helps.webHttp.get('/spreadApi/register', { phone, pid, pCode, wechatCode, verifyCode, password });
+      res = await this.helps.webHttp.get('/spreadApi/register',
+      { phone, pid, pCode, wechatCode, verifyCode, password, registerProvince, registerCity });
     } else {
-      res = await this.helps.webHttp.get('/spreadApi/register', { phone, pCode, wechatCode, verifyCode, password });
+      res = await this.helps.webHttp.get('/spreadApi/register',
+      { phone, pCode, wechatCode, verifyCode, password, registerProvince, registerCity });
     }
     if (res.isSuccess) {
       // Toast.info('注册成功');
@@ -119,6 +128,9 @@ class Register extends BaseComponent {
     return (
       <div className="alignCenterContainer">
         <Title>申请代理</Title>
+        <Helmet>
+          <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
+        </Helmet>
         <div className={styles.container}>
           <NavTitle>申请代理</NavTitle>
           <WhiteSpace size="md" />

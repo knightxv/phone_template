@@ -22,7 +22,7 @@ class InviteAgent extends BaseComponent {
   // }
   onCopy = (val, result) => {
     if (!result || this.helps.isWeixinBrowser()) {
-      this.helps.toast('复制失败，请手动复制链接');
+      this.helps.toast('复制失败，请自行选择复制');
     } else {
       this.helps.toast('复制成功');
     }

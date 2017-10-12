@@ -12,6 +12,7 @@ roadhogrc.mock.js add
 */
 import React from 'react';
 import { routerRedux } from 'dva/router';
+import fetch from 'dva/fetch';
 import { window } from 'global';
 import { Toast } from './antdComponent';
 import * as TypeDefine from './typeDefine';
@@ -59,7 +60,6 @@ const webHttpConfig = {
   },
 };
 const webHttp = new Http(webHttpConfig);
-
 export default class BaseComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -73,6 +73,8 @@ export default class BaseComponent extends React.Component {
     };
     this.helps = {
       webHttp,
+      fetch,
+      
       ...help,
       toast: (msg) => {
         Toast.info(msg || '未知错误', 1, null, false);

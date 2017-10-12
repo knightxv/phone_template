@@ -24,7 +24,7 @@ class PlayerPayManage extends BaseComponent {
     if (result && !this.helps.isWechat) {
       this.helps.toast('复制成功');
     } else {
-      this.helps.toast('复制失败，请手动复制');
+      this.helps.toast('复制失败，请自行选择复制');
     }
   };
   render() {
