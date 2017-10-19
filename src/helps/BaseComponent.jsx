@@ -93,4 +93,7 @@ export default class BaseComponent extends React.Component {
     //   isWechat: help.isWeixinBrowser,
     // };
   }
+  parseFloatMoney = (money) => {
+    return parseFloat(money / 100).toFixed(2);
+  }
 }

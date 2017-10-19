@@ -1,0 +1,11 @@
+:global(.am-notice-bar) {
+    height: .6rem;
+    line-height: .6rem;
+}
+:global(.am-notice-bar-icon) {
+    margin-left: 0.2rem;
+}
+
+:global(.am-list-header) {
+    padding: 0;
+}

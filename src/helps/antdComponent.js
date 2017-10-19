@@ -1,9 +1,6 @@
 // npm dev antd
 // yarn add antd styled-components
 import React from 'react';
-import { system } from './help';
-import { Icon, Toast } from 'antd-mobile';
-import 'antd-mobile/dist/antd-mobile.css';
 
 import 'antd/lib/pagination/style/css';
 
@@ -26,6 +23,9 @@ import 'antd/lib/col/style/css';
 
 import styled from 'styled-components';
 
+import { Icon, Toast, NoticeBar, Picker, List, ListView, InputItem } from 'antd-mobile';
+import 'antd-mobile/dist/antd-mobile.css';
+import '../assets/css/antdSelf.css';
 // import DatePicker from 'antd/lib/date-picker';
 // import 'antd/lib/date-picker/style/css';
 // const InputContainer = styled.div`
@@ -51,7 +51,7 @@ const TextInput = (props) => {
 
 const DefaultIcon = (props) => {
   return (
-    <Icon size="lg" {...props} />
+    <Icon size="md" {...props} />
   );
 };
 
@@ -93,29 +93,125 @@ const DefalutTable = ({ dataSource, columns, ...props }) => {
 
 const NavBarWrap = styled.div`
   display: flex;
-  height: 45px;
+  height: .7rem;
+  padding-left: .1rem;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   background: #fff;
 `;
 
-const DefaultNavbar = ({ title, onClick }) => {
-  const sys = system();
-  if (sys === 'PC') {
-    return null;
-  }
+const DefaultNavbar = ({ title, onClick, right }) => {
   return (
-    <NavBarWrap onClick={onClick}>
+    <NavBarWrap>
       <DefaultIcon
         type="left"
         color="#108ee9"
+        onClick={onClick}
       />
-      <div style={{ fontSize: 18 }}>{title}</div>
-      <div style={{ width: 36 }} />
+      <div>{title}</div>
+      <div style={{ width: 36 }}>
+        { right }
+      </div>
     </NavBarWrap>
   );
 };
+
+const IconSource = {
+  notice: require('../assets/gg.png'),
+};
+
+const NoticeImg = styled.img`
+  width: .3rem;
+  height: .3rem;
+  margin: 0 .06rem;
+`;
+
+const DefaultNotice = (props) => {
+  return (
+    <NoticeBar
+      mode="link"
+      marqueeProps={{ loop: true, style: { color: '#f1781e', fontSize: '.2rem' } }}
+      icon={<NoticeImg src={IconSource.notice} />}
+      {...props}
+    />
+  );
+};
+
+const dataSource = new ListView.DataSource({
+  rowHasChanged: (r1, r2) => r1 !== r2,
+});
+const RowSection = styled.div`
+  display: flex;
+  text-align: center;
+  padding: 0.1rem 0;
+`;
+const renderHeader = (columns) => { // dataIndex title
+  return (
+    <RowSection>
+      {
+        columns.map(({ title, dataIndex, remark, i }) => (
+          <div
+            key={dataIndex + i}
+            style={{
+              width: `${100 / columns.length}%`,
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}
+          >
+            <p>{ title }</p>
+            <p>{ remark }</p>
+          </div>
+        ))
+      }
+    </RowSection>
+  );
+};
+
+const renderRow = (tableData, columns) => {
+  return (
+    <div>
+      {
+        tableData.map((data, i) => (
+          <RowSection key={i}>
+            {
+              columns.map(({ dataIndex, render = rowData => rowData, option }, j) => (
+                <div key={j} style={{ width: `${100 / columns.length}%` }}>
+                  {
+                    render(data[dataIndex]) || option
+                  }
+                </div>
+              ))
+            }
+          </RowSection>
+        ))
+      }
+    </div>
+  );
+};
+
+const DefaultListView = ({ tableData, columns, ...props }) => {
+  return (
+    <ListView
+      dataSource={dataSource.cloneWithRows(tableData || [])}
+      renderRow={() => renderRow(tableData, columns)}
+      renderHeader={() => renderHeader(columns)}
+      className="fortest"
+      style={{
+        flex: 1,
+        overflow: 'auto',
+      }}
+      pageSize={10}
+      scrollRenderAheadDistance={500}
+      scrollEventThrottle={200}
+      onEndReachedThreshold={10}
+      {...props}
+    />
+  );
+};
+// DefaultListView = Object.assign(ListView);
 
 export default {
   Row,
@@ -127,4 +223,10 @@ export default {
   Icon: DefaultIcon,
   Toast,
   NavBar: DefaultNavbar,
+  NoticeBar: DefaultNotice,
+  List,
+  SelectPicker: Picker,
+  Notice: DefaultNotice,
+  ListViewTable: DefaultListView,
+  InputItem,
 };

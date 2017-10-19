@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
+import { Icon } from './antdComponent';
 
 
 exports.Background = styled.div`
@@ -23,6 +24,11 @@ exports.FlexRow = FlexRow;
 exports.FlexRowBetween = styled(FlexRow)`
     justify-content: space-between;
 `;
+exports.FlexRowBetweenWingSpace = styled(FlexRow)`
+    justify-content: space-between;
+    padding: 0 .2rem;
+`;
+
 exports.FlexRowAround = styled(FlexRow)`
     justify-content: space-around;
 `;
@@ -48,10 +54,7 @@ exports.WingBlank = styled.div`
 `;
 
 exports.WhiteSpace = styled.div`
-    height: 0px;
-    @media screen and (max-width: 768px) {
-        height: 12px;
-    }
+    height: .12rem;
 `;
 
 export const Title = ({ children }) => {
@@ -82,9 +85,57 @@ text-align: center;
 `;
 
 exports.NetImg = ({ src, ...props }) => {
-    const imgPrefix = window.httpConfig ? window.httpConfig.JavaWebPublicServerUrl : '';
-    return (
-        <img src={`${imgPrefix}${src}`} {...props} />
-    );
+  const imgPrefix = window.httpConfig ? window.httpConfig.JavaWebPublicServerUrl : '';
+  return (
+      <img src={`${imgPrefix}${src}`} {...props} />
+  );
 };
-  
+
+exports.Avatar = ({ src, ...props }) => {
+  // const imgPrefix = window.httpConfig ? window.httpConfig.JavaWebPublicServerUrl : '';
+  return (
+    <img
+      src={require('../assets/avatar.png')}
+      style={{ width: '.8rem', height: '.8rem', borderRadius: '50%' }}
+      {...props}
+    />
+  );
+};
+
+
+const InputContainer = styled.div`
+  background: #efeff4;
+  border-box: border-box;
+  padding: 0.2rem 0.2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+const InputWrap = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  background: #fff;
+  border-radius: 0.2rem;
+`;
+const Input = styled.input`
+  flex: 1;
+  padding: 0.1rem 0.2rem;
+  border: none;
+`;
+const CancelLabel = styled.div`
+  padding-left: 0.1rem;
+`;
+
+exports.SearchBar = ({ ...props }) => {
+  return (
+    <InputContainer>
+      <InputWrap>
+        <Icon type="search" size="sm" style={{ color: '#bbb', marginLeft: '.5rem' }} />
+        <Input {...props} />
+      </InputWrap>
+      <CancelLabel>取消</CancelLabel>
+    </InputContainer>
+  );
+};
+

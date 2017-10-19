@@ -34,7 +34,7 @@ export default {
         "@": "./src"
       }
     }],
-    ["import", { "libraryName": "antd-mobile", "libraryDirectory": "lib", "style": "css" }]
+    ["import", { "libraryName": "antd-mobile", "libraryDirectory": "lib" }]
   ],
   "extraPostCSSPlugins": [],
   "autoprefixer": {

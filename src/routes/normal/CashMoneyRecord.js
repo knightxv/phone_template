@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import BaseComponent from '@/helps/BaseComponent';
 import { Table, NavBar } from '@/helps/antdComponent';
 import { Title } from '@/helps/styleComponent';
-import styles from './AgencyExtractMoneyRecord.css';
+import styles from './CashMoney.css';
 
 const statusMap = {
   0: '审核中',

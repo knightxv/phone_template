@@ -5,9 +5,9 @@ import { province as provinceData, city as cityData } from '@/data/position';
 import { Input, Select, Button, NavBar } from '@/helps/antdComponent';
 import BaseComponent from '@/helps/BaseComponent';
 import { FlexRow, Flex, WhiteSpace, Title } from '@/helps/styleComponent';
-import styles from './AgencyExtractMoney.css';
-
 import bankData from '@/data/bank';
+
+import styles from './CashMoney.css';
 
 const Option = Select.Option;
 
