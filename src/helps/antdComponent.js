@@ -23,7 +23,7 @@ import 'antd/lib/col/style/css';
 
 import styled from 'styled-components';
 
-import { Icon, Toast, NoticeBar, Picker, List, ListView, InputItem } from 'antd-mobile';
+import { Icon, Toast, NoticeBar, Picker, List, ListView, InputItem, DatePicker } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
 import '../assets/css/antdSelf.css';
 // import DatePicker from 'antd/lib/date-picker';
@@ -177,10 +177,10 @@ const renderRow = (tableData, columns) => {
         tableData.map((data, i) => (
           <RowSection key={i}>
             {
-              columns.map(({ dataIndex, render = rowData => rowData, option }, j) => (
-                <div key={j} style={{ width: `${100 / columns.length}%` }}>
+              columns.map(({ dataIndex, render }, j) => (
+                <div key={j} style={{ width: `${100 / columns.length}%`, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                   {
-                    render(data[dataIndex]) || option
+                    render ? render(data) : data[dataIndex]
                   }
                 </div>
               ))
@@ -192,17 +192,19 @@ const renderRow = (tableData, columns) => {
   );
 };
 
+const StyleListView = styled(ListView)`
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+`;
+
 const DefaultListView = ({ tableData, columns, ...props }) => {
   return (
-    <ListView
+    <StyleListView
       dataSource={dataSource.cloneWithRows(tableData || [])}
       renderRow={() => renderRow(tableData, columns)}
       renderHeader={() => renderHeader(columns)}
       className="fortest"
-      style={{
-        flex: 1,
-        overflow: 'auto',
-      }}
       pageSize={10}
       scrollRenderAheadDistance={500}
       scrollEventThrottle={200}
@@ -228,5 +230,7 @@ export default {
   SelectPicker: Picker,
   Notice: DefaultNotice,
   ListViewTable: DefaultListView,
+  ListView,
   InputItem,
+  DatePicker,
 };

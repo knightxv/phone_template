@@ -115,26 +115,31 @@ const InputWrap = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
+  align-items: center;
   background: #fff;
+  padding: 3px 0;
+  border: 1px solid #dedede;
   border-radius: 0.2rem;
 `;
 const Input = styled.input`
   flex: 1;
-  padding: 0.1rem 0.2rem;
+  padding: 0.1rem 0rem 0.1rem 0.1rem;
   border: none;
+  background: none;
 `;
 const CancelLabel = styled.div`
-  padding-left: 0.1rem;
+  padding-left: 0.2rem;
+  color: #1e7df1;
 `;
 
-exports.SearchBar = ({ ...props }) => {
+exports.SearchBar = ({ ...props, onCancelClick = () => {} }) => {
   return (
     <InputContainer>
       <InputWrap>
-        <Icon type="search" size="sm" style={{ color: '#bbb', marginLeft: '.5rem' }} />
+        <Icon type="search" size="xs" style={{ color: '#bbb', marginLeft: '.2rem' }} />
         <Input {...props} />
       </InputWrap>
-      <CancelLabel>取消</CancelLabel>
+      <CancelLabel onClick={onCancelClick}>取消</CancelLabel>
     </InputContainer>
   );
 };

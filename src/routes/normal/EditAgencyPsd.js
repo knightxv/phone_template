@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 
 import BaseComponent from '@/helps/BaseComponent';
-import { Input, Button, NavBar } from '@/helps/antdComponent';
+import { InputItem, Button, NavBar } from '@/helps/antdComponent';
 import { Title, WhiteSpace, FlexRow } from '@/helps/styleComponent';
 import styles from './EditAgencyPsd.css';
 
@@ -46,42 +46,45 @@ class EditPsd extends BaseComponent {
   render() {
     const { editLoading } = this.state;
     return (
-      <div className="alignCenterContainer">
+      <div className={styles.container}>
         <Title>修改密码</Title>
-        <div className="contentContainer">
-          <NavBar
-            title="修改密码"
-            onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
-          />
-          <div>
-            <FlexRow className={styles.inputWrap}>
-              <span className={styles.inputLabel}>原密码　　</span>
-              <Input
+        <NavBar
+          title="修改密码"
+          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+        />
+        <div>
+          <div className={styles.inputContainer}>
+            <div className={styles.inputWrap}>
+              <InputItem
                 type="password"
-                onChange={ev => this.setState({ oldPsd: ev.target.value })}
-                placeholder="请输入原密码"
-              />
-            </FlexRow>
-            <FlexRow className={styles.inputWrap}>
-              <span className={styles.inputLabel}>新密码　　</span>
-              <Input
-                onChange={ev => this.setState({ newPsd: ev.target.value })}
+                onChange={value => this.setState({ oldPsd: value })}
+                placeholder="如果包含字母，请注意区分大小写"
+              >　原密码:</InputItem>
+            </div>
+            <div className={styles.inputWrap}>
+              <InputItem
                 type="password"
-                placeholder="请输入新密码"
-              />
-            </FlexRow>
-            <FlexRow className={styles.inputWrap}>
-              <span className={styles.inputLabel}>确认新密码</span>
-              <Input
-                placeholder="确认新密码"
-                onPressEnter={this.editPsd}
-                onChange={ev => this.setState({ rePsd: ev.target.value })}
+                onChange={value => this.setState({ newPsd: value })}
+                placeholder="输入新密码，请注意区分大小写"
+              >　新密码:</InputItem>
+            </div>
+            <div className={styles.inputWrap}>
+              <InputItem
                 type="password"
-              />
-            </FlexRow>
+                onChange={value => this.setState({ rePsd: value })}
+                placeholder="再次输入新密码，确认输入无误"
+              >确认密码:</InputItem>
+            </div>
+            <div className={styles.editBtnWrap}>
+              <Button
+                className={styles.editBtn}
+                loading={editLoading}
+                onClick={this.editPsd}
+              >
+                确认修改
+              </Button>
+            </div>
           </div>
-          <WhiteSpace />
-          <Button className={styles.editBtn} loading={editLoading} onClick={this.editPsd}>修改</Button>
         </div>
       </div>
     );

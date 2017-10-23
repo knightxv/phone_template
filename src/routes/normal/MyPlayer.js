@@ -1,38 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import { NavBar, Table } from '@/helps/antdComponent';
-import { Title, WingBlank } from '@/helps/styleComponent';
+import { NavBar, ListViewTable } from '@/helps/antdComponent';
+import { Title, SearchBar } from '@/helps/styleComponent';
 import BaseComponent from '@/helps/BaseComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
 import styles from './MyPlayer.css';
-
-const columns = [
-  {
-    dataIndex: 'underAgentName',
-    title: '下级代理名称',
-  },
-  {
-    dataIndex: 'agentInviteCode',
-    title: '代理邀请码',
-  },
-  {
-    dataIndex: 'allRechargeCount',
-    title: '总充钻石数',
-  },
-  {
-    dataIndex: 'rechargeCountOfToday',
-    title: '今日的充钻石数',
-  },
-  {
-    dataIndex: 'CommissionOfAll',
-    title: '总提成钻石石',
-  },
-  {
-    dataIndex: 'CommissionOfToday',
-    title: '今日提成钻石数',
-  },
-];
 
 class SecondaryAgencyRecord extends BaseComponent {
   constructor(props) {
@@ -40,30 +13,106 @@ class SecondaryAgencyRecord extends BaseComponent {
     this.state = {
       isLoaded: false,
       tableData: [],
+      searchVal: '',
     };
     this.serchInput = null;
+    const self = this;
+
+    this.columns = [
+      {
+        dataIndex: 'playerId',
+        title: '玩家',
+        render: (data) => {
+          return (<div>
+            <p>{data.playerName}</p>
+            <p>ID:{data.playerId}</p>
+          </div>);
+        },
+      },
+      {
+        dataIndex: 'masonrySurplus',
+        title: '账户钻石',
+      },
+      {
+        dataIndex: 'palyCashCount',
+        title: '玩家今日消费',
+        render(data) {
+          return self.parseFloatMoney(data.palyCashCount);
+        },
+      },
+      {
+        title: '操作',
+        render: (data) => {
+          return <div onClick={() => self.payForMyPlayer(data.playerId)}>充值</div>;
+        },
+      },
+    ];
   }
   async componentWillMount() {
-    // const res = await this.helps.webHttp.get('/spreadApi/myUnderAgents');
-    // if (res.isSuccess) {
-    //   this.setState({
-    //     tableData: res.data,
-    //   });
-    // }
+    const res = await this.helps.webHttp.get('/spreadApi/myPlayers');
+    if (res.isSuccess) {
+      this.setState({
+        tableData: res.data,
+      });
+    }
+  }
+  payForMyPlayer = (playerId) => {
+    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId } }));
+  }
+  onSearchInputChange = (ev) => {
+    this.setState({
+      searchVal: ev.target.value,
+    });
+  }
+  onCancelClick = () => {
+    this.setState({
+      searchVal: '',
+    });
+  }
+  // 邀请玩家去玩游戏
+  invitePlayerToPlayerGame = () => {
+    // alert('请求配置，跳到游戏详情页');
+    window.location.href = '/gamePlatform';
   }
   render() {
+    const { searchVal, tableData } = this.state;
+    const columns = this.columns;
+    const filterTableData = tableData.filter((data) => {
+      if (!searchVal) {
+        return true;
+      }
+      return data.playerId.indexOf(searchVal) !== -1 || data.playerName.indexOf(searchVal) !== -1;
+    });
+    const PalyCashAllCount = tableData.reduce((beforeVal, currentVal) => {
+      return beforeVal + currentVal.palyCashCount;
+    }, 0);
+    const masonrySurplusAllCount = tableData.reduce((beforeVal, currentVal) => {
+      return beforeVal + currentVal.masonrySurplus;
+    }, 0);
+    const transPalyCashCount = this.parseFloatMoney(PalyCashAllCount);
+    const columnsRemark = [`(共${tableData.length}人)`, `(共${masonrySurplusAllCount}个)`, `(共${transPalyCashCount}元)`];
+    const columnsAddRemark = columns.map((item, i) => ({
+      ...item,
+      remark: columnsRemark[i],
+    }));
     return (
-      <div className="background">
-        我的玩家
-        {/* <Title>我的下级代理</Title>
+      <div className={styles.container}>
+        <Title>我的玩家</Title>
         <NavBar
-          title="我的下级代理"
+          title="我的玩家"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          right={<div onClick={this.invitePlayerToPlayerGame}>邀请</div>}
         />
-        <Table
-          dataSource={tableData}
-          columns={columns}
-        /> */}
+        <SearchBar
+          placeholder="请输入玩家ID/昵称"
+          onChange={this.onSearchInputChange}
+          value={searchVal}
+          onCancelClick={this.onCancelClick}
+        />
+        <ListViewTable
+          tableData={filterTableData}
+          columns={columnsAddRemark}
+        />
       </div>
     );
   }

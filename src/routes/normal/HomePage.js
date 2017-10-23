@@ -98,7 +98,7 @@ class HomePage extends BaseComponent {
     const unitCanCashCount = this.parseFloatMoney(canCashCount); // 未提现
     const unitBalanceIncomeToday = this.parseFloatMoney(balanceIncomeToday);
     const unitBalancePayToday = this.parseFloatMoney(balancePayToday);
-    return (<div>
+    return (<div style={{ position: 'relative' }}>
       <Title>代理中心</Title>
       <NavBar
         title="代理中心"
@@ -126,8 +126,10 @@ class HomePage extends BaseComponent {
         <FlexRow className={styles.userInfoWrap}>
           <Avatar className={styles.userAvatar} />
           <div className={styles.userInfo}>
+            <p className={styles.saleDiamondsOfThisMonthLabel}>
+              本月销钻数量：<span className={styles.saleDiamondsLabel}>{saleDiamondsOfThisMonth || 0}</span>
+            </p>
             <p>邀请码：{inviteCode}</p>
-            <p>本月销钻数量：{saleDiamondsOfThisMonth}</p>
           </div>
         </FlexRow>
         <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
@@ -163,8 +165,8 @@ class HomePage extends BaseComponent {
             <span>(个)</span>
           </FlexRow>
           <div className={styles.masonryInfoWrap}>
-            <p className={styles.masonryInfo}>今日收入{masonryIncomeToday}个</p>
-            <p className={styles.masonryInfo}>今日支出{masonryPayToday}个</p>
+            <p className={styles.masonryInfo}>今日收入:<span className={styles.count}>{masonryIncomeToday}</span>个</p>
+            <p className={styles.masonryInfo}>今日支出:<span className={styles.count}>{masonryPayToday}</span>个</p>
           </div>
         </div>
 
@@ -180,15 +182,19 @@ class HomePage extends BaseComponent {
       <div className={styles.module}>
         <FlexRowBetweenWingSpace className={styles.titleWrap}>
           <FlexRow><TitleIcon /><span>账户余额</span></FlexRow>
-          <div className={styles.colorBlue}>交易明细</div>
+          <div className={styles.colorBlue} onClick={() => this.navigate('/cashMoneyRecord')}>交易明细</div>
         </FlexRowBetweenWingSpace>
         <div className={styles.masonryCountLable}>
           <div>
             <span className={styles.countLabel}>￥:</span><span className={styles.count}>{unitCanCashCount}</span>
           </div>
           <div className={styles.masonryInfoWrap}>
-            <p className={styles.masonryInfo}>今日收入￥{unitBalanceIncomeToday}</p>
-            <p className={styles.masonryInfo}>今日支出￥{unitBalancePayToday}</p>
+            <p className={styles.masonryInfo}>
+              今日收入￥<span className={styles.count}>{unitBalanceIncomeToday}</span>
+            </p>
+            <p className={styles.masonryInfo}>
+              今日支出￥<span className={styles.count}>{unitBalancePayToday}</span>
+            </p>
           </div>
         </div>
         <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>

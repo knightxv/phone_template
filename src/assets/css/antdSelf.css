@@ -9,3 +9,41 @@
 :global(.am-list-header) {
     padding: 0;
 }
+:global(.am-list-item.am-input-item:after) {
+    border: none;
+}
+:global(.am-list-body) {
+    border-top: none;
+}
+:global(.am-list-body div:not(:last-child) .am-list-line:after) {
+    border-bottom: none;
+}
+:global(.am-list-item) {
+    padding: 0;
+    min-height: 0;
+}
+:global(.am-list-item .am-list-line) {
+    padding: 0;
+    min-height: 0;
+}
+:global(.am-list-content) {
+    padding-top: 0!important;
+    padding-bottom: 0!important;
+}
+:global(.am-list-body:after) {
+    border-bottom: none;
+}
+
+:global(.am-list-item .am-input-label.am-input-label-5) {
+    width: 1.5rem;
+}
+:global(.am-list-item .am-input-label) {
+    color: #333;
+}
+:global(.am-list-item) {
+    background: none;
+}
+:global(.am-list-item .am-input-extra) {
+    overflow: initial;
+}
+

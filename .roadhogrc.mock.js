@@ -1,7 +1,7 @@
 export default {
     // 本地用
     'GET /config' : {
-        JavaWebPublicServerUrl: '192.168.2.101:8000', // 192.168.2.108:8080
+        JavaWebPublicServerUrl: '192.168.2.101:8000', // 192.168.2.139:8080
     },
 
     /*
@@ -193,8 +193,6 @@ export default {
         data: {}
     },
     /*
-        @add(saleDiamondsOfThisMonth, myUnderAgentCount, myPlayerCount, myDiamondsCount,
-        masonryIncomeToday, masonryPayToday, balanceIncomeToday, balancePayToday)
         获取个人信息
      */
     'GET /spreadApi/getUserInfo' : {
@@ -239,7 +237,6 @@ export default {
         ]
     },
     /*
-        @edit(goodsMoney,masonryCount )
         得到商品列表
     */
     'GET /spreadApi/getMasonryGoods' : {
@@ -250,7 +247,7 @@ export default {
                 shopId: 1, // 商品的id
                 goodsMoney: '100000', // 商品金额
                 masonryCount: '10000', // 钻石个数
-            }
+            },
         ]
     },
     /*
@@ -280,17 +277,22 @@ export default {
         page: 0,
         size: 10,
     */
-    'GET /spreadApi/balanceRechargeRecord' : {
+    'GET /spreadApi/diamondsDetail' : {
         status: 'success',
         Msg: '',
         data: [
             {
-                cashTime: 3647346734673, // 购买的时间
-                cashCount: 300, // 购买的数量
+                chargeTime: 1508480231603, // 购买的时间
+                chargeCount: 300, // 购买的数量`
             },
+            {
+                chargeTime: 1508480231603, // 购买的时间
+                chargeCount: 300, // 购买的数量`
+            },
+            
         ]
     },
-    /*  @add(--)
+    /*
         我的玩家
     */
     'GET /spreadApi/myPlayers' : {
@@ -298,7 +300,7 @@ export default {
         Msg: '',
         data: [
             {
-                playerName: '',
+                playerName: '昵称',
                 playerId: '123456',
                 palyCashCount: 3430, // 玩家消费
                 masonrySurplus: 343, // 剩余钻石
@@ -363,13 +365,15 @@ export default {
         data: [
             {
             	title: '购买[2300钻石 售价175元]',
-            	TranAmount: '-55', // 交易金额
+            	TranAmount: -55, // 交易金额
             	tranTime: 4574835, // 交易时间
             },
         ]
     },
     /*
-    	余额交易明细
+        余额交易明细
+        monthTime: 2343242
+    	type : 0(玩家购钻), 1(代理购钻) 2（代理反钻）, 3（系统调整）, 4（邀请奖励）, 5（提现）（all不传type）
      */
     'GET /spreadApi/getBalanceRecord' : {
     	status: 'success',
@@ -377,8 +381,8 @@ export default {
         data: [
             {
             	title: '购买[2300钻石 售价175元]',
-            	TranAmount: '-55', // 交易金额
-            	tranTime: 4574835, // 交易时间
+            	TranAmount: -5500, // 交易金额
+            	tranTime: 1508465568441, // 交易时间
             },
         ]
     },
@@ -439,25 +443,16 @@ export default {
         给玩家充值
         @query : HeroID id
         @query : money 充值钱
-        @chargeType  : 0微信 1支付宝
+        @chargeType  : --
         @serverID: 游戏的serverId
         @query: pid: 代理id
     */
     'GET /spreadApi/recharge_for_player' : {
         status: 'success',
         Msg: '',
-        data: null
-    },
-    /*
-        给代理充值
-        @query : HeroID id
-        @query : money 充值数量
-        @type  : 0微信 1支付宝
-    */
-    'GET /spreadApi/recharge' : {
-        status: 'success',
-        Msg: '',
-        data: null
+        data: {
+            chargeURL: '', // 支付后应该跳转的页面
+        }
     },
 
     /*

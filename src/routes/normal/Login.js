@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 
 import { Helmet } from 'react-helmet';
-import { Input, Button } from '@/helps/antdComponent';
+import { InputItem, Button } from '@/helps/antdComponent';
 import BaseComponent from '@/helps/BaseComponent';
 import { WhiteSpace, Title, IconImg } from '@/helps/styleComponent';
 import styles from './Login.css';
@@ -36,35 +36,47 @@ class Login extends BaseComponent {
     // 登录成功
     this.props.dispatch(this.helps.routerRedux.push('/homePage'));
   }
+  navigateToRegister = () => {
+    this.props.dispatch(this.helps.routerRedux.push('/register'));
+  }
   render() {
-    const { loginLoading } = this.state;
+    const { loginLoading, loginID, password } = this.state;
     return (
-      <div className="alignCenterContainer">
+      <div className={styles.container}>
         <Title>代理登录</Title>
         <Helmet>
           <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
         </Helmet>
-        <div className="contentContainer">
+        <div className={styles.contentContainer}>
           <div className={styles.logoWrap}>
             <IconImg className={styles.logo} src={logoSource} />
             <span className={styles.logoTitle}>阿当比鸡</span>
           </div>
           <div>
-            <Input
-              className={styles.loginInput}
-              onChange={(event) => this.setState({ loginID: event.target.value })}
-              placeholder="请输入账号名/姓名"
-            />
-            <Input
-              className={styles.loginInput}
-              type="password"
-              placeholder="请输入密码"
-              onPressEnter={this.login}
-              onChange={(event) => this.setState({ password: event.target.value })}
-            />
+            <div className={styles.inputWrap}>
+              <InputItem
+                className={styles.loginInput}
+                onChange={value => this.setState({ loginID: value })}
+                value={loginID}
+                placeholder="请输入账号名/姓名"
+              >账号名:</InputItem>
+            </div>
+            <div className={styles.inputWrap}>
+              <InputItem
+                className={styles.loginInput}
+                type="password"
+                placeholder="请输入密码"
+                value={password}
+                onChange={value => this.setState({ password: value })}
+              >　密码:</InputItem>
+            </div>
+            
           </div>
           <WhiteSpace />
           <Button className={styles.loginBtn} loading={loginLoading} onClick={this.login}>登录</Button>
+          <div className={styles.registerTip}>
+            还没创建账号?点击<span className={styles.registerLabel} onClick={this.navigateToRegister}>创建账号</span>
+          </div>
         </div>
       </div>
     );

@@ -7,13 +7,10 @@ import BaseComponent from '@/helps/BaseComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
 import styles from './MyUnderAgent.css';
 
-console.log(SearchBar)
-
 const columns = [
   {
     dataIndex: 'agentInviteCode',
     title: '代理ID',
-    remark: '(共9人)',
   },
   {
     dataIndex: 'CommissionOfAll',
@@ -31,9 +28,9 @@ class MyUnderAgent extends BaseComponent {
     this.state = {
       tableData: [],
       isLoaded: false,
+      searchVal: '',
       notice: '代理填写您的邀请码,该代理充钻您就可以获得10%反钻', // 公告内容
     };
-    this.serchInput = null;
   }
   async componentWillMount() {
     const res = await this.helps.webHttp.get('/spreadApi/myUnderAgents');
@@ -43,13 +40,29 @@ class MyUnderAgent extends BaseComponent {
       });
     }
   }
-  onEndReached = () => {
-    console.log('滚动到某个位置');
+  // onEndReached = () => {
+  //   console.log('滚动到某个位置');
+  // }
+  // 跳转到邀请代理
+  navigateToInvite = () => {
+    this.props.dispatch(this.helps.routerRedux.push('/inviteToAgent'));
+  }
+  onSearchInputChange = (ev) => {
+    this.setState({
+      searchVal: ev.target.value,
+    });
+  }
+  onCancelClick = () => {
+    this.setState({
+      searchVal: '',
+    });
   }
   render() {
-    const { tableData, notice } = this.state;
+    const { tableData, notice, searchVal } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(notice);
-    
+    const filterTableData = tableData.filter((data) => {
+      return data.agentInviteCode.toString().indexOf(searchVal) !== -1;
+    });
     // const allRechargeCount = tableData.reduce((beforeVal, currentVal) => {
     //   return beforeVal + currentVal.allRechargeCount;
     // }, 0);
@@ -63,8 +76,6 @@ class MyUnderAgent extends BaseComponent {
     const CommissionOfAll = tableData.reduce((beforeVal, currentVal) => {
       return beforeVal + currentVal.CommissionOfAll;
     }, 0);
-    
-
     const CommissionOfToday = tableData.reduce((beforeVal, currentVal) => {
       return beforeVal + currentVal.CommissionOfToday;
     }, 0);
@@ -84,17 +95,23 @@ class MyUnderAgent extends BaseComponent {
         <NavBar
           title="我的下级代理"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
-          right={<span>邀请</span>}
+          right={<span onClick={this.navigateToInvite}>邀请</span>}
         />
-        <SearchBar placeholder="请输入代理ID  " maxLength={8} />
         <NoticeBar
           mode="closable"
           onClick={this.navigateNotice}
         >
           <span dangerouslySetInnerHTML={notiveInfoHtml} />
         </NoticeBar>
+        <SearchBar
+          placeholder="请输入代理ID"
+          maxLength={8}
+          onChange={this.onSearchInputChange}
+          value={searchVal}
+          onCancelClick={this.onCancelClick}
+        />
         <ListViewTable
-          tableData={tableData}
+          tableData={filterTableData}
           columns={columnsAddRemark}
         />
         {/* <WingBlank style={{ textAlign: 'center', fontSize: 12 }}>

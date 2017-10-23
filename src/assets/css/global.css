@@ -6,6 +6,7 @@ html{font-size: 40px;}
 body {
     font-family: '微软雅黑','Microsoft Yahei','hiragino sans gb w3','Arial';
     /* font-size: .24rem; */
+    color: #333;
     
 }
 * {
@@ -14,7 +15,6 @@ body {
     box-sizing: border-box;
     outline: none;
     font-size: .24rem;
-    color: #333;
 }
 :global(#root) {
     min-height: 100%;

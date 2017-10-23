@@ -1,60 +1,68 @@
 import React from 'react';
 import { connect } from 'dva';
+import classNames from 'classnames';
 
-import { Button, Input } from '@/helps/antdComponent';
+import { Button, InputItem, NavBar, Icon } from '@/helps/antdComponent';
 import BaseComponent from '@/helps/BaseComponent';
-import { WhiteSpace, WingBlank, FlexRow, BaseFont, IconImg, Title } from '@/helps/styleComponent';
+import { WhiteSpace, WingBlank, FlexRow, FlexRowBetweenWingSpace, IconImg, Title } from '@/helps/styleComponent';
 import styles from './Pay.css';
+
+const selectDiamondArr = [10, 100, 500];
 
 class Pay extends BaseComponent {
   constructor(props) {
     super(props);
     const searchText = this.props.location.search.substr(1);
     const query = this.helps.querystring.parse(searchText);
-    const { heroID = '', serverID = '', code, price = '' } = query;;
-    this.code = code;
-    if (heroID && serverID) {
-      // 说明是从游戏端那边过来的
-      this.heroID = heroID;
-      this.serverID = serverID;
-      this.price = price;
-      window.location.hash = window.location.hash.split('?')[0];
-      this.disabledUserEditId = true; // 禁止用户编辑id
-    }
+    const { playerId } = query;
+    const { payEnum } = this.helps;
     this.state = {
-      heroID, // 用户id
-      money: price, // 充值金额
       diamond: '', // 钻石
-      userName: '', // 用户名
-      avatar: '', // 用户头像
+      playerName: '', // 用户名
+      playerId,
+      playerNotFind: false, // 玩家是否未找到
+      isChooseInput: false, // 是否选择其他数额
+      selectIndex: -1,
+      payTypeSelect: payEnum.WECHAT,
     };
     this.idTimer = null;
-    this.moneyTimer = null;
+    this.paySelectArr = [
+      {
+        payTypeName: '微信支付',
+        // payTypeImg: '',
+        payType: payEnum.WECHAT,
+      },
+      {
+        payTypeName: '支付宝支付',
+        // payTypeImg: '',
+        payType: payEnum.ALI,
+      },
+    ];
   }
   async componentWillMount() {
-    if (!this.heroID) {
-      return false;
-    }
-    this.idValChange(this.heroID);
-    this.moneyValChange(this.price);
+    this.idValChange(this.state.playerId);
   }
   // 充值
-  recharge = async (type) => {
+  recharge = async () => {
+    const type = this.state.payTypeSelect;
     const chargeType = this.helps.payType(type);
     // HeroID 玩家ID Diamond充值数量  TimeTick 充值时间
-    const { heroID: HeroID, money } = this.state;
-    // const { code: pid, serverID } = this.props.location.query;
-    const pid = this.code;
-    const serverID = this.serverID;
-    if (!pid) {
-      this.helps.toast('代理不存在，请联系代理重新分享链接');
-      return false;
+    const { diamond, playerId, playerNotFind } = this.state;
+    if (!playerId || playerId.length < 6 || playerNotFind) {
+      this.helps.toast('玩家不存在');
+      return;
     }
+    if (!diamond) {
+      this.helps.toast('请选择钻石个数');
+      return;
+    }
+    const money = diamond * 10;
+    const moneyFloat = this.parseFloatMoney(money);
+    const { proxyid } = this.props;
     const params = {
-      pid,
-      HeroID,
-      serverID,
-      money,
+      pid: proxyid,
+      HeroID: playerId,
+      money: moneyFloat,
       chargeType,
     };
     const res = await this.helps.webHttp.get('/spreadApi/recharge_for_player', params);
@@ -71,17 +79,23 @@ class Pay extends BaseComponent {
     clearTimeout(this.idTimer);
     this.idTimer = setTimeout(async () => {
       if (!val || val.length < 6) {
+        this.setState({
+          playerName: '',
+        });
         return false;
       }
       // 获取头像和名称
       const res = await this.helps.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val });
       if (res.isSuccess) {
-        const { userName, avatar } = res.data;
+        const { userName } = res.data;
         this.setState({
-          userName,
-          avatar,
+          playerName: userName,
+          playerNotFind: false,
         });
       } else {
+        this.setState({
+          playerNotFind: true,
+        });
         this.helps.toast(res.info);
       }
     }, 500);
@@ -90,89 +104,127 @@ class Pay extends BaseComponent {
     });
   }
   // 金额发生改变
-  moneyValChange = (val) => {
-    clearTimeout(this.moneyTimer);
-    this.moneyTimer = setTimeout(async () => {
-      if (!val || isNaN(val)) {
-        this.setState({
-          diamond: '',
-        });
-        return false;
-      }
-      const res = await this.helps.webHttp.get('/spreadApi/getDiamondsByMoney', { money: val });
-      if (res.isSuccess) {
-        this.setState({
-          diamond: res.data.diamond,
-        });
-      }
-    }, 500);
+  diamondValChange = (ev) => {
+    const val = ev.target.value;
+    if (val.length > 4 || isNaN(val) || val.indexOf('.') !== -1) {
+      return;
+    }
     this.setState({
-      money: val,
+      diamond: val,
+    });
+  }
+  // 选择其他面板
+  selectOtherCount = () => {
+    this.setState({
+      isChooseInput: true, // 是否选择其他数额
+      selectIndex: 'selfSelect',
+    });
+  }
+  // 退出编辑
+  selectOtherBlur = () => {
+    this.setState({
+      isChooseInput: false,
+      selectIndex: this.state.diamond ? 'selfSelect' : -1,
+    });
+  }
+  // 选择钻石数额
+  selectMasonry = (count, selectIndex) => {
+    this.setState({
+      selectIndex,
+      diamond: count,
+    });
+  }
+  selectPayType = (payType) => {
+    this.setState({
+      payTypeSelect: payType,
     });
   }
   render() {
-    const { userName, diamond, heroID, avatar, money } = this.state;
-    const disabledUserEditId = !!this.disabledUserEditId; // 是否禁止用户输入
-    const payEnum = this.helps;
+    const { playerName, diamond, playerNotFind, isChooseInput, selectIndex, payTypeSelect, playerId } = this.state;
+    const money = diamond * 10;
+    const moneyFloat = this.parseFloatMoney(money);
+    // const { payEnum } = this.helps;
     return (
       <div className="alignCenterContainer">
-        <Title>充值</Title>
-        <WingBlank>
-          <WhiteSpace size="md" />
+        <Title>给玩家充值</Title>
+        <NavBar
+          title="给玩家充值"
+          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+        />
+        <div className={styles.playerInputWrap}>
+          <InputItem onChange={this.idValChange} value={playerId} type="number" maxLength={8} placeholder="请输入ID/推广码" />
           {
-            avatar &&
-            (
-              <IconImg className={styles.userAvatar} src={avatar} />
-            )
+            playerNotFind
+            ? (<div className={styles.playerNotFind}>玩家ID不存在</div>)
+            : (<div className={styles.playerName}>{playerName}</div>)
           }
-          <FlexRow className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>ID　　</BaseFont>
-            <Input
-              onChange={ev => this.idValChange(ev.target.value)}
-              placeholder="请输入六位ID号"
-              maxLength={11}
-              disabled={disabledUserEditId}
-              value={heroID}
-            />
-          </FlexRow>
-          <FlexRow className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>用户名</BaseFont>
-            <Input
-              placeholder="根据ID自动检测"
-              value={userName}
-              disabled
-            />
-          </FlexRow>
-          <FlexRow className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>金额　</BaseFont>
-            <Input
-              onChange={ev => this.moneyValChange(ev.target.value)}
-              placeholder="请输入金额数"
-              disabled={disabledUserEditId}
-              maxLength={11}
-              value={money}
-            />
-          </FlexRow>
-          <FlexRow className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>钻石　</BaseFont>
-            <Input
-              placeholder="根据金额自动检测"
-              value={diamond}
-              disabled
-            />
-          </FlexRow>
-          <WhiteSpace size="lg" />
+        </div>
+        <WingBlank>
+          <div className={styles.masonryInputWrap}>
+            {
+              selectDiamondArr.map((diamondCount, i) => (
+                <div
+                  className={classNames(styles.masonrySelect, { [styles.masonrySelectd]: i === selectIndex })}
+                  key={diamondCount}
+                  onClick={() => this.selectMasonry(diamondCount, i)}
+                >
+                  {`${diamondCount} 个钻`}
+                </div>
+              ))
+            }
+            <div
+              onClick={() => this.selectMasonry(0, 'selfSelect')}
+              className={classNames({ [styles.selfSelectWrap]: true, [styles.masonrySelectd]: selectIndex === 'selfSelect' })}
+            >
+              {
+                isChooseInput
+                ? (<input
+                  className={styles.masonryInput}
+                  value={diamond}
+                  onChange={this.diamondValChange}
+                  onBlur={this.selectOtherBlur}
+                  autoFocus
+                  maxLength={4}
+                />)
+                : (<div
+                  className={styles.masonrySelectLabel}
+                  onClick={this.selectOtherCount}
+                >
+                  {
+                    (diamond && selectIndex === 'selfSelect') ? `${diamond} 个钻` : '其他数额'
+                  }
+                </div>)
+              }
+            </div>
+          </div>
+          <WhiteSpace />
+          <div>玩家购钻比例统一1元10个钻石</div>
+          <WhiteSpace />
+        </WingBlank>
+        <div className={styles.payTypeTitle}>支付方式</div>
+        {
+          this.paySelectArr.map(payInfo => (
+            <FlexRowBetweenWingSpace
+              key={payInfo.payType}
+              className={styles.paySelectItem}
+              onClick={() => this.selectPayType(payInfo.payType)}
+            >
+              <div>
+                {payInfo.payTypeName}
+              </div>
+              {
+                payTypeSelect === payInfo.payType && <Icon type="check" />
+              }
+            </FlexRowBetweenWingSpace>
+          ))
+        }
+        <div className={styles.priceTip}>价格：{moneyFloat}元</div>
+        <WingBlank>
           <Button
             className={styles.payBtn}
-            onClick={() => this.recharge(payEnum.WECHAT)}
+            onClick={this.recharge}
           >
-          微信支付
-          </Button>
-          <Button
-            className={styles.payBtn}
-            onClick={() => this.recharge(payEnum.ALI)}
-          >
-          支付宝支付
+          立即购买
           </Button>
         </WingBlank>
       </div>
@@ -180,8 +232,10 @@ class Pay extends BaseComponent {
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    ...state.agent,
+  };
 }
 
 export default connect(mapStateToProps)(Pay);

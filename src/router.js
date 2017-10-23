@@ -27,9 +27,9 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
-  const PlayerPayManage = dynamic({
+  const InviteToAgent = dynamic({
     app,
-    component: () => import('./routes/normal/PlayerPayManage'),
+    component: () => import('./routes/normal/InviteToAgent'),
     models: () => [
       import('./models/agent'),
     ],
@@ -111,9 +111,9 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
-  const AgencyPayType = dynamic({
+  const BuyMasonryDetail = dynamic({
     app,
-    component: () => import('./routes/normal/AgencyPayType'),
+    component: () => import('./routes/normal/BuyMasonryDetail'),
     models: () => [
       import('./models/agent'),
     ],
@@ -203,7 +203,7 @@ function RouterConfig({ history, app }) {
           <Route path="/login" component={NormalLogin} />
           <Route path="/homePage" component={NormalHomePage} />
           <Route path="/rankExplain" component={RankExplain} />
-          <Route path="/PlayerPayManage" component={PlayerPayManage} />
+          <Route path="/inviteToAgent" component={InviteToAgent} />
           <Route path="/pay" component={Pay} />
           <Route path="/PlayerMoneyRecord" component={PlayerMoneyRecord} />
           <Route path="/AgencyMoneyRecord" component={AgencyMoneyRecord} />
@@ -215,7 +215,7 @@ function RouterConfig({ history, app }) {
           <Route path="/EditAgencyPsd" component={EditAgencyPsd} />
           <Route path="/register" component={Register} />
           <Route path="/AgreenDetail" component={AgreenDetail} />
-          <Route path="/AgencyPayType" component={AgencyPayType} />
+          <Route path="/buyMasonryDetail" component={BuyMasonryDetail} />
           <Route path="/masonryDerail" component={MasonryDerail} />
 
           <Route path="/general/login" component={GeneralLogin} />
