@@ -11,14 +11,16 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0.2rem;
 }
 
 .qrContainer {
-    width: 96%;
-    padding: 0.5rem;
+    width: 320px;
     margin: 0 auto;
     background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.3rem 0;
 }
 
 .inviteCodeLabel {
@@ -26,10 +28,12 @@
 }
 
 .userInfo {
-    margin-bottom: 0.2rem;
+    align-self: flex-start;
+    margin: 0.2rem 30px;
 }
 
 .qrCodeTip {
+    padding-top: 0.3rem;
     text-align: center;
 }
 

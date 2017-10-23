@@ -284,10 +284,12 @@ export default {
             {
                 chargeTime: 1508480231603, // 购买的时间
                 chargeCount: 300, // 购买的数量`
+                chargeMoney: 30,
             },
             {
                 chargeTime: 1508480231603, // 购买的时间
                 chargeCount: 300, // 购买的数量`
+                chargeMoney: 30,
             },
             
         ]

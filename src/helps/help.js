@@ -54,6 +54,7 @@ exports.openWindow = (url) => {
 const payEnum = {
   WECHAT: 0,
   ALI: 1,
+  BALANCE: 3,
 };
 // 识别微信浏览器
 const isWeixinBrowser = () => {

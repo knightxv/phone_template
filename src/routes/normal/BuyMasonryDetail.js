@@ -66,11 +66,11 @@ class AgencyPayType extends BaseComponent {
     }
     return (<FlexRowBetweenWingSpace className={styles.detailItem}>
       <div>
-        <p>购进{rowData.cashCount}个钻石</p>
-        <p>{ new Date(+rowData.cashTime).format('yyyy-MM-dd hh:mm')}</p>
+        <p className={styles.chargeLabel}>购进{rowData.chargeCount}个钻石</p>
+        <p className={styles.chargeTime}>{ new Date(+rowData.chargeTime).format('yyyy-MM-dd hh:mm')}</p>
       </div>
-      <p>
-        -{parseFloat(rowData.cashCount / 10)}
+      <p className={styles.chargeMoney}>
+        -{this.parseFloatMoney(rowData.chargeMoney)}
       </p>
     </FlexRowBetweenWingSpace>);
   }
@@ -84,13 +84,12 @@ class AgencyPayType extends BaseComponent {
     this.getDetailData();
   }
   getDetailData = async () => {
-    this.page ++;
     const page = this.page;
     const size = this.size;
-    const res = await this.helps.webHttp.get('/spreadApi/balanceRechargeRecord', { page, size });
-    // cashTime: 1508480231603, // 购买的时间  cashCount: 300, // 购买的数量`
-    
+    const res = await this.helps.webHttp.get('/spreadApi/diamondsDetail', { page, size });
+    // chargeTime: 1508480231603, // 购买的时间  chargeCount: 300, // 购买的数量`  
     if (res.isSuccess) {
+      this.page ++;
       const temData = {};
       if (res.data.length === 0) {
         return;
@@ -99,7 +98,7 @@ class AgencyPayType extends BaseComponent {
         this.dataLoadOver = true;
       }
       res.data.forEach((data) => {
-        const monthValue = new Date(+data.cashTime).format('yyyyMM');
+        const monthValue = new Date(+data.chargeTime).format('yyyyMM');
         if (!temData[monthValue]) {
           temData[monthValue] = [];
         }
@@ -113,7 +112,7 @@ class AgencyPayType extends BaseComponent {
           this.data[index].data = [...this.data[index].data, ...temData[attr]];
         } else {
           this.data.push({
-            monthLabel: new Date(+temData[attr][0].cashTime).format('yyyy年MM月'),
+            monthLabel: new Date(+temData[attr][0].chargeTime).format('yyyy年MM月'),
             monthValue: attr,
             data: [...temData[attr]],
           });

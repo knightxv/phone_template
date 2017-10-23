@@ -11,10 +11,12 @@ export const AgentType = {
 export const payType = {
   WECAHT: 0,
   ALI: 1,
+  BALANCE: 2,
 };
 export const payTypeLabel = {
   [payType.WECAHT]: '微信',
   [payType.ALI]: '支付宝',
+  [payType.BALANCE]: '余额支付',
 };
 
 export const resolveStatus = {

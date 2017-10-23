@@ -145,6 +145,7 @@ const RowSection = styled.div`
   display: flex;
   text-align: center;
   padding: 0.1rem 0;
+  border-bottom: 1px solid #dedede;
 `;
 const renderHeader = (columns) => { // dataIndex title
   return (
@@ -159,6 +160,7 @@ const renderHeader = (columns) => { // dataIndex title
               alignItems: 'center',
               flexDirection: 'column',
               justifyContent: 'center',
+              color: '#000',
             }}
           >
             <p>{ title }</p>
@@ -170,6 +172,10 @@ const renderHeader = (columns) => { // dataIndex title
   );
 };
 
+const StyleListView = styled(ListView)`
+  flex: 1;
+  overflow: auto;
+`;
 const renderRow = (tableData, columns) => {
   return (
     <div>
@@ -192,12 +198,6 @@ const renderRow = (tableData, columns) => {
   );
 };
 
-const StyleListView = styled(ListView)`
-  flex: 1;
-  overflow: auto;
-  background: #fff;
-`;
-
 const DefaultListView = ({ tableData, columns, ...props }) => {
   return (
     <StyleListView
@@ -205,6 +205,7 @@ const DefaultListView = ({ tableData, columns, ...props }) => {
       renderRow={() => renderRow(tableData, columns)}
       renderHeader={() => renderHeader(columns)}
       className="fortest"
+      contentContainerStyle={{ background: '#fff' }}
       pageSize={10}
       scrollRenderAheadDistance={500}
       scrollEventThrottle={200}

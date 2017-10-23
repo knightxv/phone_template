@@ -7,6 +7,11 @@ import BaseComponent from '@/helps/BaseComponent';
 import { WhiteSpace, WingBlank, FlexRow, FlexRowBetweenWingSpace, IconImg, Title } from '@/helps/styleComponent';
 import styles from './Pay.css';
 
+const paySource = {
+  wx: require('../../assets/wx.png'),
+  zfb: require('../../assets/zfb.png'),
+};
+
 const selectDiamondArr = [10, 100, 500];
 
 class Pay extends BaseComponent {
@@ -29,12 +34,12 @@ class Pay extends BaseComponent {
     this.paySelectArr = [
       {
         payTypeName: '微信支付',
-        // payTypeImg: '',
+        paySource: paySource.wx,
         payType: payEnum.WECHAT,
       },
       {
         payTypeName: '支付宝支付',
-        // payTypeImg: '',
+        paySource: paySource.zfb,
         payType: payEnum.ALI,
       },
     ];
@@ -77,6 +82,9 @@ class Pay extends BaseComponent {
   // id发生改变
   idValChange = (val) => {
     clearTimeout(this.idTimer);
+    this.setState({
+      playerId: val,
+    });
     this.idTimer = setTimeout(async () => {
       if (!val || val.length < 6) {
         this.setState({
@@ -99,9 +107,6 @@ class Pay extends BaseComponent {
         this.helps.toast(res.info);
       }
     }, 500);
-    this.setState({
-      heroID: val,
-    });
   }
   // 金额发生改变
   diamondValChange = (ev) => {
@@ -145,7 +150,7 @@ class Pay extends BaseComponent {
     const moneyFloat = this.parseFloatMoney(money);
     // const { payEnum } = this.helps;
     return (
-      <div className="alignCenterContainer">
+      <div>
         <Title>给玩家充值</Title>
         <NavBar
           title="给玩家充值"
@@ -158,49 +163,49 @@ class Pay extends BaseComponent {
             ? (<div className={styles.playerNotFind}>玩家ID不存在</div>)
             : (<div className={styles.playerName}>{playerName}</div>)
           }
-        </div>
-        <WingBlank>
-          <div className={styles.masonryInputWrap}>
-            {
-              selectDiamondArr.map((diamondCount, i) => (
-                <div
-                  className={classNames(styles.masonrySelect, { [styles.masonrySelectd]: i === selectIndex })}
-                  key={diamondCount}
-                  onClick={() => this.selectMasonry(diamondCount, i)}
-                >
-                  {`${diamondCount} 个钻`}
-                </div>
-              ))
-            }
-            <div
-              onClick={() => this.selectMasonry(0, 'selfSelect')}
-              className={classNames({ [styles.selfSelectWrap]: true, [styles.masonrySelectd]: selectIndex === 'selfSelect' })}
-            >
+          <div className={styles.selectCountWrap}>
+            <div className={styles.rechargeTitle}>玩家购钻比例统一1元10个钻石</div>
+            <div className={styles.masonryInputWrap}>
               {
-                isChooseInput
-                ? (<input
-                  className={styles.masonryInput}
-                  value={diamond}
-                  onChange={this.diamondValChange}
-                  onBlur={this.selectOtherBlur}
-                  autoFocus
-                  maxLength={4}
-                />)
-                : (<div
-                  className={styles.masonrySelectLabel}
-                  onClick={this.selectOtherCount}
-                >
-                  {
-                    (diamond && selectIndex === 'selfSelect') ? `${diamond} 个钻` : '其他数额'
-                  }
-                </div>)
+                selectDiamondArr.map((diamondCount, i) => (
+                  <div
+                    className={classNames(styles.masonrySelect, { [styles.masonrySelectd]: i === selectIndex })}
+                    key={diamondCount}
+                    onClick={() => this.selectMasonry(diamondCount, i)}
+                  >
+                    {`${diamondCount} 个钻`}
+                  </div>
+                ))
               }
+              <div
+                onClick={() => this.selectMasonry(0, 'selfSelect')}
+                className={classNames({ [styles.selfSelectWrap]: true, [styles.masonrySelectd]: selectIndex === 'selfSelect' })}
+              >
+                {
+                  isChooseInput
+                  ? (<input
+                    className={styles.masonryInput}
+                    value={diamond}
+                    onChange={this.diamondValChange}
+                    onBlur={this.selectOtherBlur}
+                    autoFocus
+                    maxLength={4}
+                  />)
+                  : (<div
+                    className={styles.masonrySelectLabel}
+                    onClick={this.selectOtherCount}
+                  >
+                    {
+                      (diamond && selectIndex === 'selfSelect') ? `${diamond} 个钻` : '其他数额'
+                    }
+                  </div>)
+                }
+              </div>
             </div>
+            <WhiteSpace />
           </div>
-          <WhiteSpace />
-          <div>玩家购钻比例统一1元10个钻石</div>
-          <WhiteSpace />
-        </WingBlank>
+        </div>
+        <WhiteSpace />
         <div className={styles.payTypeTitle}>支付方式</div>
         {
           this.paySelectArr.map(payInfo => (
@@ -209,22 +214,23 @@ class Pay extends BaseComponent {
               className={styles.paySelectItem}
               onClick={() => this.selectPayType(payInfo.payType)}
             >
-              <div>
+              <FlexRow>
+                <IconImg src={payInfo.paySource} className={styles.payIcon} />
                 {payInfo.payTypeName}
-              </div>
+              </FlexRow>
               {
                 payTypeSelect === payInfo.payType && <Icon type="check" />
               }
             </FlexRowBetweenWingSpace>
           ))
         }
-        <div className={styles.priceTip}>价格：{moneyFloat}元</div>
+        <div className={styles.priceTip}>价格：<span className={styles.priceCount}>{moneyFloat}元</span></div>
         <WingBlank>
           <Button
             className={styles.payBtn}
             onClick={this.recharge}
           >
-          立即购买
+          立即充值
           </Button>
         </WingBlank>
       </div>

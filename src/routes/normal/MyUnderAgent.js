@@ -15,10 +15,22 @@ const columns = [
   {
     dataIndex: 'CommissionOfAll',
     title: '总提成钻石数',
+    render(rowVal) {
+      if (rowVal.CommissionOfAll >= 0) {
+        return <div className="countAdd">{`+${rowVal.CommissionOfAll}`}</div>;
+      }
+      return <div className="countSub">{`-${rowVal.CommissionOfAll}`}</div>;
+    },
   },
   {
     dataIndex: 'CommissionOfToday',
     title: '今日提成钻石数',
+    render(rowVal) {
+      if (rowVal.CommissionOfToday >= 0) {
+        return <div className="countAdd">{`+${rowVal.CommissionOfToday}`}</div>;
+      }
+      return <div className="countSub">{`-${rowVal.CommissionOfToday}`}</div>;
+    },
   },
 ];
 

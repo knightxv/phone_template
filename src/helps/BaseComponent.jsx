@@ -74,7 +74,6 @@ export default class BaseComponent extends React.Component {
     this.helps = {
       webHttp,
       fetch,
-      
       ...help,
       toast: (msg) => {
         Toast.info(msg || '未知错误', 1, null, false);
@@ -95,5 +94,14 @@ export default class BaseComponent extends React.Component {
   }
   parseFloatMoney = (money) => {
     return parseFloat(money / 100).toFixed(2);
+  }
+  transMoenyUnit = (count) => {
+    const transCount = count.toString();
+    if (transCount.length === 4) {
+      return `${parseFloat(transCount / 1000)}千`;
+    } else if (transCount.length > 4) {
+      return `${parseFloat(transCount / 10000)}万`;
+    }
+    return transCount;
   }
 }

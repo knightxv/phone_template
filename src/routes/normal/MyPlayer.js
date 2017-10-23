@@ -25,25 +25,34 @@ class SecondaryAgencyRecord extends BaseComponent {
         render: (data) => {
           return (<div>
             <p>{data.playerName}</p>
-            <p>ID:{data.playerId}</p>
+            <p style={{ color: '#999' }}>ID:{data.playerId}</p>
           </div>);
         },
       },
       {
         dataIndex: 'masonrySurplus',
         title: '账户钻石',
+        render(rowVal) {
+          return <div className="countNor">{rowVal.masonrySurplus}</div>;
+        },
       },
       {
         dataIndex: 'palyCashCount',
         title: '玩家今日消费',
-        render(data) {
-          return self.parseFloatMoney(data.palyCashCount);
+        render(rowVal) {
+          const transRowVal = self.parseFloatMoney(rowVal.palyCashCount);
+          return <div className="countAdd">{`+${transRowVal}`}</div>;
         },
       },
       {
         title: '操作',
         render: (data) => {
-          return <div onClick={() => self.payForMyPlayer(data.playerId)}>充值</div>;
+          return <div
+            className={styles.rechargeBtn}
+            onClick={() => self.payForMyPlayer(data.playerId)}
+          >
+          充值
+          </div>;
         },
       },
     ];

@@ -1,32 +1,38 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import { Button, NavBar, SelectPicker, List } from '@/helps/antdComponent';
-import { BaseFont, Title, WhiteSpace } from '@/helps/styleComponent';
+import { NavBar, Icon } from '@/helps/antdComponent';
+import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, IconImg } from '@/helps/styleComponent';
 import BaseComponent from '@/helps/BaseComponent';
 import styles from './AgencyPay.css';
 
 // const goodsIds = [1, 2, 3, 4, 5, 6];
 // const goodsSourceArr = goodsIds.map(index => require(`../resource/shop/${index}.png`));
 
+const paySource = {
+  wx: require('../../assets/wx.png'),
+  zfb: require('../../assets/zfb.png'),
+  yezf: require('../../assets/yezf.png'),
+};
+
 class AgencyPay extends BaseComponent {
   constructor(props) {
     super(props);
     this.payEnum = this.helps.payEnum;
-    const { WECHAT, ALI } = this.payEnum;
+    const { WECHAT, ALI, BALANCE } = this.payEnum;
     this.state = {
       goods: [],
-      selectPayTypeVal: [WECHAT],
+      payTypeSelect: WECHAT,
     };
     this.marsonryPayType = [
-      { value: WECHAT, label: '微信支付' },
-      { value: ALI, label: '支付宝支付' },
-      { value: '余额支付', label: '余额支付' },
+      { payType: WECHAT, label: '微信支付', paySource: paySource.wx },
+      { payType: ALI, label: '支付宝支付', paySource: paySource.zfb },
+      { payType: BALANCE, label: '余额支付', paySource: paySource.yezf },
     ];
     if (this.helps.isWeixinBrowser()) {
       this.marsonryPayType = [
-        { value: WECHAT, label: '微信支付' },
-        { value: '余额支付', label: '余额支付' },
+        { payType: WECHAT, label: '微信支付' },
+        { payType: BALANCE, label: '余额支付' },
       ];
     }
   }
@@ -59,18 +65,18 @@ class AgencyPay extends BaseComponent {
     };
     const res = await this.helps.webHttp.get('/spreadApi/balanceRecharge', params);
     if (res.isSuccess) {
+      this.props.dispatch({ type: 'agent/updateUserInfo' });
       this.helps.toast(res.info || '充值成功');
       return false;
     }
     this.helps.toast(res.info || '充值失败，请重试');
   }
   buyGood = (shopId) => {
-    const { selectPayTypeVal } = this.state;
-    const payType = selectPayTypeVal[0];
+    const { payTypeSelect } = this.state;
     const { WECHAT, ALI } = this.payEnum;
-    if (payType === WECHAT) {
+    if (payTypeSelect === WECHAT) {
       this.goToPay(WECHAT, shopId);
-    } else if (payType === ALI) {
+    } else if (payTypeSelect === ALI) {
       this.goToPay(ALI, shopId);
     } else {
       this.readyToExcharge(shopId);
@@ -78,14 +84,15 @@ class AgencyPay extends BaseComponent {
   }
   selectPayType = (val) => {
     this.setState({
-      selectPayTypeVal: val,
+      payTypeSelect: val,
     });
   }
   goToDetail = () => {
     this.props.dispatch(this.helps.routerRedux.push('/buyMasonryDetail'));
   }
   render() {
-    const { selectPayTypeVal, goods } = this.state;
+    const { goods, payTypeSelect } = this.state;
+    const { canCashCount } = this.props;
     return (
       <div>
         <Title>购买钻石</Title>
@@ -95,10 +102,36 @@ class AgencyPay extends BaseComponent {
           right={<div onClick={this.goToDetail}>明细</div>}
         />
         <WhiteSpace />
-        <div className="background">
-          <SelectPicker value={selectPayTypeVal} data={this.marsonryPayType} cols={1} onChange={this.selectPayType}>
-            <List.Item arrow="horizontal" style={{ padding: '0 0.2rem' }}>支付方式</List.Item>
-          </SelectPicker>
+        <div className={styles.payTypeContainer}>
+          <div className={styles.payTypeTitle}>支付方式</div>
+          {
+            this.marsonryPayType.map(payInfo => (
+              <FlexRowBetweenWingSpace
+                key={payInfo.payType}
+                className={styles.paySelectItem}
+                onClick={() => this.selectPayType(payInfo.payType)}
+              >
+                <FlexRow>
+                  <IconImg src={payInfo.paySource} className={styles.payIcon} />
+                  <div>{payInfo.label}</div>
+                  {
+                    payInfo.payType === this.payEnum.BALANCE
+                    && (<div className={styles.balanceTip}>
+                      ￥{this.parseFloatMoney(canCashCount)}
+                    </div>)
+                  }
+                </FlexRow>
+                <div>
+                  {
+                    payTypeSelect === payInfo.payType && <Icon type="check" />
+                  }
+                </div>
+              </FlexRowBetweenWingSpace>
+            ))
+          }
+        </div>
+        <WhiteSpace />
+        <div className={styles.payWrap}>
           <div className={styles.payTitle}>充钻石</div>
           <div className={styles.goodsContainer}>
             {
@@ -109,8 +142,8 @@ class AgencyPay extends BaseComponent {
                   style={{ marginRight: (i !== 0 && ((i - 2) % 3) === 0) ? 0 : '5%' }}
                   onClick={() => this.buyGood(shopId)}
                 >
-                  <p className={styles.goodInfo}>{masonryCount}钻石</p>
-                  <p className={styles.goodInfo}>售价：{this.parseFloatMoney(goodsMoney)}元</p>
+                  <p className={styles.goodInfo}>{this.transMoenyUnit(masonryCount)}钻石</p>
+                  <p className={styles.goodInfo}>售价：{this.transMoenyUnit(goodsMoney)}元</p>
                 </div>
               ))
             }
@@ -121,8 +154,10 @@ class AgencyPay extends BaseComponent {
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    ...state.agent,
+  };
 }
 
 export default connect(mapStateToProps)(AgencyPay);

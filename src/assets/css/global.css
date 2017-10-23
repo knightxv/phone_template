@@ -83,8 +83,12 @@ body {
     margin: 0 auto;
 }
 
-@media screen and (max-width: 768px) {
-    :global(.contentContainer) {
-        background: #fff;
-    }
+:global(.countAdd) {
+    color: #1caf08;
+}
+:global(.countSub) {
+    color: #f0602d;
+}
+:global(.countNor) {
+    color: #ff9500;
 }

@@ -25,6 +25,13 @@
     color: #187ef2;
 }
 
+.payIcon {
+    width: 0.36rem;
+    height: 0.36rem;
+    margin-right: 0.18rem;
+    display: block;
+}
+
 .payBtn {
     flex: 1;
     margin-left: 0.1rem;
@@ -42,4 +49,32 @@
     width: 84px;
     height: 56px;
     display: block;
+}
+
+.payTypeContainer {
+    background: #fff;
+    border-top: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
+}
+
+.payTypeTitle {
+    padding: 0.1rem 0.2rem;
+}
+
+.paySelectItem {
+    height: .8rem;
+    background: #fff;
+    border-top: 1px solid #dedede;
+}
+
+.payWrap {
+    background: #fff;
+    border-top: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
+}
+
+.balanceTip {
+    color: #f0602d;
+    font-size: 0.26rem;
+    padding-left: 0.1rem;
 }

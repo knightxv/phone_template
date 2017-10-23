@@ -4,13 +4,13 @@
 }
 .playerName {
     padding: 0rem 0.2rem 0rem;
-    height: 0.6rem;
+    height: 0.4rem;
     font-size: .2rem;
 }
 
 .playerNotFind {
     padding: 0rem 0.2rem 0rem;
-    height: 0.6rem;
+    height: 0.4rem;
     font-size: .2rem;
     color: red;
 }
@@ -64,14 +64,37 @@
 }
 
 .payTypeTitle {
-    padding: 0 0.2rem 0.1rem;
-    color: #9999b5;
+    padding: 0.2rem;
+    color: #000;
+    background: #fff;
 }
 
 .priceTip {
+    font-size: 0.26rem;
     padding: 0.12rem 0.2rem;
+}
+
+.priceCount {
+    font-size: 0.26rem;
+    color: #ff9500;
 }
 
 .payBtn {
     width: 100%;
+}
+
+.rechargeTitle {
+    border-top: 1px solid #dedede;
+    line-height: 0.8rem;
+}
+
+.selectCountWrap {
+    padding: 0.2rem;
+}
+
+.payIcon {
+    width: 0.36rem;
+    height: 0.36rem;
+    margin-right: 0.18rem;
+    display: block;
 }

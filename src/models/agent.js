@@ -79,6 +79,10 @@ export default {
         }
       }
     },
+    // 获取验证码倒计时
+    *updateUserInfo({ payload }, { put, select }) {
+      alert('获取用户数据');
+    },
   },
   subscriptions: {
       async setup({ dispatch, history }) {  // eslint-disable-line
