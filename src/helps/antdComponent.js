@@ -110,7 +110,7 @@ const DefaultNavbar = ({ title, onClick, right }) => {
         onClick={onClick}
       />
       <div>{title}</div>
-      <div style={{ width: 36 }}>
+      <div style={{ width: 36, color: '#78bff2' }}>
         { right }
       </div>
     </NavBarWrap>
@@ -176,25 +176,19 @@ const StyleListView = styled(ListView)`
   flex: 1;
   overflow: auto;
 `;
-const renderRow = (tableData, columns) => {
+const renderRow = (rowData, columns) => {
   return (
-    <div>
+    <RowSection>
       {
-        tableData.map((data, i) => (
-          <RowSection key={i}>
+        columns.map(({ dataIndex, render }, j) => (
+          <div key={j} style={{ width: `${100 / columns.length}%`, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
             {
-              columns.map(({ dataIndex, render }, j) => (
-                <div key={j} style={{ width: `${100 / columns.length}%`, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                  {
-                    render ? render(data) : data[dataIndex]
-                  }
-                </div>
-              ))
+              render ? render(rowData) : rowData[dataIndex]
             }
-          </RowSection>
+          </div>
         ))
       }
-    </div>
+    </RowSection>
   );
 };
 
@@ -202,11 +196,11 @@ const DefaultListView = ({ tableData, columns, ...props }) => {
   return (
     <StyleListView
       dataSource={dataSource.cloneWithRows(tableData || [])}
-      renderRow={() => renderRow(tableData, columns)}
+      renderRow={(rowData) => renderRow(rowData, columns)}
       renderHeader={() => renderHeader(columns)}
-      className="fortest"
       contentContainerStyle={{ background: '#fff' }}
-      pageSize={10}
+      initialListSize={15}
+      pageSize={1}
       scrollRenderAheadDistance={500}
       scrollEventThrottle={200}
       onEndReachedThreshold={10}

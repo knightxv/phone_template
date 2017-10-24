@@ -3,7 +3,7 @@ import { connect } from 'dva';
 
 import BaseComponent from '@/helps/BaseComponent';
 import { NavBar, ListViewTable, DatePicker, SelectPicker } from '@/helps/antdComponent';
-import { Title, FlexRowBetweenWingSpace } from '@/helps/styleComponent';
+import { Title, FlexRowBetweenWingSpace, IconImg } from '@/helps/styleComponent';
 import styles from './CashMoneyRecord.css';
 
 const PayType = [
@@ -34,8 +34,9 @@ class CashMoneyRecord extends BaseComponent {
     this.getDetailInfo(this.state.selectType[0]);
   }
   // 拿到数据
-  getDetailInfo = async (type) => {
-    const { selectTime } = this.state;
+  getDetailInfo = async () => {
+    const { selectTime, selectType } = this.state;
+    const type = selectType[0];
     const res = await this.helps.webHttp.get('/spreadApi/getBalanceRecord',
       {
         monthTime: selectTime,
@@ -54,21 +55,23 @@ class CashMoneyRecord extends BaseComponent {
   selectDateTime = (selectTime) => {
     this.setState({
       selectTime: selectTime.valueOf(),
-      selectTypeVisible: true,
+    }, () => {
+      this.getDetailInfo();
     });
   }
   // 选择交易类型
   selectTypeChange = (val) => {
-    this.getDetailInfo(val[0]);
     this.setState({
       selectType: val,
+    }, () => {
+      this.getDetailInfo();
     });
   }
   renderRow = (rowData) => {
     return (<FlexRowBetweenWingSpace className={styles.itemWrap}>
       <div>
-        <p>{rowData.title}</p>
-        <p>{new Date(rowData.tranTime).format('yyyy-MM-dd hh:mm')}</p>
+        <p className={styles.rowTitle}>{rowData.title || '系统调整'}</p>
+        <p className={styles.rowTime}>{new Date(rowData.tranTime).format('yyyy-MM-dd hh:mm')}</p>
       </div>
       <div>
         {this.parseFloatMoney(rowData.TranAmount)}元
@@ -83,7 +86,7 @@ class CashMoneyRecord extends BaseComponent {
         <NavBar
           title="余额交易明细"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
-          right={<div onClick={() => this.setState({ timePickerVisible: true })}>筛选</div>}
+          right={<div onClick={() => this.setState({ selectTypeVisible: true })}>筛选</div>}
         />
         <DatePicker
           visible={timePickerVisible}
@@ -134,7 +137,11 @@ const renderHeader = ({ tableData, selectTime }, self) => {
       <p>{`支出余额￥${transPayMoney}  收入￥${transIncome}`}</p>
     </div>
     <div>
-      icon
+      <IconImg
+        onClick={() => self.setState({ timePickerVisible: true })}
+        className={styles.riliIcon}
+        src={require('../../assets/rili.png')}
+      />
     </div>
   </FlexRowBetweenWingSpace>);
 };

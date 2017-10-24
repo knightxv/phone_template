@@ -1,7 +1,7 @@
 export default {
     // 本地用
     'GET /config' : {
-        JavaWebPublicServerUrl: '192.168.2.101:8000', // 192.168.2.139:8080
+        JavaWebPublicServerUrl: '120.77.87.4:8080', // 192.168.2.66:8080  192.168.2.101:8000
     },
 
     /*
@@ -272,7 +272,6 @@ export default {
         data: null
     },
     /*
-        @add(--)
         购钻明细
         page: 0,
         size: 10,
@@ -367,7 +366,7 @@ export default {
         data: [
             {
             	title: '购买[2300钻石 售价175元]',
-            	TranAmount: -55, // 交易金额
+            	TranAmount: 55, // 交易个数
             	tranTime: 4574835, // 交易时间
             },
         ]

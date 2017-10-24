@@ -14,7 +14,7 @@ body {
     padding: 0;
     box-sizing: border-box;
     outline: none;
-    font-size: .24rem;
+    font-size: .26rem;
 }
 :global(#root) {
     min-height: 100%;
@@ -34,9 +34,7 @@ body {
     background: #f2f2f2;
     flex: 1;
 }
-:global(.background) {
-    background: #fff;
-}
+
 :global(.alignCenterContainer) {
     flex: 1;
     max-width: 960px;

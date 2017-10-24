@@ -3,7 +3,7 @@ import { connect } from 'dva';
 
 import BaseComponent from '@/helps/BaseComponent';
 import { NavBar, ListViewTable, DatePicker, SelectPicker } from '@/helps/antdComponent';
-import { Title, FlexRowBetweenWingSpace } from '@/helps/styleComponent';
+import { Title, FlexRowBetweenWingSpace, IconImg } from '@/helps/styleComponent';
 import styles from './MasonryDetail.css';
 
 const PayType = [
@@ -34,8 +34,9 @@ class MasonryDetail extends BaseComponent {
     this.getDetailInfo(this.state.selectType[0]);
   }
   // 拿到数据
-  getDetailInfo = async (type) => {
-    const { selectTime } = this.state;
+  getDetailInfo = async () => {
+    const { selectTime, selectType } = this.state;
+    const type = selectType[0];
     const res = await this.helps.webHttp.get('/spreadApi/getMasonryRecord',
       {
         monthTime: selectTime,
@@ -54,24 +55,31 @@ class MasonryDetail extends BaseComponent {
   selectDateTime = (selectTime) => {
     this.setState({
       selectTime: selectTime.valueOf(),
-      selectTypeVisible: true,
+    }, () => {
+      this.getDetailInfo();
     });
   }
   // 选择交易类型
   selectTypeChange = (val) => {
-    this.getDetailInfo(val[0]);
     this.setState({
       selectType: val,
+    }, () => {
+      this.getDetailInfo();
     });
   }
   renderRow = (rowData) => {
     return (<FlexRowBetweenWingSpace className={styles.itemWrap}>
       <div>
-        <p>{rowData.title}</p>
-        <p>{new Date(rowData.tranTime).format('yyyy-MM-dd hh:mm')}</p>
+        <p className={styles.rowTitle}>{rowData.title || '系统调整'}</p>
+        <p className={styles.rowTime}>{new Date(rowData.tranTime).format('yyyy-MM-dd hh:mm')}</p>
       </div>
       <div>
-        {this.parseFloatMoney(rowData.TranAmount)}元
+        {
+          rowData.TranAmount >= 0
+          ? (<div className="countAdd">+{rowData.TranAmount}</div>)
+          : (<div className="countSub">{rowData.TranAmount}</div>)
+        }
+        
       </div>
     </FlexRowBetweenWingSpace>);
   }
@@ -83,7 +91,11 @@ class MasonryDetail extends BaseComponent {
         <NavBar
           title="钻石交易明细"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
-          right={<div onClick={() => this.setState({ timePickerVisible: true })}>筛选</div>}
+          right={<div
+            onClick={() => this.setState({ selectTypeVisible: true })}
+          >
+            筛选
+          </div>}
         />
         <DatePicker
           visible={timePickerVisible}
@@ -114,27 +126,29 @@ class MasonryDetail extends BaseComponent {
 }
 
 const renderHeader = ({ tableData, selectTime }, self) => {
-  const PayMoney = tableData.reduce((before, current) => {
+  const PayCount = tableData.reduce((before, current) => {
     if (current.TranAmount < 0) {
       return before + (+current.TranAmount);
     }
     return before;
   }, 0);
-  const income = tableData.reduce((before, current) => {
+  const incomeCount = tableData.reduce((before, current) => {
     if (current.TranAmount > 0) {
       return before + (+current.TranAmount);
     }
     return before;
   }, 0);
-  const transPayMoney = self.parseFloatMoney(PayMoney);
-  const transIncome = self.parseFloatMoney(income);
   return (<FlexRowBetweenWingSpace className={styles.headerWrap}>
     <div>
       <p>{new Date(selectTime).format('yyyy年MM月')}</p>
-      <p>{`支出余额￥${transPayMoney}  收入￥${transIncome}`}</p>
+      <p>{`支出钻石${PayCount}个  收入${incomeCount}个`}</p>
     </div>
     <div>
-      icon
+      <IconImg
+        className={styles.riliIcon}
+        onClick={() => self.setState({ timePickerVisible: true })}
+        src={require('../../assets/rili.png')}
+      />
     </div>
   </FlexRowBetweenWingSpace>);
 };
