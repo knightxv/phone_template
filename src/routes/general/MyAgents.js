@@ -83,20 +83,22 @@ class MyAgents extends BaseComponent {
     }, 0);
     const CommissionOfTodayFloat = parseFloat(CommissionOfToday / 100).toFixed(2);
     return (
-      <div className="background">
+      <div>
         <Title>我的下级代理</Title>
         <NavBar
           title="我的下级代理"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
-        <Table
-          dataSource={tableData}
-          columns={columns}
-        />
-        <WingBlank style={{ textAlign: 'center', fontSize: 12 }}>
-          {`我的下级代理：${agentNumber}人　总充值：${allRechargeCountFloat}元
-          　今日充值：${rechargeCountOfTodayFloat}元　总提成：${CommissionOfAllFloat}元　今日提成：${CommissionOfTodayFloat}元`}
-        </WingBlank>
+        <div className={styles.contentContainer}>
+          <Table
+            dataSource={tableData}
+            columns={columns}
+          />
+          <WingBlank style={{ textAlign: 'center', fontSize: 12 }}>
+            {`我的下级代理：${agentNumber}人　总充值：${allRechargeCountFloat}元
+            　今日充值：${rechargeCountOfTodayFloat}元　总提成：${CommissionOfAllFloat}元　今日提成：${CommissionOfTodayFloat}元`}
+          </WingBlank>
+        </div>
       </div>
     );
   }

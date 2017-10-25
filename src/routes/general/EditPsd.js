@@ -46,14 +46,15 @@ class EditPsd extends BaseComponent {
   render() {
     const { editLoading } = this.state;
     return (
-      <div className="alignCenterContainer">
+      <div>
         <Title>修改密码</Title>
-        <div className="contentContainer">
+        <div>
           <NavBar
             title="修改密码"
             onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
           />
-          <div>
+          <WhiteSpace />
+          <div className={styles.contentContainer}>
             <FlexRow className={styles.inputWrap}>
               <span className={styles.inputLabel}>原密码　　</span>
               <Input
@@ -79,9 +80,9 @@ class EditPsd extends BaseComponent {
                 type="password"
               />
             </FlexRow>
+            <WhiteSpace />
+            <Button className={styles.editBtn} loading={editLoading} onClick={this.editPsd}>修改</Button>
           </div>
-          <WhiteSpace />
-          <Button className={styles.editBtn} loading={editLoading} onClick={this.editPsd}>修改</Button>
         </div>
       </div>
     );

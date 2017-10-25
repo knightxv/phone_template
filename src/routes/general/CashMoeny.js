@@ -114,7 +114,7 @@ class CashMoeny extends BaseComponent {
     const { canCashCount } = this.props;
     const canCashCountFloat = parseFloat(canCashCount / 100).toFixed(2);
     return (
-      <div className="alignCenterContainer">
+      <div>
         <Title>提现</Title>
         <NavBar
           title="提现"

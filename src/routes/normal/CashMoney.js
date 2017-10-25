@@ -2,14 +2,13 @@ import React from 'react';
 import { connect } from 'dva';
 
 import { province as provinceData, city as cityData } from '@/data/position';
-import { InputItem, Select, Button, NavBar, Icon, SelectPicker, List } from '@/helps/antdComponent';
+import { InputItem, Button, NavBar, SelectPicker, List } from '@/helps/antdComponent';
 import BaseComponent from '@/helps/BaseComponent';
 import { FlexRow, Flex, WhiteSpace, Title } from '@/helps/styleComponent';
 import bankData from '@/data/bank';
 
 import styles from './CashMoney.css';
 
-const Option = Select.Option;
 
 class AgencyExtractMoney extends BaseComponent {
   constructor(props) {
@@ -53,7 +52,7 @@ class AgencyExtractMoney extends BaseComponent {
       wechat_acc, // 提现所用的微信号
       cardNumber, // 银行卡号
       bankCardName, // 银行卡名字
-      bankName: this.bankDataSelect[0].value, // 银行
+      bankName: bankName || this.bankDataSelect[0].value, // 银行
       bankOfDeposit, // 开户银行
       cashCount: '',
       positionSelect: defaultPosition,
@@ -193,7 +192,7 @@ class AgencyExtractMoney extends BaseComponent {
           确认提取
           </Button>
         </Flex>
-        <p className={styles.countTip}>每天做多可提现一次，48小时内到账</p>
+        <p className={styles.countTip}>每天最多提现一次,工作日24小时内到账,节假日可能会延期</p>
       </div>
     );
   }

@@ -41,6 +41,7 @@ class Login extends BaseComponent {
   }
   render() {
     const { loginLoading, loginID, password } = this.state;
+    const { gameName } = this.props;
     return (
       <div className={styles.container}>
         <Title>代理登录</Title>
@@ -50,7 +51,7 @@ class Login extends BaseComponent {
         <div className={styles.contentContainer}>
           <div className={styles.logoWrap}>
             <IconImg className={styles.logo} src={logoSource} />
-            <span className={styles.logoTitle}>阿当比鸡</span>
+            <span className={styles.logoTitle}>{gameName}</span>
           </div>
           <div>
             <div className={styles.inputWrap}>
@@ -70,7 +71,6 @@ class Login extends BaseComponent {
                 onChange={value => this.setState({ password: value })}
               >　密码:</InputItem>
             </div>
-            
           </div>
           <WhiteSpace />
           <Button className={styles.loginBtn} loading={loginLoading} onClick={this.login}>登录</Button>
@@ -83,8 +83,10 @@ class Login extends BaseComponent {
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    ...state.app,
+  };
 }
 
 export default connect(mapStateToProps)(Login);

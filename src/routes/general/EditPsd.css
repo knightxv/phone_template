@@ -1,4 +1,8 @@
 
+.contentContainer {
+    background: #fff;
+}
+
 .inputLabel {
     padding: 0 6px;
 }

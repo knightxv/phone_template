@@ -119,7 +119,7 @@ class InviteToAgent extends BaseComponent {
         <div className={styles.contentContainer}>
           <div className={styles.qrContainer}>
             <FlexRow className={styles.userInfo}>
-              <Avatar />
+              <Avatar className={styles.avatar} />
               <span className={styles.inviteCodeLabel}>邀请码:{inviteCode}</span>
             </FlexRow>
             <img width={280} height={280} src={linkSrc} />

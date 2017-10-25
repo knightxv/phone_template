@@ -20,7 +20,7 @@ class CashMoneyRecord extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
-      selectTime: new Date().getTime(),
+      selectTime: null,
       selectType: [''],
       selectTypeVisible: false, // 选择类型的组件是否显示
       timePickerVisible: false, // 日期选择组件
@@ -39,7 +39,7 @@ class CashMoneyRecord extends BaseComponent {
     const type = selectType[0];
     const res = await this.helps.webHttp.get('/spreadApi/getBalanceRecord',
       {
-        monthTime: selectTime,
+        monthTime: selectTime ? selectTime.valueOf() : new Date().getTime(),
         type,
       },
     );
@@ -54,7 +54,7 @@ class CashMoneyRecord extends BaseComponent {
   // 选择日期
   selectDateTime = (selectTime) => {
     this.setState({
-      selectTime: selectTime.valueOf(),
+      selectTime,
     }, () => {
       this.getDetailInfo();
     });
@@ -74,12 +74,16 @@ class CashMoneyRecord extends BaseComponent {
         <p className={styles.rowTime}>{new Date(rowData.tranTime).format('yyyy-MM-dd hh:mm')}</p>
       </div>
       <div>
-        {this.parseFloatMoney(rowData.TranAmount)}元
+        {
+          rowData.TranAmount >= 0
+          ? (<div className="countAdd">+{this.parseFloatMoney(rowData.TranAmount)}元</div>)
+          : (<div className="countSub">{this.parseFloatMoney(rowData.TranAmount)}元</div>)
+        }
       </div>
     </FlexRowBetweenWingSpace>);
   }
   render() {
-    const { tableData, selectType, selectTypeVisible, timePickerVisible } = this.state;
+    const { tableData, selectType, selectTypeVisible, timePickerVisible, selectTime } = this.state;
     return (
       <div className={styles.container}>
         <Title>余额交易明细</Title>
@@ -92,6 +96,7 @@ class CashMoneyRecord extends BaseComponent {
           visible={timePickerVisible}
           mode="month"
           title="选择日期"
+          value={selectTime}
           onChange={this.selectDateTime}
           onOk={() => this.setState({ timePickerVisible: false })}
           onDismiss={() => this.setState({ timePickerVisible: false })}

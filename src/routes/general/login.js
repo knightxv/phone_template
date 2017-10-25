@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'dva';
 import styles from './login.css';
 import BaseComponent from '../../helps/BaseComponent';
@@ -37,13 +38,14 @@ class Login extends BaseComponent {
   }
   render() {
     const { loginLoading } = this.state;
+    const { gameName } = this.props;
     return (
-      <div className="alignCenterContainer" style={{ maxWidth: 750 }}>
+      <div>
         <Title>合伙人登陆</Title>
         <div className="contentContainer">
           <div className={styles.logoWrap}>
             <IconImg className={styles.logo} src={logoSource} />
-            <span className={styles.logoTitle}>阿当比鸡合伙人</span>
+            <span className={styles.logoTitle}>{gameName}合伙人</span>
           </div>
           <div>
             <FlexRow className={styles.loginInput}>
@@ -59,20 +61,22 @@ class Login extends BaseComponent {
                 type="password"
                 placeholder="请输入密码"
                 onPressEnter={this.login}
-                onChange={(event) => this.setState({ password: event.target.value })}
+                onChange={event => this.setState({ password: event.target.value })}
               />
             </FlexRow>
           </div>
           <WhiteSpace />
-         <Button className={styles.loginBtn} loading={loginLoading} onClick={this.login}>登录</Button>
+          <Button className={styles.loginBtn} loading={loginLoading} onClick={this.login}>登录</Button>
         </div>
       </div>
     );
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    ...state.app,
+  };
 }
 
 export default connect(mapStateToProps)(Login);

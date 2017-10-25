@@ -11,6 +11,7 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/normal/Login'),
     models: () => [
       import('./models/agent'),
+      import('./models/app'),
     ],
   });
   const NormalHomePage = dynamic({
@@ -138,6 +139,7 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/general/login'),
     models: () => [
       import('./models/general'),
+      import('./models/app'),
     ],
   });
   const GeneralHomePage = dynamic({

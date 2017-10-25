@@ -66,10 +66,12 @@ class CashRecord extends BaseComponent {
           title="提现记录"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
-        <Table
-          dataSource={sortTableData}
-          columns={columns}
-        />
+        <div className={styles.contentContainer}>
+          <Table
+            dataSource={sortTableData}
+            columns={columns}
+          />
+        </div>
       </div>
     );
   }

@@ -102,7 +102,6 @@ class HomePage extends BaseComponent {
       <Title>代理中心</Title>
       <NavBar
         title="代理中心"
-        onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         right={<Icon type='ellipsis' onClick={this.pickerToggle} />}
       />
       {

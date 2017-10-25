@@ -55,16 +55,18 @@ class CommissionRecord extends BaseComponent {
       return item2.agentRechargeTime - item1.agentRechargeTime;
     });
     return (
-      <div className="background">
+      <div>
         <Title>提成记录</Title>
         <NavBar
           title="提成记录"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
-        <Table
-          dataSource={sortTableData}
-          columns={columns}
-        />
+        <div className={styles.contentContainer}>
+          <Table
+            dataSource={sortTableData}
+            columns={columns}
+          />
+        </div>
       </div>
     );
   }

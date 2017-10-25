@@ -31,8 +31,8 @@ class AgencyPay extends BaseComponent {
     ];
     if (this.helps.isWeixinBrowser()) {
       this.marsonryPayType = [
-        { payType: WECHAT, label: '微信支付' },
-        { payType: BALANCE, label: '余额支付' },
+        { payType: WECHAT, label: '微信支付', paySource: paySource.wx },
+        { payType: BALANCE, label: '余额支付', paySource: paySource.yezf },
       ];
     }
   }

@@ -104,11 +104,15 @@ const NavBarWrap = styled.div`
 const DefaultNavbar = ({ title, onClick, right }) => {
   return (
     <NavBarWrap>
-      <DefaultIcon
-        type="left"
-        color="#108ee9"
-        onClick={onClick}
-      />
+      <div>
+        {
+          onClick && <DefaultIcon
+            type="left"
+            color="#108ee9"
+            onClick={onClick}
+          />
+        }
+      </div>
       <div>{title}</div>
       <div style={{ width: 36, color: '#78bff2' }}>
         { right }
