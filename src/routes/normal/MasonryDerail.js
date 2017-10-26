@@ -141,7 +141,7 @@ const renderHeader = ({ tableData, selectTime }, self) => {
   }, 0);
   return (<FlexRowBetweenWingSpace className={styles.headerWrap}>
     <div>
-      <p>{new Date(selectTime).format('yyyy年MM月')}</p>
+      <p>{selectTime ? selectTime.format('YYYY年MM月') : new Date().format('yyyy年MM月') }</p>
       <p>{`支出钻石${PayCount}个  收入${incomeCount}个`}</p>
     </div>
     <div>

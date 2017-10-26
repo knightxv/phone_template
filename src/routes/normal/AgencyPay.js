@@ -65,8 +65,9 @@ class AgencyPay extends BaseComponent {
     };
     const res = await this.helps.webHttp.get('/spreadApi/balanceRecharge', params);
     if (res.isSuccess) {
-      this.props.dispatch({ type: 'agent/updateUserInfo' });
       this.helps.toast(res.info || '充值成功');
+      const userInfoRes = await this.helps.webHttp.get('/spreadApi/getUserInfo');
+      this.props.dispatch({ type: 'agent/updateUserInfo', payload: userInfoRes.data });
       return false;
     }
     this.helps.toast(res.info || '充值失败，请重试');
@@ -143,7 +144,7 @@ class AgencyPay extends BaseComponent {
                   onClick={() => this.buyGood(shopId)}
                 >
                   <p className={styles.goodInfo}>{this.transMoenyUnit(masonryCount)}钻石</p>
-                  <p className={styles.goodInfo}>售价：{this.transMoenyUnit(goodsMoney)}元</p>
+                  <p className={styles.goodInfo}>售价：{this.parseFloatMoney(goodsMoney)}元</p>
                 </div>
               ))
             }

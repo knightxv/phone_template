@@ -1,7 +1,7 @@
 export default {
     // 本地用
     'GET /config' : {
-        JavaWebPublicServerUrl: '120.77.87.4:8080', // 192.168.2.66:8080  192.168.2.101:8000
+        JavaWebPublicServerUrl: '192.168.2.101:8000', // 192.168.2.66:8080 120.77.87.4:8080
     },
 
     /*
@@ -55,7 +55,7 @@ export default {
             positionName: '福建省 泉州市', // 位置
             cardNumber: '23fdgfd', // 银行卡号
             bankCardName: 'dsfsd', // 银行卡名字
-            bankName: '工商银行', // 银行
+            bankName: '招商银行', // 银行
             bankOfDeposit: 'fdsf', // 开户银行
         }
     },
@@ -208,7 +208,7 @@ export default {
             balancePayToday: 0, // 今日余额支出
 
             bankCardName: null,
-            bankName: null,
+            bankName: '招商银行',
             bankOfDeposit: null,
             canCashCount: 0,
             cardNumber: null,

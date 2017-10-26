@@ -138,7 +138,7 @@ const renderHeader = ({ tableData, selectTime }, self) => {
   const transIncome = self.parseFloatMoney(income);
   return (<FlexRowBetweenWingSpace className={styles.headerWrap}>
     <div>
-      <p>{new Date(selectTime).format('yyyy年MM月')}</p>
+      <p>{selectTime ? selectTime.format('YYYY年MM月') : new Date().format('yyyy年MM月') }</p>
       <p>{`支出余额￥${transPayMoney}  收入￥${transIncome}`}</p>
     </div>
     <div>
