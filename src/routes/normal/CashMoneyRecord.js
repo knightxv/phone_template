@@ -8,12 +8,11 @@ import styles from './CashMoneyRecord.css';
 
 const PayType = [
   { value: '', label: '全部' },
-  { value: 0, label: '玩家购钻' },
-  { value: 1, label: '代理购钻' },
-  { value: 2, label: '代理反钻' },
+  { value: 0, label: '卖给玩家的钻石' },
+  { value: 1, label: '我的购钻' },
+  { value: 2, label: '下级代理返钻' },
   { value: 3, label: '系统调整' },
-  { value: 4, label: '邀请奖励' },
-  { value: 5, label: '提现' },
+  { value: 4, label: '排行榜奖励' },
 ];
 
 class CashMoneyRecord extends BaseComponent {
@@ -22,8 +21,6 @@ class CashMoneyRecord extends BaseComponent {
     this.state = {
       selectTime: null,
       selectType: [''],
-      selectTypeVisible: false, // 选择类型的组件是否显示
-      timePickerVisible: false, // 日期选择组件
       tableData: [],
       isLoaded: false,
       pageIndex: 0,
@@ -83,33 +80,22 @@ class CashMoneyRecord extends BaseComponent {
     </FlexRowBetweenWingSpace>);
   }
   render() {
-    const { tableData, selectType, selectTypeVisible, timePickerVisible, selectTime } = this.state;
+    const { tableData, selectType } = this.state;
     return (
       <div className={styles.container}>
         <Title>余额交易明细</Title>
         <NavBar
           title="余额交易明细"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
-          right={<div onClick={() => this.setState({ selectTypeVisible: true })}>筛选</div>}
-        />
-        <DatePicker
-          visible={timePickerVisible}
-          mode="month"
-          title="选择日期"
-          value={selectTime}
-          onChange={this.selectDateTime}
-          onOk={() => this.setState({ timePickerVisible: false })}
-          onDismiss={() => this.setState({ timePickerVisible: false })}
-        />
-        <SelectPicker
-          visible={selectTypeVisible}
-          value={selectType}
-          title="选择交易类型"
-          data={PayType}
-          cols={1}
-          onChange={this.selectTypeChange}
-          onOk={() => this.setState({ selectTypeVisible: false })}
-          onDismiss={() => this.setState({ selectTypeVisible: false })}
+          right={<SelectPicker
+            value={selectType}
+            title="选择交易类型"
+            data={PayType}
+            cols={1}
+            onChange={this.selectTypeChange}
+          >
+            <WrapDiv>筛选</WrapDiv>
+          </SelectPicker>}
         />
         <ListViewTable
           tableData={tableData}
@@ -120,6 +106,11 @@ class CashMoneyRecord extends BaseComponent {
     );
   }
 }
+
+// 防止extra放在div报警告
+const WrapDiv = ({ children, extra, ...props }) => {
+  return (<div {...props}>{children}</div>);
+};
 
 const renderHeader = ({ tableData, selectTime }, self) => {
   const PayMoney = tableData.reduce((before, current) => {
@@ -134,20 +125,24 @@ const renderHeader = ({ tableData, selectTime }, self) => {
     }
     return before;
   }, 0);
-  const transPayMoney = self.parseFloatMoney(PayMoney);
+  const transPayMoney = Math.abs(self.parseFloatMoney(PayMoney));
   const transIncome = self.parseFloatMoney(income);
   return (<FlexRowBetweenWingSpace className={styles.headerWrap}>
     <div>
       <p>{selectTime ? selectTime.format('YYYY年MM月') : new Date().format('yyyy年MM月') }</p>
       <p>{`支出余额￥${transPayMoney}  收入￥${transIncome}`}</p>
     </div>
-    <div>
+    <DatePicker
+      mode="month"
+      title="选择日期"
+      value={selectTime}
+      onChange={self.selectDateTime}
+    >
       <IconImg
-        onClick={() => self.setState({ timePickerVisible: true })}
         className={styles.riliIcon}
         src={require('../../assets/rili.png')}
       />
-    </div>
+    </DatePicker>
   </FlexRowBetweenWingSpace>);
 };
 

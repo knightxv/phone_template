@@ -84,10 +84,10 @@ body {
 }
 
 :global(.countAdd) {
-    color: #1caf08;
+    color: #f0602d;
 }
 :global(.countSub) {
-    color: #f0602d;
+    color: #1caf08;
 }
 :global(.countNor) {
     color: #ff9500;

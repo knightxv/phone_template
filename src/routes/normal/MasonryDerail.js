@@ -8,12 +8,11 @@ import styles from './MasonryDetail.css';
 
 const PayType = [
   { value: '', label: '全部' },
-  { value: 0, label: '玩家购钻' },
-  { value: 1, label: '代理购钻' },
-  { value: 2, label: '代理反钻' },
+  { value: 0, label: '卖给玩家的钻石' },
+  { value: 1, label: '我的购钻' },
+  { value: 2, label: '下级代理返钻' },
   { value: 3, label: '系统调整' },
-  { value: 4, label: '邀请奖励' },
-  { value: 5, label: '提现' },
+  { value: 4, label: '排行榜奖励' },
 ];
 
 class MasonryDetail extends BaseComponent {
@@ -22,8 +21,6 @@ class MasonryDetail extends BaseComponent {
     this.state = {
       selectTime: null,
       selectType: [''],
-      selectTypeVisible: false, // 选择类型的组件是否显示
-      timePickerVisible: false, // 日期选择组件
       tableData: [],
       isLoaded: false,
       pageIndex: 0,
@@ -84,37 +81,23 @@ class MasonryDetail extends BaseComponent {
     </FlexRowBetweenWingSpace>);
   }
   render() {
-    const { tableData, selectType, selectTypeVisible, timePickerVisible, selectTime } = this.state;
+    const { tableData, selectType } = this.state;
     return (
       <div className={styles.container}>
         <Title>钻石交易明细</Title>
         <NavBar
           title="钻石交易明细"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
-          right={<div
-            onClick={() => this.setState({ selectTypeVisible: true })}
+          right={<SelectPicker
+            value={selectType}
+            title="选择交易类型"
+            data={PayType}
+            cols={1}
+            onChange={this.selectTypeChange}
           >
-            筛选
-          </div>}
-        />
-        <DatePicker
-          visible={timePickerVisible}
-          mode="month"
-          title="选择日期"
-          value={selectTime}
-          onChange={this.selectDateTime}
-          onOk={() => this.setState({ timePickerVisible: false })}
-          onDismiss={() => this.setState({ timePickerVisible: false })}
-        />
-        <SelectPicker
-          visible={selectTypeVisible}
-          value={selectType}
-          title="选择交易类型"
-          data={PayType}
-          cols={1}
-          onChange={this.selectTypeChange}
-          onOk={() => this.setState({ selectTypeVisible: false })}
-          onDismiss={() => this.setState({ selectTypeVisible: false })}
+            <WrapDiv>筛选</WrapDiv>
+          </SelectPicker>
+        }
         />
         <ListViewTable
           tableData={tableData}
@@ -139,19 +122,30 @@ const renderHeader = ({ tableData, selectTime }, self) => {
     }
     return before;
   }, 0);
+  const transPayCount = Math.abs(PayCount);
+  const transImcomeCount = Math.abs(incomeCount);
   return (<FlexRowBetweenWingSpace className={styles.headerWrap}>
     <div>
       <p>{selectTime ? selectTime.format('YYYY年MM月') : new Date().format('yyyy年MM月') }</p>
-      <p>{`支出钻石${PayCount}个  收入${incomeCount}个`}</p>
+      <p>{`支出钻石${transPayCount}个  收入${transImcomeCount}个`}</p>
     </div>
-    <div>
+    <DatePicker
+      mode="month"
+      title="选择日期"
+      value={selectTime}
+      onChange={self.selectDateTime}
+    >
       <IconImg
         className={styles.riliIcon}
-        onClick={() => self.setState({ timePickerVisible: true })}
         src={require('../../assets/rili.png')}
       />
-    </div>
+    </DatePicker>
   </FlexRowBetweenWingSpace>);
+};
+
+// 防止extra放在div报警告
+const WrapDiv = ({ children, extra, ...props }) => {
+  return (<div {...props}>{children}</div>);
 };
 
 function mapStateToProps() {

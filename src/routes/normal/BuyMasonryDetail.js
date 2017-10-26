@@ -6,18 +6,6 @@ import { NavBar, ListView } from '@/helps/antdComponent';
 import { Title, FlexRowBetweenWingSpace } from '@/helps/styleComponent';
 import styles from './BuyMasonryDetail.css';
 
-const getSectionData = (dataBlob, sectionId) => {
-  return dataBlob[sectionId];
-};
-const getRowData = (dataBlob, sectionId, rowId) => {
-  return dataBlob[`${sectionId}:${rowId}`];
-};
-const ds = new ListView.DataSource({
-  getSectionData,
-  getRowData,
-  rowHasChanged: (r1, r2) => r1 !== r2,
-  sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-});
 
 const parseData = (classData, rowKey = 'data') => {
   const dataBlob = [];
@@ -29,7 +17,6 @@ const parseData = (classData, rowKey = 'data') => {
     dataBlob[i] = classData[i];
     temArr = classData[i][rowKey];
     rowIds[i] = [];
-
     if (temArr && temArr.length !== 0) {
         for (let j = 0; j < temArr.length; j ++) {
           rowIds[i].push(j);
@@ -48,6 +35,18 @@ const parseData = (classData, rowKey = 'data') => {
 class AgencyPayType extends BaseComponent {
   constructor(props) {
     super(props);
+    const getSectionData = (dataBlob, sectionId) => {
+      return dataBlob[sectionId];
+    };
+    const getRowData = (dataBlob, sectionId, rowId) => {
+      return dataBlob[`${sectionId}:${rowId}`];
+    };
+    const ds = new ListView.DataSource({
+      getSectionData,
+      getRowData,
+      rowHasChanged: (r1, r2) => r1 !== r2,
+      sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+    });
     this.state = {
       dataSource: ds,
     };
@@ -81,7 +80,7 @@ class AgencyPayType extends BaseComponent {
     return <div className={styles.monthLabel}>{sectionData.monthLabel}</div>;
   }
   async componentWillMount() {
-    this.getDetailData();
+    await this.getDetailData();
   }
   getDetailData = async () => {
     const page = this.page;
@@ -129,12 +128,12 @@ class AgencyPayType extends BaseComponent {
     }
   }
   // 到达底部
-  onEndReached = () => {
+  onEndReached = async () => {
     if (this.dataLoadOver) {
       this.helps.toast('没有更多数据');
       return;
     }
-    this.getDetailData();
+    await this.getDetailData();
   }
   render() {
     return (
