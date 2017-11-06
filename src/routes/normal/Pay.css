@@ -4,26 +4,25 @@
 }
 .playerName {
     padding: 0rem 0.2rem 0rem;
-    height: 0.4rem;
-    font-size: .2rem;
+    font-size: .26rem;
 }
 
 .playerNotFind {
     padding: 0rem 0.2rem 0rem;
     height: 0.4rem;
-    font-size: .2rem;
+    font-size: .26rem;
     color: red;
 }
 
 .masonrySelect {
-    width: 1.2rem;
-    height: 0.5rem;
-    line-height: 0.5rem;
+    width: 1.5rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
     text-align: center;
     background: #fff;
-    margin-right: 0.5rem;
+    margin-right: 0.2rem;
     border-radius: 3px;
-    border: 1px solid #dedede;
+    border: 1px solid #eee;
 }
 .masonrySelectd {
     border: 1px solid #169bd5!important;
@@ -45,22 +44,26 @@
 }
 .masonrySelectLabel {
     text-align: center;
-    line-height: 0.5rem;
+    line-height: 0.6rem;
 }
 
 .selfSelectWrap {
-    width: 1.2rem;
-    height: 0.5rem;
-    border: 1px solid #dedede;
+    width: 1.5rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    border: 1px solid #eee;
     box-sizing: border-box;
     border-radius: 3px;
     background: #fff;
 }
 
 .paySelectItem {
-    height: .8rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.16rem 0.2rem;
     background: #fff;
-    border-top: 1px solid #dedede;
+    border-top: 1px solid #eee;
 }
 
 .payTypeTitle {
@@ -70,12 +73,10 @@
 }
 
 .priceTip {
-    font-size: 0.26rem;
     padding: 0.12rem 0.2rem;
 }
 
 .priceCount {
-    font-size: 0.26rem;
     color: #ff9500;
 }
 
@@ -84,7 +85,7 @@
 }
 
 .rechargeTitle {
-    border-top: 1px solid #dedede;
+    border-top: 1px solid #eee;
     line-height: 0.8rem;
 }
 
@@ -93,8 +94,8 @@
 }
 
 .payIcon {
-    width: 0.36rem;
-    height: 0.36rem;
-    margin-right: 0.18rem;
+    width: 0.42rem;
+    height: 0.42rem;
+    margin-right: 0.26rem;
     display: block;
 }

@@ -13,6 +13,7 @@
 .goodsWrap {
     margin-bottom: .2rem;
     margin-right: .2rem;
+    padding: 0.1rem;
     width: 30%;
     display: flex;
     flex-direction: column;
@@ -22,6 +23,7 @@
     border-radius: 3px;
 }
 .goodInfo {
+    font-size: 0.26rem;
     color: #187ef2;
 }
 
@@ -53,8 +55,8 @@
 
 .payTypeContainer {
     background: #fff;
-    border-top: 1px solid #dedede;
-    border-bottom: 1px solid #dedede;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 }
 
 .payTypeTitle {
@@ -64,18 +66,17 @@
 .paySelectItem {
     height: .8rem;
     background: #fff;
-    border-top: 1px solid #dedede;
+    border-top: 1px solid #eee;
 }
 
 .payWrap {
     background: #fff;
-    border-top: 1px solid #dedede;
-    border-bottom: 1px solid #dedede;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
     padding: 0rem 0 0.2rem;
 }
 
 .balanceTip {
     color: #f0602d;
-    font-size: 0.26rem;
     padding-left: 0.1rem;
 }

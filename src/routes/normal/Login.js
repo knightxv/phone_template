@@ -21,13 +21,9 @@ class Login extends BaseComponent {
   // 登录
   login = async () => {
     const { loginID, password } = this.state;
-    if (!window.remote_ip_info) {
-      this.helps.toast('申请失败，请重试');
-      return false;
-    }
-    const { province, city } = window.remote_ip_info;
-    const registerProvince = `${province}省`;
-    const registerCity = `${city}市`;
+    const ipInfo = window.remote_ip_info;
+    const registerProvince = ipInfo ? `${ipInfo.province}省` : '';
+    const registerCity = ipInfo ? `${ipInfo.city}市` : '';
     const res = await this.helps.webHttp.get('/spreadApi/login', { loginID, password, registerProvince, registerCity });
     if (!res.isSuccess) {
       this.helps.toast(res.message || '账号或密码错误');

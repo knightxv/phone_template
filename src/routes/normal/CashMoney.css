@@ -11,11 +11,12 @@
     text-align: right;
     padding: 0 16px;
     color: #ababab;
+    font-size: 0.26rem;
 }
 
 .inputRowItem {
     background: #fff;
-    border-bottom: 1px solid #dedede;
+    border-bottom: 1px solid #eee;
 }
 
 .itemWrap {

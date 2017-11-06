@@ -132,7 +132,7 @@ class HomePage extends BaseComponent {
           </div>
         </FlexRow>
         <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
-          <FlexRow className={styles.titleWrap}>
+          <FlexRow className={styles.navigateTitleWrap}>
             <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
             <span>我的下级代理</span>
           </FlexRow>
@@ -142,7 +142,7 @@ class HomePage extends BaseComponent {
           </FlexRow>
         </FlexRowBetweenWingSpace>
         <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/MyPlayer')}>
-          <FlexRow className={styles.titleWrap}>
+          <FlexRow className={styles.navigateTitleWrap}>
             <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
             <span>我的玩家</span>
           </FlexRow>
@@ -170,7 +170,7 @@ class HomePage extends BaseComponent {
         </div>
 
         <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/agencyPay')}>
-          <FlexRow className={styles.titleWrap}>
+          <FlexRow className={styles.navigateTitleWrap}>
             <IconImg className={styles.titleIconImg} src={IconSource.zuanshi} />
             <span>购买钻石</span>
           </FlexRow>
@@ -197,7 +197,7 @@ class HomePage extends BaseComponent {
           </div>
         </div>
         <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
-          <FlexRow className={styles.titleWrap}>
+          <FlexRow className={styles.navigateTitleWrap}>
             <IconImg className={styles.titleIconImg} src={IconSource.tixian} />
             <span>提现</span>
           </FlexRow>

@@ -93,30 +93,40 @@ const DefalutTable = ({ dataSource, columns, ...props }) => {
 
 const NavBarWrap = styled.div`
   display: flex;
-  height: .7rem;
-  padding-left: .1rem;
+  height: .8rem;
+  padding-left: .2rem;
+  padding-right: .2rem;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   background: #fff;
 `;
+const NavBarSideWrap = styled.div`
+  min-width: 36px;
+  color: #78bff2;
+  display: flex;
+  flex-direction: colunm;
+  justify-content: center;
+`;
 
 const DefaultNavbar = ({ title, onClick, right }) => {
   return (
     <NavBarWrap>
-      <div style={{ width: 36 }}>
+      <NavBarSideWrap>
         {
           onClick && <DefaultIcon
             type="left"
             color="#108ee9"
+            size="md"
+            style={{ marginLeft: '-0.4rem' }}
             onClick={onClick}
           />
         }
-      </div>
-      <div>{title}</div>
-      <div style={{ width: 36, color: '#78bff2' }}>
+      </NavBarSideWrap>
+      <div style={{ fontSize: '0.36rem' }}>{title}</div>
+      <NavBarSideWrap>
         { right }
-      </div>
+      </NavBarSideWrap>
     </NavBarWrap>
   );
 };
@@ -135,7 +145,7 @@ const DefaultNotice = (props) => {
   return (
     <NoticeBar
       mode="link"
-      marqueeProps={{ loop: true, style: { color: '#f1781e', fontSize: '.2rem' } }}
+      marqueeProps={{ loop: true, style: { color: '#f1781e', fontSize: '.3rem' } }}
       icon={<NoticeImg src={IconSource.notice} />}
       {...props}
     />
@@ -151,30 +161,30 @@ const RowSection = styled.div`
   padding: 0.1rem 0;
   border-bottom: 1px solid #dedede;
 `;
-const renderHeader = (columns) => { // dataIndex title
-  return (
-    <RowSection>
-      {
-        columns.map(({ title, dataIndex, remark, i }) => (
-          <div
-            key={dataIndex + i}
-            style={{
-              width: `${100 / columns.length}%`,
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              color: '#000',
-            }}
-          >
-            <p>{ title }</p>
-            <p>{ remark }</p>
-          </div>
-        ))
-      }
-    </RowSection>
-  );
-};
+// const renderHeader = (columns) => { // dataIndex title
+//   return (
+//     <RowSection>
+//       {
+//         columns.map(({ title, dataIndex, remark, i }) => (
+//           <div
+//             key={dataIndex + i}
+//             style={{
+//               width: `${100 / columns.length}%`,
+//               display: 'flex',
+//               alignItems: 'center',
+//               flexDirection: 'column',
+//               justifyContent: 'center',
+//               color: '#000',
+//             }}
+//           >
+//             <p>{ title }</p>
+//             <p>{ remark }</p>
+//           </div>
+//         ))
+//       }
+//     </RowSection>
+//   );
+// };
 
 const StyleListView = styled(ListView)`
   flex: 1;
@@ -201,7 +211,6 @@ const DefaultListView = ({ tableData, columns, ...props }) => {
     <StyleListView
       dataSource={dataSource.cloneWithRows(tableData || [])}
       renderRow={(rowData) => renderRow(rowData, columns)}
-      renderHeader={() => renderHeader(columns)}
       contentContainerStyle={{ background: '#fff' }}
       initialListSize={15}
       pageSize={1}

@@ -81,7 +81,31 @@ class SecondaryAgencyRecord extends BaseComponent {
   // 邀请玩家去玩游戏
   invitePlayerToPlayerGame = () => {
     // alert('请求配置，跳到游戏详情页');
-    window.location.href = '/gamePlatform';
+    window.location.href = 'http://www.hulema.com';
+  }
+  renderHeader = (columnsData) => { // dataIndex title
+    return (
+      <div className={styles.rowSection}>
+        {
+          columnsData.map(({ title, dataIndex, remark, i }) => (
+            <div
+              key={dataIndex + i}
+              style={{
+                width: `${100 / columnsData.length}%`,
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                color: '#000',
+              }}
+            >
+              <p>{ title }</p>
+              <p>{ remark }</p>
+            </div>
+          ))
+        }
+      </div>
+    );
   }
   render() {
     const { searchVal, tableData } = this.state;
@@ -118,6 +142,9 @@ class SecondaryAgencyRecord extends BaseComponent {
           value={searchVal}
           onCancelClick={this.onCancelClick}
         />
+        {
+          this.renderHeader(columns)
+        }
         <ListViewTable
           tableData={filterTableData}
           columns={columnsAddRemark}

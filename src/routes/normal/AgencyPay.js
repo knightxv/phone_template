@@ -144,7 +144,7 @@ class AgencyPay extends BaseComponent {
                   onClick={() => this.buyGood(shopId)}
                 >
                   <p className={styles.goodInfo}>{this.transMoenyUnit(masonryCount)}钻石</p>
-                  <p className={styles.goodInfo}>售价：{this.parseFloatMoney(goodsMoney)}元</p>
+                  <p className={styles.goodInfo}>售价:{this.parseFloatMoney(goodsMoney)}元</p>
                 </div>
               ))
             }

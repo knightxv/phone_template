@@ -76,17 +76,9 @@ class Register extends BaseComponent {
       this.helps.toast('请同意阿当科技推广协议');
       return false;
     }
-    if (!phone || !verifyCode) {
-      this.helps.toast('请完善信息填写');
-      return false;
-    }
-    if (!window.remote_ip_info) {
-      this.helps.toast('申请失败，请重试');
-      return false;
-    }
-    const { province, city } = window.remote_ip_info;
-    const registerProvince = `${province}省`;
-    const registerCity = `${city}市`;
+    const ipInfo = window.remote_ip_info;
+    const registerProvince = ipInfo ? `${ipInfo.province}省` : '';
+    const registerCity = ipInfo ? `${ipInfo.city}市` : '';
     const password = 123456; // 默认密码
     let res;
     if (pid) {

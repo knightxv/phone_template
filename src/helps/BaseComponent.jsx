@@ -26,7 +26,7 @@ import help from './help';
 const webHttpConfig = {
   getConfigUrl: '/config',
   httpConfigKey: 'JavaWebPublicServerUrl',
-  isDebug: true,
+  isDebug: false,
   responseHandle(res) {
     if (res.status === 'failed' && res.code === 2) {
       Toast.info(res.info, 1, null, false);
@@ -57,6 +57,9 @@ const webHttpConfig = {
     };
     window.httpConfig = httpConfig;
     return httpConfig;
+  },
+  getFetchUrl() {
+    return 'http://127.0.0.1:8081';
   },
 };
 const webHttp = new Http(webHttpConfig);

@@ -1,9 +1,10 @@
 
 .module {
     background: #fff;
+    border-top: 1px solid #eee;
 }
 .borderBottom {
-    border-bottom: 1px solid #deded2;
+    border-bottom: 1px solid #eee;
 }
 
 .titleIcon {
@@ -15,8 +16,8 @@
 }
 
 .userInfoWrap {
-    height: 1.22rem;
-    border-bottom: 1px solid #deded2;
+    height: 1.4rem;
+    border-bottom: 1px solid #eee;
 }
 
 .userInfo {
@@ -39,6 +40,10 @@
     height: .7rem;
     line-height: .7rem;
 }
+.navigateTitleWrap {
+    height: .82rem;
+    line-height: .82rem;
+}
 
 .colorBlue {
     color: #1e7df1;
@@ -50,25 +55,25 @@
 }
 
 .countLabel {
-    font-size: .32rem;
+    font-size: .4rem;
     color: #000;
 }
 .count {
-    font-size: .32rem;
+    font-size: .4rem;
     padding: 0 5px;
     color: #ff9500;
 }
 
 .masonryCountLable {
     padding-left: .2rem;
-    font-size: .28rem;
+    font-size: .32rem;
     padding-bottom: .1rem;
-    border-bottom: 1px solid #dedede;
+    border-bottom: 1px solid #eee;
 }
 
 .titleIconImg {
-    width: .3rem;
-    height: .3rem;
+    width: .32rem;
+    height: .32rem;
     margin: 0 .06rem;
 }
 
@@ -108,7 +113,7 @@
 
 .saleDiamondsOfThisMonthLabel {
     color: #333;
-    font-size: 0.26rem;
+    font-size: 0.32rem;
 }
 
 .saleDiamondsLabel {

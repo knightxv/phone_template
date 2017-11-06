@@ -54,7 +54,7 @@ exports.WingBlank = styled.div`
 `;
 
 exports.WhiteSpace = styled.div`
-    height: .12rem;
+    height: .16rem;
 `;
 
 export const Title = ({ children }) => {

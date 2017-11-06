@@ -8,11 +8,12 @@ import styles from './CashMoneyRecord.css';
 
 const PayType = [
   { value: '', label: '全部' },
-  { value: 0, label: '卖给玩家的钻石' },
-  { value: 1, label: '我的购钻' },
+  { value: 0, label: '买钻石给玩家' },
+  { value: 1, label: '购买钻石' },
   { value: 2, label: '下级代理返钻' },
   { value: 3, label: '系统调整' },
-  { value: 4, label: '排行榜奖励' },
+  { value: 4, label: '月销钻排行奖励' },
+  { value: 5, label: '提现' },
 ];
 
 class CashMoneyRecord extends BaseComponent {
@@ -47,6 +48,40 @@ class CashMoneyRecord extends BaseComponent {
     } else {
       this.helps.toast(res.info || '请求错误');
     }
+  }
+  renderHeader = () => {
+    const { tableData, selectTime } = this.state;
+    const PayMoney = tableData.reduce((before, current) => {
+      if (current.TranAmount < 0) {
+        return before + (+current.TranAmount);
+      }
+      return before;
+    }, 0);
+    const income = tableData.reduce((before, current) => {
+      if (current.TranAmount > 0) {
+        return before + (+current.TranAmount);
+      }
+      return before;
+    }, 0);
+    const transPayMoney = Math.abs(this.parseFloatMoney(PayMoney));
+    const transIncome = this.parseFloatMoney(income);
+    return (<FlexRowBetweenWingSpace className={styles.headerWrap}>
+      <div>
+        <p>{selectTime ? selectTime.format('YYYY年MM月') : new Date().format('yyyy年MM月') }</p>
+        <p>{`支出余额￥${transPayMoney}  收入￥${transIncome}`}</p>
+      </div>
+      <DatePicker
+        mode="month"
+        title="选择日期"
+        value={selectTime}
+        onChange={this.selectDateTime}
+      >
+        <IconImg
+          className={styles.riliIcon}
+          src={require('../../assets/rili.png')}
+        />
+      </DatePicker>
+    </FlexRowBetweenWingSpace>);
   }
   // 选择日期
   selectDateTime = (selectTime) => {
@@ -97,10 +132,13 @@ class CashMoneyRecord extends BaseComponent {
             <WrapDiv>筛选</WrapDiv>
           </SelectPicker>}
         />
+        {
+          this.renderHeader()
+        }
         <ListViewTable
           tableData={tableData}
           renderRow={this.renderRow}
-          renderHeader={() => renderHeader(this.state, this)}
+          renderHeader={null}
         />
       </div>
     );
@@ -112,39 +150,39 @@ const WrapDiv = ({ children, extra, ...props }) => {
   return (<div {...props}>{children}</div>);
 };
 
-const renderHeader = ({ tableData, selectTime }, self) => {
-  const PayMoney = tableData.reduce((before, current) => {
-    if (current.TranAmount < 0) {
-      return before + (+current.TranAmount);
-    }
-    return before;
-  }, 0);
-  const income = tableData.reduce((before, current) => {
-    if (current.TranAmount > 0) {
-      return before + (+current.TranAmount);
-    }
-    return before;
-  }, 0);
-  const transPayMoney = Math.abs(self.parseFloatMoney(PayMoney));
-  const transIncome = self.parseFloatMoney(income);
-  return (<FlexRowBetweenWingSpace className={styles.headerWrap}>
-    <div>
-      <p>{selectTime ? selectTime.format('YYYY年MM月') : new Date().format('yyyy年MM月') }</p>
-      <p>{`支出余额￥${transPayMoney}  收入￥${transIncome}`}</p>
-    </div>
-    <DatePicker
-      mode="month"
-      title="选择日期"
-      value={selectTime}
-      onChange={self.selectDateTime}
-    >
-      <IconImg
-        className={styles.riliIcon}
-        src={require('../../assets/rili.png')}
-      />
-    </DatePicker>
-  </FlexRowBetweenWingSpace>);
-};
+// const renderHeader = ({ tableData, selectTime }, self) => {
+//   const PayMoney = tableData.reduce((before, current) => {
+//     if (current.TranAmount < 0) {
+//       return before + (+current.TranAmount);
+//     }
+//     return before;
+//   }, 0);
+//   const income = tableData.reduce((before, current) => {
+//     if (current.TranAmount > 0) {
+//       return before + (+current.TranAmount);
+//     }
+//     return before;
+//   }, 0);
+//   const transPayMoney = Math.abs(self.parseFloatMoney(PayMoney));
+//   const transIncome = self.parseFloatMoney(income);
+//   return (<FlexRowBetweenWingSpace className={styles.headerWrap}>
+//     <div>
+//       <p>{selectTime ? selectTime.format('YYYY年MM月') : new Date().format('yyyy年MM月') }</p>
+//       <p>{`支出余额￥${transPayMoney}  收入￥${transIncome}`}</p>
+//     </div>
+//     <DatePicker
+//       mode="month"
+//       title="选择日期"
+//       value={selectTime}
+//       onChange={self.selectDateTime}
+//     >
+//       <IconImg
+//         className={styles.riliIcon}
+//         src={require('../../assets/rili.png')}
+//       />
+//     </DatePicker>
+//   </FlexRowBetweenWingSpace>);
+// };
 
 function mapStateToProps() {
   return {};

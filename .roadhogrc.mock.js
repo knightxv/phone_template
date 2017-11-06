@@ -1,7 +1,7 @@
 export default {
     // 本地用
     'GET /config' : {
-        JavaWebPublicServerUrl: '192.168.2.101:8000', // 192.168.2.66:8080 120.77.87.4:8080
+        JavaWebPublicServerUrl: '192.168.2.66:8080', // 192.168.2.66:8080 120.77.87.4:8080
     },
 
     /*

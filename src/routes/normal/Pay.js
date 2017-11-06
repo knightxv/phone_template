@@ -123,13 +123,14 @@ class Pay extends BaseComponent {
     this.setState({
       isChooseInput: true, // 是否选择其他数额
       selectIndex: 'selfSelect',
+      diamond: '',
     });
   }
   // 退出编辑
   selectOtherBlur = () => {
     this.setState({
       isChooseInput: false,
-      selectIndex: this.state.diamond ? 'selfSelect' : -1,
+      selectIndex: (this.state.diamond && this.state.diamond != 0) ? 'selfSelect' : -1,
     });
   }
   // 选择钻石数额
@@ -146,7 +147,7 @@ class Pay extends BaseComponent {
   }
   render() {
     const { playerName, diamond, playerNotFind, isChooseInput, selectIndex, payTypeSelect, playerId } = this.state;
-    const money = diamond * 10;
+    const money = !isNaN(diamond) ? diamond * 10 : 0;
     const moneyFloat = this.parseFloatMoney(money);
     // const { payEnum } = this.helps;
     return (
@@ -178,7 +179,7 @@ class Pay extends BaseComponent {
                 ))
               }
               <div
-                onClick={() => this.selectMasonry(0, 'selfSelect')}
+                onClick={() => this.selectMasonry('', 'selfSelect')}
                 className={classNames({ [styles.selfSelectWrap]: true, [styles.masonrySelectd]: selectIndex === 'selfSelect' })}
               >
                 {
@@ -209,19 +210,19 @@ class Pay extends BaseComponent {
         <div className={styles.payTypeTitle}>支付方式</div>
         {
           this.paySelectArr.map(payInfo => (
-            <FlexRowBetweenWingSpace
+            <div
               key={payInfo.payType}
               className={styles.paySelectItem}
               onClick={() => this.selectPayType(payInfo.payType)}
             >
               <FlexRow>
                 <IconImg src={payInfo.paySource} className={styles.payIcon} />
-                {payInfo.payTypeName}
+                <span>{payInfo.payTypeName}</span>
               </FlexRow>
               {
                 payTypeSelect === payInfo.payType && <Icon type="check" />
               }
-            </FlexRowBetweenWingSpace>
+            </div>
           ))
         }
         <div className={styles.priceTip}>价格：<span className={styles.priceCount}>{moneyFloat}元</span></div>

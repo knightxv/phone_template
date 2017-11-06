@@ -69,6 +69,30 @@ class MyUnderAgent extends BaseComponent {
       searchVal: '',
     });
   }
+  renderHeader = (columnsData) => { // dataIndex title
+    return (
+      <div className={styles.rowSection}>
+        {
+          columnsData.map(({ title, dataIndex, remark, i }) => (
+            <div
+              key={dataIndex + i}
+              style={{
+                width: `${100 / columnsData.length}%`,
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                color: '#000',
+              }}
+            >
+              <p>{ title }</p>
+              <p>{ remark }</p>
+            </div>
+          ))
+        }
+      </div>
+    );
+  }
   render() {
     const { tableData, notice, searchVal } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(notice);
@@ -122,6 +146,9 @@ class MyUnderAgent extends BaseComponent {
           value={searchVal}
           onCancelClick={this.onCancelClick}
         />
+        {
+          this.renderHeader(columns)
+        }
         <ListViewTable
           tableData={filterTableData}
           columns={columnsAddRemark}
