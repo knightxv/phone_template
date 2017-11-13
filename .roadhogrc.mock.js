@@ -1,7 +1,7 @@
 export default {
     // 本地用
     'GET /config' : {
-        JavaWebPublicServerUrl: '192.168.2.66:8080', // 192.168.2.66:8080 120.77.87.4:8080
+        JavaWebPublicServerUrl: '192.168.2.101:8000', // 192.168.2.66:8080 120.77.87.4:8080
     },
 
     /*
@@ -206,20 +206,22 @@ export default {
             masonryPayToday: 0, // 今日钻石支出
             balanceIncomeToday: 0, // 今日余额收入
             balancePayToday: 0, // 今日余额支出
+            canCashCount: 0, // 未提现（余额）
+            cashCountlog: 0, // 已提现
+            inviteCode: '223344',
+            proxyid: 2,
+            masonry: 0, // 钻书数量
+            ranking: 3,
+            powerList: ['give'],
 
             bankCardName: null,
-            bankName: '招商银行',
+            bankName: '建设银行',
             bankOfDeposit: null,
-            canCashCount: 0,
             cardNumber: null,
-            cashCountlog: 0,
-            inviteCode: '223344',
-            masonry: 0,
-            positionName: null,
-            proxyid: 2,
+            positionName: '',
+
             rechargeOfToday: 0,
             rechargeOfYesterDay: 0,
-            ranking: 3
         }
     },
     /*
@@ -290,24 +292,9 @@ export default {
                 chargeCount: 300, // 购买的数量`
                 chargeMoney: 30,
             },
-            
         ]
     },
-    /*
-        我的玩家
-    */
-    'GET /spreadApi/myPlayers' : {
-        status: 'success',
-        Msg: '',
-        data: [
-            {
-                playerName: '昵称',
-                playerId: '123456',
-                palyCashCount: 3430, // 玩家消费
-                masonrySurplus: 343, // 剩余钻石
-            }
-        ]
-    },
+    
     /*
     代理充值记录
     */
@@ -519,5 +506,50 @@ export default {
         data: {
             htmlText: '介绍代理有奖励：在申请代理时介绍人邀请码填写您的邀请码， 您将获得该代理永久充值10%钻石石奖励！详询美女客服5200', // 公告信息
         }
-    }
+    },
+
+
+    /*已经添加到文档上的 */
+    'GET /spreadApi/getGameList': {
+        "status":"success",
+        "Msg":"",
+        "data":[
+            {
+                "serverid":"43",
+                "gameName":"当当比鸡",
+                "gameIcon":"http://120.55.57.25:8080/wresource/gameimgs/c2a6776a28324722a9ca78c6279d747c.jpg",
+                "gameNumber":15
+            }
+        ]
+    },
+    /*
+        我的玩家
+    */
+    'GET /spreadApi/myPlayers' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                playerName: '昵称',
+                playerId: '123456',
+                recentlyLoginTime: 1510307559161,
+                palyCashCount: 3430, // 玩家消费
+                masonrySurplus: 343, // 剩余钻石
+            }
+        ]
+    },
+    /*
+        赠送钻石
+        params：	serverid
+        params：	pid
+        params：	HeroID
+        params：	diamond
+    */
+    'GET /spreadApi/giveDiamond' : {
+        status: 'success',
+        Msg: '',
+        data: {
+
+        }
+    },
 };

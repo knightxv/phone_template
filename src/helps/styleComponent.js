@@ -84,10 +84,10 @@ font-size: .5rem;
 text-align: center;
 `;
 
-exports.NetImg = ({ src, ...props }) => {
-  const imgPrefix = window.httpConfig ? window.httpConfig.JavaWebPublicServerUrl : '';
+exports.NetImg = ({ ...props }) => {
+  // const imgPrefix = window.httpConfig ? window.httpConfig.JavaWebPublicServerUrl : '';
   return (
-      <img src={`${imgPrefix}${src}`} {...props} />
+      <img {...props} />
   );
 };
 

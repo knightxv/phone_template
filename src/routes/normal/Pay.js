@@ -4,12 +4,13 @@ import classNames from 'classnames';
 
 import { Button, InputItem, NavBar, Icon } from '@/helps/antdComponent';
 import BaseComponent from '@/helps/BaseComponent';
-import { WhiteSpace, WingBlank, FlexRow, FlexRowBetweenWingSpace, IconImg, Title } from '@/helps/styleComponent';
+import { WhiteSpace, WingBlank, FlexRow, IconImg, Title } from '@/helps/styleComponent';
 import styles from './Pay.css';
 
 const paySource = {
   wx: require('../../assets/wx.png'),
   zfb: require('../../assets/zfb.png'),
+  give: require('../../assets/give.png'),
 };
 
 const selectDiamondArr = [10, 100, 500];
@@ -19,8 +20,8 @@ class Pay extends BaseComponent {
     super(props);
     const searchText = this.props.location.search.substr(1);
     const query = this.helps.querystring.parse(searchText);
-    const { playerId } = query;
-    const { payEnum } = this.helps;
+    const { playerId, serverid } = query;
+    const { payEnum, powerEnum } = this.helps;
     this.state = {
       diamond: '', // 钻石
       playerName: '', // 用户名
@@ -31,6 +32,10 @@ class Pay extends BaseComponent {
       payTypeSelect: payEnum.WECHAT,
     };
     this.idTimer = null;
+    this.serverid = serverid; // 游戏的id
+    // if (this.helps) {
+
+    // }
     this.paySelectArr = [
       {
         payTypeName: '微信支付',
@@ -42,17 +47,56 @@ class Pay extends BaseComponent {
         paySource: paySource.zfb,
         payType: payEnum.ALI,
       },
+      {
+        payTypeName: '直接赠送',
+        paySource: paySource.give,
+        payType: payEnum.GIVE,
+      },
     ];
+    if (this.helps.isWeixinBrowser()) {
+      this.paySelectArr = this.paySelectArr.filter((payInfo) => {
+        return payInfo.payType !== payEnum.ALI;
+      });
+    }
+    const { powerList } = this.props;
+    const hasPowerToGive = powerList && powerList.findIndex((power) => {
+      return power === powerEnum.give;
+    }) > -1;
+    if (!hasPowerToGive) {
+      this.paySelectArr = this.paySelectArr.filter((payInfo) => {
+        return payInfo.payType !== payEnum.GIVE;
+      });
+    }
   }
   async componentWillMount() {
     this.idValChange(this.state.playerId);
   }
+  // 赠送钻石
+  giveDiamond = async () => {
+    const { diamond, playerId } = this.state;
+    const { proxyid } = this.props;
+    const params = {
+      pid: proxyid,
+      HeroID: playerId,
+      diamond,
+      serverid: this.serverid,
+    };
+    const res = await this.helps.webHttp.get('/spreadApi/giveDiamond', params);
+    if (!res.isSuccess) {
+      this.helps.toast(res.info || '赠送失败');
+      return false;
+    }
+    this.helps.toast('赠送成功');
+    this.props.dispatch(this.helps.routerRedux.goBack());
+  }
   // 充值
   recharge = async () => {
-    const type = this.state.payTypeSelect;
-    const chargeType = this.helps.payType(type);
     // HeroID 玩家ID Diamond充值数量  TimeTick 充值时间
     const { diamond, playerId, playerNotFind } = this.state;
+    if (!this.serverid) {
+      this.helps.toast('请返回选择游戏');
+      return;
+    }
     if (!playerId || playerId.length < 6 || playerNotFind) {
       this.helps.toast('玩家不存在');
       return;
@@ -61,6 +105,13 @@ class Pay extends BaseComponent {
       this.helps.toast('请选择钻石个数');
       return;
     }
+    const type = this.state.payTypeSelect;
+    const { payEnum } = this.helps;
+    if (type === payEnum.GIVE) {
+      this.giveDiamond();
+      return;
+    }
+    const chargeType = this.helps.payType(type);
     const money = diamond * 10;
     const moneyFloat = this.parseFloatMoney(money);
     const { proxyid } = this.props;
@@ -69,6 +120,7 @@ class Pay extends BaseComponent {
       HeroID: playerId,
       money: moneyFloat,
       chargeType,
+      serverid: this.serverid,
     };
     const res = await this.helps.webHttp.get('/spreadApi/recharge_for_player', params);
     if (!res.isSuccess) {
@@ -93,7 +145,7 @@ class Pay extends BaseComponent {
         return false;
       }
       // 获取头像和名称
-      const res = await this.helps.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val });
+      const res = await this.helps.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val, serverid: this.serverid });
       if (res.isSuccess) {
         const { userName } = res.data;
         this.setState({
@@ -141,15 +193,16 @@ class Pay extends BaseComponent {
     });
   }
   selectPayType = (payType) => {
+    // const { payEnum } = this.helps;
     this.setState({
       payTypeSelect: payType,
     });
   }
   render() {
     const { playerName, diamond, playerNotFind, isChooseInput, selectIndex, payTypeSelect, playerId } = this.state;
-    const money = !isNaN(diamond) ? diamond * 10 : 0;
+    const { payEnum } = this.helps;
+    const money = (!isNaN(diamond) && payTypeSelect !== payEnum.GIVE) ? diamond * 10 : 0;
     const moneyFloat = this.parseFloatMoney(money);
-    // const { payEnum } = this.helps;
     return (
       <div>
         <Title>给玩家充值</Title>

@@ -67,7 +67,7 @@ class AgencyPay extends BaseComponent {
     if (res.isSuccess) {
       this.helps.toast(res.info || '充值成功');
       const userInfoRes = await this.helps.webHttp.get('/spreadApi/getUserInfo');
-      this.props.dispatch({ type: 'agent/updateUserInfo', payload: userInfoRes.data });
+      this.props.dispatch({ type: 'agent/updateAppInfo', payload: userInfoRes.data });
       return false;
     }
     this.helps.toast(res.info || '充值失败，请重试');

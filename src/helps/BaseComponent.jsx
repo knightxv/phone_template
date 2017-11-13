@@ -13,10 +13,10 @@ roadhogrc.mock.js add
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import fetch from 'dva/fetch';
+import querystring from 'querystring';
 import { window } from 'global';
 import { Toast } from './antdComponent';
 import * as TypeDefine from './typeDefine';
-import querystring from 'querystring';
 
 // import * as ToolComponents from './styleComponent';
 import Http from './Http';
@@ -26,7 +26,10 @@ import help from './help';
 const webHttpConfig = {
   getConfigUrl: '/config',
   httpConfigKey: 'JavaWebPublicServerUrl',
-  isDebug: false,
+  isDebug: true,
+  getFetchUrl() {
+    return 'http://192.168.2.66:8081';
+  },
   responseHandle(res) {
     if (res.status === 'failed' && res.code === 2) {
       Toast.info(res.info, 1, null, false);
@@ -57,9 +60,6 @@ const webHttpConfig = {
     };
     window.httpConfig = httpConfig;
     return httpConfig;
-  },
-  getFetchUrl() {
-    return 'http://127.0.0.1:8081';
   },
 };
 const webHttp = new Http(webHttpConfig);

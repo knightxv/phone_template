@@ -126,6 +126,13 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
+  const SelectGame = dynamic({
+    app,
+    component: () => import('./routes/SelectGame'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
   // const Login = dynamic({
   //   app,
   //   component: () => import('./routes/normal/HomePage'),
@@ -219,6 +226,7 @@ function RouterConfig({ history, app }) {
           <Route path="/AgreenDetail" component={AgreenDetail} />
           <Route path="/buyMasonryDetail" component={BuyMasonryDetail} />
           <Route path="/masonryDerail" component={MasonryDerail} />
+          <Route path="/selectGame" component={SelectGame} />
 
           <Route path="/general/login" component={GeneralLogin} />
           <Route path="/general/homePage" component={GeneralHomePage} />

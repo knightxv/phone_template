@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import { province as provinceData, city as cityData } from '@/data/position';
+import { region } from '@/data/region';
 import { InputItem, Button, NavBar, SelectPicker, List } from '@/helps/antdComponent';
 import BaseComponent from '@/helps/BaseComponent';
 import { FlexRow, Flex, WhiteSpace, Title } from '@/helps/styleComponent';
@@ -17,42 +17,56 @@ class AgencyExtractMoney extends BaseComponent {
       wechat_acc, // 提现所用的微信号
       positionName, // 位置
       cardNumber, // 银行卡号
-      bankCardName, // 银行卡名字
+      bankCardName, // 名字
       bankName, // 银行
       bankOfDeposit, // 开户银行
 
      } = props;
+    //  const positionName = 'df';
     this.bankDataSelect = bankData.map(val => ({
       label: val,
       value: val,
     }));
-    this.positionDataSelect = provinceData.map((pro) => {
-      const children = cityData.filter((city) => {
-        return city.ProID === pro.ProID;
-      }).map(item => ({
-        label: item.name,
-        value: item.name,
-        key: item.CityID,
-      }));
-      return {
-        label: pro.name,
-        value: pro.name,
-        children,
-      };
-    });
-    // 默认的城市
-    let defaultPosition = ['北京市', '北京市'];
+    this.positionDataSelect = region;
+    // 查看所填的城市是否在列表里，否则就选择默认的
+    let defaultPosition = [this.positionDataSelect[0].value, this.positionDataSelect[0].children[0].value];
     if (positionName) {
       const positionArr = positionName.split(' ');
-      if (positionArr.length === 2) {
-        defaultPosition = positionArr;
+      if (positionArr.length !== 2) {
+        return;
       }
+      const pro = positionArr[0];
+      const city = positionArr[1];
+      this.positionDataSelect.some((position) => {
+        if (position.value === pro) {
+          position.children.some((cityPos) => {
+            if (cityPos.value === city) {
+              defaultPosition = [pro, city];
+              return true;
+            }
+            return false;
+          });
+          return true;
+        }
+        return false;
+      });
+      // defaultPosition = positionArr;
     }
+    // 查看所填的银行是否在所填的范围内，否则就选择默认的
+    let defaultBankName = this.bankDataSelect[0].value;
+    this.bankDataSelect.some((bank) => {
+      if (bank.value === bankName) {
+        defaultBankName = bankName;
+        return true;
+      } else {
+        return false;
+      }
+    });
     this.state = {
-      wechat_acc, // 提现所用的微信号
+      wechat_acc: wechat_acc || '', // 提现所用的微信号
       cardNumber, // 银行卡号
-      bankCardName, // 银行卡名字
-      bankName: bankName || this.bankDataSelect[0].value, // 银行
+      bankCardName, // 名字
+      bankName: [defaultBankName], // 银行
       bankOfDeposit, // 开户银行
       cashCount: '',
       positionSelect: defaultPosition,
@@ -63,7 +77,7 @@ class AgencyExtractMoney extends BaseComponent {
     const { wechat_acc, positionSelect, cardNumber, bankCardName, bankName, bankOfDeposit, cashCount } = this.state;
     const positionName = positionSelect.join(' ');
     const params = {
-      bankName,
+      bankName: bankName[0],
       userName: bankCardName,
       cardNumber,
       bankOfDeposit,
@@ -91,13 +105,13 @@ class AgencyExtractMoney extends BaseComponent {
   // 选择银行
   selectBankChange = (val) => {
     this.setState({
-      bankName: val[0],
+      bankName: val,
     });
   }
   // 选择城市
   selectCityChange = (val) => {
     this.setState({
-      positionSelct: val,
+      positionSelect: val,
     });
   }
   render() {
@@ -113,7 +127,7 @@ class AgencyExtractMoney extends BaseComponent {
         />
         <WhiteSpace />
         <SelectPicker
-          value={[bankName]}
+          value={bankName}
           data={this.bankDataSelect}
           title="选择交易类型"
           onChange={this.selectBankChange}

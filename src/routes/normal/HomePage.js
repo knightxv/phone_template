@@ -141,7 +141,7 @@ class HomePage extends BaseComponent {
             <Icon type="right" />
           </FlexRow>
         </FlexRowBetweenWingSpace>
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/MyPlayer')}>
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/selectGame')}>
           <FlexRow className={styles.navigateTitleWrap}>
             <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
             <span>我的玩家</span>
