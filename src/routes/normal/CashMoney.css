@@ -1,0 +1,54 @@
+
+
+.cashBtn {
+    width: 100%;
+    flex: 1;
+    display: block;
+    margin: 15px 15px;
+}
+
+.countTip {
+    text-align: right;
+    padding: 0 16px;
+    color: #ababab;
+    font-size: 0.26rem;
+}
+
+.inputRowItem {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+.itemWrap {
+    background: #fff;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+    min-height: 0.8rem;
+}
+
+.selectTitle {
+    width: 1.5rem;
+}
+
+.selectLabel {
+    padding-right: 0.3rem;
+}
+
+.itemCashWrap {
+    background: #fff;
+    padding: 0.3rem;
+}
+
+.tip {
+    color: #999;
+}
+
+.moenyPreLabel {
+    color: #000;
+    font-size: 0.32rem;
+}
+
+.moneyCount {
+    padding: 0 0.1rem;
+    color: #ff9500;
+}

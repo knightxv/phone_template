@@ -50,11 +50,18 @@ exports.openWindow = (url) => {
   document.body.appendChild(link);
   link.click();
 };
-
+// 支付配置
 const payEnum = {
   WECHAT: 0,
   ALI: 1,
+  BALANCE: 3,
+  GIVE: 4,
 };
+// 权限配置
+const powerEnum = {
+  give: 'give',
+};
+
 // 识别微信浏览器
 const isWeixinBrowser = () => {
   return /micromessenger/.test(window.navigator.userAgent.toLowerCase());
@@ -64,6 +71,7 @@ const isWeixinBrowser = () => {
 const nowSystem = system();
 const isWechat = isWeixinBrowser();
 exports.payEnum = payEnum;
+exports.powerEnum = powerEnum;
 exports.isWechat = isWechat;
 exports.system = system;
 

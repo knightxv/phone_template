@@ -1,47 +1,21 @@
 import React from 'react';
 import { connect } from 'dva';
 
+// import { NoticeBar, WhiteSpace, Icon } from 'antd-mobile';
 // import PropTypes from 'prop-types';
 import BaseComponent from '@/helps/BaseComponent';
-import { NavTitle, BaseFont, Title } from '@/helps/styleComponent';
+import { NavBar, NoticeBar, Icon } from '@/helps/antdComponent';
+import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, Avatar, IconImg } from '@/helps/styleComponent';
 import styles from './HomePage.css';
 
 // import { htmlTextType } from '../utils/typeDefine';
-
-const funcList = [
-  {
-    router: '/PlayerPayManage',
-    name: '下线充值管理',
-  },
-  {
-    router: '/PlayerMoneyRecord',
-    name: '会员充值记录',
-  },
-  {
-    router: '/AgencyPay',
-    name: '钻石充值',
-  },
-  {
-    router: '/AgencyMoneyRecord',
-    name: '充值记录',
-  },
-  {
-    router: '/AgencyExtractMoney',
-    name: '余额提现',
-  },
-  {
-    router: '/AgencyExtractMoneyRecord',
-    name: '余额提现记录',
-  },
-  {
-    router: '/SecondaryAgencyRecord',
-    name: '我的下级代理',
-  },
-  {
-    router: '/EditAgencyPsd',
-    name: '修改密码',
-  },
-];
+const IconSource = {
+  zuanshi: require('../../assets/czzs.png'),
+  xiajiguanli: require('../../assets/gwjcz.png'),
+  wanjiachongzhi: require('../../assets/tx.png'),
+  tixian: require('../../assets/xjdl.png'),
+  notice: require('../../assets/gg.png'),
+};
 
 const rankingLimit = 50; // 控制排行是否显示
 
@@ -54,6 +28,7 @@ class HomePage extends BaseComponent {
       loaded: false,
       noticeInfo: '', // 公告信息
       priceInfoVisible: false, // 奖励说明是否显示
+      navbarRightPickerShow: false, // 右边的导航栏picker是否显示
     };
   }
   async componentWillMount() {
@@ -76,14 +51,14 @@ class HomePage extends BaseComponent {
         noticeInfo: extraRes.data.htmlText,
       });
     }
-    // 获取奖励说明
-    const priceStatu = this.TypeDefine.htmlTextType.page_prizeExplain;
-    const priceRes = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', { type: priceStatu });
-    if (priceRes.isSuccess && priceRes.data.htmlText) {
-      this.setState({
-        priceInfoVisible: true,
-      });
-    }
+    // // 获取奖励说明
+    // const priceStatu = this.TypeDefine.htmlTextType.page_prizeExplain;
+    // const priceRes = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', { type: priceStatu });
+    // if (priceRes.isSuccess && priceRes.data.htmlText) {
+    //   this.setState({
+    //     priceInfoVisible: true,
+    //   });
+    // }
   }
   navigate = (touterName) => {
     this.props.dispatch(this.helps.routerRedux.push(touterName));
@@ -92,72 +67,159 @@ class HomePage extends BaseComponent {
     await this.helps.webHttp.get('/spreadApi/logout');
     this.props.dispatch(this.helps.routerRedux.push('/login'));
   }
+  // 跳转到公告详情
+  navigateNotice = async () => {
+    this.navigate('/noticeDetail');
+  }
+  pickerToggle = () => {
+    this.setState({
+      navbarRightPickerShow: !this.state.navbarRightPickerShow,
+    });
+  }
+  editPas = () => {
+    this.navigate('/EditAgencyPsd');
+  }
   render() {
-    const { loaded, noticeInfo, priceInfoVisible } = this.state;
+    const { loaded, noticeInfo, navbarRightPickerShow } = this.state;
+    const notiveInfoHtml = this.helps.createMarkup(noticeInfo);
     const noticeVisible = !!noticeInfo;
-    const { inviteCode, masonry, rechargeOfToday, rechargeOfYesterDay, canCashCount, cashCountlog, ranking } = this.props;
+    const { inviteCode, masonry, rechargeOfToday,
+    rechargeOfYesterDay, canCashCount, cashCountlog, ranking, myUnderAgentCount,
+    myPlayerCount, saleDiamondsOfThisMonth, masonryIncomeToday, masonryPayToday,
+    balanceIncomeToday, balancePayToday,
+    } = this.props;
     if (!loaded) {
       return null;
     }
     const isRankingShow = ranking && ranking <= rankingLimit; // 当排行小于50
-    const unitRechargeOfToday = parseFloat(rechargeOfToday / 100);
-    const unitRechargeOfYesterDay = parseFloat(rechargeOfYesterDay / 100);
-    const unitCashCountlog = parseFloat(cashCountlog / 100);
-    const unitCanCashCount = parseFloat(canCashCount / 100);
-    return (<div>
-      <Title>阿当代理中心</Title>
-      <NavTitle
-        className="G_borderBottom"
-        style={{ position: 'fixed', background: '#fff', width: '100%' }}
-      >
-        您的邀请码：<span style={{ color: 'red', fontSize: '26px' }}>{inviteCode}</span>
-      </NavTitle>
-      <div style={{ height: 50 }} />
-      {
-        (<BaseFont className={styles.navInfoTip}>
-          {
-          isRankingShow
-          ? (<span>月销钻<span className={styles.rankTip}>排名为第{ranking}名</span></span>)
-          : (<span>当月销钻石<span className={styles.rankTip}>排名为50名之后</span></span>)
-        }
-        {
-          priceInfoVisible && (<a href="javascript:;" onClick={() => this.navigate('/RankExplain')}>（点击查看奖励说明）</a>)
-        }
-        </BaseFont>
-        )
-      }
+    // const unitRechargeOfToday = parseFloat(rechargeOfToday / 100); // 玩家今日充值
+    // const unitRechargeOfYesterDay = parseFloat(rechargeOfYesterDay / 100); // 玩家昨日充值
+    // const unitCashCountlog = parseFloat(cashCountlog / 100); // 已提现
+    const unitCanCashCount = this.parseFloatMoney(canCashCount); // 未提现
+    const unitBalanceIncomeToday = this.parseFloatMoney(balanceIncomeToday);
+    const unitBalancePayToday = this.parseFloatMoney(balancePayToday);
+    return (<div style={{ position: 'relative' }}>
+      <Title>代理中心</Title>
+      <NavBar
+        title="代理中心"
+        right={<Icon type='ellipsis' onClick={this.pickerToggle} />}
+      />
       {
         noticeVisible
-        && (
-          <BaseFont className={styles.notice} dangerouslySetInnerHTML={this.helps.createMarkup(noticeInfo)} />
-        )
+        && <NoticeBar
+          onClick={this.navigateNotice}
+        >
+          <FlexRow>
+            <span dangerouslySetInnerHTML={notiveInfoHtml} />
+          </FlexRow>
+        </NoticeBar>
       }
+      <WhiteSpace />
+      <div className={styles.module}>
+        <FlexRowBetweenWingSpace className={styles.borderBottom}>
+          <div className={styles.titleWrap}>
+            我的排名:<span className={styles.colorBlue}>{ isRankingShow ? ranking : '未上榜'}</span>
+          </div>
+          <p className={styles.colorBlue} onClick={() => this.navigate('/rankExplain')}>奖励规则</p>
+        </FlexRowBetweenWingSpace>
+        <FlexRow className={styles.userInfoWrap}>
+          <Avatar className={styles.userAvatar} />
+          <div className={styles.userInfo}>
+            <p className={styles.saleDiamondsOfThisMonthLabel}>
+              本月销钻数量：<span className={styles.saleDiamondsLabel}>{saleDiamondsOfThisMonth || 0}</span>
+            </p>
+            <p>邀请码：{inviteCode}</p>
+          </div>
+        </FlexRow>
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
+          <FlexRow className={styles.navigateTitleWrap}>
+            <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
+            <span>我的下级代理</span>
+          </FlexRow>
+          <FlexRow className={styles.titleWrap}>
+            <p>{myUnderAgentCount}人</p>
+            <Icon type="right" />
+          </FlexRow>
+        </FlexRowBetweenWingSpace>
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/selectGame')}>
+          <FlexRow className={styles.navigateTitleWrap}>
+            <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
+            <span>我的玩家</span>
+          </FlexRow>
+          <FlexRow className={styles.titleWrap}>
+            <p>{myPlayerCount}人</p>
+            <Icon type="right" />
+          </FlexRow>
+        </FlexRowBetweenWingSpace>
+      </div>
+      <WhiteSpace />
+      <div className={styles.module}>
+        <FlexRowBetweenWingSpace className={styles.titleWrap}>
+          <FlexRow><TitleIcon /><span>钻石数量</span></FlexRow>
+          <div className={styles.colorBlue} onClick={() => this.navigate('/masonryDerail')}>交易明细</div>
+        </FlexRowBetweenWingSpace>
+        <div className={styles.masonryCountLable}>
+          <FlexRow>
+            <span className={styles.count}>{masonry}</span>
+            <span>(个)</span>
+          </FlexRow>
+          <div className={styles.masonryInfoWrap}>
+            <p className={styles.masonryInfo}>今日收入:<span className={styles.count}>{masonryIncomeToday}</span>个</p>
+            <p className={styles.masonryInfo}>今日支出:<span className={styles.count}>{masonryPayToday}</span>个</p>
+          </div>
+        </div>
+
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/agencyPay')}>
+          <FlexRow className={styles.navigateTitleWrap}>
+            <IconImg className={styles.titleIconImg} src={IconSource.zuanshi} />
+            <span>购买钻石</span>
+          </FlexRow>
+          <Icon type="right" />
+        </FlexRowBetweenWingSpace>
+      </div>
+      <WhiteSpace />
+      <div className={styles.module}>
+        <FlexRowBetweenWingSpace className={styles.titleWrap}>
+          <FlexRow><TitleIcon /><span>账户余额</span></FlexRow>
+          <div className={styles.colorBlue} onClick={() => this.navigate('/cashMoneyRecord')}>交易明细</div>
+        </FlexRowBetweenWingSpace>
+        <div className={styles.masonryCountLable}>
+          <div>
+            <span className={styles.countLabel}>￥:</span><span className={styles.count}>{unitCanCashCount}</span>
+          </div>
+          <div className={styles.masonryInfoWrap}>
+            <p className={styles.masonryInfo}>
+              今日收入￥<span className={styles.count}>{unitBalanceIncomeToday}</span>
+            </p>
+            <p className={styles.masonryInfo}>
+              今日支出￥<span className={styles.count}>{unitBalancePayToday}</span>
+            </p>
+          </div>
+        </div>
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
+          <FlexRow className={styles.navigateTitleWrap}>
+            <IconImg className={styles.titleIconImg} src={IconSource.tixian} />
+            <span>提现</span>
+          </FlexRow>
+          <Icon type="right" />
+        </FlexRowBetweenWingSpace>
+      </div>
       {
-        funcList.map((item, i) => {
-          return (<BaseFont
-            key={i}
-            className={styles.funItem}
-            onClick={() => this.navigate(item.router)}
-          >
-            {item.name}
-          </BaseFont>
-          );
-        })
+        navbarRightPickerShow && <div className={styles.pickerWrap} onClick={this.pickerToggle}>
+          <div className={styles.navbarOption}>
+            <div className={styles.navbarOptionItem} onClick={this.editPas}>修改密码</div>
+            <div className={styles.navbarOptionItem} onClick={this.logout}>退出</div>
+          </div>
+        </div>
       }
-      <BaseFont className={styles.funItem}>钻石:<Count>{masonry}</Count></BaseFont>
-      <BaseFont className={styles.funItem}>玩家今日充值:<Count>{unitRechargeOfToday}</Count></BaseFont>
-      <BaseFont className={styles.funItem}>玩家昨日充值:<Count>{unitRechargeOfYesterDay}</Count></BaseFont>
-      <BaseFont className={styles.funItem}>已提现:<Count>{unitCashCountlog}</Count></BaseFont>
-      <BaseFont className={styles.funItem}>未提现:<Count>{unitCanCashCount}</Count></BaseFont>
-      <BaseFont className={styles.funItem} onClick={this.logout}>退出</BaseFont>
     </div>);
   }
 }
 HomePage.propTypes = {
 };
 
-const Count = ({ children }) => {
-  return <span style={{ color: 'red' }}>{children}</span>;
+const TitleIcon = () => {
+  return <span className={styles.titleIcon} />;
 };
 
 const mapStateToProps = (state) => {

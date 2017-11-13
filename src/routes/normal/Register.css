@@ -1,27 +1,28 @@
 
 .container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 10px;
-}
-
-.verifyBtn {
-    background: #0E90D2;
-    color: #fff;
-    line-height: 42px;
-    height: 42px;
-    padding: 0 10px;
-    border-radius: 0.1rem;
-}
-
-.verifyCodeBtnContainer {
-    display: flex;
-    flex-direction: row;
-    align-items: left;
+    
 }
 
 .verifyCodeBtn {
-    margin-left: 0px;
+    color: #1e7df1;
+    border: 1px solid #1e7df1;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.verifyCodeDisable {
+    color: rgba(0, 0, 0, 0.25);
+    background: #f7f7f7;
+    border-color: #999;
+}
+
+.agreenLabel {
+    font-size: 0.24rem;
+    color: #333;
+    line-height: 1rem;
+}
+.agreenLink {
+    color: #1e7df1;
 }
 
 .ageenBtn {
@@ -30,13 +31,14 @@
     cursor: pointer;
 }
 
-.checkbox {
-    width: 15px;
-    height: 15px;
-    display: block;
+.contentContainer {
+    margin-top: 0.14rem;
 }
 
-.agreenWrap {
-    display: flex;
-    align-items: center;
+.inputWrap {
+    background: #fff;
+}
+
+.registerWrap {
+    padding: 0 0.4rem;
 }

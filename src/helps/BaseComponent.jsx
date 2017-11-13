@@ -13,10 +13,10 @@ roadhogrc.mock.js add
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import fetch from 'dva/fetch';
+import querystring from 'querystring';
 import { window } from 'global';
 import { Toast } from './antdComponent';
 import * as TypeDefine from './typeDefine';
-import querystring from 'querystring';
 
 // import * as ToolComponents from './styleComponent';
 import Http from './Http';
@@ -27,6 +27,9 @@ const webHttpConfig = {
   getConfigUrl: '/config',
   httpConfigKey: 'JavaWebPublicServerUrl',
   isDebug: true,
+  getFetchUrl() {
+    return 'http://192.168.2.66:8081';
+  },
   responseHandle(res) {
     if (res.status === 'failed' && res.code === 2) {
       Toast.info(res.info, 1, null, false);
@@ -74,7 +77,6 @@ export default class BaseComponent extends React.Component {
     this.helps = {
       webHttp,
       fetch,
-      
       ...help,
       toast: (msg) => {
         Toast.info(msg || '未知错误', 1, null, false);
@@ -92,5 +94,17 @@ export default class BaseComponent extends React.Component {
     //   system: help.system(),
     //   isWechat: help.isWeixinBrowser,
     // };
+  }
+  parseFloatMoney = (money) => {
+    return parseFloat(money / 100).toFixed(2);
+  }
+  transMoenyUnit = (count) => {
+    const transCount = count.toString();
+    if (transCount.length === 4) {
+      return `${parseFloat(transCount / 1000)}千`;
+    } else if (transCount.length > 4) {
+      return `${parseFloat(transCount / 10000)}万`;
+    }
+    return transCount;
   }
 }

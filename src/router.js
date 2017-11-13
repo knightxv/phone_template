@@ -11,6 +11,7 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/normal/Login'),
     models: () => [
       import('./models/agent'),
+      import('./models/app'),
     ],
   });
   const NormalHomePage = dynamic({
@@ -27,9 +28,9 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
-  const PlayerPayManage = dynamic({
+  const InviteToAgent = dynamic({
     app,
-    component: () => import('./routes/normal/PlayerPayManage'),
+    component: () => import('./routes/normal/InviteToAgent'),
     models: () => [
       import('./models/agent'),
     ],
@@ -62,23 +63,30 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
-  const AgencyExtractMoney = dynamic({
+  const CashMoney = dynamic({
     app,
-    component: () => import('./routes/normal/AgencyExtractMoney'),
+    component: () => import('./routes/normal/CashMoney'),
     models: () => [
       import('./models/agent'),
     ],
   });
-  const AgencyExtractMoneyRecord = dynamic({
+  const CashMoneyRecord = dynamic({
     app,
-    component: () => import('./routes/normal/AgencyExtractMoneyRecord'),
+    component: () => import('./routes/normal/CashMoneyRecord'),
     models: () => [
       import('./models/agent'),
     ],
   });
-  const SecondaryAgencyRecord = dynamic({
+  const MyUnderAgent = dynamic({
     app,
-    component: () => import('./routes/normal/SecondaryAgencyRecord'),
+    component: () => import('./routes/normal/MyUnderAgent'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
+  const MyPlayer = dynamic({
+    app,
+    component: () => import('./routes/normal/MyPlayer'),
     models: () => [
       import('./models/agent'),
     ],
@@ -104,9 +112,23 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
-  const AgencyPayType = dynamic({
+  const BuyMasonryDetail = dynamic({
     app,
-    component: () => import('./routes/normal/AgencyPayType'),
+    component: () => import('./routes/normal/BuyMasonryDetail'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
+  const MasonryDerail = dynamic({
+    app,
+    component: () => import('./routes/normal/MasonryDerail'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
+  const SelectGame = dynamic({
+    app,
+    component: () => import('./routes/SelectGame'),
     models: () => [
       import('./models/agent'),
     ],
@@ -124,6 +146,7 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/general/login'),
     models: () => [
       import('./models/general'),
+      import('./models/app'),
     ],
   });
   const GeneralHomePage = dynamic({
@@ -175,37 +198,46 @@ function RouterConfig({ history, app }) {
       import('./models/general'),
     ],
   });
+  // 公用
+  const NoticeDetail = dynamic({
+    app,
+    component: () => import('./routes/NoticeDetail'),
+  });
   return (
-    <div className="routerContainer">
+    <div id="container" className="routerContainer">
       <Router history={history}>
         <Switch>
           <Route path="/" exact component={NormalLogin} />
 
           <Route path="/login" component={NormalLogin} />
           <Route path="/homePage" component={NormalHomePage} />
-          <Route path="/RankExplain" component={RankExplain} />
-          <Route path="/PlayerPayManage" component={PlayerPayManage} />
+          <Route path="/rankExplain" component={RankExplain} />
+          <Route path="/inviteToAgent" component={InviteToAgent} />
           <Route path="/pay" component={Pay} />
           <Route path="/PlayerMoneyRecord" component={PlayerMoneyRecord} />
           <Route path="/AgencyMoneyRecord" component={AgencyMoneyRecord} />
-          <Route path="/AgencyPay" component={AgencyPay} />
-          <Route path="/AgencyExtractMoney" component={AgencyExtractMoney} />
-          <Route path="/AgencyExtractMoneyRecord" component={AgencyExtractMoneyRecord} />
-          <Route path="/SecondaryAgencyRecord" component={SecondaryAgencyRecord} />
+          <Route path="/agencyPay" component={AgencyPay} />
+          <Route path="/cashMoney" component={CashMoney} />
+          <Route path="/cashMoneyRecord" component={CashMoneyRecord} />
+          <Route path="/myUnderAgent" component={MyUnderAgent} />
+          <Route path="/myPlayer" component={MyPlayer} />
           <Route path="/EditAgencyPsd" component={EditAgencyPsd} />
           <Route path="/register" component={Register} />
           <Route path="/AgreenDetail" component={AgreenDetail} />
-          <Route path="/AgencyPayType" component={AgencyPayType} />
+          <Route path="/buyMasonryDetail" component={BuyMasonryDetail} />
+          <Route path="/masonryDerail" component={MasonryDerail} />
+          <Route path="/selectGame" component={SelectGame} />
 
           <Route path="/general/login" component={GeneralLogin} />
           <Route path="/general/homePage" component={GeneralHomePage} />
-
           <Route path="/general/inviteAgent" component={InviteAgent} />
           <Route path="/general/editPsd" component={EditPsd} />
           <Route path="/general/myAgents" component={MyAgents} />
           <Route path="/general/cashRecord" component={CashRecord} />
           <Route path="/general/cashMoeny" component={CashMoeny} />
           <Route path="/general/commissionRecord" component={CommissionRecord} />
+
+          <Route path="/noticeDetail" component={NoticeDetail} />
         </Switch>
       </Router>
     </div>

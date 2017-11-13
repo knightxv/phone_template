@@ -37,7 +37,7 @@ class InviteAgent extends BaseComponent {
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
         <WhiteSpace />
-        <WingBlank className="background">
+        <WingBlank className={styles.contentContainer}>
           <p>链接</p>
           <div className={styles.linkInfoWrap}>
             <a

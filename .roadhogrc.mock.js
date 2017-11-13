@@ -1,111 +1,49 @@
-
 export default {
     // 本地用
-    'GET /config': {
-        JavaWebPublicServerUrl: '192.168.2.108:8080', // 192.168.1.108:8080
+    'GET /config' : {
+        JavaWebPublicServerUrl: '192.168.2.101:8000', // 192.168.2.66:8080 120.77.87.4:8080
     },
-
-    // /*
-    //     备注：返回的图片要是完成路径或者域名底下的相对路径 eg: /public/picture/banner-1.jpg
-    //  */
-    // /*
-    //     轮播的图片
-    //  */
-    // 'GET /gamePlatform/navbarSwiperList': [
-    //     {
-    //         gameId: 23,
-    //         gamePicture: '/picture/banner-1.jpg'
-    //     },
-    //     {
-    //         gameId: 23,
-    //         gamePicture: '/picture/banner-1.jpg'
-    //     },
-    //     {
-    //         gameId: 23,
-    //         gamePicture: '/picture/banner-1.jpg'
-    //     },
-    //     {
-    //         gameId: 23,
-    //         gamePicture: '/picture/banner-1.jpg'
-    //     }
-    // ],
-    // /*
-    //     推荐游戏
-    //  */
-    // 'GET /gamePlatform/gameRecommendList': [
-    //     {
-    //         gameIcon: '/picture/icon.png',
-    //         gameName: '阿当比鸡',
-    //         gameStar: 5,
-    //         gameSize: '35.5M',
-    //         gameStatu: '阿当比鸡玩的刺激d！',
-    //         gameId: 23
-    //     },
-    // ],
-    // /*
-    //     得到游戏详情
-    //     gameId
-    // */
-    // 'GET /gamePlatform/gameDetailInfo': {
-    //     gameName: '阿当比鸡',
-    //     gameIcon: '/picture/icon.png',
-    //     downAndroid: 'https://fir.im/ns3t', // 游戏第三方下载链接
-    //     downIos: 'https://itunes.apple.com/us/app/小吆湖南棋牌-湖南特色玩法-多种玩法集合/id1220747741', // ios的下载链接
-    //     reserve: 'http://cdn.xiaoyaogame.cn/apk/com.tencent.tmgp.xyhnqpg0322.apk_1.2.apk', // android下载包
-    //     gameSize: '39.5M',
-    //     downCount: '5万次',
-    //     gameVersion: '11.3.0',
-    //     gameStar: 5,
-    //     gameIntroduce: '游戏介绍',
-    //     characteristic: '新版特性',
-    //     publicDataTime: 1507531145366, // 发布日期
-    //     developer: '厦门当当猫网络科技有限公司', // 开发者
-    //     gameScreenshot: [
-    //         '/detail/picture/hnqp-banner01.jpg',
-    //         '/detail/picture/hnqp-banner02.jpg',
-    //         '/detail/picture/hnqp-banner03.jpg',
-    //         '/detail/picture/hnqp-banner04.jpg'
-    //     ] // 游戏截图
-    // },
 
     /*
         总管理登录
-        loginID
-        password
+        @query : loginID
+        @qyeru : password
+        @query : registerProvince : 注册省份
+        @query : registerCity : 注册城市
     */
-    'GET /spreadApi/general/login': {
+    'GET /spreadApi/general/login' : {
         status: 'success',
         Msg: '',
-        data: null,
+        data: null
     },
-     /*
+    /*
         总管理登出
     */
-    'GET /spreadApi/general/logout': {
+    'GET /spreadApi/general/logout' : {
         status: 'success',
         Msg: '',
-        data: null,
+        data: null
     },
 
-    'GET /spreadApi/getVerifyCode': {
+    'GET /spreadApi/getVerifyCode' : {
         status: 'success',
         Msg: '',
-        data: null,
+        data: null
     },
 
     /*
         获取用户数据
     */
-    'GET /spreadApi/general/getUserInfo': {
+    'GET /spreadApi/general/getUserInfo' : {
         status: 'success',
         Msg: '',
         data: {
-            
+
             // cashCountlog: 0, // 已提成（文档没要求）
-            canCashCount: 0, // 余额（元）
+            canCashCount: 0, // 账户余额（元）（保留2位小数）
             proxyid: 2, // 代理id
             inviteCode: 132032, // 邀请码
-            
+
             commissionRate: 15, // 当前提成比例
             prizeByExtension: 500, // 推广人数奖励(元)
             openDay: 10, // 开通天数
@@ -117,29 +55,27 @@ export default {
             positionName: '福建省 泉州市', // 位置
             cardNumber: '23fdgfd', // 银行卡号
             bankCardName: 'dsfsd', // 银行卡名字
-            bankName: '工商银行', // 银行
+            bankName: '招商银行', // 银行
             bankOfDeposit: 'fdsf', // 开户银行
-        },
+        }
     },
-
-
 
     /*
         (代理页面)控制首页的显示和隐藏
         @ query : type : 1 奖励页面 2 代理公告 3 总代理公告
     */
-    'GET /ddm/phone/api/getHtmlText': {
+    'GET /ddm/phone/api/getHtmlText' : {
         status: 'success',
         Msg: '',
         data: {
-        htmlText: '介绍代理有奖励：在申请代理时介绍人邀请码填写您的邀请码， 您将获得该代理永久充值10%钻石石奖励！详询美女客服5200', // 公告信息
-        },
+            htmlText: '介绍代理有奖励：在申请代理时介绍人邀请码填写您的邀请码， 您将获得该代理永久充值10%钻石石奖励！详询美女客服5200', // 公告信息
+        }
     },
 
     /*
         提成记录
     */
-    'GET /spreadApi/general/commissionRecord': {
+    'GET /spreadApi/general/commissionRecord' : {
         status: 'success',
         Msg: '',
         data: [
@@ -148,14 +84,14 @@ export default {
                 agentCode: 123320, // 代理邀请码
                 commissionCount: 34, // 提成金额
                 agentRechargeTime: 0, // 代理充值时间
-            },
+            }
         ]
     },
 
     /*
         余额提现记录
     */
-    'GET /spreadApi/general/cashRecord': {
+    'GET /spreadApi/general/cashRecord' : {
         status: 'success',
         Msg: '',
         data: [
@@ -163,45 +99,45 @@ export default {
                 createTime: 1504527287992, //提取时间（时间戳）
                 cashCount: 34, // 提现金额
                 result: 0, // 0待审核 1已通过 2已拒绝
-            },
-            {
+            }, {
                 createTime: 1506498557344, //提取时间（时间戳）
                 cashCount: 34, // 提现金额
                 result: 0, // 0待审核 1已通过 2已拒绝
-            },
+            }
         ]
     },
 
     /*
     我的下级代理
   */
-  'GET /spreadApi/general/myUnderAgents': {
-    status: 'success',
-    Msg: '',
-    data: [
-        {
-            underAgentName: 'fdff', // 下级代理名称
-            agentInviteCode: '124355', // 代理商邀请码
-            allRechargeCount: 334, // 总充值数
-            rechargeCountOfToday: 43, // 今日的充值数
-            CommissionOfAll: 434, //总提成金额
-            CommissionOfToday: 23, // 今日提成金额
-        },
-    ]
-  },
+    'GET /spreadApi/general/myUnderAgents' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                underAgentName: 'fdff', // 下级代理名称
+                agentInviteCode: '124355', // 代理商邀请码
+                allRechargeCount: 334, // 总充值数
+                rechargeCountOfToday: 43, // 今日的充值数
+                CommissionOfAll: 434, //总提成金额
+                CommissionOfToday: 23, // 今日提成金额
+            }
+        ]
+    },
+    
 
-  /*
-    修改代理密码
-    @query : oldPsd : 旧密码
-    @query : newPsd : 新密码
-  */
-  'GET /spreadApi/general/editPassword': {
-    status: 'success',
-    Msg: '',
-    data: null
-  },
+    /*
+        修改代理密码
+        @query : oldPsd : 旧密码
+        @query : newPsd : 新密码
+    */
+    'GET /spreadApi/general/editPassword' : {
+        status: 'success',
+        Msg: '',
+        data: null
+    },
 
-  /*
+    /*
     提现金额
     @query : cashCount 提现金额
     @query : userName 开户姓名
@@ -209,13 +145,13 @@ export default {
     @query : bankName : 银行名字
     @query : bankOfDeposit : 银行开户行
     @qeury : positionName : 市级地点名字
-    @query : wechatNumber : 微信名 
+    @query : wechatNumber : 微信名
   */
-  'GET /spreadApi/general/cash': {
-    status: 'success',
-    Msg: '',
-    data: null
-  },
+    'GET /spreadApi/general/cash' : {
+        status: 'success',
+        Msg: '',
+        data: null
+    },
 
     /*
         注册
@@ -223,10 +159,10 @@ export default {
         @query : pCode ： 上级邀请码
         @query : wechatCode : 微信号码
         @query : verifyCode : 验证码
-        @query : registerProvince : 微信号码
-        @query : registerCity : 验证码
+        @query : registerProvince : 注册省份
+        @query : registerCity : 注册城市
     */
-    'GET /spreadApi/register': {
+    'GET /spreadApi/register' : {
         status: 'success',
         Msg: '',
         data: null
@@ -236,7 +172,7 @@ export default {
         通过id得到用户邀请码
         @query: id
     */
-    'GET /spreadApi/getinveteCodeById': {
+    'GET /spreadApi/getinveteCodeById' : {
         status: 'success',
         Msg: '',
         data: {
@@ -244,118 +180,137 @@ export default {
         }
     },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    登录
+    /*
+    代理登录
     @query : loginID
-    @query : password
+    @qyeru : password
+    @query : registerProvince : 注册省份
+    @query : registerCity : 注册城市
    */
-  'GET /spreadApi/login': {
-    status: 'success',
-    Msg: '',
-    data: {}
-},
-/*
-获取个人信息
-*/
-'GET /spreadApi/getUserInfo': {
-    status: 'success',
-    Msg: '',
-    data: {
-      bankCardName: null,
-      bankName: null,
-      bankOfDeposit: null,
-      canCashCount: 0,
-      cardNumber: null,
-      cashCountlog: 0,
-      inviteCode: null,
-      masonry: 0,
-      positionName: null,
-      proxyid: 2,
-      rechargeOfToday: 0,
-      rechargeOfYesterDay: 0,
-      ranking: 3,
-    }
-},
-/*
+    'GET /spreadApi/login' : {
+        status: 'success',
+        Msg: '',
+        data: {}
+    },
+    /*
+        获取个人信息
+     */
+    'GET /spreadApi/getUserInfo' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            saleDiamondsOfThisMonth:84651, // 本月销钻
+            myUnderAgentCount: 15, // 我的下级代理人数
+            myPlayerCount: 80, // 我的玩家人数
+            masonryIncomeToday: 0, // 今日钻石收入
+            masonryPayToday: 0, // 今日钻石支出
+            balanceIncomeToday: 0, // 今日余额收入
+            balancePayToday: 0, // 今日余额支出
+            canCashCount: 0, // 未提现（余额）
+            cashCountlog: 0, // 已提现
+            inviteCode: '223344',
+            proxyid: 2,
+            masonry: 0, // 钻书数量
+            ranking: 3,
+            powerList: ['give'],
+
+            bankCardName: null,
+            bankName: '建设银行',
+            bankOfDeposit: null,
+            cardNumber: null,
+            positionName: '',
+
+            rechargeOfToday: 0,
+            rechargeOfYesterDay: 0,
+        }
+    },
+    /*
 会员充值记录
 */
-'GET /spreadApi/rechargeRecordOfMenber': {
-    status: 'success',
-    Msg: '',
-    data: [
-        {
-            heroID: '12', // 玩家id
-            diamond: 123, // 充值数量
-            timeTick: 4734, //充值的时间戳
+    'GET /spreadApi/rechargeRecordOfMenber' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                heroID: '12', // 玩家id
+                diamond: 123, // 充值数量
+                timeTick: 4734, //充值的时间戳
+            }
+        ]
+    },
+    /*
+        得到商品列表
+    */
+    'GET /spreadApi/getMasonryGoods' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                shopId: 1, // 商品的id
+                goodsMoney: '100000', // 商品金额
+                masonryCount: '10000', // 钻石个数
+            },
+        ]
+    },
+    /*
+        代理充值
+        @query : goodsId
+        @query : chargeType (1微信，2支付宝)
+    */
+    'GET /spreadApi/recharge' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            chargeURL: 'www.baidu.com',
         }
-    ]
-},
-/*
-得到商品列表
-*/
-'GET /spreadApi/getMasonryGoods': {
-status: 'success',
-Msg: '',
-data: [
-    {
-        shopId: 1, // 商品的id，暂时只有 1~6用于对应商品图片
-        goodsInfo: '5000个砖石售价300元',
-        goodsIco: '', // 
-    }
-]
-},
-/*
-代理充值
-@query : goodsId
-*/
-'GET /spreadApi/recharge': {
-status: 'success',
-Msg: '',
-data: null
-},
-/*
-余额充值
-@query : goodsId
-*/
-'GET /spreadApi/balanceRecharge': {
-status: 'success',
-Msg: '',
-data: null
-},
-/*
-代理充值记录
-*/
-'GET /spreadApi/underAgentsChargeLog': {
-status: 'success',
-Msg: '',
-data: [
-    {
-        agentName: '代理名称',
-        rechargeCount: '343', // 充值数量
-        chargeMoney: '2323',
-        rechargeTime: 1505107807359, // 充值时间，（时间戳）
-    }
-]
-},
-/*
+    },
+    /*
+        余额充值
+        @query : goodsId
+    */
+    'GET /spreadApi/balanceRecharge' : {
+        status: 'success',
+        Msg: '',
+        data: null
+    },
+    /*
+        购钻明细
+        page: 0,
+        size: 10,
+    */
+    'GET /spreadApi/diamondsDetail' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                chargeTime: 1508480231603, // 购买的时间
+                chargeCount: 300, // 购买的数量`
+                chargeMoney: 30,
+            },
+            {
+                chargeTime: 1508480231603, // 购买的时间
+                chargeCount: 300, // 购买的数量`
+                chargeMoney: 30,
+            },
+        ]
+    },
+    
+    /*
+    代理充值记录
+    */
+    'GET /spreadApi/underAgentsChargeLog' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                agentName: '代理名称',
+                rechargeCount: '343', // 充值数量
+                chargeMoney: '2323',
+                rechargeTime: 1505107807359, // 充值时间，（时间戳）
+            }
+        ]
+    },
+    /*
 提现金额
 @query : cashCount 提现金额
 @query : userName 开户姓名
@@ -363,174 +318,238 @@ data: [
 @query : bankName : 银行名字
 @query : bankOfDeposit : 银行开户行
 @qeury : positionName : 市级地点名字
-@query : wechatNumber : 微信名 
+@query : wechatNumber : 微信名
 */
-'GET /spreadApi/cash': {
-status: 'success',
-Msg: '',
-data: null
-},
+    'GET /spreadApi/cash' : {
+        status: 'success',
+        Msg: '',
+        data: null
+    },
 
-/*
-余额提现记录
-*/
-'GET /spreadApi/cashRecord': {
-status: 'success',
-Msg: '',
-data: [
-  {
-      id: 343, // 编号
-      expressiveTime: 1504527287992, //提取时间（时间戳）
-      cashType: 0, // 提现类型 0 :微信 1：支付宝
-      cashCount: 34, // 提现金额
-      result: 0, // 0待审核 1已通过 2已拒绝
-  },
-]
-},
-/*
-我的下级代理
-*/
-'GET /spreadApi/myUnderAgents': {
-status: 'success',
-Msg: '',
-data: [
-    {
-        underAgentName: 'fdff', // 下级代理名称
-        agentInviteCode: '124355', // 代理邀请码
-        allRechargeCount: 334, // 总充砖数
-        rechargeCountOfToday: 43, // 今日的充砖数
-        CommissionOfAll: 434, //总提成砖石
-        CommissionOfToday: 23, // 今日提成砖石
+    /*
+	余额提现记录
+	*/
+    'GET /spreadApi/cashRecord' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                id: 343, // 编号
+                expressiveTime: 1504527287992, //提取时间（时间戳）
+                cashType: 0, // 提现类型 0 :微信 1：支付宝
+                cashCount: 34, // 提现金额
+                result: 0, // 0待审核 1已通过 2已拒绝
+            }
+        ]
+    },
+    /*
+    	钻石交易明细
+    	monthTime: 2343242
+    	type : 0(玩家购钻), 1(代理购钻) 2（代理反钻）, 3（系统调整）, 4（邀请奖励）, 5（提现）（all不传type）
+     */
+    'GET /spreadApi/getMasonryRecord' : {
+    	status: 'success',
+        Msg: '',
+        data: [
+            {
+            	title: '购买[2300钻石 售价175元]',
+            	TranAmount: 55, // 交易个数
+            	tranTime: 4574835, // 交易时间
+            },
+        ]
+    },
+    /*
+        余额交易明细
+        monthTime: 2343242
+    	type : 0(玩家购钻), 1(代理购钻) 2（代理反钻）, 3（系统调整）, 4（邀请奖励）, 5（提现）（all不传type）
+     */
+    'GET /spreadApi/getBalanceRecord' : {
+    	status: 'success',
+        Msg: '',
+        data: [
+            {
+            	title: '购买[2300钻石 售价175元]',
+            	TranAmount: -5500, // 交易金额
+            	tranTime: 1508465568441, // 交易时间
+            },
+        ]
+    },
+    /*
+		我的下级代理
+	*/
+    'GET /spreadApi/myUnderAgents' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                underAgentName: 'fdff', // 下级代理名称
+                agentInviteCode: '124355', // 代理邀请码
+                allRechargeCount: 334, // 总充砖数
+                rechargeCountOfToday: 43, // 今日的充砖数
+                CommissionOfAll: 434, //总提成砖石
+                CommissionOfToday: 23, // 今日提成砖石
 
-    }
-]
-},
+            }
+        ]
+    },
 
-/*
+    /*
 修改代理密码
 @query : oldPsd : 旧密码
 @query : newPsd : 新密码
 */
-'GET /spreadApi/editPassword': {
-status: 'success',
-Msg: '',
-data: null
-},
+    'GET /spreadApi/editPassword' : {
+        status: 'success',
+        Msg: '',
+        data: null
+    },
 
-/*
-通过id得到用户名
-@query: heroID
-*/
-'GET /spreadApi/getPlayerInfoById': {
-status: 'success',
-Msg: '',
-data: {
-    userName: '用户名',
-    avatar: '', // 头像
-}
-},
-/*
-通过金额得到钻石
-@query : money
-*/
-'GET /spreadApi/getDiamondsByMoney': {
-status: 'success',
-Msg: '',
-data: {
-  diamond: '3434', //钻石数
-}
-},
-/*
-给玩家充值
-@query : HeroID id
-@query : money 充值数量
-@chargeType  : 0微信 1支付宝
-@serverID: 游戏的serverId
-@query: pid: 代理id
-*/
-'GET /spreadApi/recharge_for_player': {
-status: 'success',
-Msg: '',
-data: null
-},
-/*
-给代理充值
-@query : HeroID id
-@query : money 充值数量
-@type  : 0微信 1支付宝
-*/
-'GET /spreadApi/recharge': {
-status: 'success',
-Msg: '',
-data: null
-},
+    /*
+        通过id得到用户名
+        @query: heroID
+    */
+    'GET /spreadApi/getPlayerInfoById' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            userName: '用户名',
+            avatar: '', // 头像
+        }
+    },
+    /*
+        通过金额得到钻石
+        @query : money
+    */
+    'GET /spreadApi/getDiamondsByMoney' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            diamond: '3434', //钻石数
+        }
+    },
+    /*
+        给玩家充值
+        @query : HeroID id
+        @query : money 充值钱
+        @chargeType  : --
+        @serverID: 游戏的serverId
+        @query: pid: 代理id
+    */
+    'GET /spreadApi/recharge_for_player' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            chargeURL: '', // 支付后应该跳转的页面
+        }
+    },
 
-/*
+    /*
 通过id得到用户邀请码
 @query: id
 */
-'GET /spreadApi/getinveteCodeById': {
-status: 'success',
-Msg: '',
-data: {
-    pCode: '1', // 用户邀请码
-}
-},
-/*
+    'GET /spreadApi/getinveteCodeById' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            pCode: '1', // 用户邀请码
+        }
+    },
+    /*
 退出
 */
-'GET /spreadApi/logout': {
+    'GET /spreadApi/logout' : {},
 
-},
-
-// -----WEB2--------
-/*
+    // -----WEB2--------
+    /*
 应用中心游戏列表
 */
-'GET /ddm/phone/api/games': {
-status: 'success',
-Msg: '',
-data: [
-  {
-    gameId: 'ddbj', // 游戏id
-    gameIcon: 'http://www.900.com/13z.jpg', // 游戏图标链接
-    gameName: '当当比鸡',
-    start: 5, // 5星评价
-    gameInfo: '当当比鸡微信/QQ客服：336767', // 游戏信息
-  }
-]
-},
+    'GET /ddm/phone/api/games' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                gameId: 'ddbj', // 游戏id
+                gameIcon: 'http://www.900.com/13z.jpg', // 游戏图标链接
+                gameName: '当当比鸡',
+                start: 5, // 5星评价
+                gameInfo: '当当比鸡微信/QQ客服：336767', // 游戏信息
+            }
+        ]
+    },
 
-/*
+    /*
 @query : gameId
 */
-'GET /ddm/phone/api/gamesList': {
-status: 'success',
-Msg: '',
-data: {
-  start: 5, // 5星评价
-  gameName: '当当比鸡',
-  gameInfo: '当当比鸡微信/QQ客服：336767',
-  applyTipInfo: '小伙伴们，成为代理邀请好友，可获得充值提成呦！',
-  iosShopDownLink: 'http://baidu.com', // ios苹果id
-  androidDownLink: 'http://baidu.com', // 安卓下载链接
-  iosDownLink: 'http://baidu.com',
-  gameIcon: 'http://www.900.com/13z.jpg',
-  gameId: 'ddbj',
-}
-},
+    'GET /ddm/phone/api/gamesList' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            start: 5, // 5星评价
+            gameName: '当当比鸡',
+            gameInfo: '当当比鸡微信/QQ客服：336767',
+            applyTipInfo: '小伙伴们，成为代理邀请好友，可获得充值提成呦！',
+            iosShopDownLink: 'http://baidu.com', // ios苹果id
+            androidDownLink: 'http://baidu.com', // 安卓下载链接
+            iosDownLink: 'http://baidu.com',
+            gameIcon: 'http://www.900.com/13z.jpg',
+            gameId: 'ddbj'
+        }
+    },
 
-/*
+    /*
 (代理页面)控制首页的显示和隐藏
 @ query : type : 1 奖励页面 2 代理公告 3 总代理公告
 */
-'GET /ddm/phone/api/getHtmlText': {
-status: 'success',
-Msg: '',
-data: {
-  htmlText: 'hehe', // 公告信息
-},
-},
+    'GET /ddm/phone/api/getHtmlText' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            htmlText: '介绍代理有奖励：在申请代理时介绍人邀请码填写您的邀请码， 您将获得该代理永久充值10%钻石石奖励！详询美女客服5200', // 公告信息
+        }
+    },
 
 
+    /*已经添加到文档上的 */
+    'GET /spreadApi/getGameList': {
+        "status":"success",
+        "Msg":"",
+        "data":[
+            {
+                "serverid":"43",
+                "gameName":"当当比鸡",
+                "gameIcon":"http://120.55.57.25:8080/wresource/gameimgs/c2a6776a28324722a9ca78c6279d747c.jpg",
+                "gameNumber":15
+            }
+        ]
+    },
+    /*
+        我的玩家
+    */
+    'GET /spreadApi/myPlayers' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                playerName: '昵称',
+                playerId: '123456',
+                recentlyLoginTime: 1510307559161,
+                palyCashCount: 3430, // 玩家消费
+                masonrySurplus: 343, // 剩余钻石
+            }
+        ]
+    },
+    /*
+        赠送钻石
+        params：	serverid
+        params：	pid
+        params：	HeroID
+        params：	diamond
+    */
+    'GET /spreadApi/giveDiamond' : {
+        status: 'success',
+        Msg: '',
+        data: {
+
+        }
+    },
 };

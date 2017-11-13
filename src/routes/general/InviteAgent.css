@@ -1,4 +1,8 @@
 
+.contentContainer {
+    background: #fff;
+}
+
 .linkText {
     color: #3EC0F8;
     max-width: 80%;

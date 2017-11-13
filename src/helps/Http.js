@@ -168,7 +168,12 @@ class Http {
     };
     return new Promise(async (resolve) => {
       // 获取远程地址
-      let fetchUrl = await self._getFetchUrl();
+      let fetchUrl = '';
+      if (self.configOption.getFetchUrl) {
+        fetchUrl = self.configOption.getFetchUrl();
+      } else {
+        fetchUrl = await self._getFetchUrl();
+      }
       const [apiUrl, params = {}] = arg;
       fetchUrl = `${fetchUrl}${apiUrl}?${queryString.stringify({ ...params })}`;
       httpRequest(fetchUrl, option)
@@ -201,7 +206,12 @@ class Http {
     const { postOption, responseHandle, isDebug, webResolveResult, onPostResponseSuccess } = this.configOption;
     return new Promise(async (resolve) => {
       // 获取远程地址
-      const prefixUrl = await self._getFetchUrl();
+      let prefixUrl = '';
+      if (self.configOption.getFetchUrl) {
+        prefixUrl = self.getFetchUrl();
+      } else {
+        prefixUrl = await self.configOption._getFetchUrl();
+      }
       const [apiUrl, body = {}] = arg;
       // const { type = this.defaultKeyType } = option;
       const option = {

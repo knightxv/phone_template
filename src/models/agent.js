@@ -1,4 +1,5 @@
 import { delay } from '@/helps/help';
+import gameConfig from '../config/gameInfo';
 
 const REGETVERIFYCODETIME = 60;
 

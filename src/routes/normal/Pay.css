@@ -1,21 +1,101 @@
-
-.inputContainer {
-    padding: 10px 0;
+.playerInputWrap {
+    margin-top: 0.2rem;
+    background: #fff;
+}
+.playerName {
+    padding: 0rem 0.2rem 0rem;
+    font-size: .26rem;
 }
 
-.inputLabel {
-    padding: 0 20px;
+.playerNotFind {
+    padding: 0rem 0.2rem 0rem;
+    height: 0.4rem;
+    font-size: .26rem;
+    color: red;
 }
 
-.userAvatar {
-    width: 80px;
-    height: 80px;
-    display: block;
-    margin: 0 auto;
-    border-radius: 50%;
+.masonrySelect {
+    width: 1.5rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    text-align: center;
+    background: #fff;
+    margin-right: 0.2rem;
+    border-radius: 3px;
+    border: 1px solid #eee;
+}
+.masonrySelectd {
+    border: 1px solid #169bd5!important;
+    color: #169bd5!important;
+}
+
+.masonryInputWrap {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.masonryInput {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none;
+    text-align: center;
+}
+.masonrySelectLabel {
+    text-align: center;
+    line-height: 0.6rem;
+}
+
+.selfSelectWrap {
+    width: 1.5rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    border: 1px solid #eee;
+    box-sizing: border-box;
+    border-radius: 3px;
+    background: #fff;
+}
+
+.paySelectItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.16rem 0.2rem;
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+.payTypeTitle {
+    padding: 0.2rem;
+    color: #000;
+    background: #fff;
+}
+
+.priceTip {
+    padding: 0.12rem 0.2rem;
+}
+
+.priceCount {
+    color: #ff9500;
 }
 
 .payBtn {
     width: 100%;
-    margin-top: 10px;
+}
+
+.rechargeTitle {
+    border-top: 1px solid #eee;
+    line-height: 0.8rem;
+}
+
+.selectCountWrap {
+    padding: 0.2rem;
+}
+
+.payIcon {
+    width: 0.42rem;
+    height: 0.42rem;
+    margin-right: 0.26rem;
+    display: block;
 }

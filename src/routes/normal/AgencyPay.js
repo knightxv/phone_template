@@ -1,20 +1,40 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import { Button, NavBar } from '@/helps/antdComponent';
-import { NetImg, BaseFont, Title } from '@/helps/styleComponent';
+import { NavBar, Icon } from '@/helps/antdComponent';
+import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, IconImg } from '@/helps/styleComponent';
 import BaseComponent from '@/helps/BaseComponent';
 import styles from './AgencyPay.css';
 
 // const goodsIds = [1, 2, 3, 4, 5, 6];
 // const goodsSourceArr = goodsIds.map(index => require(`../resource/shop/${index}.png`));
 
+const paySource = {
+  wx: require('../../assets/wx.png'),
+  zfb: require('../../assets/zfb.png'),
+  yezf: require('../../assets/yezf.png'),
+};
+
 class AgencyPay extends BaseComponent {
   constructor(props) {
     super(props);
+    this.payEnum = this.helps.payEnum;
+    const { WECHAT, ALI, BALANCE } = this.payEnum;
     this.state = {
       goods: [],
+      payTypeSelect: WECHAT,
     };
+    this.marsonryPayType = [
+      { payType: WECHAT, label: '微信支付', paySource: paySource.wx },
+      { payType: ALI, label: '支付宝支付', paySource: paySource.zfb },
+      { payType: BALANCE, label: '余额支付', paySource: paySource.yezf },
+    ];
+    if (this.helps.isWeixinBrowser()) {
+      this.marsonryPayType = [
+        { payType: WECHAT, label: '微信支付', paySource: paySource.wx },
+        { payType: BALANCE, label: '余额支付', paySource: paySource.yezf },
+      ];
+    }
   }
   async componentWillMount() {
     const res = await this.helps.webHttp.get('/spreadApi/getMasonryGoods');
@@ -25,14 +45,15 @@ class AgencyPay extends BaseComponent {
     }
   }
   // 跳转到支付页面
-  navigateToPay = async (shopId) => {
-    // window.open(chargeURL, '_self');
-    this.props.dispatch(this.helps.routerRedux.push({
-      pathname: '/AgencyPayType',
-      query: {
-        shopId,
-      },
-    }));
+  goToPay = async (payType, shopId) => {
+    const chargeType = this.helps.payType(payType);
+    const res = await this.helps.webHttp.get('/spreadApi/recharge', { goodsId: shopId, chargeType });
+    if (!res.isSuccess) {
+      this.helps.toast(res.info || '购买失败');
+      return false;
+    }
+    const chargeURL = res.data.chargeURL;
+    window.location.href = chargeURL;
   }
   // 余额充值
   readyToExcharge = async (shopId) => {
@@ -45,40 +66,99 @@ class AgencyPay extends BaseComponent {
     const res = await this.helps.webHttp.get('/spreadApi/balanceRecharge', params);
     if (res.isSuccess) {
       this.helps.toast(res.info || '充值成功');
+      const userInfoRes = await this.helps.webHttp.get('/spreadApi/getUserInfo');
+      this.props.dispatch({ type: 'agent/updateAppInfo', payload: userInfoRes.data });
       return false;
     }
     this.helps.toast(res.info || '充值失败，请重试');
   }
+  buyGood = (shopId) => {
+    const { payTypeSelect } = this.state;
+    const { WECHAT, ALI } = this.payEnum;
+    if (payTypeSelect === WECHAT) {
+      this.goToPay(WECHAT, shopId);
+    } else if (payTypeSelect === ALI) {
+      this.goToPay(ALI, shopId);
+    } else {
+      this.readyToExcharge(shopId);
+    }
+  }
+  selectPayType = (val) => {
+    this.setState({
+      payTypeSelect: val,
+    });
+  }
+  goToDetail = () => {
+    this.props.dispatch(this.helps.routerRedux.push('/buyMasonryDetail'));
+  }
   render() {
-    const { goods } = this.state;
+    const { goods, payTypeSelect } = this.state;
+    const { canCashCount } = this.props;
     return (
       <div>
-        <Title>充值</Title>
+        <Title>购买钻石</Title>
         <NavBar
-          title="充值"
+          title="购买钻石"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          right={<div onClick={this.goToDetail}>明细</div>}
         />
-        <div className={styles.goodsContainer}>
+        <WhiteSpace />
+        <div className={styles.payTypeContainer}>
+          <div className={styles.payTypeTitle}>支付方式</div>
           {
-            goods.map(({ shopId, goodsInfo, goodsIco }, i) => (
-              <div className={styles.goodsWrap} key={i}>
-                <NetImg src={goodsIco} className={styles.goodsImg} />
-                <BaseFont>{goodsInfo}</BaseFont>
-                <div className={styles.btnWrap}>
-                  <Button className={styles.payBtn} onClick={() => this.navigateToPay(shopId)}>购买</Button>
-                  <Button className={styles.payBtn} onClick={() => this.readyToExcharge(shopId)}>余额购买</Button>
+            this.marsonryPayType.map(payInfo => (
+              <FlexRowBetweenWingSpace
+                key={payInfo.payType}
+                className={styles.paySelectItem}
+                onClick={() => this.selectPayType(payInfo.payType)}
+              >
+                <FlexRow>
+                  <IconImg src={payInfo.paySource} className={styles.payIcon} />
+                  <div>{payInfo.label}</div>
+                  {
+                    payInfo.payType === this.payEnum.BALANCE
+                    && (<div className={styles.balanceTip}>
+                      ￥{this.parseFloatMoney(canCashCount)}
+                    </div>)
+                  }
+                </FlexRow>
+                <div>
+                  {
+                    payTypeSelect === payInfo.payType && <Icon type="check" />
+                  }
                 </div>
-              </div>
+              </FlexRowBetweenWingSpace>
             ))
           }
+        </div>
+        <WhiteSpace />
+        <div className={styles.payWrap}>
+          <div className={styles.payTitle}>充钻石</div>
+          <div className={styles.goodsContainer}>
+            {
+              goods.map(({ goodsMoney, masonryCount, shopId }, i) => (
+                <div
+                  className={styles.goodsWrap}
+                  key={i}
+                  style={{ marginRight: (i !== 0 && ((i - 2) % 3) === 0) ? 0 : '5%' }}
+                  onClick={() => this.buyGood(shopId)}
+                >
+                  <p className={styles.goodInfo}>{this.transMoenyUnit(masonryCount)}钻石</p>
+                  <p className={styles.goodInfo}>售价:{this.parseFloatMoney(goodsMoney)}元</p>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     );
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    ...state.agent,
+  };
 }
 
 export default connect(mapStateToProps)(AgencyPay);
