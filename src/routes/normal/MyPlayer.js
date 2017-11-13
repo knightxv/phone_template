@@ -15,8 +15,7 @@ class SecondaryAgencyRecord extends BaseComponent {
       tableData: [],
       searchVal: '',
     };
-    this.serchInput = null; // 搜索的内容
-    this.serverid = null; // 游戏id
+    this.serchInput = null;
     const self = this;
 
     this.columns = [
@@ -38,35 +37,28 @@ class SecondaryAgencyRecord extends BaseComponent {
         },
       },
       {
-        dataIndex: 'recentlyLoginTime',
-        title: '最近登录时间',
+        dataIndex: 'palyCashCount',
+        title: '玩家今日消费',
         render(rowVal) {
-          const transRowTieme = new Date(rowVal.recentlyLoginTime).format('MM-dd hh:mm');
-          return <div>{transRowTieme}</div>;
+          const transRowVal = self.parseFloatMoney(rowVal.palyCashCount);
+          return <div className="countAdd">{`+${transRowVal}`}</div>;
         },
       },
       {
         title: '操作',
         render: (data) => {
-          return (<div
+          return <div
             className={styles.rechargeBtn}
             onClick={() => self.payForMyPlayer(data.playerId)}
           >
           充值
-          </div>);
+          </div>;
         },
       },
     ];
   }
   async componentWillMount() {
-    const { serverid } = this.helps.querystring.parse(this.props.location.search.substring(1));
-    this.serverid = serverid;
-    let res;
-    if (serverid) {
-      res = await this.helps.webHttp.get('/spreadApi/myPlayers', { serverid });
-    } else {
-      res = await this.helps.webHttp.get('/spreadApi/myPlayers');
-    }
+    const res = await this.helps.webHttp.get('/spreadApi/myPlayers');
     if (res.isSuccess) {
       this.setState({
         tableData: res.data,
@@ -74,7 +66,7 @@ class SecondaryAgencyRecord extends BaseComponent {
     }
   }
   payForMyPlayer = (playerId) => {
-    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId, serverid: this.serverid || '' } }));
+    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId } }));
   }
   onSearchInputChange = (ev) => {
     this.setState({
@@ -89,11 +81,7 @@ class SecondaryAgencyRecord extends BaseComponent {
   // 邀请玩家去玩游戏
   invitePlayerToPlayerGame = () => {
     // alert('请求配置，跳到游戏详情页');
-    if (this.serverid) {
-      window.location.href = `http://www.hulema.com/#gameDetail/${this.serverid}`;
-    } else {
-      window.location.href = 'http://www.hulema.com';
-    }
+    window.location.href = 'http://www.hulema.com';
   }
   renderHeader = (columnsData) => { // dataIndex title
     return (
