@@ -32,24 +32,23 @@ class AgencyExtractMoney extends BaseComponent {
     let defaultPosition = [this.positionDataSelect[0].value, this.positionDataSelect[0].children[0].value];
     if (positionName) {
       const positionArr = positionName.split(' ');
-      if (positionArr.length !== 2) {
-        return;
+      if (positionArr.length === 2) {
+        const pro = positionArr[0];
+        const city = positionArr[1];
+        this.positionDataSelect.some((position) => {
+          if (position.value === pro) {
+            position.children.some((cityPos) => {
+              if (cityPos.value === city) {
+                defaultPosition = [pro, city];
+                return true;
+              }
+              return false;
+            });
+            return true;
+          }
+          return false;
+        });
       }
-      const pro = positionArr[0];
-      const city = positionArr[1];
-      this.positionDataSelect.some((position) => {
-        if (position.value === pro) {
-          position.children.some((cityPos) => {
-            if (cityPos.value === city) {
-              defaultPosition = [pro, city];
-              return true;
-            }
-            return false;
-          });
-          return true;
-        }
-        return false;
-      });
       // defaultPosition = positionArr;
     }
     // 查看所填的银行是否在所填的范围内，否则就选择默认的

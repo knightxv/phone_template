@@ -218,7 +218,7 @@ export default {
             bankName: '建设银行',
             bankOfDeposit: null,
             cardNumber: null,
-            positionName: '',
+            positionName: '福建省 厦门市',
 
             rechargeOfToday: 0,
             rechargeOfYesterDay: 0,
