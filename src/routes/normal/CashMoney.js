@@ -99,7 +99,7 @@ class AgencyExtractMoney extends BaseComponent {
     // 更新用户数据
     const updateRes = await this.helps.webHttp.get('/spreadApi/getUserInfo');
     if (updateRes.isSuccess) {
-      this.props.dispatch({ type: 'agent/updateInfo', payload: { ...updateRes.data } });
+      this.props.dispatch({ type: 'agent/updateAppInfo', payload: { ...updateRes.data } });
     }
   }
   // 选择银行
