@@ -48,6 +48,7 @@ export default {
   },
   // "proxy": null,
   "svgSpriteLoaderDirs": svgSpriteDirs,
+  "hash": true,
   // "externals": null,
   // "library": null,
   // "libraryTarget": "var",
