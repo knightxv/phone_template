@@ -117,7 +117,7 @@ const DefaultNavbar = ({ title, onClick, right }) => {
           onClick && <DefaultIcon
             type="left"
             color="#108ee9"
-            size="md"
+            size="lg"
             style={{ marginLeft: '-0.4rem' }}
             onClick={onClick}
           />

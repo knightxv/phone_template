@@ -51,14 +51,14 @@ class HomePage extends BaseComponent {
         noticeInfo: extraRes.data.htmlText,
       });
     }
-    // // 获取奖励说明
-    // const priceStatu = this.TypeDefine.htmlTextType.page_prizeExplain;
-    // const priceRes = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', { type: priceStatu });
-    // if (priceRes.isSuccess && priceRes.data.htmlText) {
-    //   this.setState({
-    //     priceInfoVisible: true,
-    //   });
-    // }
+    // 获取奖励说明
+    const priceStatu = this.TypeDefine.htmlTextType.page_prizeExplain;
+    const priceRes = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', { type: priceStatu });
+    if (priceRes.isSuccess && priceRes.data.htmlText) {
+      this.setState({
+        priceInfoVisible: true,
+      });
+    }
   }
   navigate = (touterName) => {
     this.props.dispatch(this.helps.routerRedux.push(touterName));
@@ -80,7 +80,7 @@ class HomePage extends BaseComponent {
     this.navigate('/EditAgencyPsd');
   }
   render() {
-    const { loaded, noticeInfo, navbarRightPickerShow } = this.state;
+    const { loaded, noticeInfo, navbarRightPickerShow, priceInfoVisible } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(noticeInfo);
     const noticeVisible = !!noticeInfo;
     const { inviteCode, masonry, rechargeOfToday,
@@ -120,7 +120,9 @@ class HomePage extends BaseComponent {
           <div className={styles.titleWrap}>
             我的排名:<span className={styles.colorBlue}>{ isRankingShow ? ranking : '未上榜'}</span>
           </div>
-          <p className={styles.colorBlue} onClick={() => this.navigate('/rankExplain')}>奖励规则</p>
+          {
+            priceInfoVisible && <p className={styles.colorBlue} onClick={() => this.navigate('/rankExplain')}>奖励规则</p>
+          }
         </FlexRowBetweenWingSpace>
         <FlexRow className={styles.userInfoWrap}>
           <Avatar className={styles.userAvatar} />

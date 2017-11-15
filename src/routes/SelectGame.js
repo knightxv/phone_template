@@ -15,6 +15,9 @@ class SelectGame extends BaseComponent {
     };
   }
   async componentWillMount() {
+    // alert(window.devicePixelRatio)
+    // alert(window.devicePixelRatio * document.documentElement.offsetWidth)
+    // alert(window.getComputedStyle(document.documentElement)['font-size'])
     const res = await this.helps.webHttp.get('/spreadApi/getGameList');
     if (res.isSuccess) {
       this.setState({

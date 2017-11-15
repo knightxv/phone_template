@@ -28,7 +28,7 @@ const webHttpConfig = {
   httpConfigKey: 'JavaWebPublicServerUrl',
   isDebug: true,
   getFetchUrl() {
-    return 'http://192.168.2.66:8081';
+    return '';
   },
   responseHandle(res) {
     if (res.status === 'failed' && res.code === 2) {

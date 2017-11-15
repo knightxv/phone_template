@@ -535,7 +535,14 @@ export default {
                 recentlyLoginTime: 1510307559161,
                 palyCashCount: 3430, // 玩家消费
                 masonrySurplus: 343, // 剩余钻石
-            }
+            },
+            {
+                playerName: '昵称2',
+                playerId: '172256',
+                recentlyLoginTime: 1510729414280,
+                palyCashCount: 3430, // 玩家消费
+                masonrySurplus: 34233, // 剩余钻石
+            },
         ]
     },
     /*

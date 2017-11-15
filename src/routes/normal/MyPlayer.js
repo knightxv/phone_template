@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import { NavBar, ListViewTable } from '@/helps/antdComponent';
+import { NavBar, ListViewTable, Icon } from '@/helps/antdComponent';
 import { Title, SearchBar } from '@/helps/styleComponent';
 import BaseComponent from '@/helps/BaseComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
@@ -14,11 +14,24 @@ class SecondaryAgencyRecord extends BaseComponent {
       isLoaded: false,
       tableData: [],
       searchVal: '',
+      isSort: false, // 是否进行排序
     };
     this.serchInput = null; // 搜索的内容
     this.serverid = null; // 游戏id
     const self = this;
 
+    // 是否是正序排序
+    this.sortState = {
+      masonrySurplus: {
+        isSortUp: false, // 是否正序排序
+        isSort: false, // 是否在排序
+      },
+      recentlyLoginTime: {
+        isSortUp: false, // 是否正序排序
+        isSort: false, // 是否在排序
+      },
+    };
+    // this.forceUpdate();
     this.columns = [
       {
         dataIndex: 'playerId',
@@ -39,7 +52,7 @@ class SecondaryAgencyRecord extends BaseComponent {
       },
       {
         dataIndex: 'recentlyLoginTime',
-        title: '最近登录时间',
+        title: '最近登录',
         render(rowVal) {
           const transRowTieme = new Date(rowVal.recentlyLoginTime).format('MM-dd hh:mm');
           return <div>{transRowTieme}</div>;
@@ -57,6 +70,30 @@ class SecondaryAgencyRecord extends BaseComponent {
         },
       },
     ];
+  }
+  // 切换排序
+  toggleSort = (sortType) => {
+    if (!this.state.isSort) {
+      this.sortState[sortType].isSort = true;
+      this.setState({
+        isSort: true,
+      });
+      return false;
+    }
+    for (const attr in this.sortState) {
+      if (this.sortState[attr]) {
+        // const element = object[key];
+        if (attr === sortType) {
+          if (this.sortState[attr].isSort) {
+            this.sortState[attr].isSortUp = !this.sortState[attr].isSortUp;
+          }
+          this.sortState[attr].isSort = true;
+        } else {
+          this.sortState[attr].isSort = false;
+        }
+      }
+    }
+    this.forceUpdate();
   }
   async componentWillMount() {
     const { serverid } = this.helps.querystring.parse(this.props.location.search.substring(1));
@@ -96,50 +133,88 @@ class SecondaryAgencyRecord extends BaseComponent {
     }
   }
   renderHeader = (columnsData) => { // dataIndex title
+    const { isSort } = this.state;
     return (
       <div className={styles.rowSection}>
         {
-          columnsData.map(({ title, dataIndex, remark, i }) => (
-            <div
-              key={dataIndex + i}
-              style={{
-                width: `${100 / columnsData.length}%`,
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                color: '#000',
-              }}
-            >
-              <p>{ title }</p>
-              <p>{ remark }</p>
-            </div>
-          ))
+          columnsData.map(({ title, dataIndex, remark, i }) => {
+            const sortInfo = this.sortState[dataIndex];
+            let sortIcon = null;
+            // console.log(sortInfo);
+            if (isSort && sortInfo && sortInfo.isSort) {
+              // console.log(sortInfo)
+              if (sortInfo.isSortUp) {
+                sortIcon = <Icon type="up" size="xs" />;
+              } else {
+                sortIcon = <Icon type="down" size="xs" />;
+              }
+            }
+            return (
+              <div
+                key={dataIndex + i}
+                style={{
+                  width: `${100 / columnsData.length}%`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  color: '#000',
+                }}
+              >
+                <p className={styles.tableTilteWrap} onClick={() => this.toggleSort(dataIndex)}>
+                  <span>{ title }</span>{sortIcon}
+                </p>
+                <p>{ remark }</p>
+              </div>
+            );
+          })
         }
       </div>
     );
   }
   render() {
-    const { searchVal, tableData } = this.state;
+    const { searchVal, tableData, isSort } = this.state;
     const columns = this.columns;
-    const filterTableData = tableData.filter((data) => {
+    let sortTableData = tableData;
+    if (isSort) {
+      for (const attr in this.sortState) {
+        if (this.sortState[attr] && this.sortState[attr].isSort) {
+          if (this.sortState[attr].isSortUp) {
+            sortTableData = sortTableData.sort((item1, item2) => {
+              return item1[attr] - item2[attr];
+            });
+          } else {
+            sortTableData = sortTableData.sort((item1, item2) => {
+              return item2[attr] - item1[attr];
+            });
+          }
+        }
+      }
+      
+      // const sortType = sortTypeArr[0];
+    }
+    const filterTableData = sortTableData.filter((data) => {
       if (!searchVal) {
         return true;
       }
       return data.playerId.toString().indexOf(searchVal) !== -1 || data.playerName.indexOf(searchVal) !== -1;
     });
-    const PalyCashAllCount = tableData.reduce((beforeVal, currentVal) => {
-      return beforeVal + currentVal.palyCashCount;
-    }, 0);
-    const masonrySurplusAllCount = tableData.reduce((beforeVal, currentVal) => {
-      return beforeVal + currentVal.masonrySurplus;
-    }, 0);
-    const transPalyCashCount = this.parseFloatMoney(PalyCashAllCount);
-    const columnsRemark = [`(共${tableData.length}人)`, `(共${masonrySurplusAllCount}个)`, `(共${transPalyCashCount}元)`];
-    const columnsAddRemark = columns.map((item, i) => ({
-      ...item,
-      remark: columnsRemark[i],
-    }));
+    // const PalyCashAllCount = tableData.reduce((beforeVal, currentVal) => {
+    //   return beforeVal + currentVal.palyCashCount;
+    // }, 0);
+    // const masonrySurplusAllCount = tableData.reduce((beforeVal, currentVal) => {
+    //   return beforeVal + currentVal.masonrySurplus;
+    // }, 0);
+    // const transPalyCashCount = this.parseFloatMoney(PalyCashAllCount);
+    // const columnsRemark = [`(共${tableData.length}人)`, `(共${masonrySurplusAllCount}个)`, `(共${transPalyCashCount}元)`];
+    // const columnsAddRemark = columns.map((item, i) => ({
+    //   ...item,
+    //   remark: columnsRemark[i],
+    // }));
+    // const columnsAddRemark = columns.map(item => ({
+    //   ...item,
+    //   title: 'sdds'
+    // }));
     return (
       <div className={styles.container}>
         <Title>我的玩家</Title>
@@ -149,7 +224,7 @@ class SecondaryAgencyRecord extends BaseComponent {
           right={<div onClick={this.invitePlayerToPlayerGame}>邀请</div>}
         />
         <SearchBar
-          placeholder="请输入玩家ID/昵称"
+          placeholder="输入玩家的ID/名称"
           onChange={this.onSearchInputChange}
           value={searchVal}
           onCancelClick={this.onCancelClick}
@@ -159,7 +234,8 @@ class SecondaryAgencyRecord extends BaseComponent {
         }
         <ListViewTable
           tableData={filterTableData}
-          columns={columnsAddRemark}
+          columns={columns}
+          sort={this.state.isSort}
         />
       </div>
     );
