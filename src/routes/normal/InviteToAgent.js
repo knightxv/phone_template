@@ -28,7 +28,7 @@ class InviteToAgent extends BaseComponent {
     // this.rechargeRouterName = '/pay';
     // this.rechargeLink = `${origin}${pathname}#/pay?code=${proxyid}`;
     this.registerRouterName = '/register';
-    this.registerLink = `${origin}${pathname}#/register?code=${proxyid}`;
+    this.registerLink = `${origin}${pathname}#/register?pid=${proxyid}`;
     this.copySuccess = false;
     this.state = {
       linkSrc: '',
@@ -55,7 +55,7 @@ class InviteToAgent extends BaseComponent {
     (buttonIndex) => {
       if (buttonIndex === 0) {
         const { proxyid } = self.props;
-        const params = { code: proxyid };
+        const params = { pid: proxyid };
         self.navigate(this.registerRouterName, params);
       } else if (buttonIndex === 1) {
         if (self.copySuccess) {
@@ -101,7 +101,7 @@ class InviteToAgent extends BaseComponent {
   }
   render() {
     const { inviteCode } = this.props;
-    const { rechargeRouterName, rechargeLink, registerLink } = this;
+    const { registerLink } = this;
     const { linkSrc } = this.state;
     return (
       <div className={styles.container}>

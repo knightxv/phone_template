@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 
 import { Button, InputItem, NavBar } from '@/helps/antdComponent';
 import BaseComponent from '@/helps/BaseComponent';
-import { BaseFont, Title } from '@/helps/styleComponent';
+import { Title } from '@/helps/styleComponent';
 import styles from './Register.css';
 
 
@@ -22,14 +22,13 @@ import styles from './Register.css';
 class Register extends BaseComponent {
   constructor(props) {
     super(props);
-    const { code } = this.helps.querystring.parse(this.props.location.search.substr(1));
-    this.code = code; // 上级代理的id
+    const { pid } = this.helps.querystring.parse(this.props.location.search.substr(1));
+    this.code = pid; // 上级代理的id(pid)
     this.hasCode = !!this.code;
     this.state = {
       phone: '',
       pCode: '', // 上级代理邀请码
       verifyCode: '', // 验证码
-      isAgreen: true,
     };
   }
   async componentWillMount() {
@@ -70,10 +69,10 @@ class Register extends BaseComponent {
   }
   // 注册
   register = async () => {
-    const { phone, wechatCode, verifyCode, isAgreen, pCode } = this.state;
+    const { phone, verifyCode, pCode } = this.state;
     const pid = this.code;
-    if (!isAgreen) {
-      this.helps.toast('请同意阿当科技推广协议');
+    if (!verifyCode) {
+      this.helps.toast('请输入验证码');
       return false;
     }
     const ipInfo = window.remote_ip_info;
@@ -83,10 +82,10 @@ class Register extends BaseComponent {
     let res;
     if (pid) {
       res = await this.helps.webHttp.get('/spreadApi/register',
-      { phone, pid, pCode, wechatCode, verifyCode, password, registerProvince, registerCity });
+      { phone, pid, pCode, verifyCode, password, registerProvince, registerCity });
     } else {
       res = await this.helps.webHttp.get('/spreadApi/register',
-      { phone, pCode, wechatCode, verifyCode, password, registerProvince, registerCity });
+      { phone, pCode, verifyCode, password, registerProvince, registerCity });
     }
     if (res.isSuccess) {
       // Toast.info('注册成功');
@@ -110,7 +109,7 @@ class Register extends BaseComponent {
     const isCanReGetVerifyCode = getVerifyCodeElseTime === 0; // 倒计时是否结束
     const isShowElseTime = !isCanReGetVerifyCode; // 是否显示剩余时间
     const isCanGetVerifyCode = isCanReGetVerifyCode && this.checkPhoneValid();
-    const hasCode = this.hasCode;
+    // const hasCode = this.hasCode;
     return (
       <div className={styles.container}>
         <Title>申请代理</Title>
@@ -118,7 +117,7 @@ class Register extends BaseComponent {
           <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
         </Helmet>
         <NavBar
-          title="排行奖励说明"
+          title="申请代理"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
         <div className={styles.contentContainer}>

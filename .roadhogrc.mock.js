@@ -519,7 +519,7 @@ export default {
                 "gameName":"当当比鸡",
                 "gameIcon":"http://120.55.57.25:8080/wresource/gameimgs/c2a6776a28324722a9ca78c6279d747c.jpg",
                 "gameNumber":15
-            }
+            },
         ]
     },
     /*

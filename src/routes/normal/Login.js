@@ -12,6 +12,8 @@ const logoSource = require('@/assets/adang_logo.png');
 class Login extends BaseComponent {
   constructor(props) {
     super(props);
+    const { pid } = this.helps.querystring.parse(this.props.location.search.substr(1));
+    this.pid = pid; // 上级id
     this.state = {
       loginLoading: false,
       loginID: '',
@@ -33,7 +35,16 @@ class Login extends BaseComponent {
     this.props.dispatch(this.helps.routerRedux.push('/homePage'));
   }
   navigateToRegister = () => {
-    this.props.dispatch(this.helps.routerRedux.push('/register'));
+    if (this.pid) {
+      this.props.dispatch(this.helps.routerRedux.push({
+        pathname: '/register',
+        query: {
+          pid: this.pid,
+        },
+      }));
+    } else {
+      this.props.dispatch(this.helps.routerRedux.push('/register'));
+    }
   }
   render() {
     const { loginLoading, loginID, password } = this.state;

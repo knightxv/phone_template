@@ -79,6 +79,23 @@ class HomePage extends BaseComponent {
   editPas = () => {
     this.navigate('/EditAgencyPsd');
   }
+  // 跳到我的玩家
+  goMyPlayer = async () => {
+    const res = await this.helps.webHttp.get('/spreadApi/getGameList');
+    if (res.isSuccess) {
+      if (res.data && res.data.length === 1) {
+        const serverid = res.data[0].serverid;
+        this.props.dispatch(this.helps.routerRedux.push({
+          pathname: '/MyPlayer',
+          query: {
+            serverid,
+          },
+        }));
+      } else {
+        this.props.dispatch(this.helps.routerRedux.push('/selectGame'));
+      }
+    }
+  }
   render() {
     const { loaded, noticeInfo, navbarRightPickerShow, priceInfoVisible } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(noticeInfo);
@@ -143,7 +160,7 @@ class HomePage extends BaseComponent {
             <Icon type="right" />
           </FlexRow>
         </FlexRowBetweenWingSpace>
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/selectGame')}>
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={this.goMyPlayer}>
           <FlexRow className={styles.navigateTitleWrap}>
             <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
             <span>我的玩家</span>
