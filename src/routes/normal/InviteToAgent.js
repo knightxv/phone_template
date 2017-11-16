@@ -124,7 +124,7 @@ class InviteToAgent extends BaseComponent {
             </FlexRow>
             <img width={280} height={280} src={linkSrc} />
             <div style={{ display: 'none' }}>
-              <QRCode ref={node => {this.canvasNode = node;} } size={280} value={registerLink} />
+              <QRCode ref={(node) => { this.canvasNode = node; }} size={280} value={registerLink} />
             </div>
             <div className={styles.qrCodeTip}>扫二维码加入代理,长按可保存至相册</div>
           </div>
@@ -144,16 +144,16 @@ export default connect(mapStateToProps)(InviteToAgent);
 
 /*
 <div
-              onClick={() => navigate(registerRouterName, params)}
-              className={styles.linkText}
-              rel="noopener noreferrer"
-            >
-              {registerLink}
-            </div>
-            <CopyToClipboard
-              text={registerLink}
-              onCopy={this.onCopy}
-            >
-              <Button className={styles.linkBtn}>点击复制</Button>
-            </CopyToClipboard>
+  onClick={() => navigate(registerRouterName, params)}
+  className={styles.linkText}
+  rel="noopener noreferrer"
+>
+  {registerLink}
+</div>
+<CopyToClipboard
+  text={registerLink}
+  onCopy={this.onCopy}
+>
+  <Button className={styles.linkBtn}>点击复制</Button>
+</CopyToClipboard>
 */

@@ -143,27 +143,13 @@ class Register extends BaseComponent {
               onChange={value => this.setState({ verifyCode: value })}
               placeholder="请输入验证码"
               extra={<div
-                className={classnames({ [styles.verifyCodeBtn]: true, [styles.verifyCodeDisable]: !isCanGetVerifyCode })}
+                 className={classnames({ [styles.verifyCodeBtn]: true, [styles.verifyCodeDisable]: !isCanGetVerifyCode })}
                 onClick={this.getVerifyCode}
               >
                 { !isShowElseTime ? '获取验证码' : `剩余${getVerifyCodeElseTime}` }
               </div>}
             >验证码:</InputItem>
           </div>
-          {/* <FlexRow className={styles.inputContainer}>
-            <BaseFont className={styles.inputLabel}>验证码：　　</BaseFont>
-            <InputItem
-              onChange={ev => this.setState({ verifyCode: ev.target.value })}
-              placeholder="请输入验证码"
-            />
-            <Button
-              disabled={!isCanGetVerifyCode}
-              className={styles.verifyCodeBtn}
-              onClick={this.getVerifyCode}
-            >
-              { !isShowElseTime ? '点击获取' : `剩余${getVerifyCodeElseTime}` }
-            </Button>
-          </FlexRow> */}
           <div className={styles.registerWrap}>
             <div className={styles.agreenLabel}>
               点击注册,即表明同意<span className={styles.agreenLink} onClick={this.navigateToAgreen}>代理推广协议</span>
