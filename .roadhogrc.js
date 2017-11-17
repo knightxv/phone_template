@@ -7,7 +7,7 @@ const svgSpriteDirs = [
 export default {
   // 阿当比鸡
   "entry": "src/index.js",
-  "publicPath": "/generalManage/adangbiji/",
+  "publicPath": "/generalManage/",
   "outputPath": "./dist",
   // // 博饼
   // "entry": "src/bobing.js",

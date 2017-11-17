@@ -20,7 +20,7 @@ export default {
         dispatch({
           type: 'setGameName',
           payload: {
-            ...gameConfig.adangbiji,
+            ...gameConfig,
             // ...gameConfig.bobing,
           },
         });
