@@ -15,6 +15,13 @@
     cursor: pointer;
 }
 
+.rechargeBtn {
+    background: #1e7df1;
+    padding: 2px 12px;
+    color: #dfe9fc;
+    border-radius: 3px;
+}
+
 .rowSection {
     display: flex;
     text-align: center;

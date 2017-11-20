@@ -35,6 +35,18 @@ class Login extends BaseComponent {
     this.props.dispatch(this.helps.routerRedux.push('/homePage'));
   }
   navigateToRegister = () => {
+    this.props.dispatch(this.helps.routerRedux.push('/register'));
+    // if (this.pid) {
+    //   this.props.dispatch(this.helps.routerRedux.push({
+    //     pathname: '/register',
+    //     query: {
+    //       pid: this.pid,
+    //     },
+    //   }));
+    // } else {
+    // }
+  }
+  componentWillMount() {
     if (this.pid) {
       this.props.dispatch(this.helps.routerRedux.push({
         pathname: '/register',
@@ -42,8 +54,6 @@ class Login extends BaseComponent {
           pid: this.pid,
         },
       }));
-    } else {
-      this.props.dispatch(this.helps.routerRedux.push('/register'));
     }
   }
   render() {

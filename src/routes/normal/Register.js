@@ -22,27 +22,15 @@ import styles from './Register.css';
 class Register extends BaseComponent {
   constructor(props) {
     super(props);
-    const { pid } = this.helps.querystring.parse(this.props.location.search.substr(1));
-    this.code = pid; // 上级代理的id(pid)
+    const { code } = this.helps.querystring.parse(this.props.location.search.substr(1));
+    this.code = code; // 上级代理的邀请码
+    this.pid = ''; // 上级代理的id(pid)(暂时没什么用)
     this.hasCode = !!this.code;
     this.state = {
       phone: '',
-      pCode: '', // 上级代理邀请码
+      pCode: code, // 上级代理邀请码
       verifyCode: '', // 验证码
     };
-  }
-  async componentWillMount() {
-    if (this.code) {
-      const res = await this.helps.webHttp.get('/spreadApi/getinveteCodeById', { id: this.code });
-      if (res.isSuccess) {
-        const pCode = res.data.pCode;
-        this.setState({
-          pCode,
-        });
-      } else {
-        this.helps.toast(res.info);
-      }
-    }
   }
   // 得到验证码
   getVerifyCode = async () => {
@@ -70,7 +58,7 @@ class Register extends BaseComponent {
   // 注册
   register = async () => {
     const { phone, verifyCode, pCode } = this.state;
-    const pid = this.code;
+    const pid = this.pid;
     if (!verifyCode) {
       this.helps.toast('请输入验证码');
       return false;
@@ -103,6 +91,11 @@ class Register extends BaseComponent {
   navigateToAgreen = () => {
     this.props.dispatch(this.helps.routerRedux.push('/AgreenDetail'));
   }
+  async componentWillMount() {
+    // this.setState({
+
+    // })
+  }
   render() {
     const { pCode, phone, verifyCode } = this.state;
     const { getVerifyCodeElseTime } = this.props;
@@ -118,7 +111,7 @@ class Register extends BaseComponent {
         </Helmet>
         <NavBar
           title="申请代理"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={() => this.props.dispatch(this.helps.routerRedux.push('/login'))}
         />
         <div className={styles.contentContainer}>
           <div className={styles.inputWrap}>

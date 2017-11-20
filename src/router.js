@@ -126,6 +126,13 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
+  const RechargeForAgent = dynamic({
+    app,
+    component: () => import('./routes/normal/RechargeForAgent'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
   const SelectGame = dynamic({
     app,
     component: () => import('./routes/SelectGame'),
@@ -227,6 +234,7 @@ function RouterConfig({ history, app }) {
           <Route path="/buyMasonryDetail" component={BuyMasonryDetail} />
           <Route path="/masonryDerail" component={MasonryDerail} />
           <Route path="/selectGame" component={SelectGame} />
+          <Route path="/rechargeForAgent" component={RechargeForAgent} />
 
           <Route path="/general/login" component={GeneralLogin} />
           <Route path="/general/homePage" component={GeneralHomePage} />

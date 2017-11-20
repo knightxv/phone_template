@@ -24,11 +24,11 @@ class InviteToAgent extends BaseComponent {
     const winLoc = window.location;
     const origin = winLoc.origin;
     const pathname = winLoc.pathname;
-    const { proxyid } = props;
+    const { proxyid, inviteCode } = props;
     // this.rechargeRouterName = '/pay';
     // this.rechargeLink = `${origin}${pathname}#/pay?code=${proxyid}`;
-    this.registerRouterName = '/login';
-    this.registerLink = `${origin}${pathname}#/login?pid=${proxyid}`;
+    this.registerRouterName = '/register';
+    this.registerLink = `${origin}${pathname}#/register?code=${inviteCode}`;
     this.copySuccess = false;
     this.state = {
       linkSrc: '',
@@ -54,9 +54,11 @@ class InviteToAgent extends BaseComponent {
     },
     (buttonIndex) => {
       if (buttonIndex === 0) {
-        const { proxyid } = self.props;
-        const params = { pid: proxyid };
-        self.navigate(this.registerRouterName, params);
+        window.open(self.registerLink);
+        // const { inviteCode } = self.props;
+        // const params = { code: inviteCode };
+        // self.navigate(this.registerRouterName, params);
+
       } else if (buttonIndex === 1) {
         if (self.copySuccess) {
           this.helps.toast('复制成功');

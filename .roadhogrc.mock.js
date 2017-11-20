@@ -192,38 +192,7 @@ export default {
         Msg: '',
         data: {}
     },
-    /*
-        获取个人信息
-     */
-    'GET /spreadApi/getUserInfo' : {
-        status: 'success',
-        Msg: '',
-        data: {
-            saleDiamondsOfThisMonth:84651, // 本月销钻
-            myUnderAgentCount: 15, // 我的下级代理人数
-            myPlayerCount: 80, // 我的玩家人数
-            masonryIncomeToday: 0, // 今日钻石收入
-            masonryPayToday: 0, // 今日钻石支出
-            balanceIncomeToday: 0, // 今日余额收入
-            balancePayToday: 0, // 今日余额支出
-            canCashCount: 0, // 未提现（余额）
-            cashCountlog: 0, // 已提现
-            inviteCode: '223344',
-            proxyid: 2,
-            masonry: 0, // 钻书数量
-            ranking: 3,
-            powerList: ['give'],
-
-            bankCardName: null,
-            bankName: '建设银行',
-            bankOfDeposit: null,
-            cardNumber: null,
-            positionName: '',
-
-            rechargeOfToday: 0,
-            rechargeOfYesterDay: 0,
-        }
-    },
+    
     /*
 会员充值记录
 */
@@ -510,6 +479,38 @@ export default {
 
 
     /*已经添加到文档上的 */
+    /*
+        获取个人信息
+     */
+    'GET /spreadApi/getUserInfo' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            saleDiamondsOfThisMonth:84651, // 本月销钻
+            myUnderAgentCount: 15, // 我的下级代理人数
+            myPlayerCount: 80, // 我的玩家人数
+            masonryIncomeToday: 0, // 今日钻石收入
+            masonryPayToday: 0, // 今日钻石支出
+            balanceIncomeToday: 0, // 今日余额收入
+            balancePayToday: 0, // 今日余额支出
+            canCashCount: 1000, // 未提现（余额）
+            cashCountlog: 0, // 已提现
+            inviteCode: '223344',
+            proxyid: 2,
+            masonry: 0, // 钻书数量
+            ranking: 3,
+            powerList: ['give', 'rechargeForPlayer', 'rechargeForAnyAgent', 'rechargeForUnderAgent'],
+
+            bankCardName: null,
+            bankName: '建设银行',
+            bankOfDeposit: null,
+            cardNumber: null,
+            positionName: '',
+
+            rechargeOfToday: 0,
+            rechargeOfYesterDay: 0,
+        }
+    },
     'GET /spreadApi/getGameList': {
         "status":"success",
         "Msg":"",
@@ -559,4 +560,14 @@ export default {
 
         }
     },
+    /*
+        总代理给代理充值
+    */
+    'GET /spreadApi/general/giveDiamond': {
+        status: 'success',
+        Msg: '',
+        data: {
+
+        }
+    }
 };

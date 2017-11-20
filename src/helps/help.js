@@ -60,6 +60,9 @@ const payEnum = {
 // 权限配置
 const powerEnum = {
   give: 'give',
+  rechargeForPlayer: 'rechargeForPlayer',
+  rechargeForAnyAgent: 'rechargeForAnyAgent',
+  rechargeForUnderAgent: 'rechargeForUnderAgent',
 };
 
 // 识别微信浏览器

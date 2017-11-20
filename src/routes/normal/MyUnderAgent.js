@@ -7,33 +7,6 @@ import BaseComponent from '@/helps/BaseComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
 import styles from './MyUnderAgent.css';
 
-const columns = [
-  {
-    dataIndex: 'agentInviteCode',
-    title: '代理ID',
-  },
-  {
-    dataIndex: 'CommissionOfAll',
-    title: '总提成钻石数',
-    render(rowVal) {
-      if (rowVal.CommissionOfAll >= 0) {
-        return <div className="countAdd">{`+${rowVal.CommissionOfAll}`}</div>;
-      }
-      return <div className="countSub">{`-${rowVal.CommissionOfAll}`}</div>;
-    },
-  },
-  {
-    dataIndex: 'CommissionOfToday',
-    title: '今日提成钻石数',
-    render(rowVal) {
-      if (rowVal.CommissionOfToday >= 0) {
-        return <div className="countAdd">{`+${rowVal.CommissionOfToday}`}</div>;
-      }
-      return <div className="countSub">{`-${rowVal.CommissionOfToday}`}</div>;
-    },
-  },
-];
-
 class MyUnderAgent extends BaseComponent {
   constructor(props) {
     super(props);
@@ -43,6 +16,59 @@ class MyUnderAgent extends BaseComponent {
       searchVal: '',
       notice: '代理填写您的邀请码,该代理充钻您就可以获得10%反钻', // 公告内容
     };
+    const self = this;
+    this.columns = [
+      {
+        dataIndex: 'agentInviteCode',
+        title: '代理ID',
+      },
+      {
+        dataIndex: 'CommissionOfAll',
+        title: '总提成钻石数',
+        render(rowVal) {
+          if (rowVal.CommissionOfAll >= 0) {
+            return <div className="countAdd">{`+${rowVal.CommissionOfAll}`}</div>;
+          }
+          return <div className="countSub">{`-${rowVal.CommissionOfAll}`}</div>;
+        },
+      },
+      {
+        dataIndex: 'CommissionOfToday',
+        title: '今日提成钻石数',
+        render(rowVal) {
+          if (rowVal.CommissionOfToday >= 0) {
+            return <div className="countAdd">{`+${rowVal.CommissionOfToday}`}</div>;
+          }
+          return <div className="countSub">{`-${rowVal.CommissionOfToday}`}</div>;
+        },
+      },
+    ];
+    const { powerEnum } = this.helps;
+    const { powerList } = this.props;
+    const hasPowerToRecharge = powerList && powerList.findIndex((power) => {
+      return power === powerEnum.rechargeForAnyAgent || power === powerEnum.rechargeForUnderAgent;
+    }) > -1;
+    if (hasPowerToRecharge) {
+      this.columns.push({
+        title: '操作',
+        render: (data) => {
+          return (<div
+            className={styles.rechargeBtn}
+            onClick={() => self.rechargeForAgent(data.agentInviteCode)}
+          >
+          充值
+          </div>);
+        },
+      });
+    }
+  }
+  rechargeForAgent = (agentId) => {
+    this.props.dispatch(this.helps.routerRedux.push({
+      pathname: 'rechargeForAgent',
+      query: {
+        agentId,
+      },
+    }));
   }
   async componentWillMount() {
     const res = await this.helps.webHttp.get('/spreadApi/myUnderAgents');
@@ -121,7 +147,7 @@ class MyUnderAgent extends BaseComponent {
 
     const CommissionOfTodayRemark = `共(${CommissionOfToday}个)`; // 今日提成
     const columnsRemark = [agentNumberRemark, CommissionOfAllRemark, CommissionOfTodayRemark];
-    const columnsAddRemark = columns.map((item, i) => ({
+    const columnsAddRemark = this.columns.map((item, i) => ({
       ...item,
       remark: columnsRemark[i],
     }));
@@ -147,7 +173,7 @@ class MyUnderAgent extends BaseComponent {
           onCancelClick={this.onCancelClick}
         />
         {
-          this.renderHeader(columns)
+          this.renderHeader(this.columns)
         }
         <ListViewTable
           tableData={filterTableData}
@@ -162,8 +188,10 @@ class MyUnderAgent extends BaseComponent {
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    ...state.agent,
+  };
 }
 
 export default connect(mapStateToProps)(MyUnderAgent);
