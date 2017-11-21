@@ -59,7 +59,14 @@ class SecondaryAgencyRecord extends BaseComponent {
           return <div>{transRowTieme}</div>;
         },
       },
-      {
+    ];
+    const { powerEnum } = this.helps;
+    const { powerList } = this.props;
+    const hasPowerToRecharge = powerList && powerList.findIndex((power) => {
+      return power === powerEnum.rechargeForPlayer;
+    }) > -1;
+    if (hasPowerToRecharge) {
+      this.columns.push({
         title: '操作',
         render: (data) => {
           return (<div
@@ -69,8 +76,8 @@ class SecondaryAgencyRecord extends BaseComponent {
           充值
           </div>);
         },
-      },
-    ];
+      });
+    }
   }
   // 切换排序
   toggleSort = (sortType) => {
