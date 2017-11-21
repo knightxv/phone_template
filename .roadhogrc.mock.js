@@ -499,7 +499,7 @@ export default {
             proxyid: 2,
             masonry: 0, // 钻书数量
             ranking: 3,
-            powerList: ['give', 'rechargeForPlayer', 'rechargeForAnyAgent', 'rechargeForUnderAgent'],
+            powerList: [ 1, 2],
 
             bankCardName: null,
             bankName: '建设银行',

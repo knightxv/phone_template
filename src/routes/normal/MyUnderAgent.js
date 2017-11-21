@@ -46,7 +46,7 @@ class MyUnderAgent extends BaseComponent {
     const { powerEnum } = this.helps;
     const { powerList } = this.props;
     const hasPowerToRecharge = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.rechargeForAnyAgent || power === powerEnum.rechargeForUnderAgent;
+      return power === powerEnum.iAgentGiveForAnyAgent || power === powerEnum.iAgentGiveForAgent;
     }) > -1;
     if (hasPowerToRecharge) {
       this.columns.push({

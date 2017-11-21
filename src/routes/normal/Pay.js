@@ -33,38 +33,32 @@ class Pay extends BaseComponent {
     };
     this.idTimer = null;
     this.serverid = serverid; // 游戏的id
-    // if (this.helps) {
-
-    // }
     this.paySelectArr = [
       {
         payTypeName: '微信支付',
         paySource: paySource.wx,
         payType: payEnum.WECHAT,
       },
-      {
+    ];
+    // 如果不是在微信，可以有支付宝支付
+    if (!this.helps.isWeixinBrowser()) {
+      this.paySelectArr.push({
         payTypeName: '支付宝支付',
         paySource: paySource.zfb,
         payType: payEnum.ALI,
-      },
-      {
-        payTypeName: '直接赠送',
-        paySource: paySource.give,
-        payType: payEnum.GIVE,
-      },
-    ];
-    if (this.helps.isWeixinBrowser()) {
-      this.paySelectArr = this.paySelectArr.filter((payInfo) => {
-        return payInfo.payType !== payEnum.ALI;
       });
     }
     const { powerList } = this.props;
     const hasPowerToGive = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.give;
+      
+      return power === powerEnum.agentGiveForPlayer;
     }) > -1;
-    if (!hasPowerToGive) {
-      this.paySelectArr = this.paySelectArr.filter((payInfo) => {
-        return payInfo.payType !== payEnum.GIVE;
+    // 如果有赠送的权限
+    if (hasPowerToGive) {
+      this.paySelectArr.push({
+        payTypeName: '直接赠送',
+        paySource: paySource.give,
+        payType: payEnum.GIVE,
       });
     }
   }

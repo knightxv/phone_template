@@ -27,7 +27,7 @@ class RechargeForAgent extends BaseComponent {
     this.idTimer = null;
     const { powerList } = this.props;
     this.hasPowerToRechargeAny = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.rechargeForAnyAgent;
+      return power === powerEnum.iAgentGiveForAnyAgent;
     }) > -1;
   }
   async componentWillMount() {
