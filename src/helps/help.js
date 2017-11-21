@@ -59,10 +59,9 @@ const payEnum = {
 };
 // 权限配置
 const powerEnum = {
-  give: 'give',
-  rechargeForPlayer: 'rechargeForPlayer',
-  rechargeForAnyAgent: 'rechargeForAnyAgent',
-  rechargeForUnderAgent: 'rechargeForUnderAgent',
+  agentGiveForPlayer: 0,
+  iAgentGiveForAnyAgent: 1,
+  iAgentGiveForAgent: 2,
 };
 
 // 识别微信浏览器
