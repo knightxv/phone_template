@@ -183,8 +183,12 @@ class RechargeForAgent extends BaseComponent {
         </div>
       </div>
       <WhiteSpace />
-      <div className={styles.priceTip}>充值价格：<span className={styles.priceCount}>{moneyFloat}元</span></div>
-      <div className={styles.priceTip}>我的余额：<span className={styles.priceCount}>{canCashCountFloat}元</span></div>
+      <div className={styles.priceTip}>
+        充值价格：<span className={styles.priceCount}>{moneyFloat}元</span>
+      </div>
+      <div className={styles.priceTip}>
+        我的余额：<span className={styles.priceCount}>{canCashCountFloat}元</span>
+      </div>
       <WingBlank>
         <Button
           disabled={!isCanRecharge}
