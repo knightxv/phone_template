@@ -373,18 +373,7 @@ export default {
         data: null
     },
 
-    /*
-        通过id得到用户名
-        @query: heroID
-    */
-    'GET /spreadApi/getPlayerInfoById' : {
-        status: 'success',
-        Msg: '',
-        data: {
-            userName: '用户名',
-            avatar: '', // 头像
-        }
-    },
+   
     /*
         通过金额得到钻石
         @query : money
@@ -499,7 +488,7 @@ export default {
             proxyid: 2,
             masonry: 0, // 钻书数量
             ranking: 3,
-            powerList: [ 1, 2],
+            powerList: [ 1, 2, 4],
 
             bankCardName: null,
             bankName: '建设银行',
@@ -569,5 +558,40 @@ export default {
         data: {
 
         }
-    }
+    },
+     /*
+        通过id得到用户名
+        @params: heroID
+        @params: serverid
+    */
+    'GET /spreadApi/getPlayerInfoById' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            userName: '用户名',
+            avatar: '', // 头像
+        }
+    },
+    /*
+        收藏玩家
+        @params: playerId
+    */
+    'GET /spreadApi/savePlayer': {
+        status: 'success',
+        Msg: '',
+        data: {
+
+        }
+    },
+     /*
+        取消收藏
+        @params: playerId
+    */
+    'GET /spreadApi/cancelSavePlayer': {
+        status: 'success',
+        Msg: '',
+        data: {
+
+        }
+    },
 };

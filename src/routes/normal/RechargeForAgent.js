@@ -40,7 +40,7 @@ class RechargeForAgent extends BaseComponent {
       agentId,
       diamond,
     };
-    const res = await this.helps.webHttp.get('/spreadApi/general/giveDiamond', params);
+    const res = await this.helps.webHttp.get('/spreadApi/iAgentGiveForAgent', params);
     if (!res.isSuccess) {
       this.helps.toast(res.info || '赠送失败');
     } else {
@@ -116,11 +116,8 @@ class RechargeForAgent extends BaseComponent {
   }
   render() {
     const { diamond, isChooseInput, selectIndex, agentId } = this.state;
-    const { canCashCount } = this.props;
-    const canCashCountFloat = this.parseFloatMoney(canCashCount);
-    const rechargeCount = diamond * 10;
-    const moneyFloat = this.parseFloatMoney(rechargeCount);
-    const isCanRecharge = canCashCount >= rechargeCount && canCashCount !== 0 && rechargeCount !== 0;
+    const { masonry } = this.props;
+    const isCanRecharge = masonry >= diamond && masonry !== 0 && diamond !== 0;
     return (<div>
       <Title>给代理充值</Title>
       <NavBar
@@ -184,10 +181,7 @@ class RechargeForAgent extends BaseComponent {
       </div>
       <WhiteSpace />
       <div className={styles.priceTip}>
-        充值价格：<span className={styles.priceCount}>{moneyFloat}元</span>
-      </div>
-      <div className={styles.priceTip}>
-        我的余额：<span className={styles.priceCount}>{canCashCountFloat}元</span>
+        剩余钻石：<span className={styles.priceCount}>{masonry}个</span>
       </div>
       <WingBlank>
         <Button

@@ -25,6 +25,7 @@ class Pay extends BaseComponent {
     this.state = {
       diamond: '', // 钻石
       playerName: '', // 用户名
+      isSave: false, // 玩家是否被收藏
       playerId,
       playerNotFind: false, // 玩家是否未找到
       isChooseInput: false, // 是否选择其他数额
@@ -33,24 +34,28 @@ class Pay extends BaseComponent {
     };
     this.idTimer = null;
     this.serverid = serverid; // 游戏的id
-    this.paySelectArr = [
-      {
+    this.paySelectArr = [];
+    
+    const { powerList } = this.props;
+    const havePowerToRechargePlayer = powerList && powerList.findIndex((power) => {
+      return power === powerEnum.playerSDKCharge;
+    }) > -1;
+    if (havePowerToRechargePlayer) {
+      this.paySelectArr.push({
         payTypeName: '微信支付',
         paySource: paySource.wx,
         payType: payEnum.WECHAT,
-      },
-    ];
-    // 如果不是在微信，可以有支付宝支付
-    if (!this.helps.isWeixinBrowser()) {
-      this.paySelectArr.push({
-        payTypeName: '支付宝支付',
-        paySource: paySource.zfb,
-        payType: payEnum.ALI,
       });
+      // 如果不是在微信，可以有支付宝支付
+      if (!this.helps.isWeixinBrowser()) {
+        this.paySelectArr.push({
+          payTypeName: '支付宝支付',
+          paySource: paySource.zfb,
+          payType: payEnum.ALI,
+        });
+      }
     }
-    const { powerList } = this.props;
     const hasPowerToGive = powerList && powerList.findIndex((power) => {
-      
       return power === powerEnum.agentGiveForPlayer;
     }) > -1;
     // 如果有赠送的权限
@@ -141,10 +146,11 @@ class Pay extends BaseComponent {
       // 获取头像和名称
       const res = await this.helps.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val, serverid: this.serverid });
       if (res.isSuccess) {
-        const { userName } = res.data;
+        const { userName, isSave } = res.data;
         this.setState({
           playerName: userName,
-          playerNotFind: false,
+          playerNotFind: !userName,
+          isSave,
         });
       } else {
         this.setState({
@@ -192,8 +198,30 @@ class Pay extends BaseComponent {
       payTypeSelect: payType,
     });
   }
+  saveOption = async () => {
+    const { isSave, playerId } = this.state;
+    if (!playerId) {
+      return;
+    }
+    let res;
+    if (isSave) {
+      res = await this.helps.webHttp.get('/spreadApi/cancelSavePlayer', { heroID: playerId, serverid: this.serverid });
+    } else {
+      res = await this.helps.webHttp.get('/spreadApi/savePlayer', { heroID: playerId, serverid: this.serverid });
+    }
+    if (res.isSuccess) {
+      this.setState({
+        isSave: !isSave,
+      });
+    } else {
+      this.helps.toast(res.info);
+    }
+  }
   render() {
-    const { playerName, diamond, playerNotFind, isChooseInput, selectIndex, payTypeSelect, playerId } = this.state;
+    const { playerName, diamond, playerNotFind,
+      isChooseInput, selectIndex, payTypeSelect, playerId,
+      isSave,
+    } = this.state;
     const { payEnum } = this.helps;
     const money = (!isNaN(diamond) && payTypeSelect !== payEnum.GIVE) ? diamond * 10 : 0;
     const moneyFloat = this.parseFloatMoney(money);
@@ -205,7 +233,14 @@ class Pay extends BaseComponent {
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
         <div className={styles.playerInputWrap}>
-          <InputItem onChange={this.idValChange} value={playerId} type="number" maxLength={8} placeholder="请输入ID/推广码" />
+          <InputItem
+            onChange={this.idValChange}
+            value={playerId}
+            type="number"
+            maxLength={8}
+            placeholder="请输入ID/推广码"
+            extra={!playerName ? null : <Button onClick={this.saveOption}>{isSave ? '取消收藏' : '收藏'}</Button>}
+          />
           {
             playerNotFind
             ? (<div className={styles.playerNotFind}>玩家ID不存在</div>)

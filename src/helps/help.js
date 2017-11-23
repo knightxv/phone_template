@@ -62,6 +62,8 @@ const powerEnum = {
   agentGiveForPlayer: 0,
   iAgentGiveForAnyAgent: 1,
   iAgentGiveForAgent: 2,
+  playerSDKCharge: 3,
+  proxySDKCharge: 4,
 };
 
 // 识别微信浏览器

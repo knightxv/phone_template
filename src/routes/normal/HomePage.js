@@ -30,6 +30,13 @@ class HomePage extends BaseComponent {
       priceInfoVisible: false, // 奖励说明是否显示
       navbarRightPickerShow: false, // 右边的导航栏picker是否显示
     };
+    const { powerEnum } = this.helps;
+    const { powerList } = this.props;
+    const havePowerToRecharge = powerList && powerList.findIndex((power) => {
+      return power === powerEnum.proxySDKCharge;
+    }) > -1;
+    this.havePowerToRecharge = havePowerToRecharge;
+    // 是否有购买钻石的权限
   }
   async componentWillMount() {
     // 获取个人数据
@@ -115,6 +122,7 @@ class HomePage extends BaseComponent {
     const unitCanCashCount = this.parseFloatMoney(canCashCount); // 未提现
     const unitBalanceIncomeToday = this.parseFloatMoney(balanceIncomeToday);
     const unitBalancePayToday = this.parseFloatMoney(balancePayToday);
+    const havePowerToRecharge = this.havePowerToRecharge;
     return (<div style={{ position: 'relative' }}>
       <Title>代理中心</Title>
       <NavBar
@@ -187,14 +195,17 @@ class HomePage extends BaseComponent {
             <p className={styles.masonryInfo}>今日支出:<span className={styles.count}>{masonryPayToday}</span>个</p>
           </div>
         </div>
-
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/agencyPay')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.zuanshi} />
-            <span>购买钻石</span>
-          </FlexRow>
-          <Icon type="right" />
-        </FlexRowBetweenWingSpace>
+        {
+          havePowerToRecharge
+          ? <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/agencyPay')}>
+            <FlexRow className={styles.navigateTitleWrap}>
+              <IconImg className={styles.titleIconImg} src={IconSource.zuanshi} />
+              <span>购买钻石</span>
+            </FlexRow>
+            <Icon type="right" />
+          </FlexRowBetweenWingSpace>
+          : null
+        }
       </div>
       <WhiteSpace />
       <div className={styles.module}>
