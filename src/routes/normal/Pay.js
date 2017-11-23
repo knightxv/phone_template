@@ -21,7 +21,7 @@ class Pay extends BaseComponent {
     const searchText = this.props.location.search.substr(1);
     const query = this.helps.querystring.parse(searchText);
     const { playerId, serverid } = query;
-    const { payEnum, powerEnum } = this.helps;
+    const { payEnum } = this.helps;
     this.state = {
       diamond: '', // 钻石
       playerName: '', // 用户名
@@ -34,38 +34,8 @@ class Pay extends BaseComponent {
     };
     this.idTimer = null;
     this.serverid = serverid; // 游戏的id
-    this.paySelectArr = [];
+    // this.paySelectArr = [];
     
-    const { powerList } = this.props;
-    const havePowerToRechargePlayer = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.playerSDKCharge;
-    }) > -1;
-    if (havePowerToRechargePlayer) {
-      this.paySelectArr.push({
-        payTypeName: '微信支付',
-        paySource: paySource.wx,
-        payType: payEnum.WECHAT,
-      });
-      // 如果不是在微信，可以有支付宝支付
-      if (!this.helps.isWeixinBrowser()) {
-        this.paySelectArr.push({
-          payTypeName: '支付宝支付',
-          paySource: paySource.zfb,
-          payType: payEnum.ALI,
-        });
-      }
-    }
-    const hasPowerToGive = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.agentGiveForPlayer;
-    }) > -1;
-    // 如果有赠送的权限
-    if (hasPowerToGive) {
-      this.paySelectArr.push({
-        payTypeName: '直接赠送',
-        paySource: paySource.give,
-        payType: payEnum.GIVE,
-      });
-    }
   }
   async componentWillMount() {
     this.idValChange(this.state.playerId);
@@ -216,6 +186,41 @@ class Pay extends BaseComponent {
   //     this.helps.toast(res.info);
   //   }
   // }
+  power = () => {
+    const paySelectArr = [];
+    const { powerList } = this.props;
+    const { powerEnum, payEnum } = this.helps;
+    const havePowerToRechargePlayer = powerList && powerList.findIndex((power) => {
+      return power === powerEnum.playerSDKCharge;
+    }) > -1;
+    if (havePowerToRechargePlayer) {
+      paySelectArr.push({
+        payTypeName: '微信支付',
+        paySource: paySource.wx,
+        payType: payEnum.WECHAT,
+      });
+      // 如果不是在微信，可以有支付宝支付
+      if (!this.helps.isWeixinBrowser()) {
+        paySelectArr.push({
+          payTypeName: '支付宝支付',
+          paySource: paySource.zfb,
+          payType: payEnum.ALI,
+        });
+      }
+    }
+    const hasPowerToGive = powerList && powerList.findIndex((power) => {
+      return power === powerEnum.agentGiveForPlayer;
+    }) > -1;
+    // 如果有赠送的权限
+    if (hasPowerToGive) {
+      paySelectArr.push({
+        payTypeName: '直接赠送',
+        paySource: paySource.give,
+        payType: payEnum.GIVE,
+      });
+    }
+    return paySelectArr;
+  }
   render() {
     const { playerName, diamond, playerNotFind,
       isChooseInput, selectIndex, payTypeSelect, playerId,
@@ -223,6 +228,7 @@ class Pay extends BaseComponent {
     const { payEnum } = this.helps;
     const money = (!isNaN(diamond) && payTypeSelect !== payEnum.GIVE) ? diamond * 10 : 0;
     const moneyFloat = this.parseFloatMoney(money);
+    const paySelectArr = this.power(); //  为了处理双击刷新问题
     return (
       <div>
         <Title>给玩家充值</Title>
@@ -288,7 +294,7 @@ class Pay extends BaseComponent {
         <WhiteSpace />
         <div className={styles.payTypeTitle}>支付方式</div>
         {
-          this.paySelectArr.map(payInfo => (
+          paySelectArr.map(payInfo => (
             <div
               key={payInfo.payType}
               className={styles.paySelectItem}
