@@ -25,7 +25,7 @@ class Pay extends BaseComponent {
     this.state = {
       diamond: '', // 钻石
       playerName: '', // 用户名
-      isSave: false, // 玩家是否被收藏
+      // isSave: false, // 玩家是否被收藏
       playerId,
       playerNotFind: false, // 玩家是否未找到
       isChooseInput: false, // 是否选择其他数额
@@ -146,11 +146,10 @@ class Pay extends BaseComponent {
       // 获取头像和名称
       const res = await this.helps.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val, serverid: this.serverid });
       if (res.isSuccess) {
-        const { userName, isSave } = res.data;
+        const { userName } = res.data;
         this.setState({
           playerName: userName,
           playerNotFind: !userName,
-          isSave,
         });
       } else {
         this.setState({
@@ -198,29 +197,28 @@ class Pay extends BaseComponent {
       payTypeSelect: payType,
     });
   }
-  saveOption = async () => {
-    const { isSave, playerId } = this.state;
-    if (!playerId) {
-      return;
-    }
-    let res;
-    if (isSave) {
-      res = await this.helps.webHttp.get('/spreadApi/cancelSavePlayer', { heroID: playerId, serverid: this.serverid });
-    } else {
-      res = await this.helps.webHttp.get('/spreadApi/savePlayer', { heroID: playerId, serverid: this.serverid });
-    }
-    if (res.isSuccess) {
-      this.setState({
-        isSave: !isSave,
-      });
-    } else {
-      this.helps.toast(res.info);
-    }
-  }
+  // saveOption = async () => {
+  //   const { isSave, playerId } = this.state;
+  //   if (!playerId) {
+  //     return;
+  //   }
+  //   let res;
+  //   if (isSave) {
+  //     res = await this.helps.webHttp.get('/spreadApi/cancelSavePlayer', { heroID: playerId, serverid: this.serverid });
+  //   } else {
+  //     res = await this.helps.webHttp.get('/spreadApi/savePlayer', { heroID: playerId, serverid: this.serverid });
+  //   }
+  //   if (res.isSuccess) {
+  //     this.setState({
+  //       isSave: !isSave,
+  //     });
+  //   } else {
+  //     this.helps.toast(res.info);
+  //   }
+  // }
   render() {
     const { playerName, diamond, playerNotFind,
       isChooseInput, selectIndex, payTypeSelect, playerId,
-      isSave,
     } = this.state;
     const { payEnum } = this.helps;
     const money = (!isNaN(diamond) && payTypeSelect !== payEnum.GIVE) ? diamond * 10 : 0;
@@ -239,7 +237,6 @@ class Pay extends BaseComponent {
             type="number"
             maxLength={8}
             placeholder="请输入ID/推广码"
-            extra={!playerName ? null : <Button onClick={this.saveOption}>{isSave ? '取消收藏' : '收藏'}</Button>}
           />
           {
             playerNotFind

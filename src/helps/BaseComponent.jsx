@@ -26,7 +26,7 @@ import help from './help';
 const webHttpConfig = {
   getConfigUrl: '/config',
   httpConfigKey: 'JavaWebPublicServerUrl',
-  isDebug: true,
+  isDebug: false,
   getFetchUrl() {
     return '';
   },
