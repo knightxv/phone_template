@@ -594,4 +594,16 @@ export default {
 
         }
     },
+    /*
+        取消收藏
+        @params: playerId
+    */
+    'GET /spreadApi/getPlatformInfo': {
+        status: 'success',
+        Msg: '',
+        data: {
+            gameName: '阿当比鸡21'
+        }
+    },
+    
 };
