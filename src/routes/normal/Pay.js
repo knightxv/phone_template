@@ -22,6 +22,12 @@ class Pay extends BaseComponent {
     const query = this.helps.querystring.parse(searchText);
     const { playerId, serverid } = query;
     const { payEnum } = this.helps;
+    let defaultPayEnum = payEnum.WECHAT;
+    const paySelectArr = this.power();
+    if (paySelectArr.length > 0) {
+      defaultPayEnum = paySelectArr[0].payType;
+    }
+    console.log(paySelectArr)
     this.state = {
       diamond: '', // 钻石
       playerName: '', // 用户名
@@ -30,7 +36,7 @@ class Pay extends BaseComponent {
       playerNotFind: false, // 玩家是否未找到
       isChooseInput: false, // 是否选择其他数额
       selectIndex: -1,
-      payTypeSelect: payEnum.WECHAT,
+      payTypeSelect: defaultPayEnum,
     };
     this.idTimer = null;
     this.serverid = serverid; // 游戏的id
