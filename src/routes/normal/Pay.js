@@ -26,6 +26,7 @@ class Pay extends BaseComponent {
     const paySelectArr = this.power();
     if (paySelectArr.length > 0) {
       defaultPayEnum = paySelectArr[0].payType;
+    }
     this.state = {
       diamond: '', // 钻石
       playerName: '', // 用户名
