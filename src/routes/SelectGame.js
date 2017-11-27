@@ -27,8 +27,9 @@ class SelectGame extends BaseComponent {
   }
   // 选择游戏跳转
   selectGame = (serverid) => {
+    const { redirect } = this.helps.querystring.parse(this.props.location.search.substring(1));
     this.props.dispatch(this.helps.routerRedux.push({
-      pathname: '/MyPlayer',
+      pathname: redirect,
       query: {
         serverid,
       },

@@ -133,6 +133,34 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
+  const MySaveAgent = dynamic({
+    app,
+    component: () => import('./routes/normal/MySaveAgent'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
+  const MySavePlayer = dynamic({
+    app,
+    component: () => import('./routes/normal/MySavePlayer'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
+  const SavePlayer = dynamic({
+    app,
+    component: () => import('./routes/normal/SavePlayer'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
+  const SaveAgent = dynamic({
+    app,
+    component: () => import('./routes/normal/SaveAgent'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
   const SelectGame = dynamic({
     app,
     component: () => import('./routes/SelectGame'),
@@ -235,6 +263,10 @@ function RouterConfig({ history, app }) {
           <Route path="/masonryDerail" component={MasonryDerail} />
           <Route path="/selectGame" component={SelectGame} />
           <Route path="/rechargeForAgent" component={RechargeForAgent} />
+          <Route path="/mySaveAgent" component={MySaveAgent} />
+          <Route path="/mySavePlayer" component={MySavePlayer} />
+          <Route path="/savePlayer" component={SavePlayer} />
+          <Route path="/saveAgent" component={SaveAgent} />
 
           <Route path="/general/login" component={GeneralLogin} />
           <Route path="/general/homePage" component={GeneralHomePage} />

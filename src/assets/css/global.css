@@ -81,6 +81,10 @@ body {
     margin: 0 auto;
 }
 
+:global(.color_base) {
+    color: #78bff2;
+}
+
 :global(.countAdd) {
     color: #f0602d;
 }

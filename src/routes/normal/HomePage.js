@@ -87,19 +87,24 @@ class HomePage extends BaseComponent {
     this.navigate('/EditAgencyPsd');
   }
   // 跳到我的玩家
-  goMyPlayer = async () => {
+  goMyPlayer = async (routerName) => {
     const res = await this.helps.webHttp.get('/spreadApi/getGameList');
     if (res.isSuccess) {
       if (res.data && res.data.length === 1) {
         const serverid = res.data[0].serverid;
         this.props.dispatch(this.helps.routerRedux.push({
-          pathname: '/MyPlayer',
+          pathname: routerName,
           query: {
             serverid,
           },
         }));
       } else {
-        this.props.dispatch(this.helps.routerRedux.push('/selectGame'));
+        this.props.dispatch(this.helps.routerRedux.push({
+          pathname: '/selectGame',
+          query: {
+            redirect: routerName,
+          },
+        }));
       }
     }
   }
@@ -107,10 +112,10 @@ class HomePage extends BaseComponent {
     const { loaded, noticeInfo, navbarRightPickerShow, priceInfoVisible } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(noticeInfo);
     const noticeVisible = !!noticeInfo;
-    const { inviteCode, masonry, rechargeOfToday,
-    rechargeOfYesterDay, canCashCount, cashCountlog, ranking, myUnderAgentCount,
+    const { inviteCode, masonry, canCashCount, ranking, myUnderAgentCount,
     myPlayerCount, saleDiamondsOfThisMonth, masonryIncomeToday, masonryPayToday,
-    balanceIncomeToday, balancePayToday,
+    balanceIncomeToday, balancePayToday, savePlayerCount, saveAgentCount,
+    // rechargeOfToday, rechargeOfYesterDay, cashCountlog,
     } = this.props;
     if (!loaded) {
       return null;
@@ -168,13 +173,33 @@ class HomePage extends BaseComponent {
             <Icon type="right" />
           </FlexRow>
         </FlexRowBetweenWingSpace>
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={this.goMyPlayer}>
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/mySaveAgent')}>
+          <FlexRow className={styles.navigateTitleWrap}>
+            <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
+            <span>我收藏的代理</span>
+          </FlexRow>
+          <FlexRow className={styles.titleWrap}>
+            <p>{saveAgentCount || 0}人</p>
+            <Icon type="right" />
+          </FlexRow>
+        </FlexRowBetweenWingSpace>
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goMyPlayer('MyPlayer')}>
           <FlexRow className={styles.navigateTitleWrap}>
             <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
             <span>我的玩家</span>
           </FlexRow>
           <FlexRow className={styles.titleWrap}>
             <p>{myPlayerCount}人</p>
+            <Icon type="right" />
+          </FlexRow>
+        </FlexRowBetweenWingSpace>
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goMyPlayer('/mySavePlayer')}>
+          <FlexRow className={styles.navigateTitleWrap}>
+            <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
+            <span>我收藏的玩家</span>
+          </FlexRow>
+          <FlexRow className={styles.titleWrap}>
+            <p>{savePlayerCount || 0}人</p>
             <Icon type="right" />
           </FlexRow>
         </FlexRowBetweenWingSpace>

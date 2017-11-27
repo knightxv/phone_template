@@ -12,8 +12,8 @@ const logoSource = require('@/assets/adang_logo.png');
 class Login extends BaseComponent {
   constructor(props) {
     super(props);
-    const { pid } = this.helps.querystring.parse(this.props.location.search.substr(1));
-    this.pid = pid; // 上级id
+    const { pCode } = this.helps.querystring.parse(this.props.location.search.substr(1));
+    this.pCode = pCode; // 上级邀请码
     this.state = {
       loginLoading: false,
       loginID: '',
@@ -35,7 +35,16 @@ class Login extends BaseComponent {
     this.props.dispatch(this.helps.routerRedux.push('/homePage'));
   }
   navigateToRegister = () => {
-    this.props.dispatch(this.helps.routerRedux.push('/register'));
+    if (this.pCode) {
+      this.props.dispatch(this.helps.routerRedux.push({
+        pathname: '/register',
+        query: {
+          code: this.pCode,
+        },
+      }));
+    } else {
+      this.props.dispatch(this.helps.routerRedux.push('/register'));
+    }
     // if (this.pid) {
     //   this.props.dispatch(this.helps.routerRedux.push({
     //     pathname: '/register',
@@ -45,16 +54,6 @@ class Login extends BaseComponent {
     //   }));
     // } else {
     // }
-  }
-  componentWillMount() {
-    if (this.pid) {
-      this.props.dispatch(this.helps.routerRedux.push({
-        pathname: '/register',
-        query: {
-          pid: this.pid,
-        },
-      }));
-    }
   }
   render() {
     const { loginLoading, loginID, password } = this.state;
