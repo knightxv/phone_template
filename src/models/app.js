@@ -1,13 +1,21 @@
-import gameConfig from '../config/gameInfo';
+
 import webHttp from '../helps/webHttp';
 
 export default {
   namespace: 'app',
   state: {
     gameName: '',
+    loginID: '',
+    password: '',
   },
   reducers: {
     setGameName(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+      };
+    },
+    updateAppInfo(state, { payload }) {
       return {
         ...state,
         ...payload,
@@ -18,7 +26,7 @@ export default {
   },
   subscriptions: {
       async setup({ dispatch, history }) {  // eslint-disable-line
-        webHttp.get('/spreadApi/getPlatformInfo').then(res => {
+        webHttp.get('/spreadApi/getPlatformInfo').then((res) => {
           const gameConfig = res.data;
           dispatch({
             type: 'setGameName',
