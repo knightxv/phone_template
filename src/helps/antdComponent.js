@@ -209,7 +209,7 @@ const renderRow = (rowData, columns) => {
 const ListViewWrapBody = (props) => {
   if (props.children.length === 0) {
     return (
-      <div className="am-list-body my-body">
+      <div className="am-list-body my-body" style={{ textAlign: 'center', paddingTop: '5rem' }}>
         {props.ListEmptyComponent || '没有数据'}
       </div>
     );

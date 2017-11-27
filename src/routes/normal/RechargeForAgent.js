@@ -15,7 +15,6 @@ class RechargeForAgent extends BaseComponent {
     const searchText = this.props.location.search.substr(1);
     const query = this.helps.querystring.parse(searchText);
     const { agentId } = query;
-    const { powerEnum } = this.helps;
     this.state = {
       diamond: '', // 钻石
       agentId,
@@ -25,10 +24,7 @@ class RechargeForAgent extends BaseComponent {
       selectIndex: -1,
     };
     this.idTimer = null;
-    const { powerList } = this.props;
-    this.hasPowerToRechargeAny = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.iAgentGiveForAnyAgent;
-    }) > -1;
+    this.hasPowerToRechargeAny = this.hasPower('iAgentGiveForAnyAgent');
   }
   async componentWillMount() {
     // this.idValChange(this.state.agentId);

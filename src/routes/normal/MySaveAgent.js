@@ -101,11 +101,7 @@ class MySaveAgent extends BaseComponent {
         },
       },
     ];
-    const { powerEnum } = this.helps;
-    const { powerList } = this.props;
-    const hasPowerToRecharge = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.iAgentGiveForAnyAgent || power === powerEnum.iAgentGiveForAgent;
-    }) > -1;
+    const hasPowerToRecharge = this.hasPower('iAgentGiveForAnyAgent') && this.hasPower('iAgentGiveForAgent');
     if (hasPowerToRecharge) {
       columns.push({
         title: '操作',

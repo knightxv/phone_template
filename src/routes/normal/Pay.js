@@ -193,11 +193,8 @@ class Pay extends BaseComponent {
   // }
   power = () => {
     const paySelectArr = [];
-    const { powerList } = this.props;
-    const { powerEnum, payEnum } = this.helps;
-    const havePowerToRechargePlayer = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.playerSDKCharge;
-    }) > -1;
+    const { payEnum } = this.helps;
+    const havePowerToRechargePlayer = this.hasPower('playerSDKCharge');
     if (havePowerToRechargePlayer) {
       paySelectArr.push({
         payTypeName: '微信支付',
@@ -213,9 +210,7 @@ class Pay extends BaseComponent {
         });
       }
     }
-    const hasPowerToGive = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.agentGiveForPlayer;
-    }) > -1;
+    const hasPowerToGive = this.hasPower('agentGiveForPlayer');
     // 如果有赠送的权限
     if (hasPowerToGive) {
       paySelectArr.push({

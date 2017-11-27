@@ -57,25 +57,15 @@ const payEnum = {
   BALANCE: 3,
   GIVE: 4,
 };
-// 权限配置
-const powerEnum = {
-  agentGiveForPlayer: 0,
-  iAgentGiveForAnyAgent: 1,
-  iAgentGiveForAgent: 2,
-  playerSDKCharge: 3,
-  proxySDKCharge: 4,
-};
 
 // 识别微信浏览器
 const isWeixinBrowser = () => {
   return /micromessenger/.test(window.navigator.userAgent.toLowerCase());
 };
 
-
 const nowSystem = system();
 const isWechat = isWeixinBrowser();
 exports.payEnum = payEnum;
-exports.powerEnum = powerEnum;
 exports.isWechat = isWechat;
 exports.system = system;
 

@@ -488,7 +488,7 @@ export default {
             proxyid: 2,
             masonry: 0, // 钻书数量
             ranking: 3,
-            powerList: [0, 1, 2, 5],
+            powerList: [ 5, 6, 7, 8, 9, 10],
 
             bankCardName: null,
             bankName: '建设银行',
@@ -582,6 +582,20 @@ export default {
         data: {
 
         }
+    },
+    /* 我收藏的玩家 */
+    'GET /spreadApi/mySavePlayer': {
+        "status":"success",
+        "Msg":"",
+        "data":[
+            {
+                "playerName":"昵称",
+                "playerId":"123456",
+                "recentlyLoginTime":1510307559161,
+                "palyCashCount":3430,
+                "masonrySurplus":343
+            }
+        ]
     },
      /*
         取消收藏

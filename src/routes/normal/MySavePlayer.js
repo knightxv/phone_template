@@ -18,8 +18,6 @@ class MySavePlayer extends BaseComponent {
     };
     this.serchInput = null; // 搜索的内容
     this.serverid = null; // 游戏id
-    const self = this;
-
     // 是否是正序排序
     this.sortState = {
       masonrySurplus: {
@@ -32,8 +30,34 @@ class MySavePlayer extends BaseComponent {
       },
     };
     // this.forceUpdate();
-    
-    this.columns = [
+  }
+  // 切换排序
+  toggleSort = (sortType) => {
+    if (!this.state.isSort) {
+      this.sortState[sortType].isSort = true;
+      this.setState({
+        isSort: true,
+      });
+      return false;
+    }
+    for (const attr in this.sortState) {
+      if (this.sortState[attr]) {
+        // const element = object[key];
+        if (attr === sortType) {
+          if (this.sortState[attr].isSort) {
+            this.sortState[attr].isSortUp = !this.sortState[attr].isSortUp;
+          }
+          this.sortState[attr].isSort = true;
+        } else {
+          this.sortState[attr].isSort = false;
+        }
+      }
+    }
+    this.forceUpdate();
+  }
+  powerToControllColumns = () => {
+    const self = this;
+    const columns = [
       {
         dataIndex: 'playerId',
         title: '玩家',
@@ -59,7 +83,10 @@ class MySavePlayer extends BaseComponent {
           return <div>{transRowTieme}</div>;
         },
       },
-      {
+    ];
+    const hasPowerToRecharge = this.hasPower('playerSDKCharge') || this.hasPower('agentGiveForPlayer');
+    if (hasPowerToRecharge) {
+      columns.push({
         title: '操作',
         render: (data) => {
           return (<div
@@ -69,32 +96,9 @@ class MySavePlayer extends BaseComponent {
           充值
           </div>);
         },
-      },
-    ];
-  }
-  // 切换排序
-  toggleSort = (sortType) => {
-    if (!this.state.isSort) {
-      this.sortState[sortType].isSort = true;
-      this.setState({
-        isSort: true,
       });
-      return false;
     }
-    for (const attr in this.sortState) {
-      if (this.sortState[attr]) {
-        // const element = object[key];
-        if (attr === sortType) {
-          if (this.sortState[attr].isSort) {
-            this.sortState[attr].isSortUp = !this.sortState[attr].isSortUp;
-          }
-          this.sortState[attr].isSort = true;
-        } else {
-          this.sortState[attr].isSort = false;
-        }
-      }
-    }
-    this.forceUpdate();
+    return columns;
   }
   async componentWillMount() {
     const { serverid } = this.helps.querystring.parse(this.props.location.search.substring(1));
@@ -177,7 +181,7 @@ class MySavePlayer extends BaseComponent {
   }
   render() {
     const { searchVal, tableData, isSort } = this.state;
-    const columns = this.columns;
+    const columns = this.powerToControllColumns();
     let sortTableData = tableData;
     if (isSort) {
       for (const attr in this.sortState) {

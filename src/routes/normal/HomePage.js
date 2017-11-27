@@ -30,15 +30,18 @@ class HomePage extends BaseComponent {
       priceInfoVisible: false, // 奖励说明是否显示
       navbarRightPickerShow: false, // 右边的导航栏picker是否显示
     };
-    const { powerEnum } = this.helps;
-    const { powerList } = this.props;
-    const havePowerToRecharge = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.proxySDKCharge;
-    }) > -1;
-    this.havePowerToRecharge = havePowerToRecharge;
-    // 是否有购买钻石的权限
+  }
+  powerManage = () => {
+    this.havePowerToRecharge = this.hasPower('proxySDKCharge'); // 代理第三方充值(是否有购买钻石的权限)
+    this.havePowerToSavePlayer = this.hasPower('playerSave'); // 玩家收藏
+    this.havePowerToSaveAgent = this.hasPower('agentSave'); // 代理收藏
+    this.hasPowerToUnderPlayer = this.hasPower('myPlayer'); // 我的玩家
+    this.hasPowerToUnderAgent = this.hasPower('myAgent'); // 我的代理
+    this.hasPowerToBanlance = this.hasPower('banlance'); // 账户余额
   }
   async componentWillMount() {
+    // const { powerList } = this.props;
+    this.powerManage();
     // 获取个人数据
     const res = await this.helps.webHttp.get('/spreadApi/getUserInfo');
     if (res.isSuccess) {
@@ -127,7 +130,16 @@ class HomePage extends BaseComponent {
     const unitCanCashCount = this.parseFloatMoney(canCashCount); // 未提现
     const unitBalanceIncomeToday = this.parseFloatMoney(balanceIncomeToday);
     const unitBalancePayToday = this.parseFloatMoney(balancePayToday);
-    const havePowerToRecharge = this.havePowerToRecharge;
+    // 权限
+    const {
+      havePowerToRecharge,
+      havePowerToSavePlayer,
+      havePowerToSaveAgent,
+      hasPowerToUnderPlayer,
+      hasPowerToUnderAgent,
+      hasPowerToBanlance,
+    } = this;
+    
     return (<div style={{ position: 'relative' }}>
       <Title>代理中心</Title>
       <NavBar
@@ -163,46 +175,62 @@ class HomePage extends BaseComponent {
             <p>邀请码：{inviteCode}</p>
           </div>
         </FlexRow>
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
-            <span>我的下级代理</span>
-          </FlexRow>
-          <FlexRow className={styles.titleWrap}>
-            <p>{myUnderAgentCount}人</p>
-            <Icon type="right" />
-          </FlexRow>
-        </FlexRowBetweenWingSpace>
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/mySaveAgent')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
-            <span>我收藏的代理</span>
-          </FlexRow>
-          <FlexRow className={styles.titleWrap}>
-            <p>{saveAgentCount || 0}人</p>
-            <Icon type="right" />
-          </FlexRow>
-        </FlexRowBetweenWingSpace>
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goMyPlayer('MyPlayer')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
-            <span>我的玩家</span>
-          </FlexRow>
-          <FlexRow className={styles.titleWrap}>
-            <p>{myPlayerCount}人</p>
-            <Icon type="right" />
-          </FlexRow>
-        </FlexRowBetweenWingSpace>
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goMyPlayer('/mySavePlayer')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
-            <span>我收藏的玩家</span>
-          </FlexRow>
-          <FlexRow className={styles.titleWrap}>
-            <p>{savePlayerCount || 0}人</p>
-            <Icon type="right" />
-          </FlexRow>
-        </FlexRowBetweenWingSpace>
+        {/* 我的代理功能 */}
+        {
+          hasPowerToUnderAgent &&
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
+            <FlexRow className={styles.navigateTitleWrap}>
+              <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
+              <span>我的下级代理</span>
+            </FlexRow>
+            <FlexRow className={styles.titleWrap}>
+              <p>{myUnderAgentCount}人</p>
+              <Icon type="right" />
+            </FlexRow>
+          </FlexRowBetweenWingSpace>
+        }
+        {
+          havePowerToSaveAgent &&
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/mySaveAgent')}>
+            <FlexRow className={styles.navigateTitleWrap}>
+              <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
+              <span>我收藏的代理</span>
+            </FlexRow>
+            <FlexRow className={styles.titleWrap}>
+              <p>{saveAgentCount || 0}人</p>
+              <Icon type="right" />
+            </FlexRow>
+          </FlexRowBetweenWingSpace>
+        }
+        {/* 我的玩家 */}
+        {
+          hasPowerToUnderPlayer &&
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goMyPlayer('MyPlayer')}>
+            <FlexRow className={styles.navigateTitleWrap}>
+              <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
+              <span>我的玩家</span>
+            </FlexRow>
+            <FlexRow className={styles.titleWrap}>
+              <p>{myPlayerCount}人</p>
+              <Icon type="right" />
+            </FlexRow>
+          </FlexRowBetweenWingSpace>
+        }
+        {/* 收藏玩家功能 */}
+        {
+          havePowerToSavePlayer &&
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goMyPlayer('/mySavePlayer')}>
+            <FlexRow className={styles.navigateTitleWrap}>
+              <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
+              <span>我收藏的玩家</span>
+            </FlexRow>
+            <FlexRow className={styles.titleWrap}>
+              <p>{savePlayerCount || 0}人</p>
+              <Icon type="right" />
+            </FlexRow>
+          </FlexRowBetweenWingSpace>
+        }
+        
       </div>
       <WhiteSpace />
       <div className={styles.module}>
@@ -233,32 +261,36 @@ class HomePage extends BaseComponent {
         }
       </div>
       <WhiteSpace />
-      <div className={styles.module}>
-        <FlexRowBetweenWingSpace className={styles.titleWrap}>
-          <FlexRow><TitleIcon /><span>账户余额</span></FlexRow>
-          <div className={styles.colorBlue} onClick={() => this.navigate('/cashMoneyRecord')}>交易明细</div>
-        </FlexRowBetweenWingSpace>
-        <div className={styles.masonryCountLable}>
-          <div>
-            <span className={styles.countLabel}>￥:</span><span className={styles.count}>{unitCanCashCount}</span>
+      {/* 账户余额 */}
+      {
+        hasPowerToBanlance &&
+        <div className={styles.module}>
+          <FlexRowBetweenWingSpace className={styles.titleWrap}>
+            <FlexRow><TitleIcon /><span>账户余额</span></FlexRow>
+            <div className={styles.colorBlue} onClick={() => this.navigate('/cashMoneyRecord')}>交易明细</div>
+          </FlexRowBetweenWingSpace>
+          <div className={styles.masonryCountLable}>
+            <div>
+              <span className={styles.countLabel}>￥:</span><span className={styles.count}>{unitCanCashCount}</span>
+            </div>
+            <div className={styles.masonryInfoWrap}>
+              <p className={styles.masonryInfo}>
+                今日收入￥<span className={styles.count}>{unitBalanceIncomeToday}</span>
+              </p>
+              <p className={styles.masonryInfo}>
+                今日支出￥<span className={styles.count}>{unitBalancePayToday}</span>
+              </p>
+            </div>
           </div>
-          <div className={styles.masonryInfoWrap}>
-            <p className={styles.masonryInfo}>
-              今日收入￥<span className={styles.count}>{unitBalanceIncomeToday}</span>
-            </p>
-            <p className={styles.masonryInfo}>
-              今日支出￥<span className={styles.count}>{unitBalancePayToday}</span>
-            </p>
-          </div>
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
+            <FlexRow className={styles.navigateTitleWrap}>
+              <IconImg className={styles.titleIconImg} src={IconSource.tixian} />
+              <span>提现</span>
+            </FlexRow>
+            <Icon type="right" />
+          </FlexRowBetweenWingSpace>
         </div>
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.tixian} />
-            <span>提现</span>
-          </FlexRow>
-          <Icon type="right" />
-        </FlexRowBetweenWingSpace>
-      </div>
+      }
       {
         navbarRightPickerShow && <div className={styles.pickerWrap} onClick={this.pickerToggle}>
           <div className={styles.navbarOption}>

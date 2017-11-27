@@ -32,8 +32,35 @@ class SecondaryAgencyRecord extends BaseComponent {
       },
     };
     // this.forceUpdate();
-    
-    this.columns = [
+    this.columns = [];
+  }
+  // 切换排序
+  toggleSort = (sortType) => {
+    if (!this.state.isSort) {
+      this.sortState[sortType].isSort = true;
+      this.setState({
+        isSort: true,
+      });
+      return false;
+    }
+    for (const attr in this.sortState) {
+      if (this.sortState[attr]) {
+        // const element = object[key];
+        if (attr === sortType) {
+          if (this.sortState[attr].isSort) {
+            this.sortState[attr].isSortUp = !this.sortState[attr].isSortUp;
+          }
+          this.sortState[attr].isSort = true;
+        } else {
+          this.sortState[attr].isSort = false;
+        }
+      }
+    }
+    this.forceUpdate();
+  }
+  powerToControllColumns = () => {
+    const self = this;
+    const columns = [
       {
         dataIndex: 'playerId',
         title: '玩家',
@@ -59,7 +86,10 @@ class SecondaryAgencyRecord extends BaseComponent {
           return <div>{transRowTieme}</div>;
         },
       },
-      {
+    ];
+    const hasPowerToRecharge = this.hasPower('playerSDKCharge') || this.hasPower('agentGiveForPlayer');
+    if (hasPowerToRecharge) {
+      columns.push({
         title: '操作',
         render: (data) => {
           return (<div
@@ -69,32 +99,9 @@ class SecondaryAgencyRecord extends BaseComponent {
           充值
           </div>);
         },
-      },
-    ];
-  }
-  // 切换排序
-  toggleSort = (sortType) => {
-    if (!this.state.isSort) {
-      this.sortState[sortType].isSort = true;
-      this.setState({
-        isSort: true,
       });
-      return false;
     }
-    for (const attr in this.sortState) {
-      if (this.sortState[attr]) {
-        // const element = object[key];
-        if (attr === sortType) {
-          if (this.sortState[attr].isSort) {
-            this.sortState[attr].isSortUp = !this.sortState[attr].isSortUp;
-          }
-          this.sortState[attr].isSort = true;
-        } else {
-          this.sortState[attr].isSort = false;
-        }
-      }
-    }
-    this.forceUpdate();
+    return columns;
   }
   async componentWillMount() {
     const { serverid } = this.helps.querystring.parse(this.props.location.search.substring(1));
@@ -175,7 +182,7 @@ class SecondaryAgencyRecord extends BaseComponent {
   }
   render() {
     const { searchVal, tableData, isSort } = this.state;
-    const columns = this.columns;
+    const columns = this.powerToControllColumns();
     let sortTableData = tableData;
     if (isSort) {
       for (const attr in this.sortState) {

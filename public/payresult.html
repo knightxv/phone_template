@@ -11,8 +11,8 @@
 </head>
 <body>
 <h2>充值完成,<span id="elseTime">3</span>秒之后自动跳回首页</h2>
-<!-- 
-<script type="text/javascript" src="payresult/webkit1.js"></script> -->
+ 
+<script type="text/javascript" src="./ajax.min.js"></script>
 
 <script>
 var elseTime = 3;
@@ -27,8 +27,19 @@ function runTime() {
 			runTime();
 			return false;
 		}
-		// window.location.href = '/generalManage/bobing/index.html#/homePage';
-		window.location.href = '/generalManage/adangbiji/index.html#/homePage';
+		ajax({
+			type:"get",
+			url:"/generalManage/adangbiji/index.html", //添加自己的接口链接
+			timeOut: 10000,
+			success:function(str){
+				window.location.href = '/generalManage/adangbiji/index.html#/homePage';
+			},
+			error:function(){
+				window.location.href = '/generalManage/index.html#/homePage';
+			}
+		});
+		// window.location.href = '/generalManage/index.html#/homePage';
+		// window.location.href = '/generalManage/adangbiji/index.html#/homePage';
 	}, 1000);
 }
 
