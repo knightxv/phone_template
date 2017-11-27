@@ -488,7 +488,7 @@ export default {
             proxyid: 2,
             masonry: 0, // 钻书数量
             ranking: 3,
-            powerList: [ 1, 2, 4],
+            powerList: [0, 1, 2, 5],
 
             bankCardName: null,
             bankName: '建设银行',
