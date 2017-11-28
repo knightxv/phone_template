@@ -1,4 +1,6 @@
 import Http from './Http';
+import { Toast } from './antdComponent';
+
 const webHttpConfig = {
   // getConfigUrl: '/config',
   // httpConfigKey: 'JavaWebPublicServerUrl',
@@ -19,7 +21,7 @@ const webHttpConfig = {
   },
   webResolveResult(res, Response) {
     if (res.status === 'success') {
-      return new Response(true, res.Msg, res.data);
+      return new Response(true, res.info || res.Msg, res.data);
     } else {
       return new Response(false, res.info);
     }

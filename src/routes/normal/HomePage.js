@@ -51,6 +51,7 @@ class HomePage extends BaseComponent {
       });
     } else {
       this.helps.toast(res.info);
+      return;
     }
     const params = { type: this.TypeDefine.htmlTextType.notice_normalAgency }; // htmlTextType.notice_normalAgency
     // 获取首页额外数据
@@ -90,7 +91,7 @@ class HomePage extends BaseComponent {
     this.navigate('/EditAgencyPsd');
   }
   // 跳到我的玩家
-  goMyPlayer = async (routerName) => {
+  goToSelectGame = async (routerName) => {
     const res = await this.helps.webHttp.get('/spreadApi/getGameList');
     if (res.isSuccess) {
       if (res.data && res.data.length === 1) {
@@ -191,7 +192,7 @@ class HomePage extends BaseComponent {
         }
         {
           havePowerToSaveAgent &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/mySaveAgent')}>
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/mySaveAgent')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
               <span>我收藏的代理</span>
@@ -205,7 +206,7 @@ class HomePage extends BaseComponent {
         {/* 我的玩家 */}
         {
           hasPowerToUnderPlayer &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goMyPlayer('MyPlayer')}>
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('MyPlayer')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
               <span>我的玩家</span>
@@ -219,7 +220,7 @@ class HomePage extends BaseComponent {
         {/* 收藏玩家功能 */}
         {
           havePowerToSavePlayer &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goMyPlayer('/mySavePlayer')}>
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/mySavePlayer')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
               <span>我收藏的玩家</span>

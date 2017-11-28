@@ -232,6 +232,7 @@ const DefaultListView = ({ tableData, columns, ListEmptyComponent, ...props }) =
       scrollRenderAheadDistance={500}
       scrollEventThrottle={200}
       onEndReachedThreshold={10}
+      style={{ background: '#fff' }}
       renderBodyComponent={() => <ListViewWrapBody ListEmptyComponent={ListEmptyComponent} />}
       {...props}
     />

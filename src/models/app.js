@@ -5,8 +5,8 @@ export default {
   namespace: 'app',
   state: {
     gameName: '',
-    loginID: '',
-    password: '',
+    // loginID: '',
+    // password: '',
   },
   reducers: {
     setGameName(state, { payload }) {

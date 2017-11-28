@@ -474,6 +474,7 @@ export default {
     'GET /spreadApi/getUserInfo' : {
         status: 'success',
         Msg: '',
+        code: 2,
         data: {
             saleDiamondsOfThisMonth:84651, // 本月销钻
             myUnderAgentCount: 15, // 我的下级代理人数
@@ -588,13 +589,13 @@ export default {
         "status":"success",
         "Msg":"",
         "data":[
-            {
-                "playerName":"昵称",
-                "playerId":"123456",
-                "recentlyLoginTime":1510307559161,
-                "palyCashCount":3430,
-                "masonrySurplus":343
-            }
+            // {
+            //     "playerName":"昵称",
+            //     "playerId":"123456",
+            //     "recentlyLoginTime":1510307559161,
+            //     "palyCashCount":3430,
+            //     "masonrySurplus":343
+            // }
         ]
     },
      /*

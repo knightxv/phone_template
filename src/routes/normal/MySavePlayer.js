@@ -133,6 +133,14 @@ class MySavePlayer extends BaseComponent {
     this.props.dispatch(this.helps.routerRedux.push({ pathname: '/savePlayer', query: { serverid: this.serverid || '' } }));
   }
   renderRowData = () => {
+    const { searchVal } = this.state;
+    if (searchVal) {
+      return (
+        <div style={{ margin: '0.5rem auto', textAlign: 'center' }}>
+          没有搜索到相关玩家
+        </div>
+      );
+    }
     return (
       <div style={{ margin: '0.5rem auto', textAlign: 'center' }}>
         您还没有玩家哦~赶紧去<span onClick={this.navigateToSavePlayer} className="color_base">添加</span>
@@ -197,7 +205,6 @@ class MySavePlayer extends BaseComponent {
           }
         }
       }
-      
       // const sortType = sortTypeArr[0];
     }
     const filterTableData = sortTableData.filter((data) => {

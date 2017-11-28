@@ -33,7 +33,7 @@ class Login extends BaseComponent {
       return false;
     }
     // 登录成功
-    this.props.dispatch({ type: 'app/updateAppInfo', payload: { loginID, password } });
+    this.props.dispatch({ type: 'agent/updateAppInfo', payload: { loginID, password } });
     this.props.dispatch(this.helps.routerRedux.push('/homePage'));
   }
   navigateToRegister = () => {
@@ -104,6 +104,7 @@ class Login extends BaseComponent {
 function mapStateToProps(state) {
   return {
     ...state.app,
+    ...state.agent,
   };
 }
 

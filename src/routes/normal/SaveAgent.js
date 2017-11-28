@@ -6,7 +6,7 @@ import { Button, InputItem, Icon } from '@/helps/antdComponent';
 import BaseComponent from '@/helps/BaseComponent';
 // import { Title } from '@/helps/styleComponent';
 import styles from './save.less';
-import { FlexRow, FlexRowBetweenWingSpace, WhiteSpace } from '../../helps/styleComponent';
+import { FlexRow } from '../../helps/styleComponent';
 
 class SaveAgent extends BaseComponent {
   constructor(props) {
@@ -58,12 +58,18 @@ class SaveAgent extends BaseComponent {
       res = await this.helps.webHttp.get('/spreadApi/saveAgent', { agentInviteCode, serverid: this.serverid });
     }
     if (res.isSuccess) {
+      if (isSave) {
+        this.helps.toast(res.info || '收藏成功');
+      } else {
+        this.helps.toast(res.info || '收藏成功');
+      }
       this.setState({
         playerInfo: {
           ...playerInfo,
           isSave: !isSave,
         },
       });
+      this.props.dispatch(this.helps.routerRedux.goBack());
     } else {
       this.helps.toast(res.info || '操作失败');
     }
@@ -87,14 +93,11 @@ class SaveAgent extends BaseComponent {
             />
           </FlexRow>
         </FlexRow>
-        <WhiteSpace />
         {
           playerInfo &&
-          <div className={styles.listWrap}>
-            <FlexRowBetweenWingSpace className={styles.rowItem}>
-              <div>{playerInfo.underAgentName}</div>
-              <Button onClick={this.toggleSave}>{playerInfo.isSave ? '取消收藏' : '收藏'}</Button>
-            </FlexRowBetweenWingSpace>
+          <div className={styles.rowItem}>
+            <div>{playerInfo.agentInviteCode}</div>
+            <Button size="default" onClick={this.toggleSave}>{playerInfo.isSave ? '取消收藏' : '收藏'}</Button>
           </div>
         }
         {
