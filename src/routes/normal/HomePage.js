@@ -32,16 +32,17 @@ class HomePage extends BaseComponent {
     };
   }
   powerManage = () => {
-    this.havePowerToRecharge = this.hasPower('proxySDKCharge'); // 代理第三方充值(是否有购买钻石的权限)
-    this.havePowerToSavePlayer = this.hasPower('playerSave'); // 玩家收藏
-    this.havePowerToSaveAgent = this.hasPower('agentSave'); // 代理收藏
-    this.hasPowerToUnderPlayer = this.hasPower('myPlayer'); // 我的玩家
-    this.hasPowerToUnderAgent = this.hasPower('myAgent'); // 我的代理
-    this.hasPowerToBanlance = this.hasPower('banlance'); // 账户余额
+    return {
+      havePowerToRecharge: this.hasPower('proxySDKCharge'), // 代理第三方充值(是否有购买钻石的权限)
+      havePowerToSavePlayer: this.hasPower('playerSave'), // 玩家收藏
+      havePowerToSaveAgent: this.hasPower('agentSave'), // 代理收藏
+      hasPowerToUnderPlayer: this.hasPower('myPlayer'), // 我的玩家
+      hasPowerToUnderAgent: this.hasPower('myAgent'), // 我的代理
+      hasPowerToBanlance: this.hasPower('proxySDKCharge'), // 账户余额
+    };
   }
   async componentWillMount() {
     // const { powerList } = this.props;
-    this.powerManage();
     // 获取个人数据
     const res = await this.helps.webHttp.get('/spreadApi/getUserInfo');
     if (res.isSuccess) {
@@ -131,6 +132,7 @@ class HomePage extends BaseComponent {
     const unitCanCashCount = this.parseFloatMoney(canCashCount); // 未提现
     const unitBalanceIncomeToday = this.parseFloatMoney(balanceIncomeToday);
     const unitBalancePayToday = this.parseFloatMoney(balancePayToday);
+    const power = this.powerManage();
     // 权限
     const {
       havePowerToRecharge,
@@ -139,7 +141,7 @@ class HomePage extends BaseComponent {
       hasPowerToUnderPlayer,
       hasPowerToUnderAgent,
       hasPowerToBanlance,
-    } = this;
+    } = power;
     
     return (<div style={{ position: 'relative' }}>
       <Title>代理中心</Title>

@@ -14,6 +14,7 @@ const paySource = {
 };
 
 const selectDiamondArr = [10, 100, 500];
+const defaultSelectIndex = 2;
 
 class Pay extends BaseComponent {
   constructor(props) {
@@ -28,13 +29,13 @@ class Pay extends BaseComponent {
       defaultPayEnum = paySelectArr[0].payType;
     }
     this.state = {
-      diamond: '', // 钻石
+      diamond: selectDiamondArr[defaultSelectIndex], // 钻石
       playerName: '', // 用户名
       // isSave: false, // 玩家是否被收藏
       playerId,
       playerNotFind: false, // 玩家是否未找到
       isChooseInput: false, // 是否选择其他数额
-      selectIndex: -1,
+      selectIndex: defaultSelectIndex,
       payTypeSelect: defaultPayEnum,
     };
     this.idTimer = null;
