@@ -239,12 +239,13 @@ class Pay extends BaseComponent {
         />
         <div className={styles.playerInputWrap}>
           <InputItem
+          	disabled={true}
             onChange={this.idValChange}
             value={playerId}
             type="number"
             maxLength={8}
             placeholder="请输入ID/推广码"
-          />
+          /> 
           {
             playerNotFind
             ? (<div className={styles.playerNotFind}>玩家ID不存在</div>)
