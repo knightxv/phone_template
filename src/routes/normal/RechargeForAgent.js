@@ -8,6 +8,7 @@ import { WhiteSpace, WingBlank, FlexRow, Title } from '@/helps/styleComponent';
 import styles from './RechargeForAgent.css';
 
 const selectDiamondArr = [10, 100, 500];
+const defaultSelectIndex = 2;
 
 class RechargeForAgent extends BaseComponent {
   constructor(props) {
@@ -16,12 +17,12 @@ class RechargeForAgent extends BaseComponent {
     const query = this.helps.querystring.parse(searchText);
     const { agentId } = query;
     this.state = {
-      diamond: '', // 钻石
+      diamond: selectDiamondArr[defaultSelectIndex], // 钻石
       agentId,
       // playerName: '', // 用户名
       // playerNotFind: false, // 玩家是否未找到
       isChooseInput: false, // 是否选择其他数额
-      selectIndex: -1,
+      selectIndex: defaultSelectIndex,
     };
     this.idTimer = null;
     this.hasPowerToRechargeAny = this.hasPower('iAgentGiveForAnyAgent');

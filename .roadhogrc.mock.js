@@ -581,7 +581,7 @@ export default {
         status: 'success',
         Msg: '',
         data: {
-
+        	
         }
     },
     /* 我收藏的玩家 */
@@ -589,13 +589,13 @@ export default {
         "status":"success",
         "Msg":"",
         "data":[
-            // {
-            //     "playerName":"昵称",
-            //     "playerId":"123456",
-            //     "recentlyLoginTime":1510307559161,
-            //     "palyCashCount":3430,
-            //     "masonrySurplus":343
-            // }
+            {
+                "playerName":"昵称",
+                "playerId":"123456",
+                "recentlyLoginTime":1510307559161,
+                "palyCashCount":3430,
+                "masonrySurplus":343
+            }
         ]
     },
      /*

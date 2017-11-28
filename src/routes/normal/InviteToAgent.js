@@ -27,8 +27,10 @@ class InviteToAgent extends BaseComponent {
     const { proxyid, inviteCode } = props;
     // this.rechargeRouterName = '/pay';
     // this.rechargeLink = `${origin}${pathname}#/pay?code=${proxyid}`;
-    this.registerRouterName = '/register';
-    this.registerLink = `${origin}${pathname}#/register?code=${inviteCode}`;
+    this.registerRouterName = '/login';
+    this.registerLink = `${origin}${pathname}#/login?pCode=${inviteCode}`;
+    // this.registerRouterName = '/register';
+    // this.registerLink = `${origin}${pathname}#/register?code=${inviteCode}`;
     this.copySuccess = false;
     this.state = {
       linkSrc: '',

@@ -111,7 +111,7 @@ class Register extends BaseComponent {
         </Helmet>
         <NavBar
           title="申请代理"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.push('/login'))}
+          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
         <div className={styles.contentContainer}>
           <div className={styles.inputWrap}>
