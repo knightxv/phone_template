@@ -390,7 +390,7 @@ export default {
         @query : HeroID id
         @query : money 充值钱
         @chargeType  : --
-        @serverID: 游戏的serverId
+        @serverid: 游戏的serverid
         @query: pid: 代理id
     */
     'GET /spreadApi/recharge_for_player' : {
