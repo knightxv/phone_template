@@ -68,7 +68,7 @@ export default {
         status: 'success',
         Msg: '',
         data: {
-            htmlText: '介绍代理有奖励：在申请代理时介绍人邀请码填写您的邀请码， 您将获得该代理永久充值10%钻石石奖励！详询美女客服5200', // 公告信息
+            htmlText: '', // 公告信息
         }
     },
 
@@ -454,17 +454,7 @@ export default {
         }
     },
 
-    /*
-(代理页面)控制首页的显示和隐藏
-@ query : type : 1 奖励页面 2 代理公告 3 总代理公告
-*/
-    'GET /ddm/phone/api/getHtmlText' : {
-        status: 'success',
-        Msg: '',
-        data: {
-            htmlText: '介绍代理有奖励：在申请代理时介绍人邀请码填写您的邀请码， 您将获得该代理永久充值10%钻石石奖励！详询美女客服5200', // 公告信息
-        }
-    },
+    
 
 
     /*已经添加到文档上的 */
@@ -618,6 +608,18 @@ export default {
         Msg: '',
         data: {
             gameName: '阿当比鸡21'
+        }
+    },
+
+    /*
+(代理页面)控制首页的显示和隐藏
+@ query : type : 1 奖励页面 2 代理公告 3 总代理公告
+*/
+    'GET /ddm/phone/api/getHtmlText' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            htmlText: 'ss', // 公告信息
         }
     },
     

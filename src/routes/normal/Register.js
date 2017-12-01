@@ -30,6 +30,7 @@ class Register extends BaseComponent {
       phone: '',
       pCode: code, // 上级代理邀请码
       verifyCode: '', // 验证码
+      agreenShow: false,
     };
   }
   // 得到验证码
@@ -92,12 +93,15 @@ class Register extends BaseComponent {
     this.props.dispatch(this.helps.routerRedux.push('/AgreenDetail'));
   }
   async componentWillMount() {
-    // this.setState({
-
-    // })
+    const type = this.TypeDefine.htmlTextType.agreen_page;
+    const res = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', { type });
+    const htmlText = res.isSuccess ? res.data.htmlText : '';
+    this.setState({
+      agreenShow: !!htmlText,
+    });
   }
   render() {
-    const { pCode, phone, verifyCode } = this.state;
+    const { pCode, phone, verifyCode, agreenShow } = this.state;
     const { getVerifyCodeElseTime } = this.props;
     const isCanReGetVerifyCode = getVerifyCodeElseTime === 0; // 倒计时是否结束
     const isShowElseTime = !isCanReGetVerifyCode; // 是否显示剩余时间
@@ -144,9 +148,12 @@ class Register extends BaseComponent {
             >验证码:</InputItem>
           </div>
           <div className={styles.registerWrap}>
-            <div className={styles.agreenLabel}>
-              点击注册,即表明同意<span className={styles.agreenLink} onClick={this.navigateToAgreen}>代理推广协议</span>
-            </div>
+            {
+              agreenShow &&
+              <div className={styles.agreenLabel}>
+                点击注册,即表明同意<span className={styles.agreenLink} onClick={this.navigateToAgreen}>代理推广协议</span>
+              </div>
+            }
             <Button
               style={{ width: '100%' }}
               onClick={this.register}

@@ -7,7 +7,7 @@ import BaseComponent from '@/helps/BaseComponent';
 import { WhiteSpace, Title, IconImg } from '@/helps/styleComponent';
 import styles from './Login.css';
 
-const logoSource = require('@/assets/adang_logo.png');
+// const logoSource = require('@/assets/adang_logo.png');
 
 class Login extends BaseComponent {
   constructor(props) {
@@ -68,7 +68,7 @@ class Login extends BaseComponent {
         </Helmet>
         <div className={styles.contentContainer}>
           <div className={styles.logoWrap}>
-            <IconImg className={styles.logo} src={logoSource} />
+            {/* <IconImg className={styles.logo} src={logoSource} /> */}
             <span className={styles.logoTitle}>{gameName}</span>
           </div>
           <div>
