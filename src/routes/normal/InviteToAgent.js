@@ -7,7 +7,7 @@ import { ActionSheet } from 'antd-mobile';
 // import { isWechat } from '@/helps/help';
 import { NavBar, Icon } from '@/helps/antdComponent';
 import BaseComponent from '@/helps/BaseComponent';
-import { Title, Avatar, FlexRow } from '@/helps/styleComponent';
+import { Title, Avatar, FlexRow, NetImg } from '@/helps/styleComponent';
 import styles from './InviteToAgent.css';
 
 const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);
@@ -104,7 +104,7 @@ class InviteToAgent extends BaseComponent {
     // saveFile(imgData,filename);
   }
   render() {
-    const { inviteCode } = this.props;
+    const { inviteCode, inviteAgentBg } = this.props;
     const { registerLink } = this;
     const { linkSrc } = this.state;
     return (
@@ -120,7 +120,7 @@ class InviteToAgent extends BaseComponent {
             <Icon type='ellipsis' onClick={this.showLinkOptionPicker} />
           </CopyToClipboard>}
         />
-        <div className={styles.contentContainer}>
+        <WrapContent inviteAgentBg={inviteAgentBg}>
           <div className={styles.qrContainer}>
             <FlexRow className={styles.userInfo}>
               <Avatar className={styles.avatar} />
@@ -128,19 +128,39 @@ class InviteToAgent extends BaseComponent {
             </FlexRow>
             <img width={280} height={280} src={linkSrc} />
             <div style={{ display: 'none' }}>
-              <QRCode ref={(node) => { this.canvasNode = node; }} size={280} value={registerLink} />
+              <QRCode
+                ref={(node) => { this.canvasNode = node; }}
+                size={280}
+                value={registerLink}
+              />
             </div>
             <div className={styles.qrCodeTip}>扫二维码加入代理,长按可保存至相册</div>
           </div>
-        </div>
+        </WrapContent>
       </div>
     );
   }
 }
 
+const WrapContent = ({ inviteAgentBg, children }) => {
+  if (inviteAgentBg) {
+    return (<div className={styles.contentContainer}>
+      <img className={styles.contentBg} src={inviteAgentBg} />
+      <div className={styles.bgContentWrap}>
+        { children }
+      </div>
+    </div>);
+  } else {
+    return (<div className={styles.contentContainer}>
+      { children }
+    </div>);
+  }
+};
+
 function mapStateToProps(state) {
   return {
     ...state.agent,
+    ...state.app,
   };
 }
 

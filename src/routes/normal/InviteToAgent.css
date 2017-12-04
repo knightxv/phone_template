@@ -12,6 +12,26 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
+}
+/* 有背景 */
+.contentBg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.bgContentWrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .qrContainer {

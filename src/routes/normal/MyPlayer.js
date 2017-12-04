@@ -134,10 +134,10 @@ class SecondaryAgencyRecord extends BaseComponent {
   // 邀请玩家去玩游戏
   invitePlayerToPlayerGame = () => {
     // alert('请求配置，跳到游戏详情页');
-    if (this.serverid) {
-      window.location.href = `http://www.hulema.com/#gameDetail/${this.serverid}`;
-    } else {
-      window.location.href = 'http://www.hulema.com';
+    const { invitePlayLink } = this.props;
+    console.log(this.props);
+    if (invitePlayLink) {
+      window.location.href = invitePlayLink;
     }
   }
   renderHeader = (columnsData) => { // dataIndex title
@@ -253,6 +253,7 @@ class SecondaryAgencyRecord extends BaseComponent {
 function mapStateToProps(state) {
   return {
     ...state.agent,
+    ...state.app,
   };
 }
 

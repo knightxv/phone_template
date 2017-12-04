@@ -102,7 +102,7 @@ class Register extends BaseComponent {
   }
   render() {
     const { pCode, phone, verifyCode, agreenShow } = this.state;
-    const { getVerifyCodeElseTime } = this.props;
+    const { getVerifyCodeElseTime, companyName } = this.props;
     const isCanReGetVerifyCode = getVerifyCodeElseTime === 0; // 倒计时是否结束
     const isShowElseTime = !isCanReGetVerifyCode; // 是否显示剩余时间
     const isCanGetVerifyCode = isCanReGetVerifyCode && this.checkPhoneValid();
@@ -159,7 +159,7 @@ class Register extends BaseComponent {
               onClick={this.register}
             >申请代理</Button>
           </div>
-          <div style={{ textAlign: 'center', fontSize: '0.25rem', paddingTop: 16 }}>厦门当当猫网络科技有限公司</div>
+          <div style={{ textAlign: 'center', fontSize: '0.25rem', paddingTop: 16 }}>{companyName}</div>
         </div>
       </div>
     );
@@ -170,6 +170,7 @@ class Register extends BaseComponent {
 function mapStateToProps(state) {
   return {
     ...state.agent,
+    ...state.app,
   };
 }
 
