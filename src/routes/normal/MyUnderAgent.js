@@ -7,33 +7,6 @@ import BaseComponent from '@/helps/BaseComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
 import styles from './MyUnderAgent.css';
 
-const columns = [
-  {
-    dataIndex: 'agentInviteCode',
-    title: '代理ID',
-  },
-  {
-    dataIndex: 'CommissionOfAll',
-    title: '总提成钻石数',
-    render(rowVal) {
-      if (rowVal.CommissionOfAll >= 0) {
-        return <div className="countAdd">{`+${rowVal.CommissionOfAll}`}</div>;
-      }
-      return <div className="countSub">{`-${rowVal.CommissionOfAll}`}</div>;
-    },
-  },
-  {
-    dataIndex: 'CommissionOfToday',
-    title: '今日提成钻石数',
-    render(rowVal) {
-      if (rowVal.CommissionOfToday >= 0) {
-        return <div className="countAdd">{`+${rowVal.CommissionOfToday}`}</div>;
-      }
-      return <div className="countSub">{`-${rowVal.CommissionOfToday}`}</div>;
-    },
-  },
-];
-
 class MyUnderAgent extends BaseComponent {
   constructor(props) {
     super(props);
@@ -43,6 +16,14 @@ class MyUnderAgent extends BaseComponent {
       searchVal: '',
       notice: '代理填写您的邀请码,该代理充钻您就可以获得10%反钻', // 公告内容
     };
+  }
+  rechargeForAgent = (agentId) => {
+    this.props.dispatch(this.helps.routerRedux.push({
+      pathname: 'rechargeForAgent',
+      query: {
+        agentId,
+      },
+    }));
   }
   async componentWillMount() {
     const res = await this.helps.webHttp.get('/spreadApi/myUnderAgents');
@@ -93,6 +74,50 @@ class MyUnderAgent extends BaseComponent {
       </div>
     );
   }
+  powerArr = () => {
+    const self = this;
+    const columns = [
+      {
+        dataIndex: 'agentInviteCode',
+        title: '代理ID',
+      },
+      {
+        dataIndex: 'CommissionOfAll',
+        title: '总提成钻石数',
+        render(rowVal) {
+          if (rowVal.CommissionOfAll >= 0) {
+            return <div className="countAdd">{`+${rowVal.CommissionOfAll}`}</div>;
+          }
+          return <div className="countSub">{`-${rowVal.CommissionOfAll}`}</div>;
+        },
+      },
+      {
+        dataIndex: 'CommissionOfToday',
+        title: '今日提成钻石数',
+        render(rowVal) {
+          if (rowVal.CommissionOfToday >= 0) {
+            return <div className="countAdd">{`+${rowVal.CommissionOfToday}`}</div>;
+          }
+          return <div className="countSub">{`-${rowVal.CommissionOfToday}`}</div>;
+        },
+      },
+    ];
+    const hasPowerToRecharge = this.hasPower('iAgentGiveForAgent') || this.hasPower('iAgentGiveForAnyAgent');
+    if (hasPowerToRecharge) {
+      columns.push({
+        title: '操作',
+        render: (data) => {
+          return (<div
+            className={styles.rechargeBtn}
+            onClick={() => self.rechargeForAgent(data.agentInviteCode)}
+          >
+          充值
+          </div>);
+        },
+      });
+    }
+    return columns;
+  }
   render() {
     const { tableData, notice, searchVal } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(notice);
@@ -121,10 +146,12 @@ class MyUnderAgent extends BaseComponent {
 
     const CommissionOfTodayRemark = `共(${CommissionOfToday}个)`; // 今日提成
     const columnsRemark = [agentNumberRemark, CommissionOfAllRemark, CommissionOfTodayRemark];
+    const columns = this.powerArr();
     const columnsAddRemark = columns.map((item, i) => ({
       ...item,
       remark: columnsRemark[i],
     }));
+
     return (
       <div className={styles.container}>
         <Title>我的下级代理</Title>
@@ -162,8 +189,10 @@ class MyUnderAgent extends BaseComponent {
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    ...state.agent,
+  };
 }
 
 export default connect(mapStateToProps)(MyUnderAgent);

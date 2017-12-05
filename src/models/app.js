@@ -1,12 +1,21 @@
-import gameConfig from '../config/gameInfo';
+
+import webHttp from '../helps/webHttp';
 
 export default {
   namespace: 'app',
   state: {
-    gameName: '阿当比鸡',
+    gameName: '',
+    // loginID: '',
+    // password: '',
   },
   reducers: {
     setGameName(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+      };
+    },
+    updateAppInfo(state, { payload }) {
       return {
         ...state,
         ...payload,
@@ -17,12 +26,15 @@ export default {
   },
   subscriptions: {
       async setup({ dispatch, history }) {  // eslint-disable-line
-        dispatch({
-          type: 'setGameName',
-          payload: {
-            ...gameConfig.adangbiji,
-            // ...gameConfig.bobing,
-          },
+        webHttp.get('/spreadApi/getPlatformInfo').then((res) => {
+          const gameConfig = res.data;
+          dispatch({
+            type: 'setGameName',
+            payload: {
+              ...gameConfig,
+              // ...gameConfig.bobing,
+            },
+          });
         });
       },
   },

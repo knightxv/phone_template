@@ -12,10 +12,13 @@ const logoSource = require('@/assets/adang_logo.png');
 class Login extends BaseComponent {
   constructor(props) {
     super(props);
+    const { pCode } = this.helps.querystring.parse(this.props.location.search.substr(1));
+    this.pCode = pCode; // 上级邀请码
+    const { loginID, password } = this.props;
     this.state = {
       loginLoading: false,
-      loginID: '',
-      password: '',
+      loginID,
+      password,
     };
   }
   // 登录
@@ -30,10 +33,29 @@ class Login extends BaseComponent {
       return false;
     }
     // 登录成功
+    this.props.dispatch({ type: 'agent/updateAppInfo', payload: { loginID, password } });
     this.props.dispatch(this.helps.routerRedux.push('/homePage'));
   }
   navigateToRegister = () => {
-    this.props.dispatch(this.helps.routerRedux.push('/register'));
+    if (this.pCode) {
+      this.props.dispatch(this.helps.routerRedux.push({
+        pathname: '/register',
+        query: {
+          code: this.pCode,
+        },
+      }));
+    } else {
+      this.props.dispatch(this.helps.routerRedux.push('/register'));
+    }
+    // if (this.pid) {
+    //   this.props.dispatch(this.helps.routerRedux.push({
+    //     pathname: '/register',
+    //     query: {
+    //       pid: this.pid,
+    //     },
+    //   }));
+    // } else {
+    // }
   }
   render() {
     const { loginLoading, loginID, password } = this.state;
@@ -82,6 +104,7 @@ class Login extends BaseComponent {
 function mapStateToProps(state) {
   return {
     ...state.app,
+    ...state.agent,
   };
 }
 

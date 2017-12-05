@@ -7,7 +7,7 @@ import BaseComponent from '@/helps/BaseComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
 import styles from './MyPlayer.css';
 
-class SecondaryAgencyRecord extends BaseComponent {
+class MySavePlayer extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,9 +16,8 @@ class SecondaryAgencyRecord extends BaseComponent {
       searchVal: '',
       isSort: false, // 是否进行排序
     };
-    this.serchInput = null;
-    const self = this;
-
+    this.serchInput = null; // 搜索的内容
+    this.serverid = null; // 游戏id
     // 是否是正序排序
     this.sortState = {
       masonrySurplus: {
@@ -31,7 +30,6 @@ class SecondaryAgencyRecord extends BaseComponent {
       },
     };
     // this.forceUpdate();
-    this.columns = [];
   }
   // 切换排序
   toggleSort = (sortType) => {
@@ -78,16 +76,11 @@ class SecondaryAgencyRecord extends BaseComponent {
         },
       },
       {
-<<<<<<< HEAD
-        dataIndex: 'palyCashCount',
-        title: '玩家今日消费',
-=======
         dataIndex: 'recentlyLoginTime',
         title: '最近登录',
->>>>>>> 2.0.2
         render(rowVal) {
-          const transRowVal = self.parseFloatMoney(rowVal.palyCashCount);
-          return <div className="countAdd">{`+${transRowVal}`}</div>;
+          const transRowTieme = new Date(rowVal.recentlyLoginTime).format('MM-dd hh:mm');
+          return <div>{transRowTieme}</div>;
         },
       },
     ];
@@ -96,19 +89,26 @@ class SecondaryAgencyRecord extends BaseComponent {
       columns.push({
         title: '操作',
         render: (data) => {
-          return <div
+          return (<div
             className={styles.rechargeBtn}
             onClick={() => self.payForMyPlayer(data.playerId)}
           >
           充值
-          </div>;
+          </div>);
         },
       });
     }
     return columns;
   }
   async componentWillMount() {
-    const res = await this.helps.webHttp.get('/spreadApi/myPlayers');
+    const { serverid } = this.helps.querystring.parse(this.props.location.search.substring(1));
+    this.serverid = serverid;
+    let res;
+    if (serverid) {
+      res = await this.helps.webHttp.get('/spreadApi/mySavePlayer', { serverid });
+    } else {
+      res = await this.helps.webHttp.get('/spreadApi/mySavePlayer');
+    }
     if (res.isSuccess) {
       this.setState({
         tableData: res.data,
@@ -116,7 +116,7 @@ class SecondaryAgencyRecord extends BaseComponent {
     }
   }
   payForMyPlayer = (playerId) => {
-    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId } }));
+    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId, serverid: this.serverid || '' } }));
   }
   onSearchInputChange = (ev) => {
     this.setState({
@@ -128,10 +128,24 @@ class SecondaryAgencyRecord extends BaseComponent {
       searchVal: '',
     });
   }
-  // 邀请玩家去玩游戏
-  invitePlayerToPlayerGame = () => {
-    // alert('请求配置，跳到游戏详情页');
-    window.location.href = 'http://www.hulema.com';
+  // 添加收藏的玩家
+  navigateToSavePlayer = () => {
+    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/savePlayer', query: { serverid: this.serverid || '' } }));
+  }
+  renderRowData = () => {
+    const { searchVal } = this.state;
+    if (searchVal) {
+      return (
+        <div style={{ margin: '0.5rem auto', textAlign: 'center' }}>
+          没有搜索到相关玩家
+        </div>
+      );
+    }
+    return (
+      <div style={{ margin: '0.5rem auto', textAlign: 'center' }}>
+        您还没有玩家哦~赶紧去<span onClick={this.navigateToSavePlayer} className="color_base">添加</span>
+      </div>
+    );
   }
   renderHeader = (columnsData) => { // dataIndex title
     const { isSort } = this.state;
@@ -191,7 +205,6 @@ class SecondaryAgencyRecord extends BaseComponent {
           }
         }
       }
-      
       // const sortType = sortTypeArr[0];
     }
     const filterTableData = sortTableData.filter((data) => {
@@ -218,11 +231,11 @@ class SecondaryAgencyRecord extends BaseComponent {
     // }));
     return (
       <div className={styles.container}>
-        <Title>我的玩家</Title>
+        <Title>我收藏的玩家</Title>
         <NavBar
-          title="我的玩家"
+          title="我收藏的玩家"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
-          right={<div onClick={this.invitePlayerToPlayerGame}>邀请</div>}
+          right={<div onClick={this.navigateToSavePlayer}>添加</div>}
         />
         <SearchBar
           placeholder="输入玩家的ID/名称"
@@ -237,6 +250,7 @@ class SecondaryAgencyRecord extends BaseComponent {
           tableData={filterTableData}
           columns={columns}
           sort={this.state.isSort}
+          ListEmptyComponent={this.renderRowData()}
         />
       </div>
     );
@@ -249,4 +263,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SecondaryAgencyRecord);
+export default connect(mapStateToProps)(MySavePlayer);

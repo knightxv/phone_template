@@ -1,31 +1,28 @@
 import { delay } from '@/helps/help';
-import gameConfig from '../config/gameInfo';
 
 const REGETVERIFYCODETIME = 60;
-
 export default {
   namespace: 'agent',
   state: {
+    // inviteCode: 0, // 邀请码
+    // masonry: 0, // 砖石
+    // rechargeOfToday: 0, // 今日充值
+    // rechargeOfYesterDay: 0, // 昨日充值
+    // canCashCount: 0, // 未提现
+    // cashCountlog: 0, // 已提现
+    // proxyid: '',
 
-    inviteCode: 0, // 邀请码
-    masonry: 0, // 砖石
-    rechargeOfToday: 0, // 今日充值
-    rechargeOfYesterDay: 0, // 昨日充值
-    canCashCount: 0, // 未提现
-    cashCountlog: 0, // 已提现
-    proxyid: '',
+    //   // 提现银行卡信息
+    // bankName: '', // 提现银行
+    // bankOfDeposit: '', // 银行开户行
+    // bankCardName: '', // 开户姓名
+    // cardNumber: '', // 卡号
+    // positionName: '', // 地区
 
-      // 提现银行卡信息
-    bankName: '', // 提现银行
-    bankOfDeposit: '', // 银行开户行
-    bankCardName: '', // 开户姓名
-    cardNumber: '', // 卡号
-    positionName: '', // 地区
+    // ranking: 999999,
+    // wechatacc: '',
 
-    ranking: 999999,
-    wechatacc: '',
-
-    getVerifyCodeElseTime: 0, // 获取验证码剩余的时间（0代表可以重新获取）
+    // getVerifyCodeElseTime: 0, // 获取验证码剩余的时间（0代表可以重新获取）
   },
   reducers: {
     authSuccess(state) {

@@ -79,7 +79,7 @@ class HomePage extends BaseComponent {
     const { notice } = this.state;
     const noticeHtml = this.helps.createMarkup(notice);
     return (
-      <div className="alignCenterContainer">
+      <div>
         <Title>合伙人</Title>
         <WingBlank className={`${styles.optionBtnWrap} borderBottom`}>
           <div className={styles.title}></div>

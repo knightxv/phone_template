@@ -7,7 +7,7 @@ import BaseComponent from '@/helps/BaseComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
 import styles from './MyPlayer.css';
 
-class SecondaryAgencyRecord extends BaseComponent {
+class MySaveAgent extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,12 +16,11 @@ class SecondaryAgencyRecord extends BaseComponent {
       searchVal: '',
       isSort: false, // 是否进行排序
     };
-    this.serchInput = null;
-    const self = this;
-
+    this.serchInput = null; // 搜索的内容
+    this.serverid = null; // 游戏id
     // 是否是正序排序
     this.sortState = {
-      masonrySurplus: {
+      palyCashCount: {
         isSortUp: false, // 是否正序排序
         isSort: false, // 是否在排序
       },
@@ -31,7 +30,6 @@ class SecondaryAgencyRecord extends BaseComponent {
       },
     };
     // this.forceUpdate();
-    this.columns = [];
   }
   // 切换排序
   toggleSort = (sortType) => {
@@ -57,58 +55,62 @@ class SecondaryAgencyRecord extends BaseComponent {
     }
     this.forceUpdate();
   }
-  powerToControllColumns = () => {
+  rechargeForAgent = (agentId) => {
+    this.props.dispatch(this.helps.routerRedux.push({
+      pathname: 'rechargeForAgent',
+      query: {
+        agentId,
+      },
+    }));
+  }
+  powerArr = () => {
     const self = this;
     const columns = [
       {
-        dataIndex: 'playerId',
-        title: '玩家',
-        render: (data) => {
-          return (<div>
-            <p>{data.playerName}</p>
-            <p style={{ color: '#999' }}>ID:{data.playerId}</p>
-          </div>);
-        },
+        dataIndex: 'agentInviteCode',
+        title: '代理ID',
       },
       {
-        dataIndex: 'masonrySurplus',
+        dataIndex: 'palyCashCount',
         title: '账户钻石',
         render(rowVal) {
-          return <div className="countNor">{rowVal.masonrySurplus}</div>;
+          return <div className="countNor">{rowVal.palyCashCount}</div>;
         },
       },
       {
-<<<<<<< HEAD
-        dataIndex: 'palyCashCount',
-        title: '玩家今日消费',
-=======
         dataIndex: 'recentlyLoginTime',
         title: '最近登录',
->>>>>>> 2.0.2
         render(rowVal) {
-          const transRowVal = self.parseFloatMoney(rowVal.palyCashCount);
-          return <div className="countAdd">{`+${transRowVal}`}</div>;
+          const transRowTieme = new Date(rowVal.recentlyLoginTime).format('MM-dd hh:mm');
+          return <div>{transRowTieme}</div>;
         },
       },
     ];
-    const hasPowerToRecharge = this.hasPower('playerSDKCharge') || this.hasPower('agentGiveForPlayer');
+    const hasPowerToRecharge = this.hasPower('iAgentGiveForAgent') || this.hasPower('iAgentGiveForAnyAgent');
     if (hasPowerToRecharge) {
       columns.push({
         title: '操作',
         render: (data) => {
-          return <div
+          return (<div
             className={styles.rechargeBtn}
-            onClick={() => self.payForMyPlayer(data.playerId)}
+            onClick={() => self.rechargeForAgent(data.agentInviteCode)}
           >
           充值
-          </div>;
+          </div>);
         },
       });
     }
     return columns;
   }
   async componentWillMount() {
-    const res = await this.helps.webHttp.get('/spreadApi/myPlayers');
+    const { serverid } = this.helps.querystring.parse(this.props.location.search.substring(1));
+    this.serverid = serverid;
+    let res;
+    if (serverid) {
+      res = await this.helps.webHttp.get('/spreadApi/mySaveAgent', { serverid });
+    } else {
+      res = await this.helps.webHttp.get('/spreadApi/mySaveAgent');
+    }
     if (res.isSuccess) {
       this.setState({
         tableData: res.data,
@@ -116,7 +118,7 @@ class SecondaryAgencyRecord extends BaseComponent {
     }
   }
   payForMyPlayer = (playerId) => {
-    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId } }));
+    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId, serverid: this.serverid || '' } }));
   }
   onSearchInputChange = (ev) => {
     this.setState({
@@ -128,10 +130,24 @@ class SecondaryAgencyRecord extends BaseComponent {
       searchVal: '',
     });
   }
-  // 邀请玩家去玩游戏
-  invitePlayerToPlayerGame = () => {
-    // alert('请求配置，跳到游戏详情页');
-    window.location.href = 'http://www.hulema.com';
+  // 添加收藏
+  navigateToSaveAgent = () => {
+    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/saveAgent', query: { serverid: this.serverid || '' } }));
+  }
+  renderRowData = () => {
+    const { searchVal } = this.state;
+    if (searchVal) {
+      return (
+        <div style={{ margin: '0.5rem auto', textAlign: 'center' }}>
+          没有搜索到相关代理
+        </div>
+      );
+    }
+    return (
+      <div style={{ margin: '0.5rem auto', textAlign: 'center' }}>
+        您还没有代理哦~赶紧去<span onClick={this.navigateToSaveAgent} className="color_base">添加</span>
+      </div>
+    );
   }
   renderHeader = (columnsData) => { // dataIndex title
     const { isSort } = this.state;
@@ -175,7 +191,7 @@ class SecondaryAgencyRecord extends BaseComponent {
   }
   render() {
     const { searchVal, tableData, isSort } = this.state;
-    const columns = this.powerToControllColumns();
+    const columns = this.powerArr();
     let sortTableData = tableData;
     if (isSort) {
       for (const attr in this.sortState) {
@@ -191,41 +207,24 @@ class SecondaryAgencyRecord extends BaseComponent {
           }
         }
       }
-      
       // const sortType = sortTypeArr[0];
     }
     const filterTableData = sortTableData.filter((data) => {
       if (!searchVal) {
         return true;
       }
-      return data.playerId.toString().indexOf(searchVal) !== -1 || data.playerName.indexOf(searchVal) !== -1;
+      return data.agentInviteCode.toString().indexOf(searchVal) !== -1;
     });
-    // const PalyCashAllCount = tableData.reduce((beforeVal, currentVal) => {
-    //   return beforeVal + currentVal.palyCashCount;
-    // }, 0);
-    // const masonrySurplusAllCount = tableData.reduce((beforeVal, currentVal) => {
-    //   return beforeVal + currentVal.masonrySurplus;
-    // }, 0);
-    // const transPalyCashCount = this.parseFloatMoney(PalyCashAllCount);
-    // const columnsRemark = [`(共${tableData.length}人)`, `(共${masonrySurplusAllCount}个)`, `(共${transPalyCashCount}元)`];
-    // const columnsAddRemark = columns.map((item, i) => ({
-    //   ...item,
-    //   remark: columnsRemark[i],
-    // }));
-    // const columnsAddRemark = columns.map(item => ({
-    //   ...item,
-    //   title: 'sdds'
-    // }));
     return (
       <div className={styles.container}>
-        <Title>我的玩家</Title>
+        <Title>我收藏的代理</Title>
         <NavBar
-          title="我的玩家"
+          title="我收藏的代理"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
-          right={<div onClick={this.invitePlayerToPlayerGame}>邀请</div>}
+          right={<div onClick={this.navigateToSaveAgent}>添加</div>}
         />
         <SearchBar
-          placeholder="输入玩家的ID/名称"
+          placeholder="输入代理的ID/名称"
           onChange={this.onSearchInputChange}
           value={searchVal}
           onCancelClick={this.onCancelClick}
@@ -237,6 +236,7 @@ class SecondaryAgencyRecord extends BaseComponent {
           tableData={filterTableData}
           columns={columns}
           sort={this.state.isSort}
+          ListEmptyComponent={this.renderRowData()}
         />
       </div>
     );
@@ -249,4 +249,28 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SecondaryAgencyRecord);
+export default connect(mapStateToProps)(MySaveAgent);
+
+
+/*
+ renderHeader={() => <span>header</span>}
+          renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
+            {this.state.isLoading ? 'Loading...' : 'Loaded'}
+          </div>)}
+          renderSectionHeader={sectionData => (
+            <div>{`Task ${sectionData.split(' ')[1]}`}</div>
+          )}
+          className="fortest"
+          style={{
+            height: document.documentElement.clientHeight * 3 / 4,
+            overflow: 'auto',
+            border: '1px solid #ddd',
+            margin: '0.1rem 0',
+          }}
+          pageSize={4}
+          onScroll={() => { console.log('scroll'); }}
+          scrollRenderAheadDistance={500}
+          scrollEventThrottle={200}
+          onEndReached={this.onEndReached}
+          onEndReachedThreshold={10}
+*/

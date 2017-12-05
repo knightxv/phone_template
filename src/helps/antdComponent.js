@@ -117,7 +117,7 @@ const DefaultNavbar = ({ title, onClick, right }) => {
           onClick && <DefaultIcon
             type="left"
             color="#108ee9"
-            size="md"
+            size="lg"
             style={{ marginLeft: '-0.4rem' }}
             onClick={onClick}
           />
@@ -206,7 +206,22 @@ const renderRow = (rowData, columns) => {
   );
 };
 
-const DefaultListView = ({ tableData, columns, ...props }) => {
+const ListViewWrapBody = (props) => {
+  if (props.children.length === 0) {
+    return (
+      <div className="am-list-body my-body" style={{ textAlign: 'center', paddingTop: '5rem' }}>
+        {props.ListEmptyComponent || '没有数据'}
+      </div>
+    );
+  }
+  return (
+    <div className="am-list-body my-body">
+      {props.children}
+    </div>
+  );
+};
+
+const DefaultListView = ({ tableData, columns, ListEmptyComponent, ...props }) => {
   return (
     <StyleListView
       dataSource={dataSource.cloneWithRows(tableData || [])}
@@ -217,6 +232,8 @@ const DefaultListView = ({ tableData, columns, ...props }) => {
       scrollRenderAheadDistance={500}
       scrollEventThrottle={200}
       onEndReachedThreshold={10}
+      style={{ background: '#fff' }}
+      renderBodyComponent={() => <ListViewWrapBody ListEmptyComponent={ListEmptyComponent} />}
       {...props}
     />
   );

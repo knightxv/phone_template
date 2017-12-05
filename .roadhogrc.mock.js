@@ -192,38 +192,7 @@ export default {
         Msg: '',
         data: {}
     },
-    /*
-        获取个人信息
-     */
-    'GET /spreadApi/getUserInfo' : {
-        status: 'success',
-        Msg: '',
-        data: {
-            saleDiamondsOfThisMonth:84651, // 本月销钻
-            myUnderAgentCount: 15, // 我的下级代理人数
-            myPlayerCount: 80, // 我的玩家人数
-            masonryIncomeToday: 0, // 今日钻石收入
-            masonryPayToday: 0, // 今日钻石支出
-            balanceIncomeToday: 0, // 今日余额收入
-            balancePayToday: 0, // 今日余额支出
-            canCashCount: 0, // 未提现（余额）
-            cashCountlog: 0, // 已提现
-            inviteCode: '223344',
-            proxyid: 2,
-            masonry: 0, // 钻书数量
-            ranking: 3,
-            powerList: ['give'],
-
-            bankCardName: null,
-            bankName: '建设银行',
-            bankOfDeposit: null,
-            cardNumber: null,
-            positionName: '',
-
-            rechargeOfToday: 0,
-            rechargeOfYesterDay: 0,
-        }
-    },
+    
     /*
 会员充值记录
 */
@@ -404,18 +373,7 @@ export default {
         data: null
     },
 
-    /*
-        通过id得到用户名
-        @query: heroID
-    */
-    'GET /spreadApi/getPlayerInfoById' : {
-        status: 'success',
-        Msg: '',
-        data: {
-            userName: '用户名',
-            avatar: '', // 头像
-        }
-    },
+   
     /*
         通过金额得到钻石
         @query : money
@@ -432,7 +390,7 @@ export default {
         @query : HeroID id
         @query : money 充值钱
         @chargeType  : --
-        @serverID: 游戏的serverId
+        @serverid: 游戏的serverid
         @query: pid: 代理id
     */
     'GET /spreadApi/recharge_for_player' : {
@@ -510,6 +468,39 @@ export default {
 
 
     /*已经添加到文档上的 */
+    /*
+        获取个人信息
+     */
+    'GET /spreadApi/getUserInfo' : {
+        status: 'success',
+        Msg: '',
+        code: 2,
+        data: {
+            saleDiamondsOfThisMonth:84651, // 本月销钻
+            myUnderAgentCount: 15, // 我的下级代理人数
+            myPlayerCount: 80, // 我的玩家人数
+            masonryIncomeToday: 0, // 今日钻石收入
+            masonryPayToday: 0, // 今日钻石支出
+            balanceIncomeToday: 0, // 今日余额收入
+            balancePayToday: 0, // 今日余额支出
+            canCashCount: 1000, // 未提现（余额）
+            cashCountlog: 0, // 已提现
+            inviteCode: '223344',
+            proxyid: 2,
+            masonry: 0, // 钻书数量
+            ranking: 3,
+            powerList: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+
+            bankCardName: null,
+            bankName: '建设银行',
+            bankOfDeposit: null,
+            cardNumber: null,
+            positionName: '',
+
+            rechargeOfToday: 0,
+            rechargeOfYesterDay: 0,
+        }
+    },
     'GET /spreadApi/getGameList': {
         "status":"success",
         "Msg":"",
@@ -519,7 +510,7 @@ export default {
                 "gameName":"当当比鸡",
                 "gameIcon":"http://120.55.57.25:8080/wresource/gameimgs/c2a6776a28324722a9ca78c6279d747c.jpg",
                 "gameNumber":15
-            }
+            },
         ]
     },
     /*
@@ -535,7 +526,14 @@ export default {
                 recentlyLoginTime: 1510307559161,
                 palyCashCount: 3430, // 玩家消费
                 masonrySurplus: 343, // 剩余钻石
-            }
+            },
+            {
+                playerName: '昵称2',
+                playerId: '172256',
+                recentlyLoginTime: 1510729414280,
+                palyCashCount: 3430, // 玩家消费
+                masonrySurplus: 34233, // 剩余钻石
+            },
         ]
     },
     /*
@@ -552,4 +550,75 @@ export default {
 
         }
     },
+    /*
+        总代理给代理充值
+    */
+    'GET /spreadApi/general/giveDiamond': {
+        status: 'success',
+        Msg: '',
+        data: {
+
+        }
+    },
+     /*
+        通过id得到用户名
+        @params: heroID
+        @params: serverid
+    */
+    'GET /spreadApi/getPlayerInfoById' : {
+        status: 'success',
+        Msg: '',
+        data: {
+            userName: '用户名',
+            avatar: '', // 头像
+        }
+    },
+    /*
+        收藏玩家
+        @params: playerId
+    */
+    'GET /spreadApi/savePlayer': {
+        status: 'success',
+        Msg: '',
+        data: {
+        	
+        }
+    },
+    /* 我收藏的玩家 */
+    'GET /spreadApi/mySavePlayer': {
+        "status":"success",
+        "Msg":"",
+        "data":[
+            {
+                "playerName":"昵称",
+                "playerId":"123456",
+                "recentlyLoginTime":1510307559161,
+                "palyCashCount":3430,
+                "masonrySurplus":343
+            }
+        ]
+    },
+     /*
+        取消收藏
+        @params: playerId
+    */
+    'GET /spreadApi/cancelSavePlayer': {
+        status: 'success',
+        Msg: '',
+        data: {
+
+        }
+    },
+    /*
+        取消收藏
+        @params: playerId
+    */
+    'GET /spreadApi/getPlatformInfo': {
+        status: 'success',
+        Msg: '',
+        data: {
+            gameName: '阿当比鸡21'
+        }
+    },
+    
 };

@@ -19,10 +19,11 @@ import { Toast } from './antdComponent';
 import * as TypeDefine from './typeDefine';
 
 // import * as ToolComponents from './styleComponent';
-import Http from './Http';
+import webHttp from './webHttp';
 import './config';
 import help from './help';
 
+<<<<<<< HEAD
 const webHttpConfig = {
   getConfigUrl: '/config',
   httpConfigKey: 'JavaWebPublicServerUrl',
@@ -61,8 +62,20 @@ const webHttpConfig = {
     window.httpConfig = httpConfig;
     return httpConfig;
   },
+=======
+const powerEnum = { // 权限配置
+  agentGiveForPlayer: 1, // 开启玩家赠送权限
+  iAgentGiveForAgent: 2, // 开启总代理为为下级代理充值权限
+  iAgentGiveForAnyAgent: 3, // 开启总代理为所有代理充值权限
+  playerSDKCharge: 4, // 开启玩家第三方充值
+  proxySDKCharge: 5, // 开启代理第三方充值
+  playerSave: 6, // 玩家收藏
+  banlance: 7, // 账户余额栏目
+  myPlayer: 8, // 我的玩家
+  myAgent: 9, // 我的代理
+  agentSave: 10, // 收藏代理功能
+>>>>>>> 2.0.2
 };
-const webHttp = new Http(webHttpConfig);
 export default class BaseComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -89,11 +102,16 @@ export default class BaseComponent extends React.Component {
     };
 
     this.TypeDefine = TypeDefine;
-
     // this.attribute = {
     //   system: help.system(),
     //   isWechat: help.isWeixinBrowser,
     // };
+  }
+  hasPower(power) {
+    const { powerList } = this.props;
+    return !!powerList && powerList.findIndex((powerItem) => {
+      return powerItem === powerEnum[power];
+    }) > -1;
   }
   parseFloatMoney = (money) => {
     return parseFloat(money / 100).toFixed(2);

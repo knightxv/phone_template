@@ -14,6 +14,7 @@ const paySource = {
 };
 
 const selectDiamondArr = [10, 100, 500];
+const defaultSelectIndex = 2;
 
 class Pay extends BaseComponent {
   constructor(props) {
@@ -21,52 +22,26 @@ class Pay extends BaseComponent {
     const searchText = this.props.location.search.substr(1);
     const query = this.helps.querystring.parse(searchText);
     const { playerId, serverid } = query;
-    const { payEnum, powerEnum } = this.helps;
+    const { payEnum } = this.helps;
+    let defaultPayEnum = payEnum.WECHAT;
+    const paySelectArr = this.power();
+    if (paySelectArr.length > 0) {
+      defaultPayEnum = paySelectArr[0].payType;
+    }
     this.state = {
-      diamond: '', // 钻石
+      diamond: selectDiamondArr[defaultSelectIndex], // 钻石
       playerName: '', // 用户名
+      // isSave: false, // 玩家是否被收藏
       playerId,
       playerNotFind: false, // 玩家是否未找到
       isChooseInput: false, // 是否选择其他数额
-      selectIndex: -1,
-      payTypeSelect: payEnum.WECHAT,
+      selectIndex: defaultSelectIndex,
+      payTypeSelect: defaultPayEnum,
     };
     this.idTimer = null;
     this.serverid = serverid; // 游戏的id
-    // if (this.helps) {
-
-    // }
-    this.paySelectArr = [
-      {
-        payTypeName: '微信支付',
-        paySource: paySource.wx,
-        payType: payEnum.WECHAT,
-      },
-      {
-        payTypeName: '支付宝支付',
-        paySource: paySource.zfb,
-        payType: payEnum.ALI,
-      },
-      {
-        payTypeName: '直接赠送',
-        paySource: paySource.give,
-        payType: payEnum.GIVE,
-      },
-    ];
-    if (this.helps.isWeixinBrowser()) {
-      this.paySelectArr = this.paySelectArr.filter((payInfo) => {
-        return payInfo.payType !== payEnum.ALI;
-      });
-    }
-    const { powerList } = this.props;
-    const hasPowerToGive = powerList && powerList.findIndex((power) => {
-      return power === powerEnum.give;
-    }) > -1;
-    if (!hasPowerToGive) {
-      this.paySelectArr = this.paySelectArr.filter((payInfo) => {
-        return payInfo.payType !== payEnum.GIVE;
-      });
-    }
+    // this.paySelectArr = [];
+    
   }
   async componentWillMount() {
     this.idValChange(this.state.playerId);
@@ -150,7 +125,7 @@ class Pay extends BaseComponent {
         const { userName } = res.data;
         this.setState({
           playerName: userName,
-          playerNotFind: false,
+          playerNotFind: !userName,
         });
       } else {
         this.setState({
@@ -198,11 +173,63 @@ class Pay extends BaseComponent {
       payTypeSelect: payType,
     });
   }
+  // saveOption = async () => {
+  //   const { isSave, playerId } = this.state;
+  //   if (!playerId) {
+  //     return;
+  //   }
+  //   let res;
+  //   if (isSave) {
+  //     res = await this.helps.webHttp.get('/spreadApi/cancelSavePlayer', { heroID: playerId, serverid: this.serverid });
+  //   } else {
+  //     res = await this.helps.webHttp.get('/spreadApi/savePlayer', { heroID: playerId, serverid: this.serverid });
+  //   }
+  //   if (res.isSuccess) {
+  //     this.setState({
+  //       isSave: !isSave,
+  //     });
+  //   } else {
+  //     this.helps.toast(res.info);
+  //   }
+  // }
+  power = () => {
+    const paySelectArr = [];
+    const { payEnum } = this.helps;
+    const havePowerToRechargePlayer = this.hasPower('playerSDKCharge');
+    if (havePowerToRechargePlayer) {
+      paySelectArr.push({
+        payTypeName: '微信支付',
+        paySource: paySource.wx,
+        payType: payEnum.WECHAT,
+      });
+      // 如果不是在微信，可以有支付宝支付
+      if (!this.helps.isWeixinBrowser()) {
+        paySelectArr.push({
+          payTypeName: '支付宝支付',
+          paySource: paySource.zfb,
+          payType: payEnum.ALI,
+        });
+      }
+    }
+    const hasPowerToGive = this.hasPower('agentGiveForPlayer');
+    // 如果有赠送的权限
+    if (hasPowerToGive) {
+      paySelectArr.push({
+        payTypeName: '直接赠送',
+        paySource: paySource.give,
+        payType: payEnum.GIVE,
+      });
+    }
+    return paySelectArr;
+  }
   render() {
-    const { playerName, diamond, playerNotFind, isChooseInput, selectIndex, payTypeSelect, playerId } = this.state;
+    const { playerName, diamond, playerNotFind,
+      isChooseInput, selectIndex, payTypeSelect, playerId,
+    } = this.state;
     const { payEnum } = this.helps;
     const money = (!isNaN(diamond) && payTypeSelect !== payEnum.GIVE) ? diamond * 10 : 0;
     const moneyFloat = this.parseFloatMoney(money);
+    const paySelectArr = this.power(); //  为了处理双击刷新问题
     return (
       <div>
         <Title>给玩家充值</Title>
@@ -211,7 +238,14 @@ class Pay extends BaseComponent {
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
         />
         <div className={styles.playerInputWrap}>
-          <InputItem onChange={this.idValChange} value={playerId} type="number" maxLength={8} placeholder="请输入ID/推广码" />
+          <InputItem
+          	disabled={true}
+            onChange={this.idValChange}
+            value={playerId}
+            type="number"
+            maxLength={8}
+            placeholder="请输入ID/推广码"
+          /> 
           {
             playerNotFind
             ? (<div className={styles.playerNotFind}>玩家ID不存在</div>)
@@ -262,7 +296,7 @@ class Pay extends BaseComponent {
         <WhiteSpace />
         <div className={styles.payTypeTitle}>支付方式</div>
         {
-          this.paySelectArr.map(payInfo => (
+          paySelectArr.map(payInfo => (
             <div
               key={payInfo.payType}
               className={styles.paySelectItem}

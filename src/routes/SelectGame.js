@@ -15,6 +15,9 @@ class SelectGame extends BaseComponent {
     };
   }
   async componentWillMount() {
+    // alert(window.devicePixelRatio)
+    // alert(window.devicePixelRatio * document.documentElement.offsetWidth)
+    // alert(window.getComputedStyle(document.documentElement)['font-size'])
     const res = await this.helps.webHttp.get('/spreadApi/getGameList');
     if (res.isSuccess) {
       this.setState({
@@ -24,8 +27,9 @@ class SelectGame extends BaseComponent {
   }
   // 选择游戏跳转
   selectGame = (serverid) => {
+    const { redirect } = this.helps.querystring.parse(this.props.location.search.substring(1));
     this.props.dispatch(this.helps.routerRedux.push({
-      pathname: '/MyPlayer',
+      pathname: redirect,
       query: {
         serverid,
       },

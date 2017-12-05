@@ -7,8 +7,10 @@ import Promise from 'promise';
 // import { useRouterHistory } from 'dva/router';
 // import { createHashHistory } from 'history';
 
+import './helps/rem';
+
 import './assets/css/global.css';
-import './index.css';
+// import './index.css';
 import './assets/css/normal.css';
 
 // 判断是否兼容此浏览器
@@ -17,6 +19,7 @@ window.Promise = Promise;
 // if(!window.Promise) {
 //   document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
 // }
+
 // 1. Initialize
 const app = dva({
     // history: browserHistory,
@@ -24,10 +27,12 @@ const app = dva({
   extraEnhancers: [autoRehydrate({
     log: false,
     stateReconciler: (defaultStore, newStore) => {
+    //   console.log(defaultStore)
+    //   console.log(newStore)
       return {
-        ...defaultStore,
+    //     ...defaultStore,
         ...newStore,
-        routing: {}, // 去掉routing，不然会自动跳到跳出页面的路由
+    //     routing: {}, // 去掉routing，不然会自动跳到跳出页面的路由
       };
     },
   },

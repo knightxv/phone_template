@@ -1,3 +1,6 @@
+html, body {
+    height: 100%;
+}
 body {
     font-family: '微软雅黑','Microsoft Yahei','hiragino sans gb w3','Arial';
     /* font-size: .24rem; */
@@ -76,6 +79,10 @@ body {
     width: 100%;
     max-width: 750px;
     margin: 0 auto;
+}
+
+:global(.color_base) {
+    color: #78bff2;
 }
 
 :global(.countAdd) {
