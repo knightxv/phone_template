@@ -44,7 +44,7 @@ class Login extends BaseComponent {
         <Title>合伙人登陆</Title>
         <div className="contentContainer">
           <div className={styles.logoWrap}>
-            <NetImg className={styles.logo} src={iconLogo} />
+            { iconLogo && <NetImg className={styles.logo} src={iconLogo} /> }
             <span className={styles.logoTitle}>{gameName}合伙人</span>
           </div>
           <div>

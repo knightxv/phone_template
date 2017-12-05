@@ -69,7 +69,7 @@ class Login extends BaseComponent {
         </Helmet>
         <div className={styles.contentContainer}>
           <div className={styles.logoWrap}>
-            <IconImg className={styles.logo} src={iconLogo} />
+            { iconLogo && <IconImg className={styles.logo} src={iconLogo} />}
             <span className={styles.logoTitle}>{gameName}</span>
           </div>
           <div>
