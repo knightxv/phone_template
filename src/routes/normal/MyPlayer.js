@@ -131,7 +131,14 @@ class SecondaryAgencyRecord extends BaseComponent {
   // 邀请玩家去玩游戏
   invitePlayerToPlayerGame = () => {
     // alert('请求配置，跳到游戏详情页');
+<<<<<<< HEAD
     window.location.href = 'http://www.hulema.com';
+=======
+    const { invitePlayLink } = this.props;
+    if (invitePlayLink) {
+      window.location.href = invitePlayLink;
+    }
+>>>>>>> v2.0.3
   }
   renderHeader = (columnsData) => { // dataIndex title
     const { isSort } = this.state;
@@ -176,6 +183,7 @@ class SecondaryAgencyRecord extends BaseComponent {
   render() {
     const { searchVal, tableData, isSort } = this.state;
     const columns = this.powerToControllColumns();
+    const { invitePlayLink } = this.props;
     let sortTableData = tableData;
     if (isSort) {
       for (const attr in this.sortState) {
@@ -222,7 +230,9 @@ class SecondaryAgencyRecord extends BaseComponent {
         <NavBar
           title="我的玩家"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
-          right={<div onClick={this.invitePlayerToPlayerGame}>邀请</div>}
+          right={<div onClick={this.invitePlayerToPlayerGame}>
+            { invitePlayLink && '邀请' }
+          </div>}
         />
         <SearchBar
           placeholder="输入玩家的ID/名称"
@@ -246,6 +256,7 @@ class SecondaryAgencyRecord extends BaseComponent {
 function mapStateToProps(state) {
   return {
     ...state.agent,
+    ...state.app,
   };
 }
 

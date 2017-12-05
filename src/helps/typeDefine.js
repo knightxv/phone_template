@@ -34,4 +34,5 @@ export const htmlTextType = {
   page_prizeExplain: 1, // 奖励页面
   notice_normalAgency: 2, // 代理公告
   notice_generalManage: 3, // 总代理公告
+  agreen_page: 4, // 推广协议
 };

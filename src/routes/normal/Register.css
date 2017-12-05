@@ -19,7 +19,7 @@
 .agreenLabel {
     font-size: 0.24rem;
     color: #333;
-    line-height: 1rem;
+    padding-bottom: .2rem;
 }
 .agreenLink {
     color: #1e7df1;
@@ -40,5 +40,5 @@
 }
 
 .registerWrap {
-    padding: 0 0.4rem;
+    padding: .3rem 0.4rem 0;
 }

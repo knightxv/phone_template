@@ -3,9 +3,9 @@ import { connect } from 'dva';
 import styles from './login.css';
 import BaseComponent from '../../helps/BaseComponent';
 import { Input, Button } from '../../helps/antdComponent';
-import { Title, IconImg, WhiteSpace, FlexRow } from '../../helps/styleComponent';
+import { Title, NetImg, WhiteSpace, FlexRow } from '../../helps/styleComponent';
 
-const logoSource = require('../../assets/adang_logo.png');
+// const logoSource = require('../../assets/adang_logo.png');
 
 class Login extends BaseComponent {
   constructor(props) {
@@ -38,13 +38,13 @@ class Login extends BaseComponent {
   }
   render() {
     const { loginLoading } = this.state;
-    const { gameName } = this.props;
+    const { gameName, iconLogo } = this.props;
     return (
       <div>
         <Title>合伙人登陆</Title>
         <div className="contentContainer">
           <div className={styles.logoWrap}>
-            <IconImg className={styles.logo} src={logoSource} />
+            { iconLogo && <NetImg className={styles.logo} src={iconLogo} /> }
             <span className={styles.logoTitle}>{gameName}合伙人</span>
           </div>
           <div>

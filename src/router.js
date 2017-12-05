@@ -33,6 +33,7 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/normal/InviteToAgent'),
     models: () => [
       import('./models/agent'),
+      import('./models/app'),
     ],
   });
   const Pay = dynamic({
@@ -89,6 +90,7 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/normal/MyPlayer'),
     models: () => [
       import('./models/agent'),
+      import('./models/app'),
     ],
   });
   const EditAgencyPsd = dynamic({
@@ -103,6 +105,7 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/normal/Register'),
     models: () => [
       import('./models/agent'),
+      import('./models/app'),
     ],
   });
   const AgreenDetail = dynamic({

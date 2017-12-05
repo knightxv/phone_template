@@ -5,16 +5,14 @@ export default {
   namespace: 'app',
   state: {
     gameName: '',
+    companyName: '', // 公司名字
+    iconLogo: '', // logo图片地址
+    invitePlayLink: '', // 邀请玩家链接
+    inviteAgentBg: '', // 邀请代理图片地址
     // loginID: '',
     // password: '',
   },
   reducers: {
-    setGameName(state, { payload }) {
-      return {
-        ...state,
-        ...payload,
-      };
-    },
     updateAppInfo(state, { payload }) {
       return {
         ...state,
@@ -29,7 +27,7 @@ export default {
         webHttp.get('/spreadApi/getPlatformInfo').then((res) => {
           const gameConfig = res.data;
           dispatch({
-            type: 'setGameName',
+            type: 'updateAppInfo',
             payload: {
               ...gameConfig,
               // ...gameConfig.bobing,
