@@ -78,13 +78,8 @@ class SecondaryAgencyRecord extends BaseComponent {
         },
       },
       {
-<<<<<<< HEAD
         dataIndex: 'palyCashCount',
         title: '玩家今日消费',
-=======
-        dataIndex: 'recentlyLoginTime',
-        title: '最近登录',
->>>>>>> 2.0.2
         render(rowVal) {
           const transRowVal = self.parseFloatMoney(rowVal.palyCashCount);
           return <div className="countAdd">{`+${transRowVal}`}</div>;
