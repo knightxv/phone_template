@@ -178,28 +178,6 @@ class HomePage extends BaseComponent {
             <p>邀请码：{inviteCode}</p>
           </div>
         </FlexRow>
-<<<<<<< HEAD
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
-            <span>我的下级代理</span>
-          </FlexRow>
-          <FlexRow className={styles.titleWrap}>
-            <p>{myUnderAgentCount}人</p>
-            <Icon type="right" />
-          </FlexRow>
-        </FlexRowBetweenWingSpace>
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/MyPlayer')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
-            <span>我的玩家</span>
-          </FlexRow>
-          <FlexRow className={styles.titleWrap}>
-            <p>{myPlayerCount}人</p>
-            <Icon type="right" />
-          </FlexRow>
-        </FlexRowBetweenWingSpace>
-=======
         {/* 我的代理功能 */}
         {
           hasPowerToUnderAgent &&
@@ -256,7 +234,6 @@ class HomePage extends BaseComponent {
           </FlexRowBetweenWingSpace>
         }
         
->>>>>>> 2.0.2
       </div>
       <WhiteSpace />
       <div className={styles.module}>
