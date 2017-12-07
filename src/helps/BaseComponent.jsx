@@ -46,6 +46,8 @@ export default class BaseComponent extends React.Component {
       }
       return routerRedux.push(obj);
     };
+
+    // 工具
     this.helps = {
       webHttp,
       fetch,
@@ -61,6 +63,29 @@ export default class BaseComponent extends React.Component {
     };
 
     this.TypeDefine = TypeDefine;
+
+    // 提供路由服务（对help的扩展，专门针对路由管理）
+    const self = this;
+    this.router = {
+      getQuery() {
+        const searchText = self.props.location.search.substr(1);
+        const query = querystring.parse(searchText);
+        return query;
+      },
+      go(path, query) {
+        if (!query) {
+          self.props.dispatch(routerRedux.push(path));
+          return;
+        }
+        const isObj = Object.prototype.toString.call(query) === '[object Object]';
+        if (isObj) {
+          self.props.dispatch(routerRedux.push({
+            pathName: path,
+            search: querystring.stringify(query),
+          }));
+        }
+      },
+    };
     // this.attribute = {
     //   system: help.system(),
     //   isWechat: help.isWeixinBrowser,
