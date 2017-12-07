@@ -126,14 +126,10 @@ class SecondaryAgencyRecord extends BaseComponent {
   // 邀请玩家去玩游戏
   invitePlayerToPlayerGame = () => {
     // alert('请求配置，跳到游戏详情页');
-<<<<<<< HEAD
-    window.location.href = 'http://www.hulema.com';
-=======
     const { invitePlayLink } = this.props;
     if (invitePlayLink) {
       window.location.href = invitePlayLink;
     }
->>>>>>> v2.0.3
   }
   renderHeader = (columnsData) => { // dataIndex title
     const { isSort } = this.state;
