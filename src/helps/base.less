@@ -1,3 +1,6 @@
+@bgColor: rgb(242, 242, 242);
+@gray: #b8b8b8;
+@borderColor: #eee;
 
 .flexRow(@justify: flex-start) {
     display: flex;
@@ -11,4 +14,12 @@
     padding-right: 0.2rem;
     background: #fff;
 }
-
+.borTop() {
+    border-top: 1px solid @borderColor;
+}
+.borRig() {
+    border-right: 1px solid @borderColor;
+}
+.borBot() {
+    border-bottom: 1px solid @borderColor;
+}

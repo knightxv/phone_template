@@ -10,8 +10,8 @@ import 'antd/lib/table/style/css';
 import Select from 'antd/lib/select';
 import 'antd/lib/select/style/css';
 
-import Button from 'antd/lib/button';
-import 'antd/lib/button/style/css';
+// import Button from 'antd/lib/button';
+// import 'antd/lib/button/style/css';
 
 import Input from 'antd/lib/input/Input';
 import 'antd/lib/input/style/css';
@@ -23,7 +23,7 @@ import 'antd/lib/col/style/css';
 
 import styled from 'styled-components';
 
-import { Icon, Toast, NoticeBar, Picker, List, ListView, InputItem, DatePicker } from 'antd-mobile';
+import { Icon, Toast, NoticeBar, Picker, List, ListView, InputItem, DatePicker, Button } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
 import '../assets/css/antdSelf.css';
 // import DatePicker from 'antd/lib/date-picker';
@@ -33,7 +33,7 @@ import '../assets/css/antdSelf.css';
 
 const DefaultButton = (props) => {
   return (
-    <Button type="primary" size="large" {...props} />
+    <Button type="primary" size="small" {...props} />
   );
 };
 
@@ -109,9 +109,9 @@ const NavBarSideWrap = styled.div`
   justify-content: center;
 `;
 
-const DefaultNavbar = ({ title, onClick, right }) => {
+const DefaultNavbar = ({ title, onClick, right, className }) => {
   return (
-    <NavBarWrap>
+    <NavBarWrap className={className}>
       <NavBarSideWrap>
         {
           onClick && <DefaultIcon
@@ -209,7 +209,7 @@ const renderRow = (rowData, columns) => {
 const ListViewWrapBody = (props) => {
   if (props.children.length === 0) {
     return (
-      <div className="am-list-body my-body" style={{ textAlign: 'center', paddingTop: '5rem' }}>
+      <div className="am-list-body my-body" style={{ textAlign: 'center', paddingTop: '5rem', background: 'rgb(242, 242, 242)' }}>
         {props.ListEmptyComponent || '没有数据'}
       </div>
     );
@@ -225,14 +225,13 @@ const DefaultListView = ({ tableData, columns, ListEmptyComponent, ...props }) =
   return (
     <StyleListView
       dataSource={dataSource.cloneWithRows(tableData || [])}
-      renderRow={(rowData) => renderRow(rowData, columns)}
-      contentContainerStyle={{ background: '#fff' }}
+      renderRow={rowData => renderRow(rowData, columns)}
       initialListSize={15}
       pageSize={1}
       scrollRenderAheadDistance={500}
       scrollEventThrottle={200}
       onEndReachedThreshold={10}
-      style={{ background: '#fff' }}
+      style={{ background: '#f2f2f2' }}
       renderBodyComponent={() => <ListViewWrapBody ListEmptyComponent={ListEmptyComponent} />}
       {...props}
     />

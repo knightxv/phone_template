@@ -35,7 +35,6 @@ class NoticeDetail extends BaseComponent {
         />
         <WhiteSpace />
         <div style={{ padding: '.2rem', background: '#fff' }}>
-          <div style={{ lineHeight: '.4rem' }}>代理公告通知:</div>
           <div dangerouslySetInnerHTML={noticeHtml} style={{ wordWrap: 'break-word', wordBreak: 'break-all' }} />
         </div>
       </div>

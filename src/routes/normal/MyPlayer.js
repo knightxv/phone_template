@@ -103,7 +103,8 @@ class SecondaryAgencyRecord extends BaseComponent {
     return columns;
   }
   async componentWillMount() {
-    const res = await this.helps.webHttp.get('/spreadApi/myPlayers');
+    const { serverid } = this.router.getQuery();
+    const res = await this.helps.webHttp.get('/spreadApi/myPlayers', { serverid });
     if (res.isSuccess) {
       this.setState({
         tableData: res.data,
@@ -111,7 +112,8 @@ class SecondaryAgencyRecord extends BaseComponent {
     }
   }
   payForMyPlayer = (playerId) => {
-    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId } }));
+    const { serverid } = this.router.getQuery();
+    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId, serverid } }));
   }
   onSearchInputChange = (ev) => {
     this.setState({

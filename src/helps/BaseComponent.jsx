@@ -25,7 +25,7 @@ import help from './help';
 
 const powerEnum = { // 权限配置
   agentGiveForPlayer: 1, // 开启玩家赠送权限
-  iAgentGiveForAgent: 2, // 开启总代理为为下级代理充值权限
+  iAgentGiveForAgent: 2, // 开启总代理为下级代理充值权限
   iAgentGiveForAnyAgent: 3, // 开启总代理为所有代理充值权限
   playerSDKCharge: 4, // 开启玩家第三方充值
   proxySDKCharge: 5, // 开启代理第三方充值
@@ -34,6 +34,7 @@ const powerEnum = { // 权限配置
   myPlayer: 8, // 我的玩家
   myAgent: 9, // 我的代理
   agentSave: 10, // 收藏代理功能
+  iAgentGiveForUnderAgent: 12, // 我的下级代理（囤卡模式）
 };
 export default class BaseComponent extends React.Component {
   constructor(props) {
@@ -94,7 +95,7 @@ export default class BaseComponent extends React.Component {
   hasPower(power) {
     const { powerList } = this.props;
     return !!powerList && powerList.findIndex((powerItem) => {
-      return powerItem === powerEnum[power];
+      return +powerItem === powerEnum[power];
     }) > -1;
   }
   parseFloatMoney = (money) => {

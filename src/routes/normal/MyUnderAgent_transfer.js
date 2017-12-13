@@ -7,7 +7,7 @@ import BaseComponent from '@/helps/BaseComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
 import styles from './MyPlayer.css';
 
-class MySaveAgent extends BaseComponent {
+class MySavePlayer extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +20,7 @@ class MySaveAgent extends BaseComponent {
     this.serverid = null; // 游戏id
     // 是否是正序排序
     this.sortState = {
-      palyCashCount: {
+      masonrySurplus: {
         isSortUp: false, // 是否正序排序
         isSort: false, // 是否在排序
       },
@@ -34,10 +34,12 @@ class MySaveAgent extends BaseComponent {
   // 切换排序
   toggleSort = (sortType) => {
     if (!this.state.isSort) {
-      this.sortState[sortType].isSort = true;
-      this.setState({
-        isSort: true,
-      });
+      if (this.sortState[sortType]) {
+        this.sortState[sortType].isSort = true;
+        this.setState({
+          isSort: true,
+        });
+      }
       return false;
     }
     for (const attr in this.sortState) {
@@ -55,15 +57,7 @@ class MySaveAgent extends BaseComponent {
     }
     this.forceUpdate();
   }
-  rechargeForAgent = (agentId) => {
-    this.props.dispatch(this.helps.routerRedux.push({
-      pathname: 'rechargeForAgent',
-      query: {
-        agentId,
-      },
-    }));
-  }
-  powerArr = () => {
+  powerToControllColumns = () => {
     const self = this;
     const columns = [
       {
@@ -102,14 +96,23 @@ class MySaveAgent extends BaseComponent {
     }
     return columns;
   }
+  rechargeForAgent = (agentId) => {
+    this.props.dispatch(this.helps.routerRedux.push({
+      pathname: 'rechargeForAgent',
+      query: {
+        agentId,
+      },
+    }));
+  }
   async componentWillMount() {
     const { serverid } = this.helps.querystring.parse(this.props.location.search.substring(1));
     this.serverid = serverid;
     let res;
+    // const hasPowerToiAgentGiveForAnyAgent
     if (serverid) {
-      res = await this.helps.webHttp.get('/spreadApi/mySaveAgent', { serverid });
+      res = await this.helps.webHttp.get('/spreadApi/transfer/myUnderAgents', { serverid });
     } else {
-      res = await this.helps.webHttp.get('/spreadApi/mySaveAgent');
+      res = await this.helps.webHttp.get('/spreadApi/transfer/myUnderAgents');
     }
     if (res.isSuccess) {
       this.setState({
@@ -130,10 +133,6 @@ class MySaveAgent extends BaseComponent {
       searchVal: '',
     });
   }
-  // 添加收藏
-  navigateToSaveAgent = () => {
-    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/saveAgent', query: { serverid: this.serverid || '' } }));
-  }
   renderRowData = () => {
     const { searchVal } = this.state;
     if (searchVal) {
@@ -145,7 +144,7 @@ class MySaveAgent extends BaseComponent {
     }
     return (
       <div style={{ margin: '0.5rem auto', textAlign: 'center' }}>
-        您还没有代理哦~赶紧去<span onClick={this.navigateToSaveAgent} className="color_base">添加</span>
+        您还没有代理哦~
       </div>
     );
   }
@@ -191,7 +190,7 @@ class MySaveAgent extends BaseComponent {
   }
   render() {
     const { searchVal, tableData, isSort } = this.state;
-    const columns = this.powerArr();
+    const columns = this.powerToControllColumns();
     let sortTableData = tableData;
     if (isSort) {
       for (const attr in this.sortState) {
@@ -213,18 +212,33 @@ class MySaveAgent extends BaseComponent {
       if (!searchVal) {
         return true;
       }
-      return data.agentInviteCode.toString().indexOf(searchVal) !== -1;
+      return data.playerId.toString().indexOf(searchVal) !== -1 || data.playerName.indexOf(searchVal) !== -1;
     });
+    // const PalyCashAllCount = tableData.reduce((beforeVal, currentVal) => {
+    //   return beforeVal + currentVal.palyCashCount;
+    // }, 0);
+    // const masonrySurplusAllCount = tableData.reduce((beforeVal, currentVal) => {
+    //   return beforeVal + currentVal.masonrySurplus;
+    // }, 0);
+    // const transPalyCashCount = this.parseFloatMoney(PalyCashAllCount);
+    // const columnsRemark = [`(共${tableData.length}人)`, `(共${masonrySurplusAllCount}个)`, `(共${transPalyCashCount}元)`];
+    // const columnsAddRemark = columns.map((item, i) => ({
+    //   ...item,
+    //   remark: columnsRemark[i],
+    // }));
+    // const columnsAddRemark = columns.map(item => ({
+    //   ...item,
+    //   title: 'sdds'
+    // }));
     return (
       <div className={styles.container}>
-        <Title>给代理转钻</Title>
+        <Title>给下级代理转钻</Title>
         <NavBar
-          title="给代理转钻"
+          title="给下级代理转钻"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
-          right={<div onClick={this.navigateToSaveAgent}>添加</div>}
         />
         <SearchBar
-          placeholder="输入代理的ID/名称"
+          placeholder="输入玩家的ID/名称"
           onChange={this.onSearchInputChange}
           value={searchVal}
           onCancelClick={this.onCancelClick}
@@ -249,28 +263,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(MySaveAgent);
-
-
-/*
- renderHeader={() => <span>header</span>}
-          renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
-            {this.state.isLoading ? 'Loading...' : 'Loaded'}
-          </div>)}
-          renderSectionHeader={sectionData => (
-            <div>{`Task ${sectionData.split(' ')[1]}`}</div>
-          )}
-          className="fortest"
-          style={{
-            height: document.documentElement.clientHeight * 3 / 4,
-            overflow: 'auto',
-            border: '1px solid #ddd',
-            margin: '0.1rem 0',
-          }}
-          pageSize={4}
-          onScroll={() => { console.log('scroll'); }}
-          scrollRenderAheadDistance={500}
-          scrollEventThrottle={200}
-          onEndReached={this.onEndReached}
-          onEndReachedThreshold={10}
-*/
+export default connect(mapStateToProps)(MySavePlayer);

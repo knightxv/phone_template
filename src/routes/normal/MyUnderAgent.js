@@ -83,7 +83,7 @@ class MyUnderAgent extends BaseComponent {
       },
       {
         dataIndex: 'CommissionOfAll',
-        title: '总提成钻石数',
+        title: '总钻石提成',
         render(rowVal) {
           if (rowVal.CommissionOfAll >= 0) {
             return <div className="countAdd">{`+${rowVal.CommissionOfAll}`}</div>;
@@ -93,7 +93,7 @@ class MyUnderAgent extends BaseComponent {
       },
       {
         dataIndex: 'CommissionOfToday',
-        title: '今日提成钻石数',
+        title: '今日钻石提成',
         render(rowVal) {
           if (rowVal.CommissionOfToday >= 0) {
             return <div className="countAdd">{`+${rowVal.CommissionOfToday}`}</div>;

@@ -19,9 +19,7 @@ const defaultSelectIndex = 2;
 class Pay extends BaseComponent {
   constructor(props) {
     super(props);
-    const searchText = this.props.location.search.substr(1);
-    const query = this.helps.querystring.parse(searchText);
-    const { playerId, serverid } = query;
+    const { playerId, serverid } = this.router.getQuery();
     const { payEnum } = this.helps;
     let defaultPayEnum = payEnum.WECHAT;
     const paySelectArr = this.power();
@@ -68,10 +66,6 @@ class Pay extends BaseComponent {
   recharge = async () => {
     // HeroID 玩家ID Diamond充值数量  TimeTick 充值时间
     const { diamond, playerId, playerNotFind } = this.state;
-    // if (!this.serverid) {
-    //   this.helps.toast('请返回选择游戏');
-    //   return;
-    // }
     if (!playerId || playerId.length < 6 || playerNotFind) {
       this.helps.toast('玩家不存在');
       return;
@@ -95,7 +89,7 @@ class Pay extends BaseComponent {
       HeroID: playerId,
       money: moneyFloat,
       chargeType,
-      // serverid: this.serverid,
+      serverid: this.serverid,
     };
     const res = await this.helps.webHttp.get('/spreadApi/recharge_for_player', params);
     if (!res.isSuccess) {
@@ -131,7 +125,6 @@ class Pay extends BaseComponent {
         this.setState({
           playerNotFind: true,
         });
-        this.helps.toast(res.info);
       }
     }, 500);
   }

@@ -20,21 +20,27 @@ class AgencyPay extends BaseComponent {
     super(props);
     this.payEnum = this.helps.payEnum;
     const { WECHAT, ALI, BALANCE } = this.payEnum;
+    this.marsonryPayType = [
+      // { payType: WECHAT, label: '微信支付', paySource: paySource.wx },
+      // { payType: ALI, label: '支付宝支付', paySource: paySource.zfb },
+      // { payType: BALANCE, label: '余额支付', paySource: paySource.yezf },
+    ];
+    // 如果有余额支付权限
+    const havePowerToBanlance = this.hasPower('banlance');
+    const havePowerToRecharge = this.hasPower('proxySDKCharge');
+    if (havePowerToRecharge) {
+      if (!this.helps.isWeixinBrowser()) {
+        this.marsonryPayType.push({ payType: ALI, label: '支付宝支付', paySource: paySource.zfb });
+      }
+      this.marsonryPayType.push({ payType: WECHAT, label: '微信支付', paySource: paySource.wx });
+    }
+    if (havePowerToBanlance) {
+      this.marsonryPayType.push({ payType: BALANCE, label: '余额支付', paySource: paySource.yezf });
+    }
     this.state = {
       goods: [],
-      payTypeSelect: WECHAT,
+      payTypeSelect: this.marsonryPayType[0].payType,
     };
-    this.marsonryPayType = [
-      { payType: WECHAT, label: '微信支付', paySource: paySource.wx },
-      { payType: ALI, label: '支付宝支付', paySource: paySource.zfb },
-      { payType: BALANCE, label: '余额支付', paySource: paySource.yezf },
-    ];
-    if (this.helps.isWeixinBrowser()) {
-      this.marsonryPayType = [
-        { payType: WECHAT, label: '微信支付', paySource: paySource.wx },
-        { payType: BALANCE, label: '余额支付', paySource: paySource.yezf },
-      ];
-    }
   }
   async componentWillMount() {
     const res = await this.helps.webHttp.get('/spreadApi/getMasonryGoods');
