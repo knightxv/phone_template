@@ -200,7 +200,6 @@ class AgencyExtractMoney extends BaseComponent {
           <Button
             className={styles.cashBtn}
             onClick={this.cashMoeny}
-            size="large"
           >
           确认提取
           </Button>

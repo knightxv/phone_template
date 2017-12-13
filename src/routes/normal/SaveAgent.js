@@ -97,7 +97,7 @@ class SaveAgent extends BaseComponent {
           playerInfo &&
           <div className={styles.rowItem}>
             <div>{playerInfo.agentInviteCode}</div>
-            <Button size="default" onClick={this.toggleSave}>{playerInfo.isSave ? '取消收藏' : '收藏'}</Button>
+            <Button className={styles.cancelBtn} size="small" onClick={this.toggleSave}>{playerInfo.isSave ? '取消收藏' : '收藏'}</Button>
           </div>
         }
         {

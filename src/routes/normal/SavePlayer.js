@@ -97,7 +97,7 @@ class SavePlayer extends BaseComponent {
           playerInfo &&
             <div className={styles.rowItem}>
               <div>{playerInfo.userName}</div>
-              <Button size="default" onClick={this.toggleSave}>{playerInfo.isSave ? '取消收藏' : '收藏'}</Button>
+              <Button size="small" className={styles.cancelBtn} onClick={this.toggleSave}>{playerInfo.isSave ? '取消收藏' : '收藏'}</Button>
             </div>
         }
         {

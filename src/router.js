@@ -85,6 +85,13 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
+  const MyUnderAgent_transfer = dynamic({
+    app,
+    component: () => import('./routes/normal/MyUnderAgent_transfer'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
   const MyPlayer = dynamic({
     app,
     component: () => import('./routes/normal/MyPlayer'),
@@ -153,6 +160,13 @@ function RouterConfig({ history, app }) {
   const SavePlayer = dynamic({
     app,
     component: () => import('./routes/normal/SavePlayer'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
+  const CashChangeRecord = dynamic({
+    app,
+    component: () => import('./routes/normal/CashChangeRecord'),
     models: () => [
       import('./models/agent'),
     ],
@@ -236,11 +250,18 @@ function RouterConfig({ history, app }) {
       import('./models/general'),
     ],
   });
+  // /*  充值中心 */
+  // const Exchange = dynamic({
+  //   app,
+  //   component: () => import('./routes/exchange/index'),
+  // });
+
   // 公用
   const NoticeDetail = dynamic({
     app,
     component: () => import('./routes/NoticeDetail'),
   });
+  
   return (
     <div id="container" className="routerContainer">
       <Router history={history}>
@@ -266,10 +287,12 @@ function RouterConfig({ history, app }) {
           <Route path="/masonryDerail" component={MasonryDerail} />
           <Route path="/selectGame" component={SelectGame} />
           <Route path="/rechargeForAgent" component={RechargeForAgent} />
-          <Route path="/mySaveAgent" component={MySaveAgent} />
           <Route path="/mySavePlayer" component={MySavePlayer} />
           <Route path="/savePlayer" component={SavePlayer} />
+          <Route path="/cashChangeRecord" component={CashChangeRecord} />
           <Route path="/saveAgent" component={SaveAgent} />
+          <Route path="/mySaveAgent" component={MySaveAgent} />
+          <Route path="/myUnderAgent_transfer" component={MyUnderAgent_transfer} />
 
           <Route path="/general/login" component={GeneralLogin} />
           <Route path="/general/homePage" component={GeneralHomePage} />
@@ -281,6 +304,7 @@ function RouterConfig({ history, app }) {
           <Route path="/general/commissionRecord" component={CommissionRecord} />
 
           <Route path="/noticeDetail" component={NoticeDetail} />
+          {/* <Route path="/exchange" component={Exchange} /> */}
         </Switch>
       </Router>
     </div>

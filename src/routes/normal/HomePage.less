@@ -1,3 +1,4 @@
+@import '../../helps/base.less';
 
 .module {
     background: #fff;
@@ -16,6 +17,7 @@
 }
 
 .userInfoWrap {
+    color: #fff;
     height: 1.4rem;
     border-bottom: 1px solid #eee;
 }
@@ -39,16 +41,17 @@
 .titleWrap {
     height: .7rem;
     line-height: .7rem;
+    color: #fff;
 }
 .navigateTitleWrap {
     height: .82rem;
     line-height: .82rem;
 }
 
-.colorBlue {
+/* .rankColor {
     color: #1e7df1;
     padding-left: .1rem;
-}
+} */
 
 .userAvatar {
     margin: 0 .2rem;
@@ -112,10 +115,50 @@
 }
 
 .saleDiamondsOfThisMonthLabel {
-    color: #333;
+    color: #fff;
     font-size: 0.32rem;
 }
 
 .saleDiamondsLabel {
-    color: #ff9500;
+    color: #fff;
+}
+
+
+.btnWrap {
+    padding: 0 .2rem;
+    margin-top: .2rem;
+}
+.optionEditBtn {
+    width: 100%;
+    padding: 0 .2rem;
+}
+.optionQuitBtn {
+    background: red;
+    color: #fff;
+}
+
+.headerModule {
+    background: #1b82d2;
+}
+.prizeLabel {
+    color: #fff;
+}
+.countContainer {
+    display: flex;
+    flex-direction: row;
+}
+.countWrap {
+    flex: 1;
+    padding: .1rem .2rem;
+    background: #1b82d2;
+    color: #fff;
+    .borRig();
+}
+
+.btnContainer {
+    padding-bottom: .2rem;
+}
+.homePageHeader {
+    background: #1b82d2!important;
+    color: #fff;
 }

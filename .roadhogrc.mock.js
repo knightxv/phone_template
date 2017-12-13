@@ -291,10 +291,10 @@ export default {
         data: [
             {
                 id: 343, // 编号
-                expressiveTime: 1504527287992, //提取时间（时间戳）
+                createTime: 1504527287992, //提取时间（时间戳）
                 cashType: 0, // 提现类型 0 :微信 1：支付宝
                 cashCount: 34, // 提现金额
-                result: 0, // 0待审核 1已通过 2已拒绝
+                result: 2, // 0待审核 1已通过 2已拒绝
             }
         ]
     },
@@ -330,24 +330,7 @@ export default {
             },
         ]
     },
-    /*
-		我的下级代理
-	*/
-    'GET /spreadApi/myUnderAgents' : {
-        status: 'success',
-        Msg: '',
-        data: [
-            {
-                underAgentName: 'fdff', // 下级代理名称
-                agentInviteCode: '124355', // 代理邀请码
-                allRechargeCount: 334, // 总充砖数
-                rechargeCountOfToday: 43, // 今日的充砖数
-                CommissionOfAll: 434, //总提成砖石
-                CommissionOfToday: 23, // 今日提成砖石
-
-            }
-        ]
-    },
+    
 
     /*
 修改代理密码
@@ -466,7 +449,7 @@ export default {
             proxyid: 2,
             masonry: 0, // 钻书数量
             ranking: 3,
-            powerList: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            powerList: [ 1, 2, 3, 4, 6, 7, 8, 9, 10, 12],
 
             bankCardName: null,
             bankName: '建设银行',
@@ -612,5 +595,56 @@ export default {
             htmlText: 'ss', // 公告信息
         }
     },
+    // 我收藏的代理
+    'GET /spreadApi/mySaveAgent': {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                agentInviteCode: 232,
+                recentlyLoginTime: 1510307559161,
+                masonrySurplus: 343, // 剩余钻石
+            }
+        ]
+    },
+    /*
+		我的下级代理
+	*/
+    'GET /spreadApi/myUnderAgents' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                underAgentName: 'fdff', // 下级代理名称
+                agentInviteCode: '124355', // 代理邀请码
+                allRechargeCount: 334, // 总充砖数
+                rechargeCountOfToday: 43, // 今日的充砖数
+                CommissionOfAll: 434, //总提成砖石
+                CommissionOfToday: 23, // 今日提成砖石
+
+            }
+        ]
+    },
+    /*
+		我的下级代理_囤卡模式
+	*/
+    'GET /spreadApi/transfer/myUnderAgents' : {
+        status: 'success',
+        Msg: '',
+        data: [
+            {
+                agentInviteCode: 232,
+                recentlyLoginTime: 1510307559161,
+                masonrySurplus: 343, // 剩余钻石
+            }
+        ]
+    },
+    'GET /spreadApi/getAgentInfoByInviteCode': {
+        status: 'success',
+        Msg: '',
+        data: {
+            
+        }
+    }
     
 };

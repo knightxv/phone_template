@@ -101,7 +101,7 @@ class MySavePlayer extends BaseComponent {
     return columns;
   }
   async componentWillMount() {
-    const { serverid } = this.helps.querystring.parse(this.props.location.search.substring(1));
+    const { serverid } = this.router.getQuery();
     this.serverid = serverid;
     let res;
     if (serverid) {
@@ -231,9 +231,9 @@ class MySavePlayer extends BaseComponent {
     // }));
     return (
       <div className={styles.container}>
-        <Title>我收藏的玩家</Title>
+        <Title>给玩家转钻</Title>
         <NavBar
-          title="我收藏的玩家"
+          title="给玩家转钻"
           onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
           right={<div onClick={this.navigateToSavePlayer}>添加</div>}
         />
