@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
 import styles from './MyAgents.css';
-import BaseComponent from '../../helps/BaseComponent';
-import { Table, NavBar } from '../../helps/antdComponent';
-import { Title, WingBlank } from '../../helps/styleComponent';
+import BaseComponent from '@/helps/BaseComponent';
+import { Table } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+import { Title, WingBlank } from '@/helps/styleComponent';
 
 
 const columns = [

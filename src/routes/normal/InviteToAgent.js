@@ -5,9 +5,10 @@ import QRCode from 'qrcode.react';
 import { ActionSheet } from 'antd-mobile';
 
 // import { isWechat } from '@/helps/help';
-import { NavBar, Icon } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+import { Icon } from '@/helps/antdComponent/index.js';
 import BaseComponent from '@/helps/BaseComponent';
-import { Title, Avatar, FlexRow, NetImg } from '@/helps/styleComponent';
+import { Title, Avatar, FlexRow } from '@/helps/styleComponent';
 import styles from './InviteToAgent.css';
 
 const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);

@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import { NavBar, ListViewTable, Icon } from '@/helps/antdComponent';
-import { Title, SearchBar } from '@/helps/styleComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+// import ListViewTable from '@/helps/antdComponent/ListView';
+import { Icon, ListViewTable } from '@/helps/antdComponent/index.js';
+import SearchBar from '@/helps/antdComponent/SearchBar';
+import { Title } from '@/helps/styleComponent';
 import BaseComponent from '@/helps/BaseComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
 import styles from './MyPlayer.css';

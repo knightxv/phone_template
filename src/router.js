@@ -185,13 +185,13 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
-  // const Login = dynamic({
-  //   app,
-  //   component: () => import('./routes/normal/HomePage'),
-  //   models: () => [
-  //     import('./models/agent'),
-  //   ],
-  // });
+  const Login = dynamic({
+    app,
+    component: () => import('./routes/normal/HomePage'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
   // 总代理
   const GeneralLogin = dynamic({
     app,
@@ -250,11 +250,6 @@ function RouterConfig({ history, app }) {
       import('./models/general'),
     ],
   });
-  // /*  充值中心 */
-  // const Exchange = dynamic({
-  //   app,
-  //   component: () => import('./routes/exchange/index'),
-  // });
 
   // 公用
   const NoticeDetail = dynamic({
@@ -304,7 +299,6 @@ function RouterConfig({ history, app }) {
           <Route path="/general/commissionRecord" component={CommissionRecord} />
 
           <Route path="/noticeDetail" component={NoticeDetail} />
-          {/* <Route path="/exchange" component={Exchange} /> */}
         </Switch>
       </Router>
     </div>

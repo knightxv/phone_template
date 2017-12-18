@@ -2,7 +2,11 @@ import React from 'react';
 import { connect } from 'dva';
 
 import BaseComponent from '@/helps/BaseComponent';
-import { NavBar, ListViewTable, DatePicker, SelectPicker } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+// -- import ListViewTable from '@/helps/antdComponent/ListView';
+// import DatePicker from '@/helps/antdComponent/DatePicker';
+// import SelectPicker from '@/helps/antdComponent/SelectPicker';
+import { DatePicker, SelectPicker } from '@/helps/antdComponent/index.js';
 import { Title, FlexRowBetweenWingSpace, IconImg } from '@/helps/styleComponent';
 import styles from './CashMoneyRecord.css';
 
@@ -70,17 +74,19 @@ class CashMoneyRecord extends BaseComponent {
         <p>{selectTime ? selectTime.format('YYYY年MM月') : new Date().format('yyyy年MM月') }</p>
         <p>{`支出余额￥${transPayMoney}  收入￥${transIncome}`}</p>
       </div>
-      <DatePicker
-        mode="month"
-        title="选择日期"
-        value={selectTime}
-        onChange={this.selectDateTime}
-      >
-        <IconImg
-          className={styles.riliIcon}
-          src={require('../../assets/rili.png')}
-        />
-      </DatePicker>
+      {
+        <DatePicker
+          mode="month"
+          title="选择日期"
+          value={selectTime}
+          onChange={this.selectDateTime}
+        >
+          <IconImg
+            className={styles.riliIcon}
+            src={require('../../assets/rili.png')}
+          />
+        </DatePicker>
+      }
     </FlexRowBetweenWingSpace>);
   }
   // 选择日期
@@ -100,7 +106,7 @@ class CashMoneyRecord extends BaseComponent {
     });
   }
   renderRow = (rowData) => {
-    return (<FlexRowBetweenWingSpace className={styles.itemWrap}>
+    return (<FlexRowBetweenWingSpace className={styles.itemWrap} key={rowData.tranTime}>
       <div>
         <p className={styles.rowTitle}>{rowData.title || '系统调整'}</p>
         <p className={styles.rowTime}>{new Date(rowData.tranTime).format('yyyy-MM-dd hh:mm')}</p>
@@ -135,11 +141,9 @@ class CashMoneyRecord extends BaseComponent {
         {
           this.renderHeader()
         }
-        <ListViewTable
-          tableData={tableData}
-          renderRow={this.renderRow}
-          renderHeader={null}
-        />
+        {
+          tableData.map(item => this.renderRow(item))
+        }
       </div>
     );
   }

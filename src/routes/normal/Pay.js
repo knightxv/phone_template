@@ -2,7 +2,10 @@ import React from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 
-import { Button, InputItem, NavBar, Icon } from '@/helps/antdComponent';
+import Button from '@/helps/antdComponent/Button';
+import NavBar from '@/helps/antdComponent/NavBar';
+import { Icon, InputItem } from '@/helps/antdComponent/index.js';
+// import InputItem from '@/helps/antdComponent/InputItem';
 import BaseComponent from '@/helps/BaseComponent';
 import { WhiteSpace, WingBlank, FlexRow, IconImg, Title } from '@/helps/styleComponent';
 import styles from './Pay.css';

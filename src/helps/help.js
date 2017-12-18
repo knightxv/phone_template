@@ -1,5 +1,4 @@
 import { document, window } from 'global';
-import queryString from 'querystring';
 // import { Toast as DefaultToast } from 'antd-mobile';
 
 // export const Toast = {
@@ -7,7 +6,6 @@ import queryString from 'querystring';
 //     DefaultToast.info(message, 1, null, false);
 //   },
 // };
-exports.queryString = queryString;
 exports.delay = (time = 1000) => {
   return new Promise((resolve) => {
     setTimeout(resolve, time);

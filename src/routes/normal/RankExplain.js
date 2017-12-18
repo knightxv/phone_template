@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import { NavBar } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
 import { Title, WhiteSpace } from '@/helps/styleComponent';
 import BaseComponent from '@/helps/BaseComponent';
 import styles from './RankExplain.css';

@@ -3,8 +3,9 @@ import { connect } from 'dva';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import styles from './homePage.css';
-import BaseComponent from '../../helps/BaseComponent';
-import { Button, Row, Col } from '../../helps/antdComponent';
+import BaseComponent from '@/helps/BaseComponent';
+import Button from '@/helps/antdComponent/Button';
+import { Row, Col } from '@/helps/antdComponent';
 import { WingBlank, WhiteSpace, FlexRow, FlexRowBetween, TitleIcon, Title } from '../../helps/styleComponent';
 
 class HomePage extends BaseComponent {

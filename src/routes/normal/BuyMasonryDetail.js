@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'dva';
 
 import BaseComponent from '@/helps/BaseComponent';
-import { NavBar, ListView } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+import ListView, { DataSource } from '@/helps/antdComponent/ListView';
 import { Title, FlexRowBetweenWingSpace } from '@/helps/styleComponent';
 import styles from './BuyMasonryDetail.css';
 
@@ -41,7 +42,7 @@ class AgencyPayType extends BaseComponent {
     const getRowData = (dataBlob, sectionId, rowId) => {
       return dataBlob[`${sectionId}:${rowId}`];
     };
-    const ds = new ListView.DataSource({
+    const ds = new DataSource({
       getSectionData,
       getRowData,
       rowHasChanged: (r1, r2) => r1 !== r2,

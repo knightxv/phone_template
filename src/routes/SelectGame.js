@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import { NavBar, Icon } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+import { Icon } from '@/helps/antdComponent/index.js';
 import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, NetImg } from '@/helps/styleComponent';
 import BaseComponent from '@/helps/BaseComponent';
 import styles from './SelectGame.less';

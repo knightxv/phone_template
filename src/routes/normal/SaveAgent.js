@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'dva';
 // import classnames from 'classnames';
 
-import { Button, InputItem, Icon } from '@/helps/antdComponent';
+import { Button, InputItem, Icon } from '@/helps/antdComponent/index.js';
+// import InputItem from '@/helps/antdComponent/InputItem';
+// import Icon from '@/helps/antdComponent/Icon';
 import BaseComponent from '@/helps/BaseComponent';
 // import { Title } from '@/helps/styleComponent';
 import styles from './save.less';

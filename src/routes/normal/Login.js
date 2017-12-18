@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'dva';
 
 import { Helmet } from 'react-helmet';
-import { InputItem, Button } from '@/helps/antdComponent';
+import { InputItem, Button } from '@/helps/antdComponent/index.js';
+// import Button from '@/helps/antdComponent/Button';
 import BaseComponent from '@/helps/BaseComponent';
 import { WhiteSpace, Title, IconImg } from '@/helps/styleComponent';
 import styles from './Login.css';

@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 
-import { Button, InputItem, NavBar } from '@/helps/antdComponent';
+// import Button from '@/helps/antdComponent/Button';
+import { InputItem, Button } from '@/helps/antdComponent/index';
+import NavBar from '@/helps/antdComponent/NavBar';
 import BaseComponent from '@/helps/BaseComponent';
-import { WhiteSpace, WingBlank, FlexRow, Title } from '@/helps/styleComponent';
+import { WhiteSpace, WingBlank, Title } from '@/helps/styleComponent';
 import styles from './RechargeForAgent.css';
 
 const selectDiamondArr = [10, 100, 500];

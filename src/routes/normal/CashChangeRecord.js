@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'dva';
 
 import BaseComponent from '@/helps/BaseComponent';
-import { NavBar, ListViewTable } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+import { ListViewTable } from '@/helps/antdComponent/index.js';
 import { Title } from '@/helps/styleComponent';
 import styles from './CashChangeRecord.less';
 

@@ -2,7 +2,10 @@ import React from 'react';
 import { connect } from 'dva';
 
 import BaseComponent from '@/helps/BaseComponent';
-import { NavBar, ListViewTable, DatePicker, SelectPicker } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+// import ListViewTable from '@/helps/antdComponent/ListView';
+// import DatePicker from '@/helps/antdComponent/DatePicker';
+import { SelectPicker,  DatePicker } from '@/helps/antdComponent/index.js';
 import { Title, FlexRowBetweenWingSpace, IconImg } from '@/helps/styleComponent';
 import styles from './MasonryDetail.css';
 
@@ -66,7 +69,7 @@ class MasonryDetail extends BaseComponent {
     });
   }
   renderRow = (rowData) => {
-    return (<FlexRowBetweenWingSpace className={styles.itemWrap}>
+    return (<FlexRowBetweenWingSpace className={styles.itemWrap} key={rowData.tranTime}>
       <div>
         <p className={styles.rowTitle}>{rowData.title || '系统调整'}</p>
         <p className={styles.rowTime}>{new Date(rowData.tranTime).format('yyyy-MM-dd hh:mm')}</p>
@@ -102,17 +105,20 @@ class MasonryDetail extends BaseComponent {
         <p>{selectTime ? selectTime.format('YYYY年MM月') : new Date().format('yyyy年MM月') }</p>
         <p>{`支出钻石${transPayCount}个  收入${transImcomeCount}个`}</p>
       </div>
-      <DatePicker
-        mode="month"
-        title="选择日期"
-        value={selectTime}
-        onChange={this.selectDateTime}
-      >
-        <IconImg
-          className={styles.riliIcon}
-          src={require('../../assets/rili.png')}
-        />
-      </DatePicker>
+      {
+        DatePicker &&
+        <DatePicker
+          mode="month"
+          title="选择日期"
+          value={selectTime}
+          onChange={this.selectDateTime}
+        >
+          <IconImg
+            className={styles.riliIcon}
+            src={require('../../assets/rili.png')}
+          />
+        </DatePicker>
+      }
     </FlexRowBetweenWingSpace>);
   }
   render() {
@@ -137,49 +143,18 @@ class MasonryDetail extends BaseComponent {
         {
           this.renderHeader()
         }
-        <ListViewTable
+        {
+          tableData.map(item=> this.renderRow(item))
+        }
+        {/* <ListViewTable
           tableData={tableData}
           renderRow={this.renderRow}
           renderHeader={null}
-        />
+        /> */}
       </div>
     );
   }
 }
-
-// const renderHeader = ({ tableData, selectTime }, self) => {
-//   const PayCount = tableData.reduce((before, current) => {
-//     if (current.TranAmount < 0) {
-//       return before + (+current.TranAmount);
-//     }
-//     return before;
-//   }, 0);
-//   const incomeCount = tableData.reduce((before, current) => {
-//     if (current.TranAmount > 0) {
-//       return before + (+current.TranAmount);
-//     }
-//     return before;
-//   }, 0);
-//   const transPayCount = Math.abs(PayCount);
-//   const transImcomeCount = Math.abs(incomeCount);
-//   return (<FlexRowBetweenWingSpace className={styles.headerWrap}>
-//     <div>
-//       <p>{selectTime ? selectTime.format('YYYY年MM月') : new Date().format('yyyy年MM月') }</p>
-//       <p>{`支出钻石${transPayCount}个  收入${transImcomeCount}个`}</p>
-//     </div>
-//     <DatePicker
-//       mode="month"
-//       title="选择日期"
-//       value={selectTime}
-//       onChange={self.selectDateTime}
-//     >
-//       <IconImg
-//         className={styles.riliIcon}
-//         src={require('../../assets/rili.png')}
-//       />
-//     </DatePicker>
-//   </FlexRowBetweenWingSpace>);
-// };
 
 // 防止extra放在div报警告
 const WrapDiv = ({ children, extra, ...props }) => {
