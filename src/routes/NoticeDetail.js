@@ -2,7 +2,7 @@ import { connect } from 'dva';
 import React from 'react';
 // import styles from './IndexPage.css';
 import { Title, WhiteSpace } from '@/helps/styleComponent';
-import { NavBar } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
 import BaseComponent from '@/helps/BaseComponent';
 
 class NoticeDetail extends BaseComponent {

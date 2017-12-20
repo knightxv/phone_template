@@ -1,5 +1,5 @@
 import Http from './Http';
-import { Toast } from './antdComponent';
+import Toast from './antdComponent/Toast';
 
 const webHttpConfig = {
   // getConfigUrl: '/config',

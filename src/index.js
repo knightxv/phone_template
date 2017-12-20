@@ -1,21 +1,23 @@
 import dva from 'dva';
 
-import { window } from 'global';
+// import { window } from 'global';
 import { persistStore, autoRehydrate } from 'redux-persist';
-import Promise from 'promise';
+
 // import { browserHistory } from 'dva/router';
 // import { useRouterHistory } from 'dva/router';
 // import { createHashHistory } from 'history';
 
-import './helps/rem';
+// import 'antd-mobile/dist/antd-mobile.min.css';
+// import './assets/css/antdSelf.css';
 
-import './assets/css/global.css';
+// import './helps/rem';
+// import './assets/css/global.css';
+
 // import './index.css';
-import './assets/css/normal.css';
+// import './assets/css/normal.css';
 
 // 判断是否兼容此浏览器
 window.isSupport = true;
-window.Promise = Promise;
 // if(!window.Promise) {
 //   document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
 // }

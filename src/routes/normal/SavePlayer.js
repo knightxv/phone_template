@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'dva';
 // import classnames from 'classnames';
 
-import { Button, InputItem, Icon } from '@/helps/antdComponent';
+// import Button from '@/helps/antdComponent/Button';
+// import InputItem from '@/helps/antdComponent/InputItem';
+import { Icon, InputItem, Button } from '@/helps/antdComponent/index.js';
 import BaseComponent from '@/helps/BaseComponent';
 // import { Title } from '@/helps/styleComponent';
 import styles from './save.less';
@@ -59,7 +61,7 @@ class SavePlayer extends BaseComponent {
     }
     if (res.isSuccess) {
       if (isSave) {
-        this.helps.toast(res.info || '收藏成功');
+        this.helps.toast(res.info || '取消收藏成功');
       } else {
         this.helps.toast(res.info || '收藏成功');
       }

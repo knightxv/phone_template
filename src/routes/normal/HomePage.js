@@ -4,7 +4,10 @@ import { connect } from 'dva';
 // import { NoticeBar, WhiteSpace, Icon } from 'antd-mobile';
 // import PropTypes from 'prop-types';
 import BaseComponent from '@/helps/BaseComponent';
-import { NavBar, NoticeBar, Icon, Button } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+import NoticeBar from '@/helps/antdComponent/NoticeBar';
+// import Icon from '@/helps/antdComponent/Icon';
+import { Button, Icon } from '@/helps/antdComponent/index.js';
 import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, Avatar, IconImg } from '@/helps/styleComponent';
 import styles from './HomePage.less';
 

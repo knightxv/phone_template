@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
+import BaseComponent from '@/helps/BaseComponent';
+import Button from '@/helps/antdComponent/Button';
+import InputItem from '@/helps/antdComponent/InputItem';
+import { Title, NetImg, WhiteSpace, FlexRow } from '@/helps/styleComponent';
 import styles from './login.css';
-import BaseComponent from '../../helps/BaseComponent';
-import { Input, Button } from '../../helps/antdComponent';
-import { Title, NetImg, WhiteSpace, FlexRow } from '../../helps/styleComponent';
 
 // const logoSource = require('../../assets/adang_logo.png');
 
@@ -50,18 +51,17 @@ class Login extends BaseComponent {
           <div>
             <FlexRow className={styles.loginInput}>
               <p className={styles.inputLable}>账号:</p>
-              <Input
-                onChange={(event) => this.setState({ loginID: event.target.value })}
+              <InputItem
+                onChange={(value) => this.setState({ loginID: value })}
                 placeholder="请输入账号名/姓名"
               />
             </FlexRow>
             <FlexRow className={styles.loginInput}>
               <p className={styles.inputLable}>密码:</p>
-              <Input
+              <InputItem
                 type="password"
                 placeholder="请输入密码"
-                onPressEnter={this.login}
-                onChange={event => this.setState({ password: event.target.value })}
+                onChange={value => this.setState({ password: value })}
               />
             </FlexRow>
           </div>

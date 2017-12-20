@@ -5,9 +5,10 @@ import QRCode from 'qrcode.react';
 import { ActionSheet } from 'antd-mobile';
 
 // import { isWechat } from '@/helps/help';
-import { NavBar, Icon } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+import { Icon } from '@/helps/antdComponent/index.js';
 import BaseComponent from '@/helps/BaseComponent';
-import { Title, Avatar, FlexRow, NetImg } from '@/helps/styleComponent';
+import { Title, Avatar, FlexRow } from '@/helps/styleComponent';
 import styles from './InviteToAgent.css';
 
 const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);
@@ -65,7 +66,7 @@ class InviteToAgent extends BaseComponent {
         if (self.copySuccess) {
           this.helps.toast('复制成功');
         } else {
-          this.helps.toast('复制失败，请自行选择复制');
+          this.helps.toast('当前浏览器不允许复制链接');
         }
       }
       // this.setState({ clicked: BUTTONS[buttonIndex] });

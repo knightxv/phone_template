@@ -4,9 +4,10 @@ import { window } from 'global';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import styles from './InviteAgent.css';
-import { WhiteSpace, WingBlank, Title } from '../../helps/styleComponent';
-import { Button, NavBar } from '../../helps/antdComponent';
-import BaseComponent from '../../helps/BaseComponent';
+import { WhiteSpace, WingBlank, Title } from '@/helps/styleComponent';
+import Button from '@/helps/antdComponent/Button';
+import NavBar from '@/helps/antdComponent/NavBar';
+import BaseComponent from '@/helps/BaseComponent';
 
 class InviteAgent extends BaseComponent {
   constructor(props) {

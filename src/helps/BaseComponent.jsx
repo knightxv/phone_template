@@ -1,21 +1,7 @@
-/*
-remark:
-
-npm dev
-yarn add react-helmet styled-components
-
-roadhogrc.mock.js add
-'GET /config': {
-    web: 'http://192.168.1.100:8000'
-},
-
-*/
 import React from 'react';
 import { routerRedux } from 'dva/router';
-import fetch from 'dva/fetch';
 import querystring from 'querystring';
-import { window } from 'global';
-import { Toast } from './antdComponent';
+import Toast from './antdComponent/Toast';
 import * as TypeDefine from './typeDefine';
 
 // import * as ToolComponents from './styleComponent';
@@ -43,7 +29,7 @@ export default class BaseComponent extends React.Component {
     const resolveRouterReduxPush = (obj) => {
       const isObj = Object.prototype.toString.call(obj) === '[object Object]';
       if (isObj && obj.query) {
-        obj.search = help.queryString.stringify(obj.query);
+        obj.search = querystring.stringify(obj.query);
       }
       return routerRedux.push(obj);
     };
@@ -51,7 +37,6 @@ export default class BaseComponent extends React.Component {
     // 工具
     this.helps = {
       webHttp,
-      fetch,
       ...help,
       toast: (msg) => {
         Toast.info(msg || '未知错误', 1, null, false);

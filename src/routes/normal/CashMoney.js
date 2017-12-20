@@ -1,8 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
 
+import { List } from 'antd-mobile';
 import { region } from '@/data/region';
-import { InputItem, Button, NavBar, SelectPicker, List } from '@/helps/antdComponent';
+import { InputItem, Button, SelectPicker } from '@/helps/antdComponent/index.js';
+// import Button from '@/helps/antdComponent/Button';
+// import SelectPicker from '@/helps/antdComponent/SelectPicker';
+import NavBar from '@/helps/antdComponent/NavBar';
 import BaseComponent from '@/helps/BaseComponent';
 import { FlexRow, Flex, WhiteSpace, Title } from '@/helps/styleComponent';
 import bankData from '@/data/bank';

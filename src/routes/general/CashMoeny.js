@@ -2,7 +2,10 @@ import React from 'react';
 import { connect } from 'dva';
 import { province as provinceData, city as cityData } from '@/data/position';
 import styles from './CashMoeny.css';
-import { Input, Select, Button, NavBar } from '@/helps/antdComponent';
+import { Select } from '@/helps/antdComponent';
+import NavBar from '@/helps/antdComponent/NavBar';
+import Button from '@/helps/antdComponent/Button';
+import InputItem from '@/helps/antdComponent/InputItem';
 import BaseComponent from '@/helps/BaseComponent';
 import { FlexRow, Flex, WhiteSpace, Title } from '@/helps/styleComponent';
 
@@ -123,9 +126,9 @@ class CashMoeny extends BaseComponent {
         <WhiteSpace />
         <FlexRow className={styles.itemWrap}>
           <p className={styles.label}>微信号　</p>
-          <Input
+          <InputItem
             placeholder="请输入微信号"
-            onChange={ev => this.setState({ wechat_acc: ev.target.value })}
+            onChange={value => this.setState({ wechat_acc: value })}
             value={wechatAcc}
           />
         </FlexRow>
@@ -172,25 +175,25 @@ class CashMoeny extends BaseComponent {
         </FlexRow>
         <FlexRow className={styles.itemWrap}>
           <p className={styles.label}>卡号　　</p>
-          <Input
+          <InputItem
             placeholder="请输入银行卡号"
-            onChange={ev => this.setState({ cardNumber: ev.target.value })}
+            onChange={value => this.setState({ cardNumber: value })}
             value={cardNumber}
           />
         </FlexRow>
         <FlexRow className={styles.itemWrap}>
           <p className={styles.label}>姓名　　</p>
-          <Input
+          <InputItem
             placeholder="请输入姓名"
-            onChange={ev => this.setState({ bankCardName: ev.target.value })}
+            onChange={value => this.setState({ bankCardName: value })}
             value={bankCardName}
           />
         </FlexRow>
         <FlexRow className={styles.itemWrap}>
           <p className={styles.label}>开户银行</p>
-          <Input
+          <InputItem
             placeholder="请输入开户银行"
-            onChange={ev => this.setState({ bankOfDeposit: ev.target.value })}
+            onChange={value => this.setState({ bankOfDeposit: value })}
             value={bankOfDeposit}
           />
         </FlexRow>
@@ -199,9 +202,9 @@ class CashMoeny extends BaseComponent {
           <p className={styles.label}>提现金额</p>
           <FlexRow>
             <p className={styles.label}>￥:</p>
-            <Input
+            <InputItem
               placeholder="请输入提现金额"
-              onChange={ev => this.setState({ cashCount: ev.target.value })}
+              onChange={value => this.setState({ cashCount: value})}
               value={cashCount}
             />
           </FlexRow>

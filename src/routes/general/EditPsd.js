@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'dva';
 
 import styles from './EditPsd.css';
-import BaseComponent from '../../helps/BaseComponent';
-import { Input, Button, NavBar } from '../../helps/antdComponent';
-import { Title, WingBlank, WhiteSpace, FlexRow } from '../../helps/styleComponent';
+import BaseComponent from '@/helps/BaseComponent';
+import InputItem from '@/helps/antdComponent/InputItem';
+import Button from '@/helps/antdComponent/Button';
+import NavBar from '@/helps/antdComponent/NavBar';
+import { Title, WhiteSpace, FlexRow } from '@/helps/styleComponent';
 
 class EditPsd extends BaseComponent {
   constructor(props) {
@@ -57,26 +59,25 @@ class EditPsd extends BaseComponent {
           <div className={styles.contentContainer}>
             <FlexRow className={styles.inputWrap}>
               <span className={styles.inputLabel}>原密码　　</span>
-              <Input
+              <InputItem
                 type="password"
-                onChange={ev => this.setState({ oldPsd: ev.target.value })}
+                onChange={value => this.setState({ oldPsd: value })}
                 placeholder="请输入原密码"
               />
             </FlexRow>
             <FlexRow className={styles.inputWrap}>
               <span className={styles.inputLabel}>新密码　　</span>
-              <Input
-                onChange={ev => this.setState({ newPsd: ev.target.value })}
+              <InputItem
+                onChange={value => this.setState({ newPsd: value })}
                 type="password"
                 placeholder="请输入新密码"
               />
             </FlexRow>
             <FlexRow className={styles.inputWrap}>
               <span className={styles.inputLabel}>确认新密码</span>
-              <Input
+              <InputItem
                 placeholder="确认新密码"
-                onPressEnter={this.editPsd}
-                onChange={ev => this.setState({ rePsd: ev.target.value })}
+                onChange={value => this.setState({ rePsd: value })}
                 type="password"
               />
             </FlexRow>
