@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import classNames from 'classnames';
 
 // import Button from '@/helps/antdComponent/Button';
-import { InputItem, Button } from '@/helps/antdComponent/index';
+import { InputItem, Button } from '@/helps/antdComponent/index.js';
 import NavBar from '@/helps/antdComponent/NavBar';
 import BaseComponent from '@/helps/BaseComponent';
 import { WhiteSpace, WingBlank, Title } from '@/helps/styleComponent';
@@ -43,7 +43,7 @@ class RechargeForAgent extends BaseComponent {
     if (!res.isSuccess) {
       this.helps.toast(res.info || '赠送失败');
     } else {
-      this.helps.toast('赠送成功');
+      this.helps.toast('订单已提交成功，请等待到账');
       this.props.dispatch(this.helps.routerRedux.goBack());
     }
     // 更新用户数据

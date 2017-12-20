@@ -90,7 +90,6 @@ class ListViewTable extends React.Component {
   }
   componentDidMount() {
     import(/* webpackChunkName: 'ListView' */'./ListView').then((res) => {
-      console.log(res);
       const Component = res.default;
       DataSource = res.DataSource;
       this.setState({

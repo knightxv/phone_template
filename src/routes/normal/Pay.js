@@ -62,7 +62,7 @@ class Pay extends BaseComponent {
       this.helps.toast(res.info || '赠送失败');
       return false;
     }
-    this.helps.toast('赠送成功');
+    this.helps.toast('赠送成功,请耐心等待');
     this.props.dispatch(this.helps.routerRedux.goBack());
   }
   // 充值

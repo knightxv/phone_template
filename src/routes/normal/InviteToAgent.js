@@ -66,7 +66,7 @@ class InviteToAgent extends BaseComponent {
         if (self.copySuccess) {
           this.helps.toast('复制成功');
         } else {
-          this.helps.toast('复制失败，请自行选择复制');
+          this.helps.toast('当前浏览器不允许复制链接');
         }
       }
       // this.setState({ clicked: BUTTONS[buttonIndex] });

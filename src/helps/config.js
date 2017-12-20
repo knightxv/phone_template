@@ -1,10 +1,10 @@
-// // 防止点击300毫秒延迟问题
-// import FastClick from './fastclick.js';
-// if ('addEventListener' in document) {
-//   document.addEventListener('DOMContentLoaded', () => {
-//     FastClick.attach(document.body);
-//   }, false);
-// }
+// 防止点击300毫秒延迟问题
+import FastClick from './fastclick.js';
+if ('addEventListener' in document) {
+  document.addEventListener('DOMContentLoaded', () => {
+    FastClick.attach(document.body);
+  }, false);
+}
 
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {

@@ -61,7 +61,7 @@ class SavePlayer extends BaseComponent {
     }
     if (res.isSuccess) {
       if (isSave) {
-        this.helps.toast(res.info || '收藏成功');
+        this.helps.toast(res.info || '取消收藏成功');
       } else {
         this.helps.toast(res.info || '收藏成功');
       }
