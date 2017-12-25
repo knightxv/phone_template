@@ -13,7 +13,7 @@ import styles from './Login.css';
 class Login extends BaseComponent {
   constructor(props) {
     super(props);
-    const { pCode } = this.helps.querystring.parse(this.props.location.search.substr(1));
+    const { pCode } = this.router.getQuery();
     this.pCode = pCode; // 上级邀请码
     const { loginID, password } = this.props;
     this.state = {
@@ -28,25 +28,22 @@ class Login extends BaseComponent {
     const ipInfo = window.remote_ip_info;
     const registerProvince = ipInfo ? `${ipInfo.province}省` : '';
     const registerCity = ipInfo ? `${ipInfo.city}市` : '';
-    const res = await this.helps.webHttp.get('/spreadApi/login', { loginID, password, registerProvince, registerCity });
+    const res = await this.http.webHttp.get('/spreadApi/login', { loginID, password, registerProvince, registerCity });
     if (!res.isSuccess) {
       this.helps.toast(res.message || '账号或密码错误');
       return false;
     }
     // 登录成功
     this.props.dispatch({ type: 'agent/updateAppInfo', payload: { loginID, password } });
-    this.props.dispatch(this.helps.routerRedux.push('/homePage'));
+    this.router.go('/homePage');
   }
   navigateToRegister = () => {
     if (this.pCode) {
-      this.props.dispatch(this.helps.routerRedux.push({
-        pathname: '/register',
-        query: {
-          code: this.pCode,
-        },
-      }));
+      this.router.go('/register', {
+        code: this.pCode,
+      });
     } else {
-      this.props.dispatch(this.helps.routerRedux.push('/register'));
+      this.router.go('/register');
     }
     // if (this.pid) {
     //   this.props.dispatch(this.helps.routerRedux.push({

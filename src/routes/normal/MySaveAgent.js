@@ -59,12 +59,9 @@ class MySaveAgent extends BaseComponent {
     this.forceUpdate();
   }
   rechargeForAgent = (agentId) => {
-    this.props.dispatch(this.helps.routerRedux.push({
-      pathname: 'rechargeForAgent',
-      query: {
-        agentId,
-      },
-    }));
+    this.router.go('rechargeForAgent', {
+      agentId,
+    });
   }
   powerArr = () => {
     const self = this;
@@ -106,13 +103,13 @@ class MySaveAgent extends BaseComponent {
     return columns;
   }
   async componentWillMount() {
-    const { serverid } = this.helps.querystring.parse(this.props.location.search.substring(1));
+    const { serverid } = this.router.getQuery();
     this.serverid = serverid;
     let res;
     if (serverid) {
-      res = await this.helps.webHttp.get('/spreadApi/mySaveAgent', { serverid });
+      res = await this.http.webHttp.get('/spreadApi/mySaveAgent', { serverid });
     } else {
-      res = await this.helps.webHttp.get('/spreadApi/mySaveAgent');
+      res = await this.http.webHttp.get('/spreadApi/mySaveAgent');
     }
     if (res.isSuccess) {
       this.setState({
@@ -121,7 +118,9 @@ class MySaveAgent extends BaseComponent {
     }
   }
   payForMyPlayer = (playerId) => {
-    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId, serverid: this.serverid || '' } }));
+    this.router.go('/pay', {
+      playerId, serverid: this.serverid || '',
+    });
   }
   onSearchInputChange = (ev) => {
     this.setState({
@@ -135,7 +134,9 @@ class MySaveAgent extends BaseComponent {
   }
   // 添加收藏
   navigateToSaveAgent = () => {
-    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/saveAgent', query: { serverid: this.serverid || '' } }));
+    this.router.go('/saveAgent', {
+      serverid: this.serverid || '',
+    });
   }
   renderRowData = () => {
     const { searchVal } = this.state;
@@ -223,7 +224,7 @@ class MySaveAgent extends BaseComponent {
         <Title>给代理转钻</Title>
         <NavBar
           title="给代理转钻"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
           right={<div onClick={this.navigateToSaveAgent}>添加</div>}
         />
         <SearchBar

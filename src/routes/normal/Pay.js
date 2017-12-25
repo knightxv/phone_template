@@ -2,13 +2,16 @@ import React from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 
+import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
+import { StickyContainer, Sticky } from '@/helps/lazyComponent/ReactSticky';
 import Button from '@/helps/antdComponent/Button';
 import NavBar from '@/helps/antdComponent/NavBar';
+// import ListView from '@/helps/antdComponent/ListView';
 import { Icon, InputItem } from '@/helps/antdComponent/index.js';
 // import InputItem from '@/helps/antdComponent/InputItem';
 import BaseComponent from '@/helps/BaseComponent';
 import { WhiteSpace, WingBlank, FlexRow, IconImg, Title } from '@/helps/styleComponent';
-import styles from './Pay.css';
+import styles from './Pay.less';
 
 const paySource = {
   wx: require('../../assets/wx.png'),
@@ -38,6 +41,7 @@ class Pay extends BaseComponent {
       isChooseInput: false, // 是否选择其他数额
       selectIndex: defaultSelectIndex,
       payTypeSelect: defaultPayEnum,
+      record: [],
     };
     this.idTimer = null;
     this.serverid = serverid; // 游戏的id
@@ -46,6 +50,9 @@ class Pay extends BaseComponent {
   }
   async componentWillMount() {
     this.idValChange(this.state.playerId);
+  }
+  componentWillUnmount() {
+    console.log(1);
   }
   // 赠送钻石
   giveDiamond = async () => {
@@ -57,24 +64,24 @@ class Pay extends BaseComponent {
       diamond,
       serverid: this.serverid,
     };
-    const res = await this.helps.webHttp.get('/spreadApi/giveDiamond', params);
+    const res = await this.http.webHttp.get('/spreadApi/giveDiamond', params);
     if (!res.isSuccess) {
-      this.helps.toast(res.info || '赠送失败');
+      this.message.info(res.info || '赠送失败');
       return false;
     }
-    this.helps.toast('赠送成功,请耐心等待');
-    this.props.dispatch(this.helps.routerRedux.goBack());
+    this.message.info('赠送成功,请耐心等待');
+    this.router.back();
   }
   // 充值
   recharge = async () => {
     // HeroID 玩家ID Diamond充值数量  TimeTick 充值时间
     const { diamond, playerId, playerNotFind } = this.state;
     if (!playerId || playerId.length < 6 || playerNotFind) {
-      this.helps.toast('玩家不存在');
+      this.message.info('玩家不存在');
       return;
     }
     if (!diamond) {
-      this.helps.toast('请选择钻石个数');
+      this.message.info('请选择钻石个数');
       return;
     }
     const type = this.state.payTypeSelect;
@@ -85,7 +92,7 @@ class Pay extends BaseComponent {
     }
     const chargeType = this.helps.payType(type);
     const money = diamond * 10;
-    const moneyFloat = this.parseFloatMoney(money);
+    const moneyFloat = this.helps.parseFloatMoney(money);
     const { proxyid } = this.props;
     const params = {
       pid: proxyid,
@@ -94,7 +101,7 @@ class Pay extends BaseComponent {
       chargeType,
       serverid: this.serverid,
     };
-    const res = await this.helps.webHttp.get('/spreadApi/recharge_for_player', params);
+    const res = await this.http.webHttp.get('/spreadApi/recharge_for_player', params);
     if (!res.isSuccess) {
       this.helps.toast(res.info || '购买失败');
       return false;
@@ -117,7 +124,7 @@ class Pay extends BaseComponent {
         return false;
       }
       // 获取头像和名称
-      const res = await this.helps.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val, serverid: this.serverid });
+      const res = await this.http.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val, serverid: this.serverid });
       if (res.isSuccess) {
         const { userName } = res.data;
         this.setState({
@@ -218,24 +225,28 @@ class Pay extends BaseComponent {
     }
     return paySelectArr;
   }
+  renderRow = () => {
+    return <div>1</div>
+  }
   render() {
     const { playerName, diamond, playerNotFind,
       isChooseInput, selectIndex, payTypeSelect, playerId,
+      record,
     } = this.state;
     const { payEnum } = this.helps;
     const money = (!isNaN(diamond) && payTypeSelect !== payEnum.GIVE) ? diamond * 10 : 0;
-    const moneyFloat = this.parseFloatMoney(money);
+    const moneyFloat = this.helps.parseFloatMoney(money);
     const paySelectArr = this.power(); //  为了处理双击刷新问题
     return (
       <div>
         <Title>给玩家充值</Title>
         <NavBar
           title="给玩家充值"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <div className={styles.playerInputWrap}>
           <InputItem
-          	disabled={true}
+          	disabled
             onChange={this.idValChange}
             value={playerId}
             type="number"
@@ -317,6 +328,45 @@ class Pay extends BaseComponent {
           立即充值
           </Button>
         </WingBlank>
+        <StickyContainer>
+          <Sticky>
+            {
+              ({
+              style,
+                // the following are also available but unused in this example
+                isSticky,
+                wasSticky,
+                distanceFromTop,
+                distanceFromBottom,
+                calculatedHeight
+              }) => {
+                return (
+                  <div className={styles.listWrap} style={style}>
+                    <div className={styles.recordHeader}>
+                      <div>
+                        本月购钻数量:3003个
+                      </div>
+                      <div>
+                        总购钻数量:300个
+                      </div>
+                    </div>
+                    {
+                      wasSticky
+                      ? <ScrollListView
+                        data={record}
+                        renderRow={this.renderRow}
+                      />
+                      : <BodyScrollListView
+                        data={record}
+                        renderRow={this.renderRow}
+                      />
+                    }
+                  </div>
+                );
+              }
+            }
+          </Sticky>
+        </StickyContainer>
       </div>
     );
   }

@@ -2,12 +2,14 @@ import React from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 
+import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
+import { StickyContainer, Sticky } from '@/helps/lazyComponent/ReactSticky';
 // import Button from '@/helps/antdComponent/Button';
 import { InputItem, Button } from '@/helps/antdComponent/index.js';
 import NavBar from '@/helps/antdComponent/NavBar';
 import BaseComponent from '@/helps/BaseComponent';
 import { WhiteSpace, WingBlank, Title } from '@/helps/styleComponent';
-import styles from './RechargeForAgent.css';
+import styles from './RechargeForAgent.less';
 
 const selectDiamondArr = [10, 100, 500];
 const defaultSelectIndex = 2;
@@ -15,8 +17,7 @@ const defaultSelectIndex = 2;
 class RechargeForAgent extends BaseComponent {
   constructor(props) {
     super(props);
-    const searchText = this.props.location.search.substr(1);
-    const query = this.helps.querystring.parse(searchText);
+    const query = this.router.getQuery();
     const { agentId } = query;
     this.state = {
       diamond: selectDiamondArr[defaultSelectIndex], // 钻石
@@ -113,15 +114,18 @@ class RechargeForAgent extends BaseComponent {
       diamond: count,
     });
   }
+  renderRow = () => {
+    return (<div>2</div>);
+  }
   render() {
-    const { diamond, isChooseInput, selectIndex, agentId } = this.state;
+    const { diamond, isChooseInput, selectIndex, agentId, record } = this.state;
     const { masonry } = this.props;
     const isCanRecharge = masonry >= diamond && masonry !== 0 && diamond !== 0;
     return (<div>
       <Title>给代理充值</Title>
       <NavBar
         title="给代理充值"
-        onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+        onClick={this.router.back}
       />
       <div className={styles.playerInputWrap}>
         <InputItem
@@ -191,6 +195,45 @@ class RechargeForAgent extends BaseComponent {
         立即充值
         </Button>
       </WingBlank>
+      <StickyContainer>
+        <Sticky>
+          {
+            ({
+            style,
+              // the following are also available but unused in this example
+              isSticky,
+              wasSticky,
+              distanceFromTop,
+              distanceFromBottom,
+              calculatedHeight
+            }) => {
+              return (
+                <div className={styles.listWrap} style={style}>
+                  <div className={styles.recordHeader}>
+                    <div>
+                      本月购钻数量:3003个
+                    </div>
+                    <div>
+                      总购钻数量:300个
+                    </div>
+                  </div>
+                  {
+                    wasSticky
+                    ? <ScrollListView
+                      data={record}
+                      renderRow={this.renderRow}
+                    />
+                    : <BodyScrollListView
+                      data={record}
+                      renderRow={this.renderRow}
+                    />
+                    }
+                </div>
+              );
+            }
+          }
+        </Sticky>
+      </StickyContainer>
     </div>
     );
   }

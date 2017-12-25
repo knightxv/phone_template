@@ -3,15 +3,14 @@ html, body {
 }
 body {
     font-family: '微软雅黑','Microsoft Yahei','hiragino sans gb w3','Arial';
-    /* font-size: .24rem; */
     color: #333;
+    font-size: .32rem;
 }
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     outline: none;
-    font-size: .3rem;
 }
 :global(#root) {
     min-height: 100%;
@@ -57,12 +56,6 @@ body {
 :global(.borderBottom) {
     border-bottom: 1px solid #dedede;
 }
-:global(.moneyColor) {
-    color: #fecd84;
-}
-:global(.colorOrange) {
-    color: #ff9500;
-}
 :global(.return_icon) {
     padding: 6px 6px 0;
     margin: 6px 6px 0;
@@ -79,18 +72,4 @@ body {
     width: 100%;
     max-width: 750px;
     margin: 0 auto;
-}
-
-:global(.color_base) {
-    color: #78bff2;
-}
-
-:global(.countAdd) {
-    color: #f0602d;
-}
-:global(.countSub) {
-    color: #1caf08;
-}
-:global(.countNor) {
-    color: #ff9500;
 }

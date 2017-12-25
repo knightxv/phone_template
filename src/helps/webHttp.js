@@ -4,7 +4,7 @@ import Toast from './antdComponent/Toast';
 const webHttpConfig = {
   // getConfigUrl: '/config',
   // httpConfigKey: 'JavaWebPublicServerUrl',
-  isDebug: false,
+  isDebug: true,
   getFetchUrl() {
     return '';
   },

@@ -10,6 +10,10 @@ flex-direction: row;
 align-items: center;
 justify-content: space-between;
 background: #fff;
+position: fixed;
+width: 100%;
+top: 0;
+z-index: 999;
 `;
 const NavBarSideWrap = styled.div`
 min-width: 36px;
@@ -21,23 +25,26 @@ justify-content: center;
 
 const DefaultNavbar = ({ title, onClick, right, className }) => {
   return (
-    <NavBarWrap className={className}>
-      <NavBarSideWrap>
-        {
-            onClick && <Icon
-              type="left"
-              color="#108ee9"
-              size="lg"
-              style={{ marginLeft: '-0.4rem' }}
-              onClick={onClick}
-            />
-        }
-      </NavBarSideWrap>
-      <div style={{ fontSize: '0.36rem' }}>{title}</div>
-      <NavBarSideWrap>
-        { right }
-      </NavBarSideWrap>
-    </NavBarWrap>
+    <div>
+      <NavBarWrap className={className}>
+        <NavBarSideWrap>
+          {
+              onClick && <Icon
+                type="left"
+                color="#108ee9"
+                size="lg"
+                style={{ marginLeft: '-0.4rem' }}
+                onClick={onClick}
+              />
+          }
+        </NavBarSideWrap>
+        <div style={{ fontSize: '0.36rem' }}>{title}</div>
+        <NavBarSideWrap>
+          { right }
+        </NavBarSideWrap>
+      </NavBarWrap>
+      <div style={{ height: '0.8rem' }} />
+    </div>
   );
 };
 

@@ -23,9 +23,9 @@ class InviteAgent extends BaseComponent {
   // }
   onCopy = (val, result) => {
     if (!result || this.helps.isWeixinBrowser()) {
-      this.helps.toast('复制失败，请自行选择复制');
+      this.message.info('复制失败，请自行选择复制');
     } else {
-      this.helps.toast('复制成功');
+      this.message.info('复制成功');
     }
   }
   render() {
@@ -35,7 +35,7 @@ class InviteAgent extends BaseComponent {
         <Title>邀请代理</Title>
         <NavBar
           title="邀请代理"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <WhiteSpace />
         <WingBlank className={styles.contentContainer}>

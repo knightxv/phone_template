@@ -205,6 +205,8 @@ export default {
                 shopId: 1, // 商品的id
                 goodsMoney: '100000', // 商品金额
                 masonryCount: '10000', // 钻石个数
+                statu: 1, // 状态
+                tip: '推荐新代理,88开运'
             },
         ]
     },

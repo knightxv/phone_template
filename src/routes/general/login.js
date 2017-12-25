@@ -27,14 +27,14 @@ class Login extends BaseComponent {
     this.setState({
       loginLoading: true,
     });
-    const res = await this.helps.webHttp.get('/spreadApi/general/login', params);
+    const res = await this.http.webHttp.get('/spreadApi/general/login', params);
     this.setState({
       loginLoading: false,
     });
     if (res.isSuccess) {
-      this.props.dispatch(this.helps.routerRedux.push('/general/homePage'));
+      this.router.go('/general/homePage');
     } else {
-      this.helps.toast(res.info);
+      this.message.info(res.info);
     }
   }
   render() {
@@ -54,6 +54,7 @@ class Login extends BaseComponent {
               <InputItem
                 onChange={(value) => this.setState({ loginID: value })}
                 placeholder="请输入账号名/姓名"
+                style={{ flex: 1 }}
               />
             </FlexRow>
             <FlexRow className={styles.loginInput}>
@@ -61,6 +62,7 @@ class Login extends BaseComponent {
               <InputItem
                 type="password"
                 placeholder="请输入密码"
+                style={{ flex: 1 }}
                 onChange={value => this.setState({ password: value })}
               />
             </FlexRow>

@@ -16,14 +16,14 @@ class HomePage extends BaseComponent {
     };
   }
   navigate = (routerName) => {
-    this.props.dispatch(this.helps.routerRedux.push(routerName));
+    this.router.go(routerName);
   }
   navigateToEditPas = () => {
     this.navigate('/general/editPsd');
   }
   // 登出
   navigateToQuit = async () => {
-    await this.helps.webHttp.get('/spreadApi/general/logout');
+    await this.http.webHttp.get('/spreadApi/general/logout');
     this.navigate('/general/login');
   }
   // 查看我的代理
@@ -43,11 +43,11 @@ class HomePage extends BaseComponent {
     this.navigate('/general/cashRecord');
   }
   async componentWillMount() {
-    const res = await this.helps.webHttp.get('/spreadApi/general/getUserInfo');
+    const res = await this.http.webHttp.get('/spreadApi/general/getUserInfo');
     if (res.isSuccess) {
       this.props.dispatch({ type: 'general/updateInfo', payload: { ...res.data } });
     }
-    const noticeRes = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', { type: 3 });
+    const noticeRes = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', { type: 3 });
     if (noticeRes.isSuccess) {
       this.setState({
         notice: noticeRes.data.htmlText,
@@ -56,9 +56,9 @@ class HomePage extends BaseComponent {
   }
   onCopy = (val, result) => {
     if (!result || this.helps.isWeixinBrowser()) {
-      this.helps.toast('复制失败，请手动复制链接');
+      this.message.info('复制失败，请手动复制链接');
     } else {
-      this.helps.toast('复制成功');
+      this.message.info('复制成功');
     }
   }
   render() {

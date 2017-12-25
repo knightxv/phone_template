@@ -43,7 +43,7 @@ class CommissionRecord extends BaseComponent {
     };
   }
   async componentWillMount() {
-    const res = await this.helps.webHttp.get('/spreadApi/general/commissionRecord');
+    const res = await this.http.webHttp.get('/spreadApi/general/commissionRecord');
     if (res.isSuccess) {
       this.setState({
         tableData: res.data,
@@ -60,7 +60,7 @@ class CommissionRecord extends BaseComponent {
         <Title>提成记录</Title>
         <NavBar
           title="提成记录"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
           <Table

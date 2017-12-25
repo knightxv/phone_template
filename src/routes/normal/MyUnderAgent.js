@@ -21,15 +21,12 @@ class MyUnderAgent extends BaseComponent {
     };
   }
   rechargeForAgent = (agentId) => {
-    this.props.dispatch(this.helps.routerRedux.push({
-      pathname: 'rechargeForAgent',
-      query: {
-        agentId,
-      },
-    }));
+    this.router.go('/rechargeForAgent', {
+      agentId,
+    });
   }
   async componentWillMount() {
-    const res = await this.helps.webHttp.get('/spreadApi/myUnderAgents');
+    const res = await this.http.webHttp.get('/spreadApi/myUnderAgents');
     if (res.isSuccess) {
       this.setState({
         tableData: res.data,
@@ -41,7 +38,7 @@ class MyUnderAgent extends BaseComponent {
   // }
   // 跳转到邀请代理
   navigateToInvite = () => {
-    this.props.dispatch(this.helps.routerRedux.push('/inviteToAgent'));
+    this.router.go('/inviteToAgent');
   }
   onSearchInputChange = (ev) => {
     this.setState({
@@ -160,7 +157,7 @@ class MyUnderAgent extends BaseComponent {
         <Title>我的下级代理</Title>
         <NavBar
           title="我的下级代理"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
           right={<span onClick={this.navigateToInvite}>邀请</span>}
         />
         <NoticeBar

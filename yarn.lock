@@ -6215,6 +6215,13 @@ react-sticky@^5.0.2:
   dependencies:
     prop-types "^15.5.8"
 
+react-sticky@^6.0.1:
+  version "6.0.1"
+  resolved "http://registry.npm.taobao.org/react-sticky/download/react-sticky-6.0.1.tgz#356988bdcc6fc8cd2d89746d2302edce67d86687"
+  dependencies:
+    prop-types "^15.5.8"
+    raf "^3.3.0"
+
 react-timer-mixin@^0.13.3:
   version "0.13.3"
   resolved "http://registry.npm.taobao.org/react-timer-mixin/download/react-timer-mixin-0.13.3.tgz#0da8b9f807ec07dc3e854d082c737c65605b3d22"

@@ -3,6 +3,8 @@ import { connect } from 'dva';
 
 import { List } from 'antd-mobile';
 import { region } from '@/data/region';
+import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
+import { StickyContainer, Sticky } from '@/helps/lazyComponent/ReactSticky';
 import { InputItem, Button, SelectPicker } from '@/helps/antdComponent/index.js';
 // import Button from '@/helps/antdComponent/Button';
 // import SelectPicker from '@/helps/antdComponent/SelectPicker';
@@ -11,7 +13,7 @@ import BaseComponent from '@/helps/BaseComponent';
 import { FlexRow, Flex, WhiteSpace, Title } from '@/helps/styleComponent';
 import bankData from '@/data/bank';
 
-import styles from './CashMoney.css';
+import styles from './CashMoney.less';
 
 
 class AgencyExtractMoney extends BaseComponent {
@@ -24,7 +26,6 @@ class AgencyExtractMoney extends BaseComponent {
       bankCardName, // 名字
       bankName, // 银行
       bankOfDeposit, // 开户银行
-
      } = props;
     //  const positionName = 'df';
     this.bankDataSelect = bankData.map(val => ({
@@ -73,6 +74,7 @@ class AgencyExtractMoney extends BaseComponent {
       bankOfDeposit, // 开户银行
       cashCount: '',
       positionSelect: defaultPosition,
+      record: [],
     };
   }
   // 提现
@@ -89,17 +91,17 @@ class AgencyExtractMoney extends BaseComponent {
       cashCount,
     };
     if (!cashCount || isNaN(cashCount) || !/^\d+(\.\d{1,2})?$/.test(cashCount)) {
-      this.helps.toast('输入的提现金额格式错误');
+      this.message.info('输入的提现金额格式错误');
       return false;
     }
-    const res = await this.helps.webHttp.get('/spreadApi/cash', params);
+    const res = await this.http.webHttp.get('/spreadApi/cash', params);
     if (res.isSuccess) {
-      this.helps.toast(res.info || '提现成功');
-      this.props.dispatch(this.helps.routerRedux.goBack());
+      this.message.info(res.info || '提现成功');
+      this.router.back();
     } else {
-      this.helps.toast(res.info);
+      this.message.info(res.info);
       // 更新用户数据
-      const updateRes = await this.helps.webHttp.get('/spreadApi/getUserInfo');
+      const updateRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
       if (updateRes.isSuccess) {
         this.props.dispatch({ type: 'agent/updateAppInfo', payload: { ...updateRes.data } });
       }
@@ -117,8 +119,11 @@ class AgencyExtractMoney extends BaseComponent {
       positionSelect: val,
     });
   }
+  renderRow = () => {
+    return (<div>1</div>);
+  }
   render() {
-    const { wechat_acc: wechatAcc, cardNumber, bankCardName, positionSelect, bankName, bankOfDeposit, cashCount } = this.state;
+    const { wechat_acc: wechatAcc, cardNumber, bankCardName, positionSelect, bankName, bankOfDeposit, cashCount, record } = this.state;
     const { canCashCount } = this.props;
     const canCashCountFloat = parseFloat(canCashCount / 100).toFixed(2);
     return (
@@ -126,7 +131,7 @@ class AgencyExtractMoney extends BaseComponent {
         <Title>提现</Title>
         <NavBar
           title="提现"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <WhiteSpace />
         <SelectPicker
@@ -209,6 +214,45 @@ class AgencyExtractMoney extends BaseComponent {
           </Button>
         </Flex>
         <p className={styles.countTip}>每天最多提现一次,工作日24小时内到账,节假日可能会延期</p>
+        <StickyContainer>
+          <Sticky>
+            {
+              ({
+              style,
+                // the following are also available but unused in this example
+                isSticky,
+                wasSticky,
+                distanceFromTop,
+                distanceFromBottom,
+                calculatedHeight
+              }) => {
+                return (
+                  <div className={styles.listWrap} style={style}>
+                    <div className={styles.recordHeader}>
+                      <div>
+                        本月购钻数量:3003个
+                      </div>
+                      <div>
+                        总购钻数量:300个
+                      </div>
+                    </div>
+                    {
+                      wasSticky
+                      ? <ScrollListView
+                        data={record}
+                        renderRow={this.renderRow}
+                      />
+                      : <BodyScrollListView
+                        data={record}
+                        renderRow={this.renderRow}
+                      />
+                    }
+                  </div>
+                );
+              }
+            }
+          </Sticky>
+        </StickyContainer>
       </div>
     );
   }

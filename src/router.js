@@ -11,7 +11,6 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/normal/Login'),
     models: () => [
       import('./models/agent'),
-      import('./models/app'),
     ],
   });
   const NormalHomePage = dynamic({
@@ -33,7 +32,6 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/normal/InviteToAgent'),
     models: () => [
       import('./models/agent'),
-      import('./models/app'),
     ],
   });
   const Pay = dynamic({
@@ -97,7 +95,6 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/normal/MyPlayer'),
     models: () => [
       import('./models/agent'),
-      import('./models/app'),
     ],
   });
   const EditAgencyPsd = dynamic({
@@ -112,7 +109,6 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/normal/Register'),
     models: () => [
       import('./models/agent'),
-      import('./models/app'),
     ],
   });
   const AgreenDetail = dynamic({
@@ -122,13 +118,13 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
-  const BuyMasonryDetail = dynamic({
-    app,
-    component: () => import('./routes/normal/BuyMasonryDetail'),
-    models: () => [
-      import('./models/agent'),
-    ],
-  });
+  // const BuyMasonryDetail = dynamic({
+  //   app,
+  //   component: () => import('./routes/normal/BuyMasonryDetail'),
+  //   models: () => [
+  //     import('./models/agent'),
+  //   ],
+  // });
   const MasonryDerail = dynamic({
     app,
     component: () => import('./routes/normal/MasonryDerail'),
@@ -198,7 +194,6 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/general/login'),
     models: () => [
       import('./models/general'),
-      import('./models/app'),
     ],
   });
   const GeneralHomePage = dynamic({
@@ -278,7 +273,6 @@ function RouterConfig({ history, app }) {
           <Route path="/EditAgencyPsd" component={EditAgencyPsd} />
           <Route path="/register" component={Register} />
           <Route path="/AgreenDetail" component={AgreenDetail} />
-          <Route path="/buyMasonryDetail" component={BuyMasonryDetail} />
           <Route path="/masonryDerail" component={MasonryDerail} />
           <Route path="/selectGame" component={SelectGame} />
           <Route path="/rechargeForAgent" component={RechargeForAgent} />

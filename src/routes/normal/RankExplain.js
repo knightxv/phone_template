@@ -61,7 +61,7 @@ class RankExplain extends BaseComponent {
     //     prizeInfo: '888',
     //   },
     // ];
-    const res = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', params);
+    const res = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', params);
     if (res.isSuccess) {
       const { htmlText } = res.data;
       this.setState({
@@ -76,7 +76,7 @@ class RankExplain extends BaseComponent {
         <Title>排行奖励说明</Title>
         <NavBar
           title="排行奖励说明"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <WhiteSpace />
         <div className={styles.container}>

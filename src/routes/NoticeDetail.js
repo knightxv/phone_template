@@ -15,7 +15,7 @@ class NoticeDetail extends BaseComponent {
   async componentWillMount() {
     // 获取首页额外数据
     const params = { type: this.TypeDefine.htmlTextType.notice_normalAgency };
-    const extraRes = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', params);
+    const extraRes = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', params);
     if (extraRes.isSuccess) {
       // const { rankTipVisible, noticeVisible, noticeInfo } = res.data;
       this.setState({
@@ -31,7 +31,7 @@ class NoticeDetail extends BaseComponent {
         <Title>公告栏</Title>
         <NavBar
           title="公告栏"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <WhiteSpace />
         <div style={{ padding: '.2rem', background: '#fff' }}>

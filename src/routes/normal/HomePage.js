@@ -50,7 +50,7 @@ class HomePage extends BaseComponent {
   async componentWillMount() {
     // const { powerList } = this.props;
     // 获取个人数据
-    const res = await this.helps.webHttp.get('/spreadApi/getUserInfo');
+    const res = await this.http.webHttp.get('/spreadApi/getUserInfo');
     if (res.isSuccess) {
       this.props.dispatch({ type: 'agent/updateAppInfo', payload: res.data });
       this.setState({
@@ -62,7 +62,7 @@ class HomePage extends BaseComponent {
     }
     const params = { type: this.TypeDefine.htmlTextType.notice_normalAgency }; // htmlTextType.notice_normalAgency
     // 获取首页额外数据
-    const extraRes = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', params);
+    const extraRes = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', params);
     if (extraRes.isSuccess) {
       // const { rankTipVisible, noticeVisible, noticeInfo } = res.data;
       this.setState({
@@ -71,7 +71,7 @@ class HomePage extends BaseComponent {
     }
     // 获取奖励说明
     const priceStatu = this.TypeDefine.htmlTextType.page_prizeExplain;
-    const priceRes = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', { type: priceStatu });
+    const priceRes = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', { type: priceStatu });
     if (priceRes.isSuccess && priceRes.data.htmlText) {
       this.setState({
         priceInfoVisible: true,
@@ -79,11 +79,11 @@ class HomePage extends BaseComponent {
     }
   }
   navigate = (touterName) => {
-    this.props.dispatch(this.helps.routerRedux.push(touterName));
+    this.router.go(touterName);
   }
   logout = async () => {
-    await this.helps.webHttp.get('/spreadApi/logout');
-    this.props.dispatch(this.helps.routerRedux.push('/login'));
+    await this.http.webHttp.get('/spreadApi/logout');
+    this.navigate('/login');
   }
   // 跳转到公告详情
   navigateNotice = async () => {
@@ -94,23 +94,17 @@ class HomePage extends BaseComponent {
   }
   // 跳到我的玩家
   goToSelectGame = async (routerName) => {
-    const res = await this.helps.webHttp.get('/spreadApi/getGameList');
+    const res = await this.http.webHttp.get('/spreadApi/getGameList');
     if (res.isSuccess) {
       if (res.data && res.data.length === 1) {
         const serverid = res.data[0].serverid;
-        this.props.dispatch(this.helps.routerRedux.push({
-          pathname: routerName,
-          query: {
-            serverid,
-          },
-        }));
+        this.router.go(routerName, {
+          serverid,
+        });
       } else {
-        this.props.dispatch(this.helps.routerRedux.push({
-          pathname: '/selectGame',
-          query: {
-            redirect: routerName,
-          },
-        }));
+        this.router.go('/selectGame', {
+          redirect: routerName,
+        });
       }
     }
   }
@@ -131,9 +125,9 @@ class HomePage extends BaseComponent {
     // const unitRechargeOfToday = parseFloat(rechargeOfToday / 100); // 玩家今日充值
     // const unitRechargeOfYesterDay = parseFloat(rechargeOfYesterDay / 100); // 玩家昨日充值
     // const unitCashCountlog = parseFloat(cashCountlog / 100); // 已提现
-    const unitCanCashCount = this.parseFloatMoney(canCashCount); // 未提现
-    const unitBalanceIncomeToday = this.parseFloatMoney(balanceIncomeToday);
-    const unitBalancePayToday = this.parseFloatMoney(balancePayToday);
+    const unitCanCashCount = this.helps.parseFloatMoney(canCashCount); // 未提现
+    const unitBalanceIncomeToday = this.helps.parseFloatMoney(balanceIncomeToday);
+    const unitBalancePayToday = this.helps.parseFloatMoney(balancePayToday);
     const power = this.powerManage();
     // 权限
     const {
@@ -169,8 +163,8 @@ class HomePage extends BaseComponent {
               我的排名:<span className={styles.rankColor}>{ isRankingShow ? ranking : '未上榜'}</span>
           </div>
           {
-              priceInfoVisible && <p className={styles.prizeLabel} onClick={() => this.navigate('/rankExplain')}>奖励规则</p>
-            }
+            priceInfoVisible && <p className={styles.prizeLabel} onClick={() => this.navigate('/rankExplain')}>奖励规则</p>
+          }
         </FlexRowBetweenWingSpace>
         <FlexRow className={styles.userInfoWrap}>
           <Avatar className={styles.userAvatar} />
@@ -184,79 +178,35 @@ class HomePage extends BaseComponent {
       </div>
       <div className={styles.countContainer}>
         <div className={styles.countWrap}>
-          钻石：{ masonry }个
+          钻石：<span className={styles.countLabel}>{ masonry }</span>个
         </div>
         {
           hasPowerToBanlance &&
           <div className={styles.countWrap}>
-            余额：{ unitCanCashCount }元
+            余额：<span className={styles.countLabel}>{ unitCanCashCount }</span>元
           </div>
         }
       </div>
       <div className={styles.module}>
-        {/* 向系统购买钻石 */}
+        {/* 购买钻石 */}
         {
           (havePowerToRecharge || hasPowerToBanlance)
           ? <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/agencyPay')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.zuanshi} />
-              <span>向系统购买钻石</span>
+              <span>购买钻石</span>
             </FlexRow>
             <Icon type="right" />
           </FlexRowBetweenWingSpace>
           : null
         }
-        {/* 帮玩家充值钻石 */}
-        {
-          hasPowerToUnderPlayer &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('MyPlayer')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
-              <span>帮玩家充值钻石</span>
-            </FlexRow>
-            <Icon type="right" />
-            {/* <FlexRow className={styles.titleWrap}>
-              <p>{myPlayerCount}人</p>
-              <Icon type="right" />
-            </FlexRow> */}
-          </FlexRowBetweenWingSpace>
-        }
-        
-        {/* 给代理转钻 */}
-        {
-          havePowerToSaveAgent &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/mySaveAgent')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
-              <span>给代理转钻</span>
-            </FlexRow>
-            <Icon type="right" />
-            {/* <FlexRow className={styles.titleWrap}>
-              <p>{saveAgentCount || 0}人</p>
-            </FlexRow> */}
-          </FlexRowBetweenWingSpace>
-        }
-        {/* 给下级代理转钻(囤卡模式) */}
-        {
-          hasPowerToiAgentGiveForUnderAgent &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/myUnderAgent_transfer')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
-              <span>给下级代理转钻</span>
-            </FlexRow>
-            <Icon type="right" />
-            {/* <FlexRow className={styles.titleWrap}>
-              <p>{saveAgentCount || 0}人</p>
-            </FlexRow> */}
-          </FlexRowBetweenWingSpace>
-        }
-        {/* 给玩家转钻 */}
+        {/* 给玩家充钻 */}
         {
           havePowerToSavePlayer &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/mySavePlayer')}>
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/pay')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
-              <span>给玩家转钻</span>
+              <span>给玩家充钻</span>
             </FlexRow>
             <Icon type="right" />
             {/* <FlexRow className={styles.titleWrap}>
@@ -264,45 +214,41 @@ class HomePage extends BaseComponent {
             </FlexRow> */}
           </FlexRowBetweenWingSpace>
         }
-        {/* 钻石变化记录 */}
+        {/* 给代理充钻 */}
         {
+          havePowerToSaveAgent &&
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/rechargeForAgent')}>
+            <FlexRow className={styles.navigateTitleWrap}>
+              <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
+              <span>给代理充钻</span>
+            </FlexRow>
+            <Icon type="right" />
+            {/* <FlexRow className={styles.titleWrap}>
+              <p>{saveAgentCount || 0}人</p>
+            </FlexRow> */}
+          </FlexRowBetweenWingSpace>
+        }
+        
+        {/* 钻石变化记录 */}
+        {/* {
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/masonryDerail')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
               <span>钻石变化记录</span>
             </FlexRow>
             <Icon type="right" />
-            {/* <FlexRow className={styles.titleWrap}>
-              <Icon type="right" />
-            </FlexRow> */}
           </FlexRowBetweenWingSpace>
-        }
+        } */}
       </div>
       { hasPowerToBanlance && <WhiteSpace /> }
       {
         hasPowerToBanlance &&
         <div className={styles.module}>
-          {/* 余额申请提现 */}
+          {/* 提现 */}
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.tixian} />
-              <span>余额申请提现</span>
-            </FlexRow>
-            <Icon type="right" />
-          </FlexRowBetweenWingSpace>
-          {/* 余额提现记录 */}
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashChangeRecord')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.tixian} />
-              <span>余额提现记录</span>
-            </FlexRow>
-            <Icon type="right" />
-          </FlexRowBetweenWingSpace>
-          {/* 余额变化记录 */}
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoneyRecord')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.tixian} />
-              <span>余额变化记录</span>
+              <span>提现</span>
             </FlexRow>
             <Icon type="right" />
           </FlexRowBetweenWingSpace>

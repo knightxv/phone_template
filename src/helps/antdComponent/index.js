@@ -80,6 +80,26 @@ class Button extends React.Component {
   }
 }
 
+class ListView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      Component: null,
+    };
+  }
+  componentDidMount() {
+    import(/* webpackChunkName: 'ListView' */'./ListView').then((Component) => {
+      this.setState({
+        Component,
+      });
+    });
+  }
+  render() {
+    const { Component } = this.state;
+    return (Component ? <Component {...this.props} /> : <div />);
+  }
+}
+
 let DataSource;
 class ListViewTable extends React.Component {
   constructor(props) {
@@ -89,7 +109,7 @@ class ListViewTable extends React.Component {
     };
   }
   componentDidMount() {
-    import(/* webpackChunkName: 'ListView' */'./ListView').then((res) => {
+    import(/* webpackChunkName: 'ListViewTable' */'./ListViewTable').then((res) => {
       const Component = res.default;
       DataSource = res.DataSource;
       this.setState({
@@ -132,5 +152,6 @@ export default {
   Icon,
   Button,
   ListViewTable,
+  ListView,
   InputItem,
 };

@@ -25,36 +25,38 @@ const powerEnum = { // 权限配置
 export default class BaseComponent extends React.Component {
   constructor(props) {
     super(props);
-    // 提供工具类
-    const resolveRouterReduxPush = (obj) => {
-      const isObj = Object.prototype.toString.call(obj) === '[object Object]';
-      if (isObj && obj.query) {
-        obj.search = querystring.stringify(obj.query);
-      }
-      return routerRedux.push(obj);
-    };
-
     // 工具
     this.helps = {
-      webHttp,
       ...help,
-      toast: (msg) => {
-        Toast.info(msg || '未知错误', 1, null, false);
+      // 这两个要整理到helps上
+      parseFloatMoney(money) {
+        return parseFloat(money / 100).toFixed(2);
       },
-      querystring,
-      routerRedux: {
-        ...routerRedux,
-        push: resolveRouterReduxPush,
+      transMoenyUnit(count) {
+        const transCount = count.toString();
+        if (transCount.length === 4) {
+          return `${parseFloat(transCount / 1000)}千`;
+        } else if (transCount.length > 4) {
+          return `${parseFloat(transCount / 10000)}万`;
+        }
+        return transCount;
       },
     };
 
+    // this.Enum
     this.TypeDefine = TypeDefine;
+
+    this.http = {
+      webHttp,
+      // fetch,
+    };
 
     // 提供路由服务（对help的扩展，专门针对路由管理）
     const self = this;
     this.router = {
       getQuery() {
-        const searchText = self.props.location.search.substr(1);
+        const searchVal = props.location.search || window.location.search;
+        const searchText = searchVal.substr(1);
         const query = querystring.parse(searchText);
         return query;
       },
@@ -66,33 +68,27 @@ export default class BaseComponent extends React.Component {
         const isObj = Object.prototype.toString.call(query) === '[object Object]';
         if (isObj) {
           self.props.dispatch(routerRedux.push({
-            pathName: path,
+            pathname: path,
             search: querystring.stringify(query),
           }));
         }
       },
+      back() {
+        self.props.dispatch(routerRedux.goBack());
+      },
     };
-    // this.attribute = {
-    //   system: help.system(),
-    //   isWechat: help.isWeixinBrowser,
-    // };
+
+    // 提示
+    this.message = {
+      info(message) {
+        Toast.info(message, 1, null, false);
+      },
+    };
   }
   hasPower(power) {
     const { powerList } = this.props;
     return !!powerList && powerList.findIndex((powerItem) => {
       return +powerItem === powerEnum[power];
     }) > -1;
-  }
-  parseFloatMoney = (money) => {
-    return parseFloat(money / 100).toFixed(2);
-  }
-  transMoenyUnit = (count) => {
-    const transCount = count.toString();
-    if (transCount.length === 4) {
-      return `${parseFloat(transCount / 1000)}千`;
-    } else if (transCount.length > 4) {
-      return `${parseFloat(transCount / 10000)}万`;
-    }
-    return transCount;
   }
 }

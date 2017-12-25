@@ -26,23 +26,23 @@ class EditPsd extends BaseComponent {
   editPsd = async () => {
     const { oldPsd, newPsd, rePsd } = this.state;
     if (!oldPsd || !newPsd || !rePsd) {
-      this.helps.toast('请完善填写内容');
+      this.message.info('请完善填写内容');
       return false;
     }
     if (newPsd !== rePsd) {
-      this.helps.toast('两次密码不一致');
+      this.message.info('两次密码不一致');
       return false;
     }
     const params = {
       oldPsd,
       newPsd,
     };
-    const res = await this.helps.webHttp.get('/spreadApi/general/editPassword', params);
+    const res = await this.http.webHttp.get('/spreadApi/general/editPassword', params);
     if (res.isSuccess) {
-      this.props.dispatch(this.helps.routerRedux.goBack());
-      this.helps.toast('修改成功');
+      this.router.back();
+      this.message.info('修改成功');
     } else {
-      this.helps.toast(res.info);
+      this.message.info(res.info);
     }
   }
   render() {
@@ -53,7 +53,7 @@ class EditPsd extends BaseComponent {
         <div>
           <NavBar
             title="修改密码"
-            onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+            onClick={this.router.back}
           />
           <WhiteSpace />
           <div className={styles.contentContainer}>

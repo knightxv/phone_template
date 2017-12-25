@@ -70,7 +70,7 @@ class AgencyPayType extends BaseComponent {
         <p className={styles.chargeTime}>{ new Date(+rowData.chargeTime).format('yyyy-MM-dd hh:mm')}</p>
       </div>
       <p className={styles.chargeMoney}>
-        -{this.parseFloatMoney(rowData.chargeMoney)}
+        -{this.helps.parseFloatMoney(rowData.chargeMoney)}
       </p>
     </FlexRowBetweenWingSpace>);
   }
@@ -86,8 +86,8 @@ class AgencyPayType extends BaseComponent {
   getDetailData = async () => {
     const page = this.page;
     const size = this.size;
-    const res = await this.helps.webHttp.get('/spreadApi/diamondsDetail', { page, size });
-    // chargeTime: 1508480231603, // 购买的时间  chargeCount: 300, // 购买的数量`  
+    const res = await this.http.webHttp.get('/spreadApi/diamondsDetail', { page, size });
+    // chargeTime: 1508480231603, // 购买的时间  chargeCount: 300, // 购买的数量`
     if (res.isSuccess) {
       this.page ++;
       const temData = {};
@@ -104,7 +104,7 @@ class AgencyPayType extends BaseComponent {
         }
         temData[monthValue].push(data);
       });
-      for (let attr in temData) {
+      for(let attr in temData) {
         const index = this.data.findIndex((monthData) => {
           return monthData.monthValue === attr;
         });
@@ -131,7 +131,7 @@ class AgencyPayType extends BaseComponent {
   // 到达底部
   onEndReached = async () => {
     if (this.dataLoadOver) {
-      this.helps.toast('没有更多数据');
+      this.message.info('没有更多数据');
       return;
     }
     await this.getDetailData();
@@ -142,7 +142,7 @@ class AgencyPayType extends BaseComponent {
         <Title>购钻明细</Title>
         <NavBar
           title="购钻明细"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <ListView
           initialListSize={this.size}
