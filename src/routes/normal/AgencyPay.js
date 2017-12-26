@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 
+import classnames from 'classnames';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { Icon, Button } from '@/helps/antdComponent/index.js';
 import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
@@ -22,31 +23,32 @@ class AgencyPay extends BaseComponent {
   constructor(props) {
     super(props);
     this.payEnum = this.helps.payEnum;
-    const { WECHAT, ALI, BALANCE } = this.payEnum;
-    this.marsonryPayType = [
-      // { payType: WECHAT, label: '微信支付', paySource: paySource.wx },
-      // { payType: ALI, label: '支付宝支付', paySource: paySource.zfb },
-      // { payType: BALANCE, label: '余额支付', paySource: paySource.yezf },
-    ];
+    // const { WECHAT, ALI, BALANCE } = this.payEnum;
+    const marsonryPayType = this.getMarsonryToPowerList();
+    this.state = {
+      goods: [],
+      record: [],
+      payTypeSelect: marsonryPayType[0] ? marsonryPayType[0].payType : -1,
+    };
+    this.page = 0;
+    this.size = 10;
+  }
+  getMarsonryToPowerList = () => {
     // 如果有余额支付权限
+    const { WECHAT, ALI, BALANCE } = this.payEnum;
+    const marsonryPayType = [];
     const havePowerToBanlance = this.hasPower('banlance');
     const havePowerToRecharge = this.hasPower('proxySDKCharge');
     if (havePowerToRecharge) {
       if (!this.helps.isWeixinBrowser()) {
-        this.marsonryPayType.push({ payType: ALI, label: '支付宝支付', paySource: paySource.zfb });
+        marsonryPayType.push({ payType: ALI, label: '支付宝支付', paySource: paySource.zfb });
       }
-      this.marsonryPayType.push({ payType: WECHAT, label: '微信支付', paySource: paySource.wx });
+      marsonryPayType.push({ payType: WECHAT, label: '微信支付', paySource: paySource.wx });
     }
     if (havePowerToBanlance) {
-      this.marsonryPayType.push({ payType: BALANCE, label: '余额支付', paySource: paySource.yezf });
+      marsonryPayType.push({ payType: BALANCE, label: '余额支付', paySource: paySource.yezf });
     }
-    this.state = {
-      goods: [],
-      record: [],
-      payTypeSelect: this.marsonryPayType[0] && this.marsonryPayType[0].payType,
-    };
-    this.page = 0;
-    this.size = 10;
+    return marsonryPayType;
   }
   async componentWillMount() {
     const res = await this.http.webHttp.get('/spreadApi/getMasonryGoods');
@@ -121,11 +123,17 @@ class AgencyPay extends BaseComponent {
 
   }
   renderRow = (row) => {
-    return <div className={styles.rowItem}>1</div>
+    return <div className={styles.rowItem}>1</div>;
   }
   render() {
     const { goods, payTypeSelect, record } = this.state;
     const { canCashCount } = this.props;
+    const marsonryPayType = this.getMarsonryToPowerList();
+    const goodsWrapClass = classnames({
+      [styles.goodsWrap]: true,
+      [styles.goodsCheap]: true,
+      [styles.goodsSelect]: true,
+    });
     return (
       <div className={styles.container}>
         <Title>购买钻石</Title>
@@ -140,13 +148,13 @@ class AgencyPay extends BaseComponent {
             {
               goods.map(({ goodsMoney, masonryCount, shopId }, i) => (
                 <div
-                  className={styles.goodsWrap}
+                  className={goodsWrapClass}
                   key={i}
                   style={{ marginRight: (i !== 0 && ((i - 2) % 3) === 0) ? 0 : '5%' }}
                   onClick={() => this.buyGood(shopId)}
                 >
-                  <p className={styles.goodInfo}>{this.helps.transMoenyUnit(masonryCount)}钻石</p>
-                  <p className={styles.goodInfo}>售价:{this.helps.parseFloatMoney(goodsMoney)}元</p>
+                  <p className={styles.goodLabel}>{this.helps.transMoenyUnit(masonryCount)}钻石</p>
+                  <p className={styles.goodPrice}>售价:{this.helps.parseFloatMoney(goodsMoney)}元</p>
                 </div>
               ))
             }
@@ -166,7 +174,7 @@ class AgencyPay extends BaseComponent {
                 wasSticky,
                 distanceFromTop,
                 distanceFromBottom,
-                calculatedHeight
+                calculatedHeight,
               }) => {
                 // console.log(wasSticky)
                 return (
@@ -267,5 +275,5 @@ export default connect(mapStateToProps)(AgencyPay);
         </StickyContainer>
       </div>
 
-        
+
 */

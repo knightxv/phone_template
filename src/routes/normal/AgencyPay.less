@@ -27,8 +27,25 @@
     border-radius: 5px;
     .borTop();
     background: #fff;
+    position: relative;
 }
-.goodInfo {
+
+.goodsCheap::after {
+    content: '';
+    position: absolute;
+    width: .6rem;
+    height: .6rem;
+    background: url("../../assets/xsyh.png") no-repeat;
+    background-size: .6rem .6rem;
+    top: 0;
+    right: 0;
+}
+.goodsSelect {
+    color: #fff;
+    background: @baseColor;
+}
+
+.goodPrice {
     font-size: 0.26rem;
 }
 
@@ -61,3 +78,4 @@
     padding: .1rem;
     .borBot();
 }
+
