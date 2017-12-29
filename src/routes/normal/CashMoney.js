@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 
+import ScrollTop from '@/components/ScrollTop';
 import { List } from 'antd-mobile';
 import { region } from '@/data/region';
 import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
@@ -153,6 +154,11 @@ class AgencyExtractMoney extends BaseComponent {
       this.helps.toast(res.info || '请求错误');
     }
   }
+  scrollTop = () => {
+    // window.location
+    // scrollNode.scrollTop(0, 0);
+    window.location.reload();
+  }
   render() {
     const { wechat_acc: wechatAcc, cardNumber, bankCardName, positionSelect,
       bankName, bankOfDeposit, cashCount, record,
@@ -163,10 +169,12 @@ class AgencyExtractMoney extends BaseComponent {
     let monthCash = 0;
     let allCash = 0;
     record.forEach((data) => {
-      if (data.createTime >= this.helps.getMonthTimeStamp()) {
-        monthCash += data.cashCount;
+      if (data.result == 1) {
+        if (data.createTime >= this.helps.getMonthTimeStamp()) {
+          monthCash += data.cashCount;
+        }
+        allCash += data.cashCount;
       }
-      allCash += data.cashCount;
     });
     const monthCashLabel = this.helps.parseFloatMoney(monthCash);
     const allCashLabel = this.helps.parseFloatMoney(allCash);
@@ -290,6 +298,9 @@ class AgencyExtractMoney extends BaseComponent {
                         data={record}
                         renderRow={this.renderRow}
                       />
+                    }
+                    {
+                      wasSticky && <ScrollTop onClick={this.scrollTop} />
                     }
                   </div>
                 );

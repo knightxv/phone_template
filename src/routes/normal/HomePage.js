@@ -13,10 +13,12 @@ import styles from './HomePage.less';
 
 // import { htmlTextType } from '../utils/typeDefine';
 const IconSource = {
-  zuanshi: require('../../assets/czzs.png'),
-  xiajiguanli: require('../../assets/gwjcz.png'),
-  wanjiachongzhi: require('../../assets/tx.png'),
-  tixian: require('../../assets/xjdl.png'),
+  buyDia: require('../../assets/buyDia.png'),
+  turnDia_agent: require('../../assets/turnDia_agent.png'),
+  turnDia_play: require('../../assets/turnDia_play.png'),
+  invite: require('../../assets/invite.png'),
+  bank: require('../../assets/bank.png'),
+  fanli: require('../../assets/fanli.png'),
   notice: require('../../assets/gg.png'),
 };
 
@@ -167,6 +169,7 @@ class HomePage extends BaseComponent {
           钻石：<span className={styles.countLabel}>{ masonry }</span>个
         </div>
         {
+          havePowerToBanlance &&
           <div className={styles.countWrap}>
             余额：<span className={styles.countLabel}>{ unitCanCashCount }</span>元
           </div>
@@ -178,7 +181,7 @@ class HomePage extends BaseComponent {
           havePowerToBuyDia &&
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/agencyPay')}>
             <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.zuanshi} />
+              <IconImg className={styles.titleIconImg} src={IconSource.buyDia} />
               <span>购买钻石</span>
             </FlexRow>
             <Icon type="right" />
@@ -189,7 +192,7 @@ class HomePage extends BaseComponent {
           havePowerToRechargeToPlayer &&
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/turnDiaForPlayer')}>
             <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
+              <IconImg className={styles.titleIconImg} src={IconSource.turnDia_play} />
               <span>给玩家充钻</span>
             </FlexRow>
             <Icon type="right" />
@@ -202,7 +205,7 @@ class HomePage extends BaseComponent {
         {
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/turnDiaForAgent')}>
             <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
+              <IconImg className={styles.titleIconImg} src={IconSource.turnDia_agent} />
               <span>给代理充钻</span>
             </FlexRow>
             <Icon type="right" />
@@ -229,7 +232,7 @@ class HomePage extends BaseComponent {
           {/* 提现 */}
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
             <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.tixian} />
+              <IconImg className={styles.titleIconImg} src={IconSource.bank} />
               <span>提现</span>
             </FlexRow>
             <Icon type="right" />
@@ -241,7 +244,7 @@ class HomePage extends BaseComponent {
         {/* 邀请成为我的下级代理 */}
         <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/inviteToAgent')}>
           <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
+            <IconImg className={styles.titleIconImg} src={IconSource.invite} />
             <span>邀请成为我的下级代理</span>
           </FlexRow>
           <Icon type="right" />
@@ -251,9 +254,10 @@ class HomePage extends BaseComponent {
         </FlexRowBetweenWingSpace>
         {/* 查看下级钻石抽成情况 */}
         {
+          this.hasPower('underAgentPercentage') &&
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
             <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
+              <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
               <span>查看下级钻石抽成情况</span>
             </FlexRow>
             <Icon type="right" />

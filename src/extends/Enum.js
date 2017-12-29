@@ -13,14 +13,16 @@ export const powerEnum = {
   banlance: 7, // 账户余额栏目
   AgentBuyDiawechatPay: 15, // 微信支付(代理购买钻石)
   AgentBuyDiaAliPay: 16, // 支付宝支付(代理购买钻石)
-  AgentBuyDiabanlancePay: 17, // 余额支付(代理购买钻石)
+  AgentBuyDiabanlancePay: 17, // 余额支付(直接转钻)(代理购买钻石)
 
   AgentTurnDiaToPlayerDirect: 1, // 直接转卡(赠送)
   wechatPayForAgentTurnDiaToPlayer: 20, // 代理给玩家转钻（微信支付）
   AliPayForAgentTurnDiaToPlayer: 21, // 代理给玩家转钻（支付宝支付）
+
   iAgentTurnDiaToAgent: 23, // 总代理直接代理转钻
   playerRange: 19, // 0所有 1下级
   agentRange: 23, // 0所有 1下级
+  underAgentPercentage: 25, // 查看下级代理抽成返钻比例
 };
 
 export const Role = {

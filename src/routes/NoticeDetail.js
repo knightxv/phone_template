@@ -14,7 +14,7 @@ class NoticeDetail extends BaseComponent {
   }
   async componentWillMount() {
     // 获取首页额外数据
-    const params = { type: this.TypeDefine.htmlTextType.notice_normalAgency };
+    const params = { type: this.Enum.htmlTextType.notice_normalAgency };
     const extraRes = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', params);
     if (extraRes.isSuccess) {
       // const { rankTipVisible, noticeVisible, noticeInfo } = res.data;

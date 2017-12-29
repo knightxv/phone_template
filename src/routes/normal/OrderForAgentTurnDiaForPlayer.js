@@ -76,16 +76,16 @@ class OrderForAgentTurnDiaForPlayer extends BaseComponent {
               <div className={styles.payInfoTitle}>订单号</div>
               <span className={styles.orderIdLabel}>{ orderId }</span>
             </div>
-            <Button onClick={this.copyOrderId}>复制订单号</Button>
+            <Button size="small" onClick={this.copyOrderId}>复制订单号</Button>
           </div>
           <div className={styles.orderInfoRowItem}>
             <div>
-              <div className={styles.payInfoTitle}>购钻账户</div>
+              <div className={styles.payInfoTitle}>转出账户</div>
               <span className={styles.orderIdLabel}>{ orderAgentId }</span>
             </div>
             <div>
-              <div>购买前:<span className={styles.count}>{ payzDiaCountBefore }</span>个</div>
-              <div>购买前:<span className={styles.count}>{ payzDiaCountAfter }</span>个</div>
+              <div>转出前:<span className={styles.count}>{ payzDiaCountBefore }</span>个</div>
+              <div>转出后:<span className={styles.count}>{ payzDiaCountAfter }</span>个</div>
             </div>
           </div>
           <div className={styles.orderInfoItem}>

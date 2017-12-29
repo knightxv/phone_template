@@ -3,7 +3,7 @@ import { Icon } from './index.js';
 
 const NavBarWrap = styled.div`
 display: flex;
-height: .8rem;
+height: 1rem;
 padding-left: .2rem;
 padding-right: .2rem;
 flex-direction: row;
@@ -14,7 +14,7 @@ position: fixed;
 width: 100%;
 top: 0;
 z-index: 999;
-background: #108ee9;
+background: #295bac;
 `;
 const NavBarSideWrap = styled.div`
 min-width: 36px;
@@ -30,21 +30,21 @@ const DefaultNavbar = ({ title, onClick, right, className }) => {
       <NavBarWrap className={className}>
         <NavBarSideWrap>
           {
-              onClick && <Icon
-                type="left"
-                color="#fff"
-                size="lg"
-                style={{ marginLeft: '-0.4rem' }}
-                onClick={onClick}
-              />
+            onClick && <Icon
+              type="left"
+              color="#fff"
+              size="lg"
+              style={{ marginLeft: '-0.4rem' }}
+              onClick={onClick}
+            />
           }
         </NavBarSideWrap>
-        <div style={{ fontSize: '0.36rem', color: '#fff' }}>{title}</div>
+        <div style={{ fontSize: '0.42rem', color: '#fff' }}>{title}</div>
         <NavBarSideWrap>
           { right }
         </NavBarSideWrap>
       </NavBarWrap>
-      <div style={{ height: '0.8rem' }} />
+      <div style={{ height: '1rem' }} />
     </div>
   );
 };

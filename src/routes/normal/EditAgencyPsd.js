@@ -18,10 +18,6 @@ class EditPsd extends BaseComponent {
       rePsd: '',
     };
   }
-  // 登录
-  editPsd = async () => {
-    console.log('登录');
-  }
   // 修改新密码
   editPsd = async () => {
     const { oldPsd, newPsd, rePsd } = this.state;

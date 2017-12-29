@@ -16,17 +16,23 @@
 <script>
 
 
-
 var orderId = querySearch(/orderID=(\w+)/);
 var serverid = querySearch(/gameID=(\w+)/);
-var orderType = querySearch(/orderType=(\w+)/);
+var orderRechargeType = querySearch(/orderRechargeType=(\w+)/);
+var result = querySearch(/result=(\w+)/);
 
-if (orderType === 'proxy2hero') {
-    // 玩家
-    window.location.href = '/generalManage/index.html#/orderForAgentTurnDiaForPlayer?orderId=' + orderId + '&serverid=' + serverid;
+if (result == 1) {
+    if (orderRechargeType === 'proxy2hero') {
+        // 玩家
+        window.location.href = '/generalManage/index.html#/orderForAgentTurnDiaForPlayer?orderId=' + orderId + '&serverid=' + serverid;
+    } else {
+        window.location.href = '/generalManage/index.html#/orderForAgentTurnDiaForAgent?orderId=' + orderId;
+    }
 } else {
-    window.location.href = '/generalManage/index.html#/orderForAgentTurnDiaForAgent?orderId=' + orderId;
+    window.location.href = '/generalManage/index.html#/payFail';
 }
+
+
 
 function querySearch(reg) {
     var search = window.location.search;

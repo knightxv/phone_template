@@ -66,7 +66,7 @@ const mapStateToProps = (state) => {
 export const Title = connect(mapStateToProps)(({ children, gameName }) => {
   return (<Helmet>
     <meta charSet="utf-8" />
-    <title>{ (gameName ? `${gameName}-` : gameName) + children }</title>
+    <title>{ gameName }</title>
   </Helmet>
   );
 });

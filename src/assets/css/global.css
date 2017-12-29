@@ -4,7 +4,10 @@ html, body {
 body {
     font-family: '微软雅黑','Microsoft Yahei','hiragino sans gb w3','Arial';
     color: #333;
-    font-size: .32rem;
+    font-size: .34rem;
+}
+.body {
+    font-size: .34rem;
 }
 * {
     margin: 0;

@@ -69,9 +69,12 @@ class BuyMasonry extends BaseComponent {
   }
   // 跳出支付picker
   togglePayPicker = () => {
-    this.setState({
-      payPickerVisible: !this.state.payPickerVisible,
-    });
+    const payItemArr = this.payItemArr();
+    if (payItemArr.length > 1) {
+      this.setState({
+        payPickerVisible: !this.state.payPickerVisible,
+      });
+    }
   }
   // 选择支付方式
   selectPayType = (payInfo) => {
@@ -161,7 +164,7 @@ class BuyMasonry extends BaseComponent {
                 <div className={styles.payItem}>
                   <IconImg className={styles.payIcon} src={imgSource[imgSourceKey]} />
                   <span>{ label }</span>
-                  <Icon type="right" />
+                  { payItemArr.length > 1 && <Icon type="right" /> }
                 </div>
               </div>
             </div>

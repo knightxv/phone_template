@@ -158,8 +158,17 @@ class Modal extends React.Component {
       });
     });
   }
+  componentWillUnmount() {
+    window.document.documentElement.style.overflow = 'auto';
+  }
   render() {
     const { Component } = this.state;
+    const visible = this.props.visible;
+    if (visible) {
+      window.document.documentElement.style.overflow = 'hidden';
+    } else {
+      window.document.documentElement.style.overflow = 'auto';
+    }
     return (Component && <Component {...this.props} />);
   }
 }

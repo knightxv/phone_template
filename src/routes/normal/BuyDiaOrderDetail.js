@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import BaseComponent from '@/helps/BaseComponent';
 import { Button } from '@/helps/antdComponent/index.js';
@@ -32,8 +33,12 @@ class BuyDiaOrderDetail extends BaseComponent {
       });
     }
   }
-  copyOrderId = () => {
-    this.message.info('复制成功，当前浏览器不支持复制');
+  copyOrderId = (text, result) => {
+    if (result && !this.helps.isWechat) {
+      this.message.info('订单号复制成功');
+    } else {
+      this.message.info('订单号复制失败，当前浏览器不支持复制');
+    }
   }
   render() {
     const {
@@ -63,7 +68,12 @@ class BuyDiaOrderDetail extends BaseComponent {
               <div className={styles.payInfoTitle}>订单号</div>
               <span className={styles.orderIdLabel}>{ orderId }</span>
             </div>
-            <Button onClick={this.copyOrderId}>复制订单号</Button>
+            <CopyToClipboard
+              text={orderId}
+              onCopy={this.copyOrderId}
+            >
+              <Button>复制订单号</Button>
+            </CopyToClipboard>
           </div>
           <div className={styles.orderInfoRowItem}>
             <div>

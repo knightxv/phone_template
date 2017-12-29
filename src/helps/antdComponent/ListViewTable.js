@@ -8,7 +8,7 @@ const dataSource = new ListView.DataSource({
 const RowSection = styled.div`
     display: flex;
     text-align: center;
-    padding: 0.1rem 0;
+    padding: 0.2rem 0;
     border-bottom: 1px solid #dedede;
   `;
   // const renderHeader = (columns) => { // dataIndex title

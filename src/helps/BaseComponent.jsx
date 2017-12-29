@@ -50,7 +50,7 @@ export default class BaseComponent extends React.Component {
       },
     };
     // 枚举
-    this.TypeDefine = this.Enum = Enum;
+    this.Enum = Enum;
 
     this.http = {
       webHttp,

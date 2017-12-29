@@ -67,9 +67,12 @@ class PayToTurnDiaForPlayer extends BaseComponent {
   }
   // 跳出支付picker
   togglePayPicker = () => {
-    this.setState({
-      payPickerVisible: !this.state.payPickerVisible,
-    });
+    const payItemArr = this.payItemArr();
+    if (payItemArr.length > 1) {
+      this.setState({
+        payPickerVisible: !this.state.payPickerVisible,
+      });
+    }
   }
   // 选择支付方式
   selectPayType = (payInfo) => {
@@ -151,7 +154,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
   }
   render() {
     const { payPickerVisible, selectPayInfo, isAutoSave } = this.state;
-    const { inviteCode, canCashCount } = this.props;
+    const { inviteCode, masonry } = this.props;
     const payItemArr = this.payItemArr();
     const { diamond, playerName, playerId } = this.query;
     // const goodsMoneyLabel = this.helps.parseFloatMoney(goodsMoney);
@@ -161,8 +164,8 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       imgSourceKey,
       payType,
     } = selectPayInfo;
-    const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
     const price = this.helps.parseFloatMoney(diamond * 10);
+    const hasPowerToGive = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer');
     return (
       <div className={styles.container}>
         <Title>确认订单</Title>
@@ -174,7 +177,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
           <div className={styles.headerContainer}>
             <div className={styles.userInfoItem}>
               <div>代理ID：{ inviteCode }</div>
-              <div>当前账户钻石数:{ canCashCountLabel }个</div>
+              <div>当前账户钻石数:{ masonry }个</div>
             </div>
             <div className={styles.turnInfoWrap}>
               <div className={styles.turnInfoItem}>
@@ -190,25 +193,38 @@ class PayToTurnDiaForPlayer extends BaseComponent {
                 </div>
               </div>
             </div>
-            <div>
-              <div className={styles.rowItemWrap} onClick={this.togglePayPicker}>
-                <div>付款方式</div>
-                <div className={styles.payItem}>
-                  <IconImg className={styles.payIcon} src={imgSource[imgSourceKey]} />
-                  <span>{ label }</span>
-                  <Icon type="right" />
+            {
+              hasPowerToGive &&
+              <div>
+                <div className={styles.rowItemWrap} onClick={this.togglePayPicker}>
+                  <div>付款方式</div>
+                  <div className={styles.payItem}>
+                    <IconImg className={styles.payIcon} src={imgSource[imgSourceKey]} />
+                    <span>{ label }</span>
+                    { payItemArr.length > 1 && <Icon type="right" /> }
+                  </div>
                 </div>
               </div>
+            }
+          </div>
+          {
+            hasPowerToGive &&
+            <div>
+              <div className={styles.priceTip}>
+                注：玩家购钻价格统一0.1元/钻
+              </div>
+              <div className={styles.priceLabel}>
+                价格：<span className={styles.count}>{ price }</span>元
+              </div>
             </div>
-          </div>
-          <div className={styles.priceTip}>
-            注：玩家购钻价格统一0.1元/钻
-          </div>
-          <div className={styles.priceLabel}>价格：<span className={styles.count}>{ price }</span>元</div>
-          <div className={styles.autoSaveWrap}>
-            <Checkbox checked={isAutoSave} onChange={this.toggleSave} />
-            <span className={styles.saveTip}>转钻提交成功后自动添加为常用收款玩家</span>
-          </div>
+          }
+          {
+            this.hasPower('playerRange', 0) &&
+            <div className={styles.autoSaveWrap}>
+              <Checkbox checked={isAutoSave} onChange={this.toggleSave} />
+              <span className={styles.saveTip}>转钻提交成功后自动添加为常用收款玩家</span>
+            </div>
+          }
           <div className={styles.buyBtnWrap}>
             <Button onClick={this.payToTurn}>确认转钻</Button>
           </div>

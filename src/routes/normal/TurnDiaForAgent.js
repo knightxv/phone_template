@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import classNames from 'classnames';
+// import classNames from 'classnames';
+import ScrollTop from '@/components/ScrollTop';
 
 import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
 import { StickyContainer, Sticky } from '@/helps/lazyComponent/ReactSticky';
@@ -186,24 +187,49 @@ class TurnDiaForAgent extends BaseComponent {
     this.message.info(res.info);
   }
   renderAgentRow = (row) => {
-    const { masonrySurplus, agentInviteCode, agentName } = row;
+    const { masonrySurplus, agentInviteCode } = row;
     const hasPowerToSave = this.hasPower('agentRange', 0);
     return (<div className={styles.playersItemWrap}>
       <div className={styles.playersItem}>
-        <div>{ agentName }</div>
         <div>{ agentInviteCode }</div>
       </div>
       <div className={styles.playersItem}>{ masonrySurplus }</div>
       <div className={styles.playersItemOption}>
         <div className={styles.optionWrap}>
-          <Button onClick={() => this.selectAgent(agentInviteCode)}>选中</Button>
+          <Button size="small" onClick={() => this.selectAgent(agentInviteCode)}>选中</Button>
           {
             hasPowerToSave &&
-            <Button onClick={() => this.cancelSave(agentInviteCode)} type="danger" className={styles.btnDanger}>删除</Button>
+            <Button size="small" onClick={() => this.cancelSave(agentInviteCode)} type="danger" className={styles.btnDanger}>删除</Button>
           }
         </div>
       </div>
     </div>);
+  }
+  renderRecordHeader = () => {
+    const { record } = this.state;
+    let allCount = 0;
+    let monthCount = 0;
+    record.forEach((data) => {
+      if (data.chargeTime >= this.monthTimeStamp) {
+        monthCount += data.chargeCount;
+      }
+      allCount += data.chargeCount;
+    });
+    return (<div className={styles.recordHeader}>
+      <div>
+        <div>
+          本月购钻数量:<span className={styles.count}>{ monthCount }</span>个
+        </div>
+        <div>
+          总购钻数量:<span className={styles.count}>{ allCount }</span>个
+        </div>
+      </div>
+    </div>);
+  }
+  scrollTop = () => {
+    // window.location
+    // scrollNode.scrollTop(0, 0);
+    window.location.reload();
   }
   render() {
     const { agentName, diamond, agentNotFind, agentId,
@@ -213,17 +239,10 @@ class TurnDiaForAgent extends BaseComponent {
       if (!searchVal) {
         return true;
       }
-      return agent.playerId.toString().indexOf(searchVal)
-      !== -1 || agent.playerName.toString().indexOf(searchVal) !== -1;
+      return agent.agentInviteCode.toString().indexOf(searchVal)
+      !== -1 || agent.agentName.toString().indexOf(searchVal) !== -1;
     });
-    let allCount = 0;
-    let monthCount = 0;
-    record.forEach((data) => {
-      if (data.chargeTime >= this.monthTimeStamp) {
-        monthCount += data.chargeCount;
-      }
-      allCount += data.chargeCount;
-    });
+
     return (
       <div>
         <Title>给代理充钻</Title>
@@ -238,7 +257,7 @@ class TurnDiaForAgent extends BaseComponent {
             type="number"
             maxLength={8}
             clear
-            placeholder="请输入玩家ID"
+            placeholder="请输入代理ID"
             extra={<Button size="small" onClick={this.showChoosePlayerPicker}>选择代理</Button>}
           >代理ID</InputItem>
           {
@@ -277,30 +296,25 @@ class TurnDiaForAgent extends BaseComponent {
                 wasSticky,
                 distanceFromTop,
                 distanceFromBottom,
-                calculatedHeight
+                calculatedHeight,
               }) => {
                 return (
                   <div className={styles.listWrap} style={style}>
-                    <div className={styles.recordHeader}>
-                      <div>
-                        <div>
-                          本月购钻数量:<span className={styles.count}>{ monthCount }</span>个
-                        </div>
-                        <div>
-                          总购钻数量:<span className={styles.count}>{ allCount }</span>个
-                        </div>
-                      </div>
-                    </div>
                     {
                       wasSticky
                       ? <ScrollListView
                         data={record}
+                        renderHeader={this.renderRecordHeader}
                         renderRow={this.renderRow}
                       />
-                      : <BodyScrollListView
-                        data={record}
-                        renderRow={this.renderRow}
-                      />
+                        : <BodyScrollListView
+                          data={record}
+                          renderHeader={this.renderRecordHeader}
+                          renderRow={this.renderRow}
+                        />
+                    }
+                    {
+                      wasSticky && <ScrollTop onClick={this.scrollTop} />
                     }
                   </div>
                 );
@@ -329,7 +343,6 @@ class TurnDiaForAgent extends BaseComponent {
                   placeholder="输入代理的ID/名称"
                   onChange={this.onSearchInputChange}
                   value={searchVal}
-                  onCancelClick={this.onCancelClick}
                 />
                 <ScrollListView
                   data={filterAgentsData}

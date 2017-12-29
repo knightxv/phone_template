@@ -15,7 +15,9 @@ class Login extends BaseComponent {
     super(props);
     const { pCode } = this.router.getQuery();
     this.pCode = pCode; // 上级邀请码
-    const { loginID, password } = this.props;
+    // const { loginID, password } = this.props;
+    const loginID = this.helps.getCookie('userName');
+    const password = this.helps.getCookie('password');
     this.state = {
       loginLoading: false,
       loginID,
@@ -34,7 +36,11 @@ class Login extends BaseComponent {
       return false;
     }
     // 登录成功
-    this.props.dispatch({ type: 'agent/updateAppInfo', payload: { loginID, password } });
+    // this.props.dispatch({ type: 'agent/updateAppInfo', payload: { loginID, password } });
+    this.helps.saveCookie('userName', loginID);
+    this.helps.saveCookie('password', password);
+    // 保存账号密码(不存localstorage,微信会自动清除)
+    
     this.router.go('/homePage');
   }
   navigateToRegister = () => {

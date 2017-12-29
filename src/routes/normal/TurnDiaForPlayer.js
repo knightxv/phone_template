@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 
+import ScrollTop from '@/components/ScrollTop';
 import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
 import { StickyContainer, Sticky } from '@/helps/lazyComponent/ReactSticky';
 import Button from '@/helps/antdComponent/Button';
@@ -11,8 +12,9 @@ import { Icon, InputItem, Modal } from '@/helps/antdComponent/index.js';
 import SearchBar from '@/helps/antdComponent/SearchBar';
 // import InputItem from '@/helps/antdComponent/InputItem';
 import BaseComponent from '@/helps/BaseComponent';
-import { WhiteSpace, Title, IconImg } from '@/helps/styleComponent';
+import { WhiteSpace, Title } from '@/helps/styleComponent';
 import styles from './TurnDiaForPlayer.less';
+
 
 class TurnDiaForPlayer extends BaseComponent {
   constructor(props) {
@@ -33,8 +35,7 @@ class TurnDiaForPlayer extends BaseComponent {
       // selectIndex: defaultSelectIndex,
       // payTypeSelect: defaultPayEnum,
       record: [],
-      players: [
-      ], // 玩家
+      players: [], // 玩家
       diamond: '',
       selectplayerVisible: false,
       searchVal: '',
@@ -43,6 +44,7 @@ class TurnDiaForPlayer extends BaseComponent {
     this.serverid = serverid; // 游戏的id
     this.todayTimeStamp = new Date(new Date().format('yyyy/MM/dd')).getTime();
     this.monthTimeStamp = this.helps.getMonthTimeStamp();
+    this.loadPlayers = false;
     // this.paySelectArr = [];
   }
   async componentWillMount() {
@@ -75,11 +77,27 @@ class TurnDiaForPlayer extends BaseComponent {
       // 获取头像和名称
       const res = await this.http.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val, serverid: this.serverid });
       if (res.isSuccess) {
-        const { userName } = res.data;
-        this.setState({
-          playerName: userName,
-          errorTip: '',
-        });
+        if (this.hasPower('playerRange', 1)) {
+          let palyers = this.state.players;
+          if (!this.loadPlayers) {
+            palyers = await this.getPlayer();
+          }
+          const isUnderPlayer = palyers.some((player) => {
+            return player.playerId == val;
+          });
+          if (isUnderPlayer) {
+            const { userName } = res.data;
+            this.setState({
+              playerName: userName,
+              errorTip: '',
+            });
+          } else {
+            this.setState({
+              playerName: '',
+              errorTip: '该玩家非您的下级',
+            });
+          }
+        }
       } else {
         this.setState({
           playerName: '',
@@ -125,7 +143,9 @@ class TurnDiaForPlayer extends BaseComponent {
       this.setState({
         players: res.data || [],
       });
+      this.loadPlayers = true;
     }
+    return res.data || [];
   }
   // 选择玩家
   showChoosePlayerPicker = () => {
@@ -148,6 +168,7 @@ class TurnDiaForPlayer extends BaseComponent {
     }
     if (errorTip) {
       this.message.info(errorTip);
+      return;
     }
     if (!diamond) {
       this.message.info('请选择钻石个数');
@@ -210,31 +231,22 @@ class TurnDiaForPlayer extends BaseComponent {
       <div className={styles.playersItem}>{ masonrySurplus }</div>
       <div className={styles.playersItemOption}>
         <div className={styles.optionWrap}>
-          <Button onClick={() => this.selectPlayer(playerId)}>选中</Button>
+          <Button size="small" onClick={() => this.selectPlayer(playerId)}>选中</Button>
           {
             hasPowerToSave &&
-            <Button onClick={() => this.cancelSavePlayer(playerId)} type="danger" className={styles.btnDanger}>删除</Button>
+            <Button size="small" onClick={() => this.cancelSavePlayer(playerId)} type="danger" className={styles.btnDanger}>删除</Button>
           }
         </div>
       </div>
     </div>);
   }
-  render() {
-    const { playerName, diamond, errorTip, playerId,
-      record, selectplayerVisible, searchVal, players,
-      // isChooseInput, selectIndex, payTypeSelect,
-    } = this.state;
-    // const { payEnum } = this.helps;
-    const money = !isNaN(diamond) ? diamond * 10 : 0;
-    const moneyFloat = this.helps.parseFloatMoney(money);
-    // const paySelectArr = this.power(); //  为了处理双击刷新问题
-    const filterPlayersData = players.filter((player) => {
-      if (!searchVal) {
-        return true;
-      }
-      return player.playerId.toString().indexOf(searchVal)
-      !== -1 || player.playerName.toString().indexOf(searchVal) !== -1;
-    });
+  scrollTop = () => {
+    // window.location
+    // scrollNode.scrollTop(0, 0);
+    window.location.reload();
+  }
+  renderRecordHeader = () => {
+    const { record } = this.state;
     let allCount = 0;
     let monthCount = 0;
     let incomeToday = 0;
@@ -253,6 +265,48 @@ class TurnDiaForPlayer extends BaseComponent {
     });
     const incomeTodayLabel = this.helps.parseFloatMoney(incomeToday);
     const incomeMonthLabel = this.helps.parseFloatMoney(incomeMonth);
+    return (<div className={styles.recordHeader}>
+      <div>
+        <div>
+          本月充钻数量:<span className={styles.count}>{ monthCount }</span>个
+        </div>
+        <div>
+        充钻总数量:<span className={styles.count}>{ allCount }</span>个
+        </div>
+      </div>
+      <div>
+        {
+          this.hasPowerSome('banlance') &&
+          <div>
+            本月收益:<span className={styles.money}>{ incomeMonthLabel }</span>元
+          </div>
+        }
+        {
+          this.hasPowerSome('banlance') &&
+          <div>
+            今日收益:<span className={styles.money}>{ incomeTodayLabel }</span>元
+          </div>
+        }
+      </div> 
+    </div>);
+  }
+  render() {
+    const { playerName, diamond, errorTip, playerId,
+      record, selectplayerVisible, searchVal, players,
+      // isChooseInput, selectIndex, payTypeSelect,
+    } = this.state;
+    // const { payEnum } = this.helps;
+    const money = !isNaN(diamond) ? diamond * 10 : 0;
+    const moneyFloat = this.helps.parseFloatMoney(money);
+    // const paySelectArr = this.power(); //  为了处理双击刷新问题
+    const filterPlayersData = players.filter((player) => {
+      if (!searchVal) {
+        return true;
+      }
+      return player.playerId.toString().indexOf(searchVal)
+      !== -1 || player.playerName.toString().indexOf(searchVal) !== -1;
+    });
+    const hasPowerToGive = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer');
     return (
       <div>
         <Title>给玩家充钻</Title>
@@ -288,10 +342,15 @@ class TurnDiaForPlayer extends BaseComponent {
             placeholder="本次多少转出500个钻"
           >钻石数量</InputItem>
         </div>
-        <div className={styles.priceTip}>注:玩家购钻价格统一0.1元/钻</div>
-        <div className={styles.priceWrap}>
-          价格:<span className={styles.money}>{ moneyFloat}</span>元
-        </div>
+        {
+          hasPowerToGive &&
+          <div>
+            <div className={styles.priceTip}>注:玩家购钻价格统一0.1元/钻</div>
+            <div className={styles.priceWrap}>
+              价格:<span className={styles.money}>{ moneyFloat}</span>元
+            </div>
+          </div>
+        }
         <div className={styles.payBtnWrap}>
           <Button
             className={styles.payBtn}
@@ -310,38 +369,27 @@ class TurnDiaForPlayer extends BaseComponent {
                 wasSticky,
                 distanceFromTop,
                 distanceFromBottom,
-                calculatedHeight
+                calculatedHeight,
               }) => {
                 return (
                   <div className={styles.listWrap} style={style}>
-                    <div className={styles.recordHeader}>
-                      <div>
-                        <div>
-                          本月购钻数量:<span className={styles.count}>{ monthCount }</span>个
-                        </div>
-                        <div>
-                          总购钻数量:<span className={styles.count}>{ allCount }</span>个
-                        </div>
-                      </div>
-                      <div>
-                        <div>
-                          本月收益:<span className={styles.money}>{ incomeMonthLabel }</span>元
-                        </div>
-                        <div>
-                          今日收益:<span className={styles.money}>{ incomeTodayLabel }</span>元
-                        </div>
-                      </div>
-                    </div>
                     {
                       wasSticky
                       ? <ScrollListView
+                        ref={(node) => { this.scroll = node; }}
                         data={record}
                         renderRow={this.renderRow}
+                        renderHeader={this.renderRecordHeader}
                       />
-                      : <BodyScrollListView
-                        data={record}
-                        renderRow={this.renderRow}
-                      />
+                        : <BodyScrollListView
+                          ref={(node) => { this.scroll = node; }}
+                          data={record}
+                          renderRow={this.renderRow}
+                          renderHeader={this.renderRecordHeader}
+                        />
+                    }
+                    {
+                      wasSticky && <ScrollTop onClick={this.scrollTop} />
                     }
                   </div>
                 );
@@ -370,7 +418,6 @@ class TurnDiaForPlayer extends BaseComponent {
                   placeholder="输入玩家的ID/名称"
                   onChange={this.onSearchInputChange}
                   value={searchVal}
-                  onCancelClick={this.onCancelClick}
                 />
                 <ScrollListView
                   data={filterPlayersData}

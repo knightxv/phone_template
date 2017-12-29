@@ -5,35 +5,7 @@ import dynamic from 'dva/dynamic';
 // import IndexPage from './routes/IndexPage';
 
 function RouterConfig({ history, app }) {
-  // 普通代理
-  const NormalLogin = dynamic({
-    app,
-    component: () => import('./routes/normal/Login'),
-    models: () => [
-      import('./models/agent'),
-    ],
-  });
-  const NormalHomePage = dynamic({
-    app,
-    component: () => import('./routes/normal/HomePage'),
-    models: () => [
-      import('./models/agent'),
-    ],
-  });
-  const RankExplain = dynamic({
-    app,
-    component: () => import('./routes/normal/RankExplain'),
-    models: () => [
-      import('./models/agent'),
-    ],
-  });
-  const InviteToAgent = dynamic({
-    app,
-    component: () => import('./routes/normal/InviteToAgent'),
-    models: () => [
-      import('./models/agent'),
-    ],
-  });
+  
  
   // const PlayerMoneyRecord = dynamic({
   //   app,
@@ -53,13 +25,6 @@ function RouterConfig({ history, app }) {
   // const CashMoneyRecord = dynamic({
   //   app,
   //   component: () => import('./routes/normal/CashMoneyRecord'),
-  //   models: () => [
-  //     import('./models/agent'),
-  //   ],
-  // });
-  // const MyUnderAgent = dynamic({
-  //   app,
-  //   component: () => import('./routes/normal/MyUnderAgent'),
   //   models: () => [
   //     import('./models/agent'),
   //   ],
@@ -136,6 +101,35 @@ function RouterConfig({ history, app }) {
   //     import('./models/agent'),
   //   ],
   // });
+  // 普通代理
+  const NormalLogin = dynamic({
+    app,
+    component: () => import('./routes/normal/Login'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
+  const NormalHomePage = dynamic({
+    app,
+    component: () => import('./routes/normal/HomePage'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
+  const RankExplain = dynamic({
+    app,
+    component: () => import('./routes/normal/RankExplain'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
+  const InviteToAgent = dynamic({
+    app,
+    component: () => import('./routes/normal/InviteToAgent'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
   const SelectGame = dynamic({
     app,
     component: () => import('./routes/SelectGame'),
@@ -143,13 +137,13 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
-  // const Login = dynamic({
-  //   app,
-  //   component: () => import('./routes/normal/HomePage'),
-  //   models: () => [
-  //     import('./models/agent'),
-  //   ],
-  // });
+  const MyUnderAgent = dynamic({
+    app,
+    component: () => import('./routes/normal/MyUnderAgent'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
   const AgencyPay = dynamic({
     app,
     component: () => import('./routes/normal/AgencyPay'),
@@ -262,6 +256,13 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
+  const PayFail = dynamic({
+    app,
+    component: () => import('./routes/normal/PayFail'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
 
   // 总代理
   const GeneralLogin = dynamic({
@@ -338,7 +339,6 @@ function RouterConfig({ history, app }) {
           {/* <Route path="/AgencyMoneyRecord" component={AgencyMoneyRecord} /> */}
           {/* <Route path="/agencyPay" component={AgencyPay} /> */}
           {/* <Route path="/cashMoneyRecord" component={CashMoneyRecord} /> */}
-          {/* <Route path="/myUnderAgent" component={MyUnderAgent} /> */}
           {/* <Route path="/myPlayer" component={MyPlayer} /> */}
           
           {/* <Route path="/rechargeForAgent" component={RechargeForAgent} /> */}
@@ -352,6 +352,7 @@ function RouterConfig({ history, app }) {
           <Route path="/login" component={NormalLogin} />
           <Route path="/homePage" component={NormalHomePage} />
           <Route path="/rankExplain" component={RankExplain} />
+          <Route path="/myUnderAgent" component={MyUnderAgent} />
           <Route path="/inviteToAgent" component={InviteToAgent} />
           <Route path="/cashMoney" component={CashMoney} />
           <Route path="/EditAgencyPsd" component={EditAgencyPsd} />
@@ -370,6 +371,7 @@ function RouterConfig({ history, app }) {
           <Route path="/payToTurnDiaForAgent" component={PayToTurnDiaForAgent} />
           <Route path="/turnDiaForAgentOrderDetail" component={TurnDiaForAgentOrderDetail} />
           <Route path="/orderForAgentTurnDiaForAgent" component={OrderForAgentTurnDiaForAgent} />
+          <Route path="/payFail" component={PayFail} />
 
           <Route path="/general/login" component={GeneralLogin} />
           <Route path="/general/homePage" component={GeneralHomePage} />

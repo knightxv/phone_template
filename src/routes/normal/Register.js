@@ -84,7 +84,7 @@ class Register extends BaseComponent {
     this.router.go('/AgreenDetail');
   }
   async componentWillMount() {
-    const type = this.TypeDefine.htmlTextType.agreen_page;
+    const type = this.Enum.htmlTextType.agreen_page;
     const res = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', { type });
     const htmlText = res.isSuccess ? res.data.htmlText : '';
     this.setState({

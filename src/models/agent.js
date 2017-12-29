@@ -23,8 +23,8 @@ export default {
     // ranking: 999999,
     // wechatacc: '',
 
-    // loginID: '',
-    // password: '',
+    //*del loginID: '',
+    //*del password: '',
 
     // getVerifyCodeElseTime: 0, // 获取验证码剩余的时间（0代表可以重新获取）
   },
@@ -83,23 +83,19 @@ export default {
     },
   },
   subscriptions: {
-      async setup({ dispatch, history }) {  // eslint-disable-line
-        fetch('/spreadApi/getUserInfo')
-        .then(res => res.json())
-        .then((res) => {
-          if (res.isSuccess) {
-            dispatch({
-              type: 'updateAppInfo',
-              payload: {
-                ...res.data,
-              },
-            });
-          }
-        });
+      async setup({ dispatch, history }) {  // eslint-disable-line\
         dispatch({
           type: 'updateAppInfo',
           payload: {
             getVerifyCodeElseTime: 0,
+          },
+        });
+        const res = await fetch('/spreadApi/getUserInfo')
+        .then(res => res.json())
+        dispatch({
+          type: 'updateAppInfo',
+          payload: {
+            ...res.data,
           },
         });
       },

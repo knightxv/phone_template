@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
+import ScrollTop from '@/components/ScrollTop';
 
 import classnames from 'classnames';
 import { StickyContainer, Sticky } from 'react-sticky';
@@ -83,6 +84,11 @@ class AgencyPay extends BaseComponent {
   goToOrderDetail = () => {
     this.router.go('/buyDiaOrderDetail');
   }
+  scrollTop = () => {
+    // window.location
+    // scrollNode.scrollTop(0, 0);
+    window.location.reload();
+  }
   render() {
     const { goods, record, selectShopId } = this.state;
     const shopSelectArr = goods.filter((good) => {
@@ -135,7 +141,7 @@ class AgencyPay extends BaseComponent {
             }
           </div>
           {
-            shopTip && <div className={styles.payTip}>-{ shopTip }-</div>
+            <div className={styles.payTip}>{ shopTip && `-${shopTip}-` }</div>
           }
           <div className={styles.btnWrap}>
             <Button onClick={this.goToBuyGoods} className={styles.payBtn}>立即购买</Button>
@@ -176,6 +182,9 @@ class AgencyPay extends BaseComponent {
                         renderRow={this.renderRow}
                         ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
                       />
+                    }
+                    {
+                      wasSticky && <ScrollTop onClick={this.scrollTop} />
                     }
                   </div>
                 );
