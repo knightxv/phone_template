@@ -10,37 +10,31 @@
 <title>跳转</title>
 </head>
 <body>
-<h2><span id="elseTime">3</span>秒之后自动跳回首页</h2>
  
-<script type="text/javascript" src="./ajax.min.js"></script>
+<!-- <script type="text/javascript" src="./ajax.min.js"></script>-->
 
 <script>
-var elseTime = 3;
 
-var oElseTime = document.getElementById('elseTime');
-runTime();
-function runTime() {
-	setTimeout(function () {
-		elseTime --;
-		oElseTime.innerHTML = elseTime.toString();
-		if (elseTime > 0) {
-			runTime();
-			return false;
-		}
-		ajax({
-			type:"get",
-			url:"/generalManage/adangbiji/index.html", //添加自己的接口链接
-			timeOut: 10000,
-			success:function(str){
-				window.location.href = '/generalManage/adangbiji/index.html#/homePage';
-			},
-			error:function(){
-				window.location.href = '/generalManage/index.html#/homePage';
-			}
-		});
-		// window.location.href = '/generalManage/index.html#/homePage';
-		// window.location.href = '/generalManage/adangbiji/index.html#/homePage';
-	}, 1000);
+
+
+var orderId = querySearch(/orderID=(\w+)/);
+var serverid = querySearch(/gameID=(\w+)/);
+var orderType = querySearch(/orderType=(\w+)/);
+
+if (orderType === 'proxy2hero') {
+    // 玩家
+    window.location.href = '/generalManage/index.html#/orderForAgentTurnDiaForPlayer?orderId=' + orderId + '&serverid=' + serverid;
+} else {
+    window.location.href = '/generalManage/index.html#/orderForAgentTurnDiaForAgent?orderId=' + orderId;
+}
+
+function querySearch(reg) {
+    var search = window.location.search;
+    var orderMath = reg.exec(search);
+    if (orderMath && orderMath[0]) {
+        return orderMath[1];
+    }
+    return '';
 }
 
 </script>

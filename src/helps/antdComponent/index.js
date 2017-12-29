@@ -144,6 +144,25 @@ class InputItem extends React.Component {
     return (Component && <Component {...this.props} />);
   }
 }
+class Modal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      Component: null,
+    };
+  }
+  componentDidMount() {
+    import(/* webpackChunkName: 'Modal' */'./Modal').then((Component) => {
+      this.setState({
+        Component,
+      });
+    });
+  }
+  render() {
+    const { Component } = this.state;
+    return (Component && <Component {...this.props} />);
+  }
+}
 
 
 export default {
@@ -154,4 +173,5 @@ export default {
   ListViewTable,
   ListView,
   InputItem,
+  Modal,
 };

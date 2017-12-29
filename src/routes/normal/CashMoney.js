@@ -119,13 +119,57 @@ class AgencyExtractMoney extends BaseComponent {
       positionSelect: val,
     });
   }
-  renderRow = () => {
-    return (<div>1</div>);
+  renderRow = (rowData) => {
+    const timeLabel = new Date(rowData.createTime).format('yyyy-MM-dd hh:mm');
+    const cashCount = this.helps.parseFloatMoney(rowData.cashCount);
+    const resultMap = {
+      0: '待审核',
+      1: '已通过 ',
+      2: '已拒绝',
+    };
+    const statuLabel = resultMap[rowData.result];
+    return (<div className={styles.itemWrap}>
+      <div>
+        <div>余额-转出银行卡</div>
+        <div className={styles.timeLabel}>{ timeLabel }</div>
+      </div>
+      <div className={`${styles.orderStatuWrap} ${rowData.result === 2 ? styles.fail : styles.success}`}>
+        <span>{ cashCount }</span>
+        <span className={styles.fkh}>（</span>
+        <span>{ statuLabel }</span>
+        <span className={styles.fkh}>）</span>
+      </div>
+    </div>);
+  }
+  async componentWillMount() {
+    // const { selectTime, selectType } = this.state;
+    // const type = selectType[0];
+    const res = await this.http.webHttp.get('/spreadApi/cashRecord');
+    if (res.isSuccess) {
+      this.setState({
+        record: res.data || [],
+      });
+    } else {
+      this.helps.toast(res.info || '请求错误');
+    }
   }
   render() {
-    const { wechat_acc: wechatAcc, cardNumber, bankCardName, positionSelect, bankName, bankOfDeposit, cashCount, record } = this.state;
+    const { wechat_acc: wechatAcc, cardNumber, bankCardName, positionSelect,
+      bankName, bankOfDeposit, cashCount, record,
+    } = this.state;
     const { canCashCount } = this.props;
     const canCashCountFloat = parseFloat(canCashCount / 100).toFixed(2);
+
+    let monthCash = 0;
+    let allCash = 0;
+    record.forEach((data) => {
+      if (data.createTime >= this.helps.getMonthTimeStamp()) {
+        monthCash += data.cashCount;
+      }
+      allCash += data.cashCount;
+    });
+    const monthCashLabel = this.helps.parseFloatMoney(monthCash);
+    const allCashLabel = this.helps.parseFloatMoney(allCash);
     return (
       <div>
         <Title>提现</Title>
@@ -230,10 +274,10 @@ class AgencyExtractMoney extends BaseComponent {
                   <div className={styles.listWrap} style={style}>
                     <div className={styles.recordHeader}>
                       <div>
-                        本月购钻数量:3003个
+                        本月成功提现金额:<span className={styles.moneyCount}>{ monthCashLabel }</span>元
                       </div>
                       <div>
-                        总购钻数量:300个
+                      提现成功总金额:<span className={styles.moneyCount}>{ allCashLabel }</span>元
                       </div>
                     </div>
                     {

@@ -9,7 +9,7 @@ const dataSource = new ListView.DataSource({
 const ListViewWrapBody = (props) => {
   if (props.children.length === 0) {
     return (
-      <div className="am-list-body my-body" style={{ textAlign: 'center', paddingTop: '5rem', background: 'rgb(242, 242, 242)' }}>
+      <div className="am-list-body my-body" style={{ textAlign: 'center', background: 'rgb(242, 242, 242)' }}>
         {props.ListEmptyComponent || '没有数据'}
       </div>
     );

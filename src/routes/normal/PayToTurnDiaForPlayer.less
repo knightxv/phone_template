@@ -1,0 +1,160 @@
+@import "../../helps/base.less";
+
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.contentContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.buyBtnWrap {
+    margin-bottom: .2rem;
+    padding: .2rem;
+}
+
+.masonryIcon {
+    width: 1.4rem;
+    height: 1.2rem;
+    display: block;
+    background: #fff;
+    margin: 0 .2rem;
+}
+.userInfoItem {
+    .flexRow(space-between);
+    background: #fff;
+    margin: .2rem .3rem;
+    padding: .2rem .3rem;
+    font-size: .28rem;
+}
+.headerInfoWrap {
+    .flexRow(space-between);
+    margin: .2rem .3rem;
+    padding: .2rem 0.3rem;
+    .border();
+    border-radius: .2rem;
+    background: #fff;
+    align-items: stretch;
+}
+.masonryInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.masonryCountLabel {
+    color: #000;
+    font-weight: 600;
+    font-size: .38rem;
+}
+.masonryMoenyLabel {
+    color: @moneyColor;
+}
+.rowItemWrap {
+    .borTop();
+    padding: .2rem .2rem;
+    background: #fff;
+    .flexRow(space-between);
+}
+
+.payItem {
+    .flexRow();
+}
+.payIcon {
+    width: .4rem;
+    height: .4rem;
+    display: block;
+    margin-right: 0.1rem;
+}
+.payInfoWrap {
+    flex: 9;
+    .flexRow(space-between);
+}
+.selectIconWrap {
+    flex: 1;
+}
+
+// picker common start
+.payModal {
+    align-self: flex-end;
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3)
+}
+.payPicker {
+    color: #333;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.pickerHideMask {
+    flex: 1;
+}
+.payPickerBody {
+    background: #fff;
+}
+
+.pickerHeader {
+    .flexRow(space-between);
+    .borBot();
+    padding: .1rem 0;
+}
+.pickerTitle {
+    font-weight: 600;
+    font-size: .36rem;
+}
+.iconRight {
+    width: .72rem;
+    height: .72rem;
+}
+// picker common end
+.pickePayItem {
+    padding: .2rem;
+    .borBot();
+    .flexRow(space-between);
+}
+.count {
+    color: @moneyColor;
+}
+
+.turnInfoWrap {
+    background: #fff;
+    margin: .2rem 0;
+    padding: 0 .2rem;
+}
+.turnInfoItem {
+    padding: .2rem;
+    .flexRow();
+    font-size: .28rem;
+}
+
+.turnInfoItemKey {
+    flex: 3;
+}
+
+.turnInfoItemVal {
+    flex: 7;
+}
+.priceTip {
+    color: @gray;
+    font-size: .24rem;
+    padding: .2rem;
+}
+.priceLabel {
+    font-size: .28rem;
+    padding: 0rem .2rem .2rem;
+}
+
+.checkbox {
+    width: .3rem;
+    height: .3rem;
+}
+.autoSaveWrap {
+    padding-left: .2rem;
+}
+.saveTip {
+    color: @gray;
+    font-size: .28rem;
+    padding-left: .1rem;
+}

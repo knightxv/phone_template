@@ -112,3 +112,10 @@ exports.payType = (type) => {
   }
   return chargeType;
 };
+
+// 得到本月一号的时间
+exports.getMonthTimeStamp = () => {
+  const now = new Date();
+  const monthLabel = now.format('yyyy/MM/1');
+  return new Date(monthLabel).getTime();
+}

@@ -27,24 +27,16 @@ class HomePage extends BaseComponent {
     super(props);
     this.state = {
       isTipShow: false, // 是否显示提示
-      gameList: [],
       loaded: false,
       noticeInfo: '', // 公告信息
       priceInfoVisible: false, // 奖励说明是否显示
-      navbarRightPickerShow: false, // 右边的导航栏picker是否显示
     };
   }
   powerManage = () => {
     return {
-      havePowerToRecharge: this.hasPower('proxySDKCharge'), // 代理第三方充值(是否有购买钻石的权限)
-      havePowerToSavePlayer: this.hasPower('playerSave'), // 玩家收藏
-      havePowerToSaveAgent: this.hasPower('agentSave'), // 代理收藏
-      hasPowerToUnderPlayer: this.hasPower('myPlayer'), // 我的玩家
-      hasPowerToUnderAgent: this.hasPower('myAgent'), // 我的代理
-      hasPowerToBanlance: this.hasPower('banlance'), // 账户余额
-      hasPowerToRechargeForUnderAgent: this.hasPower('iAgentGiveForAgent'), // 是否可以给下级代理充值
-      hasPowerToiAgentGiveForUnderAgent: this.hasPower('iAgentGiveForUnderAgent'), // 是否可以给下级代理充值(囤卡模式)
-      
+      havePowerToBanlance: this.hasPowerSome('banlance'),
+      havePowerToRechargeToPlayer: this.hasPowerSome('AgentTurnDiaToPlayerDirect', 'wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer'),
+      havePowerToBuyDia: this.hasPowerSome('AgentBuyDiawechatPay', 'AgentBuyDiaAliPay', 'AgentBuyDiabanlancePay'), // 是否有购买钻石的权限
     };
   }
   async componentWillMount() {
@@ -57,10 +49,10 @@ class HomePage extends BaseComponent {
         loaded: true,
       });
     } else {
-      this.helps.toast(res.info);
+      this.message.info(res.info);
       return;
     }
-    const params = { type: this.TypeDefine.htmlTextType.notice_normalAgency }; // htmlTextType.notice_normalAgency
+    const params = { type: this.Enum.htmlTextType.notice_normalAgency };
     // 获取首页额外数据
     const extraRes = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', params);
     if (extraRes.isSuccess) {
@@ -70,7 +62,7 @@ class HomePage extends BaseComponent {
       });
     }
     // 获取奖励说明
-    const priceStatu = this.TypeDefine.htmlTextType.page_prizeExplain;
+    const priceStatu = this.Enum.htmlTextType.page_prizeExplain;
     const priceRes = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', { type: priceStatu });
     if (priceRes.isSuccess && priceRes.data.htmlText) {
       this.setState({
@@ -109,36 +101,30 @@ class HomePage extends BaseComponent {
     }
   }
   render() {
-    const { loaded, noticeInfo, navbarRightPickerShow, priceInfoVisible } = this.state;
+    const { loaded, noticeInfo, priceInfoVisible } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(noticeInfo);
     const noticeVisible = !!noticeInfo;
-    const { inviteCode, canCashCount, ranking, myUnderAgentCount,
-    myPlayerCount, saleDiamondsOfThisMonth, balanceIncomeToday,
-    balancePayToday, savePlayerCount, saveAgentCount, masonry, // 钻石
-    // masonryIncomeToday, masonryPayToday,
+    const { inviteCode, canCashCount, ranking, masonry, saleDiamondsOfThisMonth,
+    // balancePayToday, savePlayerCount, saveAgentCount, myUnderAgentCount, myPlayerCount,
+    // masonryIncomeToday, masonryPayToday, balanceIncomeToday,
     // rechargeOfToday, rechargeOfYesterDay, cashCountlog,
     } = this.props;
     if (!loaded) {
       return null;
     }
     const isRankingShow = ranking && ranking <= rankingLimit; // 当排行小于50
+    const unitCanCashCount = this.helps.parseFloatMoney(canCashCount); // 未提现(余额)
     // const unitRechargeOfToday = parseFloat(rechargeOfToday / 100); // 玩家今日充值
     // const unitRechargeOfYesterDay = parseFloat(rechargeOfYesterDay / 100); // 玩家昨日充值
     // const unitCashCountlog = parseFloat(cashCountlog / 100); // 已提现
-    const unitCanCashCount = this.helps.parseFloatMoney(canCashCount); // 未提现
-    const unitBalanceIncomeToday = this.helps.parseFloatMoney(balanceIncomeToday);
-    const unitBalancePayToday = this.helps.parseFloatMoney(balancePayToday);
+    // const unitBalanceIncomeToday = this.helps.parseFloatMoney(balanceIncomeToday);
+    // const unitBalancePayToday = this.helps.parseFloatMoney(balancePayToday);
     const power = this.powerManage();
     // 权限
     const {
-      havePowerToRecharge,
-      havePowerToSavePlayer,
-      havePowerToSaveAgent,
-      hasPowerToUnderPlayer,
-      hasPowerToUnderAgent,
-      hasPowerToBanlance,
-      hasPowerToRechargeForUnderAgent,
-      hasPowerToiAgentGiveForUnderAgent,
+      havePowerToRechargeToPlayer,
+      havePowerToBuyDia,
+      havePowerToBanlance,
     } = power;
 
     return (<div style={{ position: 'relative' }}>
@@ -181,7 +167,6 @@ class HomePage extends BaseComponent {
           钻石：<span className={styles.countLabel}>{ masonry }</span>个
         </div>
         {
-          hasPowerToBanlance &&
           <div className={styles.countWrap}>
             余额：<span className={styles.countLabel}>{ unitCanCashCount }</span>元
           </div>
@@ -190,20 +175,19 @@ class HomePage extends BaseComponent {
       <div className={styles.module}>
         {/* 购买钻石 */}
         {
-          (havePowerToRecharge || hasPowerToBanlance)
-          ? <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/agencyPay')}>
+          havePowerToBuyDia &&
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/agencyPay')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.zuanshi} />
               <span>购买钻石</span>
             </FlexRow>
             <Icon type="right" />
           </FlexRowBetweenWingSpace>
-          : null
         }
         {/* 给玩家充钻 */}
         {
-          havePowerToSavePlayer &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/pay')}>
+          havePowerToRechargeToPlayer &&
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/turnDiaForPlayer')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
               <span>给玩家充钻</span>
@@ -216,8 +200,7 @@ class HomePage extends BaseComponent {
         }
         {/* 给代理充钻 */}
         {
-          havePowerToSaveAgent &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/rechargeForAgent')}>
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/turnDiaForAgent')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />
               <span>给代理充钻</span>
@@ -240,9 +223,8 @@ class HomePage extends BaseComponent {
           </FlexRowBetweenWingSpace>
         } */}
       </div>
-      { hasPowerToBanlance && <WhiteSpace /> }
-      {
-        hasPowerToBanlance &&
+      { havePowerToBanlance && <WhiteSpace /> }
+      { havePowerToBanlance &&
         <div className={styles.module}>
           {/* 提现 */}
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
@@ -269,7 +251,6 @@ class HomePage extends BaseComponent {
         </FlexRowBetweenWingSpace>
         {/* 查看下级钻石抽成情况 */}
         {
-          hasPowerToUnderAgent &&
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.xiajiguanli} />

@@ -52,7 +52,7 @@
 .payTip {
     color: #fda523;
     text-align: center;
-    padding: 0.5rem 0;
+    padding: 0.3rem 0;
 }
 
 .btnWrap {
@@ -68,14 +68,30 @@
 }
 
 .rowItem {
-    padding: 1rem 0rem;
-    height: 10px;
+    padding: .1rem 0.2rem;
+    .flexRow(space-between);
     .borBot();
 }
 
+
 .recordHeader {
     background: #fff;
-    padding: .1rem;
+    padding: .1rem .2rem;
     .borBot();
+}
+.chargeTime {
+    color: @gray;
+    font-size: .26rem;
+    padding-top: .1rem;
+}
+.chargeCount {
+    color: @countAdd;
+}
+
+.noDataTip {
+    padding: 0.2rem 0;
+}
+.countLabel {
+    color: @countAdd;
 }
 

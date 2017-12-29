@@ -30,11 +30,12 @@ background: none;
 // color: #1e7df1;
 // `;
 
-const SearchBar = ({ ...props, onCancelClick = () => {} }) => {
+const SearchBar = ({ ...props, onChange, onCancelClick = () => {} }) => {
+  
   return (
     <InputContainer>
       <InputWrap>
-        <Input {...props} />
+        <Input {...props} onChange={e => onChange(e.target.value)} />
         {
             props.value &&
             (<Icon

@@ -14,6 +14,7 @@ position: fixed;
 width: 100%;
 top: 0;
 z-index: 999;
+background: #108ee9;
 `;
 const NavBarSideWrap = styled.div`
 min-width: 36px;
@@ -31,14 +32,14 @@ const DefaultNavbar = ({ title, onClick, right, className }) => {
           {
               onClick && <Icon
                 type="left"
-                color="#108ee9"
+                color="#fff"
                 size="lg"
                 style={{ marginLeft: '-0.4rem' }}
                 onClick={onClick}
               />
           }
         </NavBarSideWrap>
-        <div style={{ fontSize: '0.36rem' }}>{title}</div>
+        <div style={{ fontSize: '0.36rem', color: '#fff' }}>{title}</div>
         <NavBarSideWrap>
           { right }
         </NavBarSideWrap>

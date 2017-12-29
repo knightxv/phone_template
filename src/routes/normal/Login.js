@@ -30,7 +30,7 @@ class Login extends BaseComponent {
     const registerCity = ipInfo ? `${ipInfo.city}市` : '';
     const res = await this.http.webHttp.get('/spreadApi/login', { loginID, password, registerProvince, registerCity });
     if (!res.isSuccess) {
-      this.helps.toast(res.message || '账号或密码错误');
+      this.message.info(res.message || '账号或密码错误');
       return false;
     }
     // 登录成功

@@ -1,4 +1,5 @@
 import { delay } from '@/helps/help';
+import fetch from 'dva/fetch';
 
 const REGETVERIFYCODETIME = 60;
 export default {
@@ -21,6 +22,9 @@ export default {
 
     // ranking: 999999,
     // wechatacc: '',
+
+    // loginID: '',
+    // password: '',
 
     // getVerifyCodeElseTime: 0, // 获取验证码剩余的时间（0代表可以重新获取）
   },
@@ -80,6 +84,18 @@ export default {
   },
   subscriptions: {
       async setup({ dispatch, history }) {  // eslint-disable-line
+        fetch('/spreadApi/getUserInfo')
+        .then(res => res.json())
+        .then((res) => {
+          if (res.isSuccess) {
+            dispatch({
+              type: 'updateAppInfo',
+              payload: {
+                ...res.data,
+              },
+            });
+          }
+        });
         dispatch({
           type: 'updateAppInfo',
           payload: {

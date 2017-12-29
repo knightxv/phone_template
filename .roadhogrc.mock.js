@@ -451,7 +451,9 @@ export default {
             proxyid: 2,
             masonry: 0, // 钻书数量
             ranking: 3,
-            powerList: [ 1, 2, 3, 4, 6, 7, 8, 9, 10, 12],
+            powerList: {
+                1: null, 7: null, 15: null, 16: null, 17: null, 19: 0, 20: null, 21: null, 23: 0
+            },
 
             bankCardName: null,
             bankName: '建设银行',

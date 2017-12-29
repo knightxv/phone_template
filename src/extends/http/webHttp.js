@@ -1,12 +1,12 @@
-import Http from './Http';
-import Toast from './antdComponent/Toast';
+import Http from '@/helps/Http';
+import Toast from '@/helps/antdComponent/Toast';
 
 const webHttpConfig = {
   // getConfigUrl: '/config',
   // httpConfigKey: 'JavaWebPublicServerUrl',
   isDebug: true,
   getFetchUrl() {
-    return '';
+    return 'http://120.77.87.4:8081';
   },
   responseHandle(res) {
     if (res.status === 'failed' && res.code === 2) {
