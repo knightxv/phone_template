@@ -97,6 +97,13 @@ class TurnDiaForPlayer extends BaseComponent {
               errorTip: '该玩家非您的下级',
             });
           }
+        } else {
+          // 所有玩家
+          const { userName } = res.data;
+          this.setState({
+            playerName: userName,
+            errorTip: '',
+          });
         }
       } else {
         this.setState({
@@ -298,6 +305,7 @@ class TurnDiaForPlayer extends BaseComponent {
     // const { payEnum } = this.helps;
     const money = !isNaN(diamond) ? diamond * 10 : 0;
     const moneyFloat = this.helps.parseFloatMoney(money);
+    const { masonry } = this.props;
     // const paySelectArr = this.power(); //  为了处理双击刷新问题
     const filterPlayersData = players.filter((player) => {
       if (!searchVal) {
@@ -337,9 +345,8 @@ class TurnDiaForPlayer extends BaseComponent {
             onChange={this.diamondChange}
             value={diamond}
             type="number"
-            maxLength={4}
             clear
-            placeholder="本次多少转出500个钻"
+            placeholder={`本次最多转出${masonry}个钻`}
           >钻石数量</InputItem>
         </div>
         {

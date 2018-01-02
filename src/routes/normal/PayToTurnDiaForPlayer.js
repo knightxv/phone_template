@@ -81,19 +81,20 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       payPickerVisible: false,
     });
   }
-  // 跳转到支付页面
-  goToPay = async (payType, shopId) => {
-    const chargeType = this.helps.payType(payType);
-    const res = await this.http.webHttp.get('/spreadApi/recharge', { goodsId: shopId, chargeType });
-    if (!res.isSuccess) {
-      this.message.info(res.info || '购买失败');
-      return false;
-    }
-    const chargeURL = res.data.chargeURL;
-    window.location.href = chargeURL;
-  }
+  // // 跳转到支付页面
+  // goToPay = async (payType, shopId) => {
+  //   const chargeType = this.helps.payType(payType);
+  //   const res = await this.http.webHttp.get('/spreadApi/recharge', { goodsId: shopId, chargeType });
+  //   if (!res.isSuccess) {
+  //     this.message.info(res.info || '购买失败');
+  //     return false;
+  //   }
+  //   const chargeURL = res.data.chargeURL;
+  //   window.location.href = chargeURL;
+  // }
   // 余额充值
   readyToExcharge = async () => {
+    const { isAutoSave } = this.state;
     const { playerId, diamond, serverid } = this.router.getQuery();
     const { inviteCode } = this.props;
     const params = {
@@ -101,6 +102,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       pid: inviteCode,
       HeroID: playerId,
       diamond,
+      isSaveCommon: isAutoSave,
     };
     const res = await this.http.webHttp.get('/spreadApi/giveDiamond', params);
     this.message.info(res.info || '赠送成功,请耐心等待');
@@ -115,9 +117,13 @@ class PayToTurnDiaForPlayer extends BaseComponent {
   payToTurn =() => {
     const { selectPayInfo } = this.state;
     const payTypeSelect = selectPayInfo.payType;
-    const { BALANCE } = this.Enum.payType;
+    const { BALANCE, ALI } = this.Enum.payType;
     if (payTypeSelect === BALANCE) {
       this.readyToExcharge();
+      return;
+    }
+    if (this.helps.isWechat && payTypeSelect === ALI) {
+      this.message.info('请用手机浏览器打开');
       return;
     }
     this.goToPay();
@@ -214,7 +220,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
                 注：玩家购钻价格统一0.1元/钻
               </div>
               <div className={styles.priceLabel}>
-                价格：<span className={styles.count}>{ price }</span>元
+                价格：<span className={styles.count}>{ payType === this.Enum.payType.BALANCE ? '0.00' : price }</span>元
               </div>
             </div>
           }

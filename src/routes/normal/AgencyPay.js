@@ -57,7 +57,7 @@ class AgencyPay extends BaseComponent {
     const chargeMoney = this.helps.parseFloatMoney(row.payMoney);
     return (<div className={styles.rowItem} onClick={() => this.goToDetail(row.orderId)}>
       <div>
-        <div>{ chargeMoney }元购买了{ row.chargeCount }</div>
+        <div>{ chargeMoney }元购买了{ row.chargeCount }个钻石</div>
         <div className={styles.chargeTime}>{ chargeTime }</div>
       </div>
       <div className={styles.chargeCount}>+{ row.chargeCount }个钻石</div>

@@ -117,6 +117,10 @@ class BuyMasonry extends BaseComponent {
     const { shopId } = this.query;
     const payTypeSelect = selectPayInfo.payType;
     const { WECHAT, ALI } = this.Enum.payType;
+    if (this.helps.isWechat && payTypeSelect === ALI) {
+      this.message.info('请用手机浏览器打开');
+      return;
+    }
     if (payTypeSelect === WECHAT) {
       this.goToPay(WECHAT, shopId);
     } else if (payTypeSelect === ALI) {

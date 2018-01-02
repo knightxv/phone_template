@@ -235,6 +235,7 @@ class TurnDiaForAgent extends BaseComponent {
     const { agentName, diamond, agentNotFind, agentId,
       record, selectplayerVisible, searchVal, agents,
     } = this.state;
+    const { masonry } = this.props;
     const filterAgentsData = agents.filter((agent) => {
       if (!searchVal) {
         return true;
@@ -273,9 +274,8 @@ class TurnDiaForAgent extends BaseComponent {
             onChange={this.diamondChange}
             value={diamond}
             type="number"
-            maxLength={4}
             clear
-            placeholder="本次多少转出500个钻"
+            placeholder={`本次最多转出${masonry}个钻`}
           >钻石数量</InputItem>
         </div>
         <div className={styles.payBtnWrap}>

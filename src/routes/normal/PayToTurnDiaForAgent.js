@@ -44,9 +44,9 @@ class PayToTurnDiaForAgent extends BaseComponent {
   }
   render() {
     const { isAutoSave } = this.state;
-    const { inviteCode, canCashCount } = this.props;
+    const { inviteCode, masonry } = this.props;
     const { diamond, agentName, agentId } = this.query;
-    const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
+    // const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
     return (
       <div className={styles.container}>
         <Title>确认订单</Title>
@@ -58,7 +58,7 @@ class PayToTurnDiaForAgent extends BaseComponent {
           <div className={styles.headerContainer}>
             <div className={styles.userInfoItem}>
               <div>代理ID：{ inviteCode }</div>
-              <div>当前账户钻石数:{ canCashCountLabel }个</div>
+              <div>当前账户钻石数:{ masonry }个</div>
             </div>
             <div className={styles.turnInfoWrap}>
               <div className={styles.turnInfoItem}>
@@ -75,10 +75,13 @@ class PayToTurnDiaForAgent extends BaseComponent {
               </div>
             </div>
           </div>
-          <div className={styles.autoSaveWrap}>
-            <Checkbox checked={isAutoSave} onChange={this.toggleSave} />
-            <span className={styles.saveTip}>转钻提交成功后自动添加为常用收款玩家</span>
-          </div>
+          {
+            this.hasPower('agentRange', 0) &&
+            <div className={styles.autoSaveWrap}>
+              <Checkbox checked={isAutoSave} onChange={this.toggleSave} />
+              <span className={styles.saveTip}>转钻提交成功后自动添加为常用收款代理</span>
+            </div>
+          }
           <div className={styles.buyBtnWrap}>
             <Button onClick={this.goToPay}>确认转钻</Button>
           </div>

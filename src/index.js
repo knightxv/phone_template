@@ -20,19 +20,17 @@ const app = dva({
   extraEnhancers: [autoRehydrate({
     log: false,
     stateReconciler: (defaultStore, newStore) => {
-      //   console.log(defaultStore)
-      //   console.log(newStore)
         return {
           ...defaultStore,
           ...newStore,
-      //     routing: {}, // 去掉routing，不然会自动跳到跳出页面的路由
+      //     routing: { location: null }, // 去掉routing，不然会自动跳到跳出页面的路由
         };
       },
     },
   )], // 重新设置状态
-  // onError(e, dispatch) {
-  //   console.log(e.message);
-  // },
+  onError(e, dispatch) {
+    console.log(e.message);
+  },
 });
 
 // 4. Router

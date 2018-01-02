@@ -12,6 +12,7 @@ justify-content: space-between;
 background: #fff;
 position: fixed;
 width: 100%;
+max-width: 750px;
 top: 0;
 z-index: 999;
 background: #295bac;

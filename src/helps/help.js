@@ -118,25 +118,28 @@ export const payType = (type) => {
     if (isWechat) {
       chargeType = browserTypeEnum.WECHAT_ANDROID_WECHATWINDOS;
     } else if (type === payEnum.ALI) {
-        chargeType = browserTypeEnum.ALIPAY_ANDROID_PHONE_WINDOS;
-      } else {
-        chargeType = browserTypeEnum.WECHAT_ANDROID_PHONE_WINDOS;
-      }
+      chargeType = browserTypeEnum.ALIPAY_ANDROID_PHONE_WINDOS;
+    } else {
+      chargeType = browserTypeEnum.WECHAT_ANDROID_PHONE_WINDOS;
+    }
   } else if (nowSystem === 'IOS') {
     if (isWechat) {
       chargeType = browserTypeEnum.WECHAT_IOS_WECHATWINDOS;
     } else if (type === payEnum.ALI) {
-        chargeType = browserTypeEnum.ALIPAY_IOS_PHONE_WINDOS;
-      } else {
-        chargeType = browserTypeEnum.WECHAT_IOS_PHONE_WINDOS;
-      }
+      chargeType = browserTypeEnum.ALIPAY_IOS_PHONE_WINDOS;
+    } else {
+      chargeType = browserTypeEnum.WECHAT_IOS_PHONE_WINDOS;
+    }
   }
   return chargeType;
 };
 
 // 得到本月一号的时间
-export const getMonthTimeStamp = () => {
-  const now = new Date();
+export const getMonthTimeStamp = (timeStamp) => {
+  let now = new Date();
+  if (timeStamp) {
+    now = new Date(timeStamp);
+  }
   const monthLabel = now.format('yyyy/MM/1');
   return new Date(monthLabel).getTime();
 };

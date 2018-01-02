@@ -263,6 +263,13 @@ function RouterConfig({ history, app }) {
       import('./models/agent'),
     ],
   });
+  const StepRebate = dynamic({
+    app,
+    component: () => import('./routes/normal/StepRebate'),
+    models: () => [
+      import('./models/agent'),
+    ],
+  });
 
   // 总代理
   const GeneralLogin = dynamic({
@@ -372,6 +379,7 @@ function RouterConfig({ history, app }) {
           <Route path="/turnDiaForAgentOrderDetail" component={TurnDiaForAgentOrderDetail} />
           <Route path="/orderForAgentTurnDiaForAgent" component={OrderForAgentTurnDiaForAgent} />
           <Route path="/payFail" component={PayFail} />
+          <Route path="/stepRebate" component={StepRebate} />
 
           <Route path="/general/login" component={GeneralLogin} />
           <Route path="/general/homePage" component={GeneralHomePage} />

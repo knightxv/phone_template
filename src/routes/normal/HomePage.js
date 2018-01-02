@@ -38,6 +38,7 @@ class HomePage extends BaseComponent {
     return {
       havePowerToBanlance: this.hasPowerSome('banlance'),
       havePowerToRechargeToPlayer: this.hasPowerSome('AgentTurnDiaToPlayerDirect', 'wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer'),
+      havePowerToRechargeToAgent: this.hasPower('iAgentTurnDiaToAgent'),
       havePowerToBuyDia: this.hasPowerSome('AgentBuyDiawechatPay', 'AgentBuyDiaAliPay', 'AgentBuyDiabanlancePay'), // 是否有购买钻石的权限
     };
   }
@@ -125,6 +126,7 @@ class HomePage extends BaseComponent {
     // 权限
     const {
       havePowerToRechargeToPlayer,
+      havePowerToRechargeToAgent,
       havePowerToBuyDia,
       havePowerToBanlance,
     } = power;
@@ -187,6 +189,17 @@ class HomePage extends BaseComponent {
             <Icon type="right" />
           </FlexRowBetweenWingSpace>
         }
+        {/* 代理阶梯返利 */}
+        {
+          havePowerToBuyDia &&
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/stepRebate')}>
+            <FlexRow className={styles.navigateTitleWrap}>
+              <IconImg className={styles.titleIconImg} src={IconSource.buyDia} />
+              <span>代理阶梯返利</span>
+            </FlexRow>
+            <Icon type="right" />
+          </FlexRowBetweenWingSpace>
+        }
         {/* 给玩家充钻 */}
         {
           havePowerToRechargeToPlayer &&
@@ -203,6 +216,7 @@ class HomePage extends BaseComponent {
         }
         {/* 给代理充钻 */}
         {
+          havePowerToRechargeToAgent &&
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/turnDiaForAgent')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.turnDia_agent} />
