@@ -108,9 +108,9 @@ class MySavePlayer extends BaseComponent {
     this.serverid = serverid;
     let res;
     if (serverid) {
-      res = await this.helps.webHttp.get('/spreadApi/mySavePlayer', { serverid });
+      res = await this.http.webHttp.get('/spreadApi/mySavePlayer', { serverid });
     } else {
-      res = await this.helps.webHttp.get('/spreadApi/mySavePlayer');
+      res = await this.http.webHttp.get('/spreadApi/mySavePlayer');
     }
     if (res.isSuccess) {
       this.setState({
@@ -119,7 +119,9 @@ class MySavePlayer extends BaseComponent {
     }
   }
   payForMyPlayer = (playerId) => {
-    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/pay', query: { playerId, serverid: this.serverid || '' } }));
+    this.router.go('/pay', {
+      playerId, serverid: this.serverid || '',
+    });
   }
   onSearchInputChange = (ev) => {
     this.setState({
@@ -133,7 +135,9 @@ class MySavePlayer extends BaseComponent {
   }
   // 添加收藏的玩家
   navigateToSavePlayer = () => {
-    this.props.dispatch(this.helps.routerRedux.push({ pathname: '/savePlayer', query: { serverid: this.serverid || '' } }));
+    this.router.go('/savePlayer', {
+      serverid: this.serverid || '',
+    });
   }
   renderRowData = () => {
     const { searchVal } = this.state;
@@ -237,7 +241,7 @@ class MySavePlayer extends BaseComponent {
         <Title>给玩家转钻</Title>
         <NavBar
           title="给玩家转钻"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
           right={<div onClick={this.navigateToSavePlayer}>添加</div>}
         />
         <SearchBar

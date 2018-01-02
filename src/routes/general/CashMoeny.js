@@ -93,18 +93,18 @@ class CashMoeny extends BaseComponent {
       cashCount,
     };
     if (isNaN(cashCount) && !/^\d(\.\d{1,2})?$/.test(cashCount)) {
-      this.helps.toast('输入的提现金额格式错误');
+      this.message.info('输入的提现金额格式错误');
       return false;
     }
-    const res = await this.helps.webHttp.get('/spreadApi/general/cash', params);
+    const res = await this.http.webHttp.get('/spreadApi/general/cash', params);
     if (res.isSuccess) {
-      this.props.dispatch(this.helps.routerRedux.goBack());
-      this.helps.toast(res.info || '提现成功');
+      this.router.back();
+      this.message.info(res.info || '提现成功');
     } else {
-      this.helps.toast(res.info);
+      this.message.info(res.info);
     }
     // 更新用户数据
-    const updateRes = await this.helps.webHttp.get('/spreadApi/general/getUserInfo');
+    const updateRes = await this.http.webHttp.get('/spreadApi/general/getUserInfo');
     if (updateRes.isSuccess) {
       this.props.dispatch({ type: 'general/updateInfo', payload: { ...updateRes.data } });
     }
@@ -121,7 +121,7 @@ class CashMoeny extends BaseComponent {
         <Title>提现</Title>
         <NavBar
           title="提现"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <WhiteSpace />
         <FlexRow className={styles.itemWrap}>

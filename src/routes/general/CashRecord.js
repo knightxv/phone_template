@@ -48,7 +48,7 @@ class CashRecord extends BaseComponent {
     };
   }
   async componentWillMount() {
-    const res = await this.helps.webHttp.get('/spreadApi/general/cashRecord');
+    const res = await this.http.webHttp.get('/spreadApi/general/cashRecord');
     if (res.isSuccess) {
       this.setState({
         tableData: res.data,
@@ -65,7 +65,7 @@ class CashRecord extends BaseComponent {
         <Title>提现记录</Title>
         <NavBar
           title="提现记录"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
           <Table

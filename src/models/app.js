@@ -1,5 +1,5 @@
 
-import webHttp from '../helps/webHttp';
+import webHttp from '../extends/http/webHttp';
 
 export default {
   namespace: 'app',

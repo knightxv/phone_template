@@ -205,6 +205,8 @@ export default {
                 shopId: 1, // 商品的id
                 goodsMoney: '100000', // 商品金额
                 masonryCount: '10000', // 钻石个数
+                statu: 1, // 状态
+                tip: '推荐新代理,88开运'
             },
         ]
     },
@@ -436,29 +438,31 @@ export default {
         Msg: '',
         code: 2,
         data: {
-            saleDiamondsOfThisMonth:84651, // 本月销钻
-            myUnderAgentCount: 15, // 我的下级代理人数
-            myPlayerCount: 80, // 我的玩家人数
-            masonryIncomeToday: 0, // 今日钻石收入
-            masonryPayToday: 0, // 今日钻石支出
-            balanceIncomeToday: 0, // 今日余额收入
-            balancePayToday: 0, // 今日余额支出
-            canCashCount: 1000, // 未提现（余额）
-            cashCountlog: 0, // 已提现
-            inviteCode: '223344',
-            proxyid: 2,
-            masonry: 0, // 钻书数量
-            ranking: 3,
-            powerList: [ 1, 2, 3, 4, 6, 7, 8, 9, 10, 12],
+            // saleDiamondsOfThisMonth:84651, // 本月销钻
+            // myUnderAgentCount: 15, // 我的下级代理人数
+            // myPlayerCount: 80, // 我的玩家人数
+            // masonryIncomeToday: 0, // 今日钻石收入
+            // masonryPayToday: 0, // 今日钻石支出
+            // balanceIncomeToday: 0, // 今日余额收入
+            // balancePayToday: 0, // 今日余额支出
+            // canCashCount: 1000, // 未提现（余额）
+            // cashCountlog: 0, // 已提现
+            // inviteCode: '223344',
+            // proxyid: 2,
+            // masonry: 0, // 钻书数量
+            // ranking: 3,
+            // powerList: {
+            //     1: null, 7: null, 15: null, 16: null, 17: null, 19: 0, 20: null, 21: null, 23: 0
+            // },
 
-            bankCardName: null,
-            bankName: '建设银行',
-            bankOfDeposit: null,
-            cardNumber: null,
-            positionName: '',
+            // bankCardName: null,
+            // bankName: '建设银行',
+            // bankOfDeposit: null,
+            // cardNumber: null,
+            // positionName: '',
 
-            rechargeOfToday: 0,
-            rechargeOfYesterDay: 0,
+            // rechargeOfToday: 0,
+            // rechargeOfYesterDay: 0,
         }
     },
     'GET /spreadApi/getGameList': {

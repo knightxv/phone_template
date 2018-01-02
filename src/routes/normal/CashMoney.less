@@ -1,4 +1,4 @@
-
+@import "../../helps/base.less";
 
 .cashBtn {
     width: 100%;
@@ -9,7 +9,7 @@
 
 .countTip {
     text-align: right;
-    padding: 0 16px;
+    padding-right: 0.1rem;
     color: #ababab;
     font-size: 0.26rem;
 }
@@ -51,4 +51,48 @@
 .moneyCount {
     padding: 0 0.1rem;
     color: #ff9500;
+}
+
+.listWrap {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin-top: 1rem;
+}
+
+
+.recordHeader {
+    background: #fff;
+    padding: .2rem;
+    .borBot();
+}
+
+.itemWrap {
+    .flexRow(space-between);
+    .borBot();
+    padding: 0.1rem .2rem;
+    background: #fff;
+}
+
+.timeLabel {
+    font-size: .26rem;
+    color: @gray;
+    padding-top: .1rem;
+}
+.orderStatuWrap {
+    
+}
+.success {
+    color: rgb(7, 131, 7);
+}
+.fail {
+    color: rgb(254, 13, 13);
+}
+
+.fkh {
+    color: #333;
+}
+
+.tableContainer {
+    .borTop();
 }

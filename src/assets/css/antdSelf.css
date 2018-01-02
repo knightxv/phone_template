@@ -45,6 +45,7 @@
 }
 :global(.am-list-item .am-input-extra) {
     overflow: initial;
+    max-height: 1000px;
 }
 :global(.am-list-item.am-input-item) {
     height: 0.8rem;
@@ -52,4 +53,25 @@
 :global(.am-list-item .am-input-control input) {
     font-size: 0.32rem;
 }
-
+:global(.am-modal-content) {
+    background: none;
+}
+:global(.am-button-warning) {
+    background: #f86e21;
+    color: #fff;
+}
+:global(.am-button-primary) {
+    background: #295bac;
+    border: 1px solid #295bac;
+    color: #fff;
+}
+:global(.am-button) {
+    font-size: .34rem;
+    height: .8rem;
+    line-height: .8rem;
+}
+:global(.am-button-small) {
+    font-size: .28rem;
+    height: .6rem;
+    line-height: .6rem;
+}

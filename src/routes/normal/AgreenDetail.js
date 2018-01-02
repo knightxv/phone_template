@@ -4,7 +4,6 @@ import { connect } from 'dva';
 import BaseComponent from '@/helps/BaseComponent';
 import NavBar from '@/helps/antdComponent/NavBar';
 import { WhiteSpace } from '@/helps/styleComponent';
-import { createMarkup } from '@/helps/help';
 import styles from './AgreenDetail.css';
 
 class AgreenDetail extends BaseComponent {
@@ -15,8 +14,8 @@ class AgreenDetail extends BaseComponent {
     };
   }
   async componentWillMount() {
-    const type = this.TypeDefine.htmlTextType.agreen_page;
-    const res = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', { type });
+    const type = this.Enum.htmlTextType.agreen_page;
+    const res = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', { type });
     const htmlText = res.isSuccess ? res.data.htmlText : '';
     this.setState({
       htmlText,
@@ -28,10 +27,10 @@ class AgreenDetail extends BaseComponent {
       <div>
         <NavBar
           title="同意条款"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <WhiteSpace />
-        <div className={styles.container} dangerouslySetInnerHTML={createMarkup(htmlText)}>
+        <div className={styles.container} dangerouslySetInnerHTML={this.helps.createMarkup(htmlText)}>
           {/* <div className="return_btn" >&lt;返回</div> */}
           
         </div>

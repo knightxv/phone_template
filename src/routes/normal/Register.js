@@ -10,21 +10,10 @@ import BaseComponent from '@/helps/BaseComponent';
 import { Title } from '@/helps/styleComponent';
 import styles from './Register.css';
 
-
-//  /*
-//         获取验证码
-//         @query : phone[string]电话号码
-//     */
-//     'POST /phone/getVerifyCode': {
-//       status: 'success',
-//       Msg: '',
-//       data: null,
-//   },
-
 class Register extends BaseComponent {
   constructor(props) {
     super(props);
-    const { code } = this.helps.querystring.parse(this.props.location.search.substr(1));
+    const { code } = this.router.getQuery();
     this.code = code; // 上级代理的邀请码
     this.pid = ''; // 上级代理的id(pid)(暂时没什么用)
     this.hasCode = !!this.code;
@@ -45,12 +34,12 @@ class Register extends BaseComponent {
     }
     // this.props.dispatch({ type: 'app/getVerifyCode' });
     const { phone } = this.state;
-    const res = await this.helps.webHttp.get('/spreadApi/getVerifyCode', { phone });
+    const res = await this.http.webHttp.get('/spreadApi/getVerifyCode', { phone });
     if (res.isSuccess) {
       this.props.dispatch({ type: 'agent/getVerifyCode' });
-      this.helps.toast('验证码已发送，请查收');
+      this.message.info('验证码已发送，请查收');
     } else {
-      this.helps.toast(res.info || '验证码失败，请重试');
+      this.message.info(res.info || '验证码失败，请重试');
     }
   }
   // 检查手机是否合法
@@ -63,7 +52,7 @@ class Register extends BaseComponent {
     const { phone, verifyCode, pCode } = this.state;
     const pid = this.pid;
     if (!verifyCode) {
-      this.helps.toast('请输入验证码');
+      this.message.info('请输入验证码');
       return false;
     }
     const ipInfo = window.remote_ip_info;
@@ -72,31 +61,31 @@ class Register extends BaseComponent {
     const password = 123456; // 默认密码
     let res;
     if (pid) {
-      res = await this.helps.webHttp.get('/spreadApi/register',
+      res = await this.http.webHttp.get('/spreadApi/register',
       { phone, pid, pCode, verifyCode, password, registerProvince, registerCity });
     } else {
-      res = await this.helps.webHttp.get('/spreadApi/register',
+      res = await this.http.webHttp.get('/spreadApi/register',
       { phone, pCode, verifyCode, password, registerProvince, registerCity });
     }
     if (res.isSuccess) {
       // Toast.info('注册成功');
-      const resLogin = await this.helps.webHttp.get('/spreadApi/login', { loginID: phone, password });
+      const resLogin = await this.http.webHttp.get('/spreadApi/login', { loginID: phone, password });
       if (resLogin.isSuccess) {
         window.alert('初始密码默认为：123456');
-        this.props.dispatch(this.helps.routerRedux.push('/homePage'));
+        this.router.go('/homePage')
       } else {
-        this.helps.toast(resLogin.info || '登录失败');
+        this.message.toast(resLogin.info || '登录失败');
       }
     } else {
-      this.helps.toast(res.info);
+      this.message.toast(res.info);
     }
   }
   navigateToAgreen = () => {
-    this.props.dispatch(this.helps.routerRedux.push('/AgreenDetail'));
+    this.router.go('/AgreenDetail');
   }
   async componentWillMount() {
-    const type = this.TypeDefine.htmlTextType.agreen_page;
-    const res = await this.helps.webHttp.get('/ddm/phone/api/getHtmlText', { type });
+    const type = this.Enum.htmlTextType.agreen_page;
+    const res = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', { type });
     const htmlText = res.isSuccess ? res.data.htmlText : '';
     this.setState({
       agreenShow: !!htmlText,
@@ -117,7 +106,7 @@ class Register extends BaseComponent {
         </Helmet>
         <NavBar
           title="申请代理"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
           <div className={styles.inputWrap}>

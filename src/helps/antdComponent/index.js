@@ -80,6 +80,26 @@ class Button extends React.Component {
   }
 }
 
+class ListView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      Component: null,
+    };
+  }
+  componentDidMount() {
+    import(/* webpackChunkName: 'ListView' */'./ListView').then((Component) => {
+      this.setState({
+        Component,
+      });
+    });
+  }
+  render() {
+    const { Component } = this.state;
+    return (Component ? <Component {...this.props} /> : <div />);
+  }
+}
+
 let DataSource;
 class ListViewTable extends React.Component {
   constructor(props) {
@@ -89,7 +109,7 @@ class ListViewTable extends React.Component {
     };
   }
   componentDidMount() {
-    import(/* webpackChunkName: 'ListView' */'./ListView').then((res) => {
+    import(/* webpackChunkName: 'ListViewTable' */'./ListViewTable').then((res) => {
       const Component = res.default;
       DataSource = res.DataSource;
       this.setState({
@@ -124,6 +144,34 @@ class InputItem extends React.Component {
     return (Component && <Component {...this.props} />);
   }
 }
+class Modal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      Component: null,
+    };
+  }
+  componentDidMount() {
+    import(/* webpackChunkName: 'Modal' */'./Modal').then((Component) => {
+      this.setState({
+        Component,
+      });
+    });
+  }
+  componentWillUnmount() {
+    window.document.documentElement.style.overflow = 'auto';
+  }
+  render() {
+    const { Component } = this.state;
+    const visible = this.props.visible;
+    if (visible) {
+      window.document.documentElement.style.overflow = 'hidden';
+    } else {
+      window.document.documentElement.style.overflow = 'auto';
+    }
+    return (Component && <Component {...this.props} />);
+  }
+}
 
 
 export default {
@@ -132,5 +180,7 @@ export default {
   Icon,
   Button,
   ListViewTable,
+  ListView,
   InputItem,
+  Modal,
 };

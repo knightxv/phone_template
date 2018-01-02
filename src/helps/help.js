@@ -6,21 +6,21 @@ import { document, window } from 'global';
 //     DefaultToast.info(message, 1, null, false);
 //   },
 // };
-exports.delay = (time = 1000) => {
+export const delay = (time = 1000) => {
   return new Promise((resolve) => {
     setTimeout(resolve, time);
   });
 };
 
 
-exports.createMarkup = (html) => {
+export const createMarkup = (html) => {
   return {
     __html: html,
   };
 };
 
 // 识别微信浏览器
-exports.isWeixinBrowser = () => {
+export const isWeixinBrowser = () => {
   return /micromessenger/.test(window.navigator.userAgent.toLowerCase());
 };
 
@@ -41,29 +41,49 @@ const system = () => {
 };
 
 // 新窗口打开另外一个页面
-exports.openWindow = (url) => {
+export const openWindow = (url) => {
   const link = document.createElement('a');
   link.href = url;
   link.target = '_blank';
   document.body.appendChild(link);
   link.click();
 };
-// 支付配置
-const payEnum = {
-  WECHAT: 0,
-  ALI: 1,
-  BALANCE: 3,
-  GIVE: 4,
+
+// 保存cookie
+export const saveCookie = (name, value, min) => {
+  let expires = '';
+  if (min) {
+    const date = new Date();
+    date.setTime(date.getTime() + (min * 60 * 1000));
+    expires = `;expires=${date.toUTCString()}`;
+  }
+  document.cookie = `${name}=${value}${expires};path=/`;
+};
+// 读取cookie
+export const getCookie = (name) => {
+  const nameEQ = `${name}=`;
+  const cookieArr = document.cookie.split(';');
+  for (let i = 0; i < cookieArr.length; i++) {
+    let c = cookieArr[i];
+    while (c.charAt(0) === ' ') {
+      c = c.substring(1, c.length);
+    }
+    if (c.indexOf(nameEQ) === 0) {
+      return c.substring(nameEQ.length, c.length);
+    }
+  }
+  return null;
 };
 
-// 识别微信浏览器
-const isWeixinBrowser = () => {
-  return /micromessenger/.test(window.navigator.userAgent.toLowerCase());
-};
+export function removeCookie(name) {
+  if (!name) {
+    return;
+  }
+  saveCookie(name, '', -1);
+}
 
 const nowSystem = system();
 const isWechat = isWeixinBrowser();
-exports.payEnum = payEnum;
 exports.isWechat = isWechat;
 exports.system = system;
 
@@ -80,8 +100,13 @@ const browserTypeEnum = {
   ALIPAY_PC_WINDOS: 7, // 支付宝pc---
 };
 
+// 支付配置
+const payEnum = {
+  WECHAT: 0,
+  ALI: 1,
+};
 
-exports.payType = (type) => {
+export const payType = (type) => {
   let chargeType;
   if (nowSystem === 'PC') {
     if (type === payEnum.ALI) {
@@ -92,23 +117,32 @@ exports.payType = (type) => {
   } else if (nowSystem === 'Android') {
     if (isWechat) {
       chargeType = browserTypeEnum.WECHAT_ANDROID_WECHATWINDOS;
+    } else if (type === payEnum.ALI) {
+      chargeType = browserTypeEnum.ALIPAY_ANDROID_PHONE_WINDOS;
     } else {
-      if (type === payEnum.ALI) {
-        chargeType = browserTypeEnum.ALIPAY_ANDROID_PHONE_WINDOS;
-      } else {
-        chargeType = browserTypeEnum.WECHAT_ANDROID_PHONE_WINDOS;
-      }
+      chargeType = browserTypeEnum.WECHAT_ANDROID_PHONE_WINDOS;
     }
   } else if (nowSystem === 'IOS') {
     if (isWechat) {
       chargeType = browserTypeEnum.WECHAT_IOS_WECHATWINDOS;
+    } else if (type === payEnum.ALI) {
+      chargeType = browserTypeEnum.ALIPAY_IOS_PHONE_WINDOS;
     } else {
-      if (type === payEnum.ALI) {
-        chargeType = browserTypeEnum.ALIPAY_IOS_PHONE_WINDOS;
-      } else {
-        chargeType = browserTypeEnum.WECHAT_IOS_PHONE_WINDOS;
-      }
+      chargeType = browserTypeEnum.WECHAT_IOS_PHONE_WINDOS;
     }
   }
   return chargeType;
 };
+
+// 得到本月一号的时间
+export const getMonthTimeStamp = (timeStamp) => {
+  let now = new Date();
+  if (timeStamp) {
+    now = new Date(timeStamp);
+  }
+  const monthLabel = now.format('yyyy/MM/1');
+  return new Date(monthLabel).getTime();
+};
+
+
+export default exports;

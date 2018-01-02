@@ -1,146 +1,214 @@
 import React from 'react';
 import { connect } from 'dva';
+import ScrollTop from '@/components/ScrollTop';
 
-import { Icon } from '@/helps/antdComponent/index.js';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, IconImg } from '@/helps/styleComponent';
+import classnames from 'classnames';
+import { StickyContainer, Sticky } from 'react-sticky';
 import BaseComponent from '@/helps/BaseComponent';
-import styles from './AgencyPay.css';
+import { Button } from '@/helps/antdComponent/index.js';
+import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
+import NavBar from '@/helps/antdComponent/NavBar';
+import { Title, WhiteSpace } from '@/helps/styleComponent';
+import styles from './AgencyPay.less';
 
 // const goodsIds = [1, 2, 3, 4, 5, 6];
 // const goodsSourceArr = goodsIds.map(index => require(`../resource/shop/${index}.png`));
 
-const paySource = {
-  wx: require('../../assets/wx.png'),
-  zfb: require('../../assets/zfb.png'),
-  yezf: require('../../assets/yezf.png'),
-};
-
 class AgencyPay extends BaseComponent {
   constructor(props) {
     super(props);
-    this.payEnum = this.helps.payEnum;
-    const { WECHAT, ALI, BALANCE } = this.payEnum;
-    this.marsonryPayType = [
-      // { payType: WECHAT, label: '微信支付', paySource: paySource.wx },
-      // { payType: ALI, label: '支付宝支付', paySource: paySource.zfb },
-      // { payType: BALANCE, label: '余额支付', paySource: paySource.yezf },
-    ];
-    // 如果有余额支付权限
-    const havePowerToBanlance = this.hasPower('banlance');
-    const havePowerToRecharge = this.hasPower('proxySDKCharge');
-    if (havePowerToRecharge) {
-      if (!this.helps.isWeixinBrowser()) {
-        this.marsonryPayType.push({ payType: ALI, label: '支付宝支付', paySource: paySource.zfb });
-      }
-      this.marsonryPayType.push({ payType: WECHAT, label: '微信支付', paySource: paySource.wx });
-    }
-    if (havePowerToBanlance) {
-      this.marsonryPayType.push({ payType: BALANCE, label: '余额支付', paySource: paySource.yezf });
-    }
     this.state = {
       goods: [],
-      payTypeSelect: this.marsonryPayType[0] && this.marsonryPayType[0].payType,
+      selectShopId: -1, // 选择的商品id
+      record: [],
     };
   }
   async componentWillMount() {
-    const res = await this.helps.webHttp.get('/spreadApi/getMasonryGoods');
+    const res = await this.http.webHttp.get('/spreadApi/getMasonryGoods');
     if (res.isSuccess) {
+      const selectShopId = res.data.length > 0 ? res.data[0].shopId : -1;
       this.setState({
         goods: res.data,
+        selectShopId,
+      });
+    }
+    this.getRecord();
+  }
+  getRecord = async () => {
+    const res = await this.http.webHttp.get('/spreadApi/agentBuyDiaOrderList');
+    if (res.isSuccess) {
+      this.setState({
+        record: res.data,
       });
     }
   }
-  // 跳转到支付页面
-  goToPay = async (payType, shopId) => {
-    const chargeType = this.helps.payType(payType);
-    const res = await this.helps.webHttp.get('/spreadApi/recharge', { goodsId: shopId, chargeType });
-    if (!res.isSuccess) {
-      this.helps.toast(res.info || '购买失败');
-      return false;
-    }
-    const chargeURL = res.data.chargeURL;
-    window.location.href = chargeURL;
+  // 跳转购钻详情页面
+  goToDetail = (orderId) => {
+    this.router.go('/buyDiaOrderDetail', { orderId });
   }
-  // 余额充值
-  readyToExcharge = async (shopId) => {
-    if (!window.confirm('确认购买？')) {
-      return false;
-    }
-    const params = {
-      goodsId: shopId,
-    };
-    const res = await this.helps.webHttp.get('/spreadApi/balanceRecharge', params);
-    if (res.isSuccess) {
-      this.helps.toast(res.info || '充值成功');
-      const userInfoRes = await this.helps.webHttp.get('/spreadApi/getUserInfo');
-      this.props.dispatch({ type: 'agent/updateAppInfo', payload: userInfoRes.data });
-      return false;
-    }
-    this.helps.toast(res.info || '充值失败，请重试');
-  }
-  buyGood = (shopId) => {
-    const { payTypeSelect } = this.state;
-    const { WECHAT, ALI } = this.payEnum;
-    if (payTypeSelect === WECHAT) {
-      this.goToPay(WECHAT, shopId);
-    } else if (payTypeSelect === ALI) {
-      this.goToPay(ALI, shopId);
-    } else {
-      this.readyToExcharge(shopId);
-    }
-  }
-  selectPayType = (val) => {
+  // 选择商品
+  selectGoods = (selectShopId) => {
     this.setState({
-      payTypeSelect: val,
+      selectShopId,
     });
   }
-  goToDetail = () => {
-    this.props.dispatch(this.helps.routerRedux.push('/buyMasonryDetail'));
+  renderRow = (row) => {
+    const chargeTime = new Date(row.chargeTime).format('yyyy-MM-dd HH:mm');
+    const chargeMoney = this.helps.parseFloatMoney(row.payMoney);
+    return (<div className={styles.rowItem} onClick={() => this.goToDetail(row.orderId)}>
+      <div>
+        <div>{ chargeMoney }元购买了{ row.chargeCount }个钻石</div>
+        <div className={styles.chargeTime}>{ chargeTime }</div>
+      </div>
+      <div className={styles.chargeCount}>+{ row.chargeCount }个钻石</div>
+    </div>);
+  }
+  goToBuyGoods = () => {
+    const { selectShopId, goods } = this.state;
+    const goodsInfo = goods.filter((shop) => {
+      return shop.shopId === selectShopId;
+    })[0];
+    if (goodsInfo) {
+      const {
+        goodsMoney,
+        masonryCount,
+        shopId,
+      } = goodsInfo;
+      this.router.go('/buyMasonry', {
+        goodsMoney,
+        masonryCount,
+        shopId,
+      });
+    }
+  }
+  goToOrderDetail = () => {
+    this.router.go('/buyDiaOrderDetail');
+  }
+  scrollTop = () => {
+    // window.location
+    // scrollNode.scrollTop(0, 0);
+    window.location.reload();
   }
   render() {
-    const { goods, payTypeSelect } = this.state;
-    const { canCashCount } = this.props;
+    const { goods, record, selectShopId } = this.state;
+    const shopSelectArr = goods.filter((good) => {
+      return good.shopId === selectShopId;
+    });
+    const shopTip = shopSelectArr[0] && shopSelectArr[0].tip;
+    const monthRecord = []; // 本月购钻记录
+    record.some((data) => {
+      if (data.chargeTime >= this.helps.getMonthTimeStamp()) {
+        monthRecord.push(data);
+        return false;
+      }
+      return true;
+    });
+    const monthCount = monthRecord.reduce((bef, cur) => {
+      return bef + cur.chargeCount;
+    }, 0); // 本月购钻数
+    const allCount = record.reduce((bef, cur) => {
+      return bef + cur.chargeCount;
+    }, 0); // 总购钻数
     return (
-      <div>
+      <div className={styles.container}>
         <Title>购买钻石</Title>
         <NavBar
           title="购买钻石"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
+        />
+        <WhiteSpace />
+        <div className={styles.payWrap}>
+          <div className={styles.goodsContainer}>
+            {
+              goods.map(({ goodsMoney, masonryCount, shopId, statu, tip }, i) => {
+                const goodsWrapClass = classnames({
+                  [styles.goodsWrap]: true,
+                  [styles.goodsCheap]: +statu === 1,
+                  [styles.goodsSelect]: selectShopId === shopId,
+                });
+                return (
+                  <div
+                    className={goodsWrapClass}
+                    key={i}
+                    style={{ marginRight: (i !== 0 && ((i - 2) % 3) === 0) ? 0 : '5%' }}
+                    onClick={() => this.selectGoods(shopId)}
+                  >
+                    <p className={styles.goodLabel}>{this.helps.transMoenyUnit(masonryCount)}钻石</p>
+                    <p className={styles.goodPrice}>售价:{this.helps.parseFloatMoney(goodsMoney)}元</p>
+                  </div>
+                );
+              })
+            }
+          </div>
+          {
+            <div className={styles.payTip}>{ shopTip && `-${shopTip}-` }</div>
+          }
+          <div className={styles.btnWrap}>
+            <Button onClick={this.goToBuyGoods} className={styles.payBtn}>立即购买</Button>
+          </div>
+        </div>
+        <StickyContainer className={styles.stickyContainer} >
+          <Sticky>
+            {
+              ({
+              style,
+                // the following are also available but unused in this example
+                isSticky,
+                wasSticky,
+                distanceFromTop,
+                distanceFromBottom,
+                calculatedHeight,
+              }) => {
+                // console.log(wasSticky)
+                return (
+                  <div className={styles.listWrap} style={style}>
+                    <div className={styles.recordHeader}>
+                      <div>
+                        本月购钻数量:<span className={styles.countLabel}>{ monthCount }</span>个
+                      </div>
+                      <div>
+                        总购钻数量:<span className={styles.countLabel}>{ allCount }</span>个
+                      </div>
+                    </div>
+                    {
+                      wasSticky
+                      ? <ScrollListView
+                        data={record}
+                        renderRow={this.renderRow}
+                        ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
+                      />
+                      : <BodyScrollListView
+                        data={record}
+                        renderRow={this.renderRow}
+                        ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
+                      />
+                    }
+                    {
+                      wasSticky && <ScrollTop onClick={this.scrollTop} />
+                    }
+                  </div>
+                );
+              }
+            }
+          </Sticky>
+        </StickyContainer>
+      </div>
+    );
+  }
+}
+
+export default connect()(AgencyPay);
+
+/*
+<div className={styles.container}>
+        <Title>购买钻石</Title>
+        <NavBar
+          title="购买钻石"
+          onClick={this.router.back}
           right={<div onClick={this.goToDetail}>明细</div>}
         />
         <WhiteSpace />
-        <div className={styles.payTypeContainer}>
-          <div className={styles.payTypeTitle}>支付方式</div>
-          {
-            this.marsonryPayType.map(payInfo => (
-              <FlexRowBetweenWingSpace
-                key={payInfo.payType}
-                className={styles.paySelectItem}
-                onClick={() => this.selectPayType(payInfo.payType)}
-              >
-                <FlexRow>
-                  <IconImg src={payInfo.paySource} className={styles.payIcon} />
-                  <div>{payInfo.label}</div>
-                  {
-                    payInfo.payType === this.payEnum.BALANCE
-                    && (<div className={styles.balanceTip}>
-                      ￥{this.parseFloatMoney(canCashCount)}
-                    </div>)
-                  }
-                </FlexRow>
-                <div>
-                  {
-                    payTypeSelect === payInfo.payType && <Icon type="check" />
-                  }
-                </div>
-              </FlexRowBetweenWingSpace>
-            ))
-          }
-        </div>
-        <WhiteSpace />
         <div className={styles.payWrap}>
-          <div className={styles.payTitle}>充钻石</div>
           <div className={styles.goodsContainer}>
             {
               goods.map(({ goodsMoney, masonryCount, shopId }, i) => (
@@ -150,22 +218,44 @@ class AgencyPay extends BaseComponent {
                   style={{ marginRight: (i !== 0 && ((i - 2) % 3) === 0) ? 0 : '5%' }}
                   onClick={() => this.buyGood(shopId)}
                 >
-                  <p className={styles.goodInfo}>{this.transMoenyUnit(masonryCount)}钻石</p>
-                  <p className={styles.goodInfo}>售价:{this.parseFloatMoney(goodsMoney)}元</p>
+                  <p className={styles.goodInfo}>{this.helps.transMoenyUnit(masonryCount)}钻石</p>
+                  <p className={styles.goodInfo}>售价:{this.helps.parseFloatMoney(goodsMoney)}元</p>
                 </div>
               ))
             }
           </div>
+          <div className={styles.payTip}>-推荐新代理,88开运!-</div>
+          <div className={styles.btnWrap}>
+            <Button onClick={this.buyGoods} className={styles.payBtn}>立即购买</Button>
+          </div>
         </div>
+        <StickyContainer className={styles.stickyContainer} >
+          <Sticky>
+            {
+              ({
+              style,
+                // the following are also available but unused in this example
+                isSticky,
+                wasSticky,
+                distanceFromTop,
+                distanceFromBottom,
+                calculatedHeight
+              }) => {
+                return (
+                  <div className={styles.listWrap} style={style}>
+                    <ListView
+                      data={record}
+                      renderHeader={this.renderHeader}
+                      renderRow={this.renderRow}
+                      scrollEnabled={false}
+                    />
+                  </div>
+                );
+              }
+            }
+          </Sticky>
+        </StickyContainer>
       </div>
-    );
-  }
-}
 
-function mapStateToProps(state) {
-  return {
-    ...state.agent,
-  };
-}
 
-export default connect(mapStateToProps)(AgencyPay);
+*/

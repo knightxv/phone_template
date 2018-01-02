@@ -18,7 +18,7 @@ class SavePlayer extends BaseComponent {
       playerInfo: null,
       isNotFind: false,
     };
-    const { serverid } = this.helps.querystring.parse(this.props.location.search.substring(1));
+    const { serverid } = this.router.getQuery();
     this.serverid = serverid;
     this.searchTime = null;
   }
@@ -27,7 +27,7 @@ class SavePlayer extends BaseComponent {
     window.clearTimeout(this.searchTime);
     this.searchTime = window.setTimeout(async () => {
       if (value.length >= 6 && !isNaN(value)) {
-        const res = await this.helps.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: value, serverid: this.serverid });
+        const res = await this.http.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: value, serverid: this.serverid });
         if (res.isSuccess) {
           this.setState({
             isNotFind: false,
@@ -55,15 +55,15 @@ class SavePlayer extends BaseComponent {
     const { heroID, isSave } = playerInfo || {};
     let res;
     if (isSave) {
-      res = await this.helps.webHttp.get('/spreadApi/cancelSavePlayer', { heroID, serverid: this.serverid });
+      res = await this.http.webHttp.get('/spreadApi/cancelSavePlayer', { heroID, serverid: this.serverid });
     } else {
-      res = await this.helps.webHttp.get('/spreadApi/savePlayer', { heroID, serverid: this.serverid });
+      res = await this.http.webHttp.get('/spreadApi/savePlayer', { heroID, serverid: this.serverid });
     }
     if (res.isSuccess) {
       if (isSave) {
-        this.helps.toast(res.info || '取消收藏成功');
+        this.message.info(res.info || '取消收藏成功');
       } else {
-        this.helps.toast(res.info || '收藏成功');
+        this.message.info(res.info || '收藏成功');
       }
       this.setState({
         playerInfo: {
@@ -71,9 +71,9 @@ class SavePlayer extends BaseComponent {
           isSave: !isSave,
         },
       });
-      this.props.dispatch(this.helps.routerRedux.goBack());
+      this.router.back();
     } else {
-      this.helps.toast(res.info || '操作失败');
+      this.message.info(res.info || '操作失败');
     }
   }
   render() {
@@ -84,7 +84,7 @@ class SavePlayer extends BaseComponent {
           <Icon
             type="left"
             size="lg"
-            onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+            onClick={this.router.back}
           />
           <FlexRow className={styles.searchInputWrap}>
             <Icon type="search" size="xs" />

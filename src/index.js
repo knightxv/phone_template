@@ -7,15 +7,6 @@ import { persistStore, autoRehydrate } from 'redux-persist';
 // import { useRouterHistory } from 'dva/router';
 // import { createHashHistory } from 'history';
 
-// import 'antd-mobile/dist/antd-mobile.min.css';
-// import './assets/css/antdSelf.css';
-
-// import './helps/rem';
-// import './assets/css/global.css';
-
-// import './index.css';
-// import './assets/css/normal.css';
-
 // 判断是否兼容此浏览器
 window.isSupport = true;
 // if(!window.Promise) {
@@ -29,27 +20,24 @@ const app = dva({
   extraEnhancers: [autoRehydrate({
     log: false,
     stateReconciler: (defaultStore, newStore) => {
-    //   console.log(defaultStore)
-    //   console.log(newStore)
-      return {
-    //     ...defaultStore,
-        ...newStore,
-    //     routing: {}, // 去掉routing，不然会自动跳到跳出页面的路由
-      };
+        return {
+          ...defaultStore,
+          ...newStore,
+      //     routing: { location: null }, // 去掉routing，不然会自动跳到跳出页面的路由
+        };
+      },
     },
-  },
   )], // 重新设置状态
+  onError(e, dispatch) {
+    console.log(e.message);
+  },
 });
-// 2. Plugins
-// app.use({});
-
-// 3. Model
-// app.model(require('./models/general'));
-// app.model(require('./models/agent'));
-// app.model(require('./models/example'));
 
 // 4. Router
 app.router(require('./router'));
+
+app.model(require('./models/app'))
+// app.model(require('./models/agent'))
 
 // 5. Start
 app.start('#root');

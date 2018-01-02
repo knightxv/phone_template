@@ -1,0 +1,217 @@
+@import "../../helps/base.less";
+
+.playerInputWrap {
+    margin-top: 0.2rem;
+    background: #fff;
+}
+.playerName {
+    padding: .15rem 0rem .15rem 1.8rem;
+    font-size: .26rem;
+    .borTop();
+}
+
+.playerNotFind {
+    padding: .15rem 0rem .15rem 1.8rem;
+    font-size: .26rem;
+    color: red;
+    .borTop();
+}
+
+.masonrySelect {
+    width: 1.5rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    text-align: center;
+    background: #fff;
+    margin-right: 0.2rem;
+    border-radius: 3px;
+    border: 1px solid #eee;
+}
+.masonrySelectd {
+    border: 1px solid #169bd5!important;
+    color: #169bd5!important;
+}
+
+.masonryInputWrap {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.masonryInput {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none;
+    text-align: center;
+}
+.masonrySelectLabel {
+    text-align: center;
+    line-height: 0.6rem;
+}
+
+.selfSelectWrap {
+    width: 1.5rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    border: 1px solid #eee;
+    box-sizing: border-box;
+    border-radius: 3px;
+    background: #fff;
+}
+
+.paySelectItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.16rem 0.2rem;
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+.payTypeTitle {
+    padding: 0.2rem;
+    color: #000;
+    background: #fff;
+}
+
+.priceCount {
+    color: #ff9500;
+}
+
+.payBtnWrap {
+    margin: 0.5rem .3rem 0;
+}
+
+.payBtn {
+    width: 100%;
+    margin-top: .2rem;
+    margin-bottom: 2rem;
+}
+
+.rechargeTitle {
+    border-top: 1px solid #eee;
+    line-height: 0.8rem;
+}
+
+.selectCountWrap {
+    padding: 0.2rem;
+}
+
+.payIcon {
+    width: 0.42rem;
+    height: 0.42rem;
+    margin-right: 0.26rem;
+    display: block;
+}
+
+.listWrap {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin-top: 1rem;
+}
+
+.priceTip {
+    padding: 0.12rem 0.2rem;
+    color: @gray;
+    font-size: .28rem;
+}
+.priceWrap {
+    padding: 0rem 0.2rem;
+}
+
+.count {
+    color: @countAdd;
+}
+.money {
+    color: @moneyColor;
+} 
+.recordHeader {
+    .flexRow(space-between);
+    background: #fff;
+    padding: .1rem .2rem;
+    font-size: .34rem;
+}
+
+.recordRowItem {
+    .flexRow(space-between);
+    padding: .1rem .2rem;
+    .borTop();
+}
+
+.recordItemCountLabel {
+    .flexRow();
+}
+
+.recordItemTime {
+    padding-top: .1rem;
+    color: @gray;
+    font-size: .28rem;
+}
+
+// picker common start
+.payModal {
+    align-self: flex-end;
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3)
+}
+.payPicker {
+    color: #333;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.pickerHideMask {
+    flex: 1;
+}
+.payPickerBody {
+    background: #fff;
+}
+
+.pickerHeader {
+    .flexRow(space-between);
+    .borBot();
+    padding: .1rem 0;
+}
+.pickerTitle {
+    font-weight: 600;
+    font-size: .36rem;
+}
+.iconRight {
+    width: .72rem;
+    height: .72rem;
+}
+
+// picker common end
+
+.playerPickerContainer {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.playersItemWrap {
+    .flexRow();
+    background: #fff;
+    padding: .2rem 0;
+    .borBot();
+}
+.playersItem {
+    background: #fff;
+    width: 30%;
+    padding: .1rem 0;
+}
+.playersItemOption {
+    flex: 1;
+}
+
+.optionWrap {
+    .flexRow(space-around);
+}
+
+.btnDanger {
+    background: red;
+    color: #fff;
+    border: 1px solid red;
+}

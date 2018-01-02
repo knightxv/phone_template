@@ -8,7 +8,7 @@ import NavBar from '@/helps/antdComponent/NavBar';
 // import SelectPicker from '@/helps/antdComponent/SelectPicker';
 import { DatePicker, SelectPicker } from '@/helps/antdComponent/index.js';
 import { Title, FlexRowBetweenWingSpace, IconImg } from '@/helps/styleComponent';
-import styles from './CashMoneyRecord.css';
+import styles from './CashMoneyRecord.less';
 
 const PayType = [
   { value: '', label: '全部' },

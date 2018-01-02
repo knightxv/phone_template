@@ -8,7 +8,7 @@ import SearchBar from '@/helps/antdComponent/SearchBar';
 import { Title } from '@/helps/styleComponent';
 import BaseComponent from '@/helps/BaseComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
-import styles from './MyUnderAgent.css';
+import styles from './MyUnderAgent.less';
 
 class MyUnderAgent extends BaseComponent {
   constructor(props) {
@@ -21,15 +21,12 @@ class MyUnderAgent extends BaseComponent {
     };
   }
   rechargeForAgent = (agentId) => {
-    this.props.dispatch(this.helps.routerRedux.push({
-      pathname: 'rechargeForAgent',
-      query: {
-        agentId,
-      },
-    }));
+    this.router.go('/rechargeForAgent', {
+      agentId,
+    });
   }
   async componentWillMount() {
-    const res = await this.helps.webHttp.get('/spreadApi/myUnderAgents');
+    const res = await this.http.webHttp.get('/spreadApi/myUnderAgents');
     if (res.isSuccess) {
       this.setState({
         tableData: res.data,
@@ -41,11 +38,11 @@ class MyUnderAgent extends BaseComponent {
   // }
   // 跳转到邀请代理
   navigateToInvite = () => {
-    this.props.dispatch(this.helps.routerRedux.push('/inviteToAgent'));
+    this.router.go('/inviteToAgent');
   }
-  onSearchInputChange = (ev) => {
+  onSearchInputChange = (value) => {
     this.setState({
-      searchVal: ev.target.value,
+      searchVal: value,
     });
   }
   onCancelClick = () => {
@@ -89,9 +86,9 @@ class MyUnderAgent extends BaseComponent {
         title: '总钻石提成',
         render(rowVal) {
           if (rowVal.CommissionOfAll >= 0) {
-            return <div className="countAdd">{`+${rowVal.CommissionOfAll}`}</div>;
+            return <div className={styles.countAdd}>{`+${rowVal.CommissionOfAll}`}</div>;
           }
-          return <div className="countSub">{`-${rowVal.CommissionOfAll}`}</div>;
+          return <div className={styles.countSub}>{`-${rowVal.CommissionOfAll}`}</div>;
         },
       },
       {
@@ -99,9 +96,9 @@ class MyUnderAgent extends BaseComponent {
         title: '今日钻石提成',
         render(rowVal) {
           if (rowVal.CommissionOfToday >= 0) {
-            return <div className="countAdd">{`+${rowVal.CommissionOfToday}`}</div>;
+            return <div className={styles.countAdd}>{`+${rowVal.CommissionOfToday}`}</div>;
           }
-          return <div className="countSub">{`-${rowVal.CommissionOfToday}`}</div>;
+          return <div className={styles.countSub}>{`-${rowVal.CommissionOfToday}`}</div>;
         },
       },
     ];
@@ -160,7 +157,7 @@ class MyUnderAgent extends BaseComponent {
         <Title>我的下级代理</Title>
         <NavBar
           title="我的下级代理"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
           right={<span onClick={this.navigateToInvite}>邀请</span>}
         />
         <NoticeBar
@@ -174,7 +171,6 @@ class MyUnderAgent extends BaseComponent {
           maxLength={8}
           onChange={this.onSearchInputChange}
           value={searchVal}
-          onCancelClick={this.onCancelClick}
         />
         {
           this.renderHeader(columns)

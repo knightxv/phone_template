@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
+import { connect } from 'dva';
 
 
 exports.Background = styled.div`
@@ -56,13 +57,19 @@ exports.WhiteSpace = styled.div`
     height: .16rem;
 `;
 
-export const Title = ({ children }) => {
+const mapStateToProps = (state) => {
+  return {
+    ...state.app,
+  };
+};
+
+export const Title = connect(mapStateToProps)(({ children, gameName }) => {
   return (<Helmet>
     <meta charSet="utf-8" />
-    <title>{ children }</title>
+    <title>{ gameName }</title>
   </Helmet>
   );
-};
+});
 
 // app self
 export const TitleIcon = styled.span`
@@ -86,7 +93,7 @@ text-align: center;
 exports.NetImg = ({ ...props }) => {
   // const imgPrefix = window.httpConfig ? window.httpConfig.JavaWebPublicServerUrl : '';
   return (
-      <img {...props} />
+    <img {...props} />
   );
 };
 
@@ -100,6 +107,4 @@ exports.Avatar = ({ src, ...props }) => {
     />
   );
 };
-
-
 

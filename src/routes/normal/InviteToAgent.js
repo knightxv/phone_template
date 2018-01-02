@@ -64,19 +64,16 @@ class InviteToAgent extends BaseComponent {
 
       } else if (buttonIndex === 1) {
         if (self.copySuccess) {
-          this.helps.toast('复制成功');
+          this.message.info('复制成功');
         } else {
-          this.helps.toast('当前浏览器不允许复制链接');
+          this.message.info('当前浏览器不允许复制链接');
         }
       }
       // this.setState({ clicked: BUTTONS[buttonIndex] });
     });
   }
   navigate = (routerName, query) => {
-    this.props.dispatch(this.helps.routerRedux.push({
-      pathname: routerName,
-      query,
-    }));
+    this.router.go(routerName, query);
   };
   componentDidMount() {
     const imgData = this.canvasNode._canvas.toDataURL('image/png');
@@ -113,7 +110,7 @@ class InviteToAgent extends BaseComponent {
         <Title>邀请成为代理</Title>
         <NavBar
           title="邀请成为代理"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
           right={<CopyToClipboard
             text={registerLink}
             onCopy={this.onCopy}

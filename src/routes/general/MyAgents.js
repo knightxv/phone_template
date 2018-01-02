@@ -54,7 +54,7 @@ class MyAgents extends BaseComponent {
     };
   }
   async componentWillMount() {
-    const res = await this.helps.webHttp.get('/spreadApi/general/myUnderAgents');
+    const res = await this.http.webHttp.get('/spreadApi/general/myUnderAgents');
     if (res.isSuccess) {
       this.setState({
         tableData: res.data,
@@ -88,7 +88,7 @@ class MyAgents extends BaseComponent {
         <Title>我的下级代理</Title>
         <NavBar
           title="我的下级代理"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
           <Table
