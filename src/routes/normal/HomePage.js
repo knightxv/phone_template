@@ -29,7 +29,6 @@ class HomePage extends BaseComponent {
     super(props);
     this.state = {
       isTipShow: false, // 是否显示提示
-      loaded: false,
       noticeInfo: '', // 公告信息
       priceInfoVisible: false, // 奖励说明是否显示
     };
@@ -47,10 +46,10 @@ class HomePage extends BaseComponent {
     // 获取个人数据
     const res = await this.http.webHttp.get('/spreadApi/getUserInfo');
     if (res.isSuccess) {
-      this.props.dispatch({ type: 'agent/updateAppInfo', payload: res.data });
-      this.setState({
-        loaded: true,
-      });
+      this.props.dispatch({ type: 'agent/updateAppInfo',
+        payload: {
+          ...res.data,
+        } });
     } else {
       this.message.info(res.info);
       return;
@@ -104,7 +103,7 @@ class HomePage extends BaseComponent {
     }
   }
   render() {
-    const { loaded, noticeInfo, priceInfoVisible } = this.state;
+    const { noticeInfo, priceInfoVisible } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(noticeInfo);
     const noticeVisible = !!noticeInfo;
     const { inviteCode, canCashCount, ranking, masonry, saleDiamondsOfThisMonth,
@@ -112,9 +111,6 @@ class HomePage extends BaseComponent {
     // masonryIncomeToday, masonryPayToday, balanceIncomeToday,
     // rechargeOfToday, rechargeOfYesterDay, cashCountlog,
     } = this.props;
-    if (!loaded) {
-      return null;
-    }
     const isRankingShow = ranking && ranking <= rankingLimit; // 当排行小于50
     const unitCanCashCount = this.helps.parseFloatMoney(canCashCount); // 未提现(余额)
     // const unitRechargeOfToday = parseFloat(rechargeOfToday / 100); // 玩家今日充值
@@ -131,11 +127,10 @@ class HomePage extends BaseComponent {
       havePowerToBanlance,
     } = power;
 
-    return (<div style={{ position: 'relative' }}>
+    return (<div>
       <Title>代理中心</Title>
       <NavBar
         title="代理中心"
-        className={styles.homePageHeader}
       />
       {
         noticeVisible
@@ -194,7 +189,7 @@ class HomePage extends BaseComponent {
           havePowerToBuyDia &&
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/stepRebate')}>
             <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.buyDia} />
+              <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
               <span>代理阶梯返利</span>
             </FlexRow>
             <Icon type="right" />
@@ -228,7 +223,7 @@ class HomePage extends BaseComponent {
             </FlexRow> */}
           </FlexRowBetweenWingSpace>
         }
-        
+
         {/* 钻石变化记录 */}
         {/* {
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/masonryDerail')}>
@@ -290,7 +285,7 @@ class HomePage extends BaseComponent {
           <Button type="danger" className={styles.optionQuitBtn} onClick={this.logout}>退出</Button>
         </div>
       </div>
-      
+
     </div>);
   }
 }

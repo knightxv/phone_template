@@ -21,7 +21,7 @@ const ListViewWrapBody = (props) => {
   );
 };
 
-const DefaultListView = ({ data, ListEmptyComponent = null, ...props }) => {
+const DefaultListView = ({ data, ListEmptyComponent = null, getNode, ...props }) => {
   return (
     <ListView
       dataSource={dataSource.cloneWithRows(data || [])}
@@ -32,6 +32,7 @@ const DefaultListView = ({ data, ListEmptyComponent = null, ...props }) => {
       onEndReachedThreshold={10}
       style={{ background: '#f2f2f2' }}
       renderBodyComponent={() => <ListViewWrapBody ListEmptyComponent={ListEmptyComponent} />}
+      ref={(node) => { getNode && getNode(node)}}
       {...props}
       />
     );

@@ -85,9 +85,10 @@ class AgencyPay extends BaseComponent {
     this.router.go('/buyDiaOrderDetail');
   }
   scrollTop = () => {
-    // window.location
-    // scrollNode.scrollTop(0, 0);
-    window.location.reload();
+    const scrollNode = this.scroll;
+    if (scrollNode) {
+      scrollNode.scrollTo && scrollNode.scrollTo(0, 0);
+    }
   }
   render() {
     const { goods, record, selectShopId } = this.state;
@@ -175,12 +176,15 @@ class AgencyPay extends BaseComponent {
                       ? <ScrollListView
                         data={record}
                         renderRow={this.renderRow}
+                        ref={(node) => { this.scrollView = node; }}
                         ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
+                        getNode={(node) => { this.scroll = node; }}
                       />
                       : <BodyScrollListView
                         data={record}
                         renderRow={this.renderRow}
                         ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
+                        getNode={(node) => { this.scroll = node; }}
                       />
                     }
                     {

@@ -21,7 +21,7 @@ class StepRebate extends BaseComponent {
       underAgentRebate: [], // 下级代理返利信息
       queryTime: null,
       page: 0,
-      priceTableHtmlText: '',
+      rebateStatuMap: [],
     };
     this.size = 5;
   }
@@ -31,10 +31,10 @@ class StepRebate extends BaseComponent {
     this.getMonthRebateInfo(monthFirstDayStamp);
     
     // const rebateTextKey = this.Enum.htmlTextType.rebateText;
-    const htmlTextRes = await this.http.webHttp.get('/spreadApi/rebate/ruleStatu');
-    if (htmlTextRes.isSuccess) {
+    const rebateStatuMapRes = await this.http.webHttp.get('/spreadApi/rebate/ruleStatu');
+    if (rebateStatuMapRes.isSuccess) {
       this.setState({
-        priceTableHtmlText: htmlTextRes.data.htmlText,
+        rebateStatuMap: rebateStatuMapRes.data,
       });
     }
   }
@@ -49,7 +49,9 @@ class StepRebate extends BaseComponent {
   }
   nextPage = () => {
     const listLength = this.state.underAgentRebate.length;
-    if (listLength < this.size || listLength.length <= 0) {
+    const { page } = this.state;
+    const size = this.size;
+    if (listLength <= page * size + size) {
       this.message.info('没有下一页');
       return;
     }
@@ -91,13 +93,13 @@ class StepRebate extends BaseComponent {
   }
   render() {
     const { achievement, myPurchase, rebateInfo, rebateRate, underAgentPurchase,
-      underAgentRebate, page, queryTime, priceTableHtmlText,
+      underAgentRebate, page, queryTime, rebateStatuMap,
     } = this.state;
     const achievementLabel = this.helps.parseFloatMoney(achievement);
     const myPurchaseLabel = this.helps.parseFloatMoney(myPurchase);
     const underAgentPurchaseLabel = this.helps.parseFloatMoney(underAgentPurchase);
     const size = this.size;
-    const limitUnderAgentRebate = underAgentRebate.slice(page * size, size);
+    const limitUnderAgentRebate = underAgentRebate.slice(page * size, page * size + size);
     const underAgentAllCount = underAgentRebate.reduce((bef, cur) => {
       return bef + cur.rebateCount;
     }, 0);
@@ -201,7 +203,24 @@ class StepRebate extends BaseComponent {
         {/* 返利规则说明 */}
         <div>
           <div className={styles.rebateTitle}>返利规则说明</div>
-          <div className={styles.rebateHtmlTextWrap} dangerouslySetInnerHTML={this.helps.createMarkup(priceTableHtmlText)} />
+          {
+            rebateStatuMap && rebateStatuMap.length > 0 &&
+            <div className={styles.tableWrap}>
+              <div className={styles.tableRow}>
+                <div className={styles.tableCol}>金额业绩</div>
+                <div className={styles.tableCol}>返利比例</div>
+              </div>
+              {
+                rebateStatuMap.map((statu, i) => (
+                  <div className={styles.tableRow} key={`statu${i}`}>
+                    <div className={styles.tableCol}>{ Math.floor(statu.achievement / 100) }+</div>
+                    <div className={styles.tableCol}>{ statu.rate }%</div>
+                  </div>
+                ))
+              }
+              
+            </div>
+          }
           <div className={styles.rebateStatuWrap}>
             <div className={styles.rebateStatu}>
               ▶ 您总业绩=个人购卡+旗下代理购卡

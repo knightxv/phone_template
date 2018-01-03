@@ -14,6 +14,8 @@ const imgSource = {
   wx: require('../../assets/wx.png'),
   zfb: require('../../assets/zfb.png'),
   yezf: require('../../assets/yezf.png'),
+  androidTip: require('../../assets/android_tip.png'),
+  iosTip: require('../../assets/ios_tip.png'),
 };
 class PayToTurnDiaForPlayer extends BaseComponent {
   constructor(props) {
@@ -23,6 +25,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       // selectPayType: this.Enum.payType.WECHAT,
       selectPayType: {},
       isAutoSave: true,
+      payTipVisible: false,
     };
     this.query = this.router.getQuery();
     // const { goodsMoney, masonryCount, shopId } = query;
@@ -114,6 +117,11 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       // });
     }
   }
+  togglePayTipPicker = () => {
+    this.setState({
+      payTipVisible: !this.state.payTipVisible,
+    });
+  }
   payToTurn =() => {
     const { selectPayInfo } = this.state;
     const payTypeSelect = selectPayInfo.payType;
@@ -123,7 +131,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       return;
     }
     if (this.helps.isWechat && payTypeSelect === ALI) {
-      this.message.info('请用手机浏览器打开');
+      this.togglePayTipPicker();
       return;
     }
     this.goToPay();
@@ -159,7 +167,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     });
   }
   render() {
-    const { payPickerVisible, selectPayInfo, isAutoSave } = this.state;
+    const { payPickerVisible, selectPayInfo, isAutoSave, payTipVisible } = this.state;
     const { inviteCode, masonry } = this.props;
     const payItemArr = this.payItemArr();
     const { diamond, playerName, playerId } = this.query;
@@ -172,6 +180,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     } = selectPayInfo;
     const price = this.helps.parseFloatMoney(diamond * 10);
     const hasPowerToGive = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer');
+    const { ALI } = this.Enum.payType;
     return (
       <div className={styles.container}>
         <Title>确认订单</Title>
@@ -235,6 +244,24 @@ class PayToTurnDiaForPlayer extends BaseComponent {
             <Button onClick={this.payToTurn}>确认转钻</Button>
           </div>
         </div>
+        {
+          this.helps.isWechat && payType === ALI &&
+          <Modal
+            popup
+            maskClosable
+            transparent
+            animationType="fade"
+            visible={payTipVisible}
+          >
+          <div onClick={this.togglePayTipPicker}>
+            {
+              this.helps.system === 'IOS' ?
+              <IconImg className={styles.payWechatTipImg} src={imgSource.iosTip} />
+              : <IconImg className={styles.payWechatTipImg} src={imgSource.androidTip} />
+            }
+          </div>
+          </Modal>
+        }
         <Modal
           popup
           maskClosable

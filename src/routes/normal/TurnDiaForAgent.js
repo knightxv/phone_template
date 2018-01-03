@@ -227,9 +227,10 @@ class TurnDiaForAgent extends BaseComponent {
     </div>);
   }
   scrollTop = () => {
-    // window.location
-    // scrollNode.scrollTop(0, 0);
-    window.location.reload();
+    const scrollNode = this.scroll;
+    if (scrollNode) {
+      scrollNode.scrollTo && scrollNode.scrollTo(0, 0);
+    }
   }
   render() {
     const { agentName, diamond, agentNotFind, agentId,
@@ -306,11 +307,13 @@ class TurnDiaForAgent extends BaseComponent {
                         data={record}
                         renderHeader={this.renderRecordHeader}
                         renderRow={this.renderRow}
+                        getNode={(node) => { this.scroll = node; }}
                       />
                         : <BodyScrollListView
                           data={record}
                           renderHeader={this.renderRecordHeader}
                           renderRow={this.renderRow}
+                          getNode={(node) => { this.scroll = node; }}
                         />
                     }
                     {

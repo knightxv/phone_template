@@ -4,9 +4,9 @@ import Toast from '@/helps/antdComponent/Toast';
 const webHttpConfig = {
   // getConfigUrl: '/config',
   // httpConfigKey: 'JavaWebPublicServerUrl',
-  isDebug: true,
+  isDebug: false,
   getFetchUrl() {
-    return 'http://120.77.87.4:8081';
+    return '';// http://120.77.87.4:8081 http://192.168.2.66:8081
   },
   responseHandle(res) {
     if (res.status === 'failed' && res.code === 2) {
