@@ -63,13 +63,6 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
-      path: '/agencyPay',
-      component: () => import('./routes/normal/AgencyPay'),
-      models: () => [
-        import('./models/agent'),
-      ],
-    },
-    {
       path: '/EditAgencyPsd',
       component: () => import('./routes/normal/EditAgencyPsd'),
       models: () => [
