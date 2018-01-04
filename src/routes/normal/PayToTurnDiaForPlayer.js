@@ -54,11 +54,11 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     if (this.hasPower('wechatPayForAgentTurnDiaToPlayer')) {
       payItemArr.push(payItem.wechat);
     }
-    if (this.hasPower('AliPayForAgentTurnDiaToPlayer')) {
-      payItemArr.push(payItem.aliPay);
-    }
     if (this.hasPower('AgentTurnDiaToPlayerDirect')) {
       payItemArr.push(payItem.balance);
+    }
+    if (this.hasPower('AliPayForAgentTurnDiaToPlayer')) {
+      payItemArr.push(payItem.aliPay);
     }
     return payItemArr;
   }

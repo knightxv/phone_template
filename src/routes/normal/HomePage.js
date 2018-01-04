@@ -191,7 +191,7 @@ class HomePage extends BaseComponent {
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/turnDiaForPlayer')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.turnDia_play} />
-              <span>给玩家充钻</span>
+              <span>替玩家购钻</span>
             </FlexRow>
             <Icon type="right" />
             {/* <FlexRow className={styles.titleWrap}>
@@ -227,6 +227,17 @@ class HomePage extends BaseComponent {
       </div>
       { this.hasPower('stepRebate') && <WhiteSpace /> }
       <div className={styles.module}>
+      {/* 邀请成为我的下级代理 */}
+      <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/inviteToAgent')}>
+          <FlexRow className={styles.navigateTitleWrap}>
+            <IconImg className={styles.titleIconImg} src={IconSource.invite} />
+            <span>邀请下级代理</span>
+          </FlexRow>
+          <Icon type="right" />
+          {/* <FlexRow className={styles.titleWrap}>
+            <Icon type="right" />
+          </FlexRow> */}
+        </FlexRowBetweenWingSpace>
         {/* 代理阶梯返利 */}
         {
           this.hasPower('stepRebate') &&
@@ -255,17 +266,6 @@ class HomePage extends BaseComponent {
       }
       <WhiteSpace />
       <div className={styles.module}>
-        {/* 邀请成为我的下级代理 */}
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/inviteToAgent')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.invite} />
-            <span>邀请成为我的下级代理</span>
-          </FlexRow>
-          <Icon type="right" />
-          {/* <FlexRow className={styles.titleWrap}>
-            <Icon type="right" />
-          </FlexRow> */}
-        </FlexRowBetweenWingSpace>
         {/* 查看下级钻石抽成情况 */}
         {
           this.hasPower('underAgentPercentage') &&

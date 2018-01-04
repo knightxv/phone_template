@@ -56,11 +56,11 @@ class BuyMasonry extends BaseComponent {
     if (this.hasPower('AgentBuyDiawechatPay')) {
       payItemArr.push(payItem.wechat);
     }
-    if (this.hasPower('AgentBuyDiaAliPay')) {
-      payItemArr.push(payItem.aliPay);
-    }
     if (this.hasPower('AgentBuyDiabanlancePay')) {
       payItemArr.push(payItem.balance);
+    }
+    if (this.hasPower('AgentBuyDiaAliPay')) {
+      payItemArr.push(payItem.aliPay);
     }
     return payItemArr;
   }
@@ -144,7 +144,6 @@ class BuyMasonry extends BaseComponent {
     const payItemArr = this.payItemArr();
     const { goodsMoney, masonryCount } = this.query;
     const goodsMoneyLabel = this.helps.parseFloatMoney(goodsMoney);
-    const masonryCountLabel = this.helps.transMoenyUnit(masonryCount);
     const {
       label,
       imgSourceKey,
@@ -164,13 +163,13 @@ class BuyMasonry extends BaseComponent {
             <div className={styles.headerInfoWrap}>
               <IconImg className={styles.masonryIcon} src={imgSource.masonry} />
               <div className={styles.masonryInfo}>
-                <div className={styles.masonryCountLabel}>{ masonryCountLabel }钻石</div>
+                <div className={styles.masonryCountLabel}>{ masonryCount }钻石</div>
                 <div className={styles.masonryMoenyLabel}>￥{ goodsMoneyLabel }</div>
               </div>
             </div>
             <div>
               <div className={styles.rowItemWrap}>
-                <div>收款代理ID</div>
+                <div>代理ID</div>
                 <div>{ inviteCode }</div>
               </div>
               <div className={styles.rowItemWrap} onClick={this.togglePayPicker}>
