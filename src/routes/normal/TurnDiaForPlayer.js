@@ -145,7 +145,10 @@ class TurnDiaForPlayer extends BaseComponent {
   }
   // 获取玩家数据
   getPlayer = async () => {
-    const res = await this.http.webHttp.get('/spreadApi/getPlayers');
+    const { serverid } = this.router.getQuery();
+    const res = await this.http.webHttp.get('/spreadApi/getPlayers', {
+      serverid,
+    });
     if (res.isSuccess) {
       this.setState({
         players: res.data || [],

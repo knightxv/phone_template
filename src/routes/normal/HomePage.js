@@ -145,9 +145,9 @@ class HomePage extends BaseComponent {
       }
       <div className={styles.headerModule}>
         <FlexRowBetweenWingSpace>
-          <div className={styles.titleWrap}>
+          {/* <div className={styles.titleWrap}>
               我的排名:<span className={styles.rankColor}>{ isRankingShow ? ranking : '未上榜'}</span>
-          </div>
+          </div> */}
           {
             priceInfoVisible && <p className={styles.prizeLabel} onClick={() => this.navigate('/rankExplain')}>奖励规则</p>
           }
