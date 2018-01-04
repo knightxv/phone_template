@@ -107,7 +107,7 @@ class TurnDiaForAgent extends BaseComponent {
       </div>
       <div className={styles.recordItemCountLabel}>
         <span className={styles.count}>{ chargeCount }个钻石</span>
-        <Icon type="right" />
+        <Icon type="right" color="#b8b8b8" />
       </div>
     </div>);
   }
@@ -327,7 +327,7 @@ class TurnDiaForAgent extends BaseComponent {
         </StickyContainer>
         {/* 选择代理picker */}
         <Modal
-          popup
+          transparent
           maskClosable
           className={styles.payModal}
           visible={selectplayerVisible}

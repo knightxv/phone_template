@@ -180,7 +180,7 @@ class Http {
         .then(async (response) => {
           isFunction(responseHandle) && await responseHandle(response);// middleware
           isFunction(onGetResponseSuccess) && await onGetResponseSuccess(response);// middleware
-          if (isDebug) {
+          if (isDebug || window.HttpDebug) {
             self.httpLog('get', fetchUrl, params, response);
           }
           if (isFunction(webResolveResult)) {
@@ -196,7 +196,7 @@ class Http {
         })
         .catch((err) => {
           console.log(err);
-          resolve(new Response(false, '404'));
+          resolve(new Response(false, '网络繁忙,请稍后重试'));
         });
     });
   }
@@ -224,7 +224,7 @@ class Http {
         .then(async (response) => {
           isFunction(responseHandle) && await responseHandle(response);// middleware
           isFunction(onPostResponseSuccess) && await onPostResponseSuccess(response);// middleware
-          if (isDebug) {
+          if (isDebug || window.HttpDebug) {
             self.httpLog('post', fetchUrl, body, response);
           }
           if (isFunction(webResolveResult)) {
@@ -235,7 +235,7 @@ class Http {
         })
         .catch((err) => {
           console.log(err);
-          resolve(new Response(false, '404'));
+          resolve(new Response(false, '网络繁忙,请稍后重试'));
         });
     });
   }

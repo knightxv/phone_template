@@ -1,25 +1,31 @@
 @import "../../helps/base.less";
 
 .headerWrap {
-  .flexRow(space-between);
-  padding: .3rem .2rem;
+  display: flex;
+  flex-direction: column;
   text-align: center;
-}
-
-.headerLeftWrap {
   background: #fff;
   padding: .15rem .2rem;
-  margin-right: .2rem;
   border-radius: 3px;
+}
+
+.monthRebateTip {
+  font-size: .3rem;
+  padding-bottom: .2rem;
+  color: @greenTip;
 }
 
 .rebateLabel {
   color: @moneyColor;
+  font-size: .42rem;
+  line-height: .8rem;
+}
+.rebateTipAss {
+  color: @gray;
   font-size: .28rem;
-  line-height: .6rem;
 }
 .rebateTip {
-  color: @red;
+  color: @greenTip;
   font-size: .3rem;
 }
 
@@ -29,11 +35,37 @@
 .monthTip {
   line-height: .7rem;
   font-size: .28rem;
+  color: #fff;
+  .flexRow();
 }
 
 .rebateInfo {
   background: #fff;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  .borTop();
 
+}
+.rebateInfoItem {
+  width: 50%;
+  .borRig();
+  .borBot();
+  padding: .2rem;
+  text-align: center;
+}
+.rebateMoneyTip {
+  color: @moneyColor;
+}
+.rebateTitleTip {
+  font-size: .28rem;
+  padding-top: .2rem;
+  color: @greenTip;
+}
+.rebateTip2 {
+  color: @gray;
+  font-size: .28rem;
+  padding-top: .2rem;
 }
 .rowItem {
   .flexRow();
@@ -58,14 +90,17 @@
 
 .colcountItem {
   color: @moneyColor;
+  // padding: .2rem 0;
 }
-
+.rowBodyItem {
+  overflow: hidden;
+}
 .rebateListTitle {
-  margin-top: .2rem;
-  padding: .16rem .2rem;
+  padding: .2rem .2rem;
   background: #fff;
-  font-size: .28rem;
+  // font-size: .28rem;
   .borBot();
+  color: @greenTip;
 }
 
 .count {
@@ -87,6 +122,7 @@
   .flexRow(space-between);
   background: @bgColor;
   padding: .1rem .2rem;
+  background: #fff;
 }
 .pageBtnWrap {
   .flexRow();
@@ -104,6 +140,7 @@
 }
 .rebateStatu {
   padding: .1rem .2rem;
+  line-height: .38rem;
 }
 .rebateImporLabel {
   color: @red;
@@ -118,7 +155,7 @@
 }
 
 .tableWrap {
-  margin: .2rem;
+  margin: 0 .2rem .2rem;
   background: #fff;
   .borTop();
   .borLef();
@@ -132,4 +169,20 @@
   padding: .1rem 0;
   .borRig();
   .borBot();
+}
+.titleItem {
+  .flexRow();
+  padding: .3rem .2rem .15rem;
+}
+.titleIcon {
+  width: .35rem;
+  height: .35rem;
+  margin-right: .15rem;
+}
+
+.count {
+  color: @moneyColor;
+}
+.rabatePageCount {
+  color: @gray;
 }

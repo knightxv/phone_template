@@ -19,6 +19,7 @@ const IconSource = {
   invite: require('../../assets/invite.png'),
   bank: require('../../assets/bank.png'),
   fanli: require('../../assets/fanli.png'),
+  xjfl: require('../../assets/xjfl.png'),
   notice: require('../../assets/gg.png'),
 };
 
@@ -184,17 +185,6 @@ class HomePage extends BaseComponent {
             <Icon type="right" />
           </FlexRowBetweenWingSpace>
         }
-        {/* 代理阶梯返利 */}
-        {
-          havePowerToBuyDia &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/stepRebate')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
-              <span>代理阶梯返利</span>
-            </FlexRow>
-            <Icon type="right" />
-          </FlexRowBetweenWingSpace>
-        }
         {/* 给玩家充钻 */}
         {
           havePowerToRechargeToPlayer &&
@@ -235,6 +225,21 @@ class HomePage extends BaseComponent {
           </FlexRowBetweenWingSpace>
         } */}
       </div>
+      { this.hasPower('stepRebate') && <WhiteSpace /> }
+      <div className={styles.module}>
+        {/* 代理阶梯返利 */}
+        {
+          this.hasPower('stepRebate') &&
+          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/stepRebate')}>
+            <FlexRow className={styles.navigateTitleWrap}>
+              <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
+              <span>代理阶梯返利</span>
+            </FlexRow>
+            <Icon type="right" />
+          </FlexRowBetweenWingSpace>
+        }
+      </div>
+      
       { havePowerToBanlance && <WhiteSpace /> }
       { havePowerToBanlance &&
         <div className={styles.module}>
@@ -266,7 +271,7 @@ class HomePage extends BaseComponent {
           this.hasPower('underAgentPercentage') &&
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
             <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
+              <IconImg className={styles.titleIconImg} src={IconSource.xjfl} />
               <span>查看下级钻石抽成情况</span>
             </FlexRow>
             <Icon type="right" />

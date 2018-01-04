@@ -1,6 +1,8 @@
 import Http from '@/helps/Http';
 import Toast from '@/helps/antdComponent/Toast';
 
+
+// set window.HttpDebug = true; t
 const webHttpConfig = {
   // getConfigUrl: '/config',
   // httpConfigKey: 'JavaWebPublicServerUrl',

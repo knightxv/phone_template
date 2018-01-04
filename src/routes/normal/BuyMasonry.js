@@ -190,7 +190,6 @@ class BuyMasonry extends BaseComponent {
         {
           this.helps.isWechat && payType === ALI &&
           <Modal
-            popup
             maskClosable
             transparent
             animationType="fade"
@@ -206,8 +205,7 @@ class BuyMasonry extends BaseComponent {
           </Modal>
         }
         <Modal
-          popup
-          maskClosable
+          transparent
           className={styles.payModal}
           visible={payPickerVisible}
           onClose={this.togglePayPicker}

@@ -2,16 +2,17 @@ import dva from 'dva';
 
 // import { window } from 'global';
 import { persistStore, autoRehydrate } from 'redux-persist';
-
+import Promise from 'promise';
 // import { browserHistory } from 'dva/router';
 // import { useRouterHistory } from 'dva/router';
 // import { createHashHistory } from 'history';
 
 // 判断是否兼容此浏览器
 window.isSupport = true;
-// if(!window.Promise) {
-//   document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
-// }
+if(!window.Promise) {
+  // document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
+  window.Promise = Promise ;
+}
 
 // 1. Initialize
 const app = dva({

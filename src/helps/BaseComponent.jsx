@@ -24,6 +24,12 @@ export default class BaseComponent extends React.Component {
         }
         return parseFloat(money / 100).toFixed(2);
       },
+      parseIntMoney(money) {
+        if (isNaN(money)) {
+          return '';
+        }
+        return parseInt(money / 100);
+      },
       transMoenyUnit(count) {
         if (isNaN(count)) {
           return '';
