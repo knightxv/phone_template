@@ -15,20 +15,8 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
 
-  
 </head>
 <body style="font-size: 0.34rem;">
-  <script>
-    window.isSupport = false;
-    if (window.Promise) {
-      var script = document.createElement('script');
-      script.src= 'https://www.promisejs.org/polyfills/promise-7.0.4.min.js';
-      script.onload = function() {
-        document.getElementById('supportScript').appendChild(script);
-      };
-    }
-  </script>       
-  <div id="supportScript"></div>
   <!-- <script>
     (function () {var script = document.createElement('script'); script.src="http://eruda.liriliri.io/eruda.min.js";
     document.body.appendChild(script); script.onload = function () { eruda.init(); } })();
@@ -39,7 +27,7 @@
 </body>
 <script>
   if (!window.isSupport) {
-     document.getElementById('noCompatible').style.display = 'block';
-    }
-    </script>
+    document.getElementById('noCompatible').style.display = 'block';
+  }
+</script>
 </html>

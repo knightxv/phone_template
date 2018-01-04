@@ -23,6 +23,7 @@ export const powerEnum = {
   playerRange: 19, // 0所有 1下级
   agentRange: 23, // 0所有 1下级
   underAgentPercentage: 25, // 查看下级代理抽成返钻比例
+  stepRebate: 29,
 };
 
 export const Role = {

@@ -5,12 +5,12 @@ const scrollTopIconImg = require('../assets/scroll_top.png');
 
 const ScrollTopContainer = styled.div`
 position: fixed;
-bottom: 1rem;
+bottom: 2rem;
 right: 0.3rem;
 `;
 const ScrollTopIcon = styled.img`
-width: .6rem;
-height: .6rem;
+width: .8rem;
+height: .8rem;
 display: block;
 `;
 

@@ -13,6 +13,8 @@ const imgSource = {
   wx: require('../../assets/wx.png'),
   zfb: require('../../assets/zfb.png'),
   yezf: require('../../assets/yezf.png'),
+  androidTip: require('../../assets/android_tip.png'),
+  iosTip: require('../../assets/ios_tip.png'),
 };
 class BuyMasonry extends BaseComponent {
   constructor(props) {
@@ -24,6 +26,7 @@ class BuyMasonry extends BaseComponent {
       payPickerVisible: false,
       // selectPayType: this.Enum.payType.WECHAT,
       selectPayType: {},
+      payTipVisible: false,
     };
     const query = this.router.getQuery();
     // const { goodsMoney, masonryCount, shopId } = query;
@@ -118,7 +121,8 @@ class BuyMasonry extends BaseComponent {
     const payTypeSelect = selectPayInfo.payType;
     const { WECHAT, ALI } = this.Enum.payType;
     if (this.helps.isWechat && payTypeSelect === ALI) {
-      this.message.info('请用手机浏览器打开');
+      // this.message.info('请用手机浏览器打开');
+      this.togglePayTipPicker();
       return;
     }
     if (payTypeSelect === WECHAT) {
@@ -129,8 +133,13 @@ class BuyMasonry extends BaseComponent {
       this.readyToExcharge(shopId);
     }
   }
+  togglePayTipPicker = () => {
+    this.setState({
+      payTipVisible: !this.state.payTipVisible,
+    });
+  }
   render() {
-    const { payPickerVisible, selectPayInfo } = this.state;
+    const { payPickerVisible, selectPayInfo, payTipVisible } = this.state;
     const { inviteCode, canCashCount } = this.props;
     const payItemArr = this.payItemArr();
     const { goodsMoney, masonryCount } = this.query;
@@ -141,6 +150,7 @@ class BuyMasonry extends BaseComponent {
       imgSourceKey,
       payType,
     } = selectPayInfo;
+    const { ALI } = this.Enum.payType;
     const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
     return (
       <div className={styles.container}>
@@ -177,9 +187,25 @@ class BuyMasonry extends BaseComponent {
             <Button onClick={this.buyGood}>确认支付</Button>
           </div>
         </div>
+        {
+          this.helps.isWechat && payType === ALI &&
+          <Modal
+            maskClosable
+            transparent
+            animationType="fade"
+            visible={payTipVisible}
+          >
+          <div onClick={this.togglePayTipPicker}>
+            {
+              this.helps.system === 'IOS' ?
+              <IconImg className={styles.payWechatTipImg} src={imgSource.iosTip} />
+              : <IconImg className={styles.payWechatTipImg} src={imgSource.androidTip} />
+            }
+          </div>
+          </Modal>
+        }
         <Modal
-          popup
-          maskClosable
+          transparent
           className={styles.payModal}
           visible={payPickerVisible}
           onClose={this.togglePayPicker}

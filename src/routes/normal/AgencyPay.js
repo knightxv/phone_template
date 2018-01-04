@@ -5,7 +5,7 @@ import ScrollTop from '@/components/ScrollTop';
 import classnames from 'classnames';
 import { StickyContainer, Sticky } from 'react-sticky';
 import BaseComponent from '@/helps/BaseComponent';
-import { Button } from '@/helps/antdComponent/index.js';
+import { Button, Icon } from '@/helps/antdComponent/index.js';
 import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
 import NavBar from '@/helps/antdComponent/NavBar';
 import { Title, WhiteSpace } from '@/helps/styleComponent';
@@ -60,7 +60,10 @@ class AgencyPay extends BaseComponent {
         <div>{ chargeMoney }元购买了{ row.chargeCount }个钻石</div>
         <div className={styles.chargeTime}>{ chargeTime }</div>
       </div>
-      <div className={styles.chargeCount}>+{ row.chargeCount }个钻石</div>
+      <div className={styles.recordItemRightWrap}>
+        <div className={styles.chargeCount}>+{ row.chargeCount }个</div>
+        <Icon type="right" color="#b8b8b8" />
+      </div>
     </div>);
   }
   goToBuyGoods = () => {
@@ -85,9 +88,10 @@ class AgencyPay extends BaseComponent {
     this.router.go('/buyDiaOrderDetail');
   }
   scrollTop = () => {
-    // window.location
-    // scrollNode.scrollTop(0, 0);
-    window.location.reload();
+    const scrollNode = this.scroll;
+    if (scrollNode) {
+      scrollNode.scrollTo && scrollNode.scrollTo(0, 0);
+    }
   }
   render() {
     const { goods, record, selectShopId } = this.state;
@@ -175,12 +179,15 @@ class AgencyPay extends BaseComponent {
                       ? <ScrollListView
                         data={record}
                         renderRow={this.renderRow}
+                        ref={(node) => { this.scrollView = node; }}
                         ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
+                        getNode={(node) => { this.scroll = node; }}
                       />
                       : <BodyScrollListView
                         data={record}
                         renderRow={this.renderRow}
                         ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
+                        getNode={(node) => { this.scroll = node; }}
                       />
                     }
                     {

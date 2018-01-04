@@ -139,7 +139,7 @@ class TurnDiaForPlayer extends BaseComponent {
       </div>
       <div className={styles.recordItemCountLabel}>
         <span className={styles.count}>{ chargeCount }个钻石</span>
-        <Icon type="right" />
+        <Icon type="right" color="#b8b8b8" />
       </div>
     </div>);
   }
@@ -248,9 +248,10 @@ class TurnDiaForPlayer extends BaseComponent {
     </div>);
   }
   scrollTop = () => {
-    // window.location
-    // scrollNode.scrollTop(0, 0);
-    window.location.reload();
+    const scrollNode = this.scroll;
+    if (scrollNode) {
+      scrollNode.scrollTo && scrollNode.scrollTo(0, 0);
+    }
   }
   renderRecordHeader = () => {
     const { record } = this.state;
@@ -383,16 +384,16 @@ class TurnDiaForPlayer extends BaseComponent {
                     {
                       wasSticky
                       ? <ScrollListView
-                        ref={(node) => { this.scroll = node; }}
                         data={record}
                         renderRow={this.renderRow}
                         renderHeader={this.renderRecordHeader}
+                        getNode={(node) => { this.scroll = node; }}
                       />
                         : <BodyScrollListView
-                          ref={(node) => { this.scroll = node; }}
                           data={record}
                           renderRow={this.renderRow}
                           renderHeader={this.renderRecordHeader}
+                          getNode={(node) => { this.scroll = node; }}
                         />
                     }
                     {
@@ -406,7 +407,7 @@ class TurnDiaForPlayer extends BaseComponent {
         </StickyContainer>
         {/* 选择玩家picker */}
         <Modal
-          popup
+          transparent
           maskClosable
           className={styles.payModal}
           visible={selectplayerVisible}

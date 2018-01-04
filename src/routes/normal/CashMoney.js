@@ -155,9 +155,10 @@ class AgencyExtractMoney extends BaseComponent {
     }
   }
   scrollTop = () => {
-    // window.location
-    // scrollNode.scrollTop(0, 0);
-    window.location.reload();
+    const scrollNode = this.scroll;
+    if (scrollNode) {
+      scrollNode.scrollTo && scrollNode.scrollTo(0, 0);
+    }
   }
   render() {
     const { wechat_acc: wechatAcc, cardNumber, bankCardName, positionSelect,
@@ -293,10 +294,12 @@ class AgencyExtractMoney extends BaseComponent {
                       ? <ScrollListView
                         data={record}
                         renderRow={this.renderRow}
+                        getNode={(node) => { this.scroll = node; }}
                       />
                       : <BodyScrollListView
                         data={record}
                         renderRow={this.renderRow}
+                        getNode={(node) => { this.scroll = node; }}
                       />
                     }
                     {

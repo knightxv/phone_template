@@ -144,5 +144,4 @@ export const getMonthTimeStamp = (timeStamp) => {
   return new Date(monthLabel).getTime();
 };
 
-
 export default exports;

@@ -24,6 +24,15 @@ display: flex;
 flex-direction: colunm;
 justify-content: center;
 `;
+const Title = styled.div`
+font-size: .42rem;
+color: #fff;
+position: absolute;
+left: 0;
+width: 100%;
+text-align: center;
+z-index: -1;
+`;
 
 const DefaultNavbar = ({ title, onClick, right, className }) => {
   return (
@@ -40,7 +49,7 @@ const DefaultNavbar = ({ title, onClick, right, className }) => {
             />
           }
         </NavBarSideWrap>
-        <div style={{ fontSize: '0.42rem', color: '#fff' }}>{title}</div>
+        <Title>{title}</Title>
         <NavBarSideWrap>
           { right }
         </NavBarSideWrap>

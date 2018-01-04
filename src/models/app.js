@@ -11,6 +11,7 @@ export default {
     inviteAgentBg: '', // 邀请代理图片地址
     // loginID: '',
     // password: '',
+    componentLoading: false, // 组件是否在加载
   },
   reducers: {
     updateAppInfo(state, { payload }) {
@@ -19,22 +20,34 @@ export default {
         ...payload,
       };
     },
+    showLoading(state) {
+      return {
+        ...state,
+        componentLoading: true,
+      };
+    },
+    hideLoading(state) {
+      return {
+        ...state,
+        componentLoading: false,
+      };
+    },
   },
   effects: {
   },
   subscriptions: {
-      async setup({ dispatch, history }) {  // eslint-disable-line
-        webHttp.get('/spreadApi/getPlatformInfo').then((res) => {
-          const gameConfig = res.data;
-          dispatch({
-            type: 'updateAppInfo',
-            payload: {
-              ...gameConfig,
-              // ...gameConfig.bobing,
-            },
-          });
+    async setup({ dispatch, history }) {  // eslint-disable-line
+      webHttp.get('/spreadApi/getPlatformInfo').then((res) => {
+        const gameConfig = res.data;
+        dispatch({
+          type: 'updateAppInfo',
+          payload: {
+            ...gameConfig,
+            // ...gameConfig.bobing,
+          },
         });
-      },
+      });
+    },
   },
 };
 

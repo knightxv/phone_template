@@ -90,7 +90,11 @@ export default {
             getVerifyCodeElseTime: 0,
           },
         });
-        const res = await fetch('/spreadApi/getUserInfo')
+        const res = await fetch('/spreadApi/getUserInfo',{
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'include',
+        })
         .then(res => res.json())
         dispatch({
           type: 'updateAppInfo',
