@@ -34,7 +34,7 @@ export default {
     /*
         获取用户数据
     */
-    'GET /spreadApi/general/getUserInfo' : {
+    'GET /spreadApi/general/getUgetUserInfo' : {
         status: 'success',
         Msg: '',
         data: {
@@ -434,7 +434,7 @@ export default {
         获取个人信息
      */
     'GET /spreadApi/getUserInfo' : {
-        status: 'success',
+        status: 'failed',
         Msg: '',
         code: 2,
         data: {

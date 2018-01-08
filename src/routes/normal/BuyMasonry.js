@@ -133,10 +133,13 @@ class BuyMasonry extends BaseComponent {
       this.readyToExcharge(shopId);
     }
   }
+  // 支付宝支付
   togglePayTipPicker = () => {
-    this.setState({
-      payTipVisible: !this.state.payTipVisible,
-    });
+    this.message.info('微信浏览器暂不支持此支付方式');
+    // 弹出picker
+    // this.setState({
+    //   payTipVisible: !this.state.payTipVisible,
+    // });
   }
   render() {
     const { payPickerVisible, selectPayInfo, payTipVisible } = this.state;
