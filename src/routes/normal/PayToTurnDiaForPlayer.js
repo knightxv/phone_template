@@ -51,11 +51,12 @@ class PayToTurnDiaForPlayer extends BaseComponent {
   payItemArr = () => {
     const payItem = this.payItem;
     const payItemArr = [];
-    if (this.hasPower('wechatPayForAgentTurnDiaToPlayer')) {
-      payItemArr.push(payItem.wechat);
-    }
+    
     if (this.hasPower('AgentTurnDiaToPlayerDirect')) {
       payItemArr.push(payItem.balance);
+    }
+    if (this.hasPower('wechatPayForAgentTurnDiaToPlayer')) {
+      payItemArr.push(payItem.wechat);
     }
     if (this.hasPower('AliPayForAgentTurnDiaToPlayer')) {
       payItemArr.push(payItem.aliPay);

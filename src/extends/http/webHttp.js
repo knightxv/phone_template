@@ -1,14 +1,17 @@
 import Http from '@/helps/Http';
 import Toast from '@/helps/antdComponent/Toast';
 
-
+let remoteUrl = '';
+if (process.env.NODE_ENV === 'development') {
+  remoteUrl = 'http://120.77.87.4:8081'; // http://192.168.2.66:8081
+}
 // set window.HttpDebug = true; t
 const webHttpConfig = {
   // getConfigUrl: '/config',
   // httpConfigKey: 'JavaWebPublicServerUrl',
   isDebug: false,
   getFetchUrl() {
-    return '';// http://120.77.87.4:8081 http://192.168.2.66:8081
+    return remoteUrl;
   },
   responseHandle(res) {
     if (res.status === 'failed' && res.code === 2) {

@@ -53,11 +53,11 @@ class BuyMasonry extends BaseComponent {
   payItemArr = () => {
     const payItem = this.payItem;
     const payItemArr = [];
-    if (this.hasPower('AgentBuyDiawechatPay')) {
-      payItemArr.push(payItem.wechat);
-    }
     if (this.hasPower('AgentBuyDiabanlancePay')) {
       payItemArr.push(payItem.balance);
+    }
+    if (this.hasPower('AgentBuyDiawechatPay')) {
+      payItemArr.push(payItem.wechat);
     }
     if (this.hasPower('AgentBuyDiaAliPay')) {
       payItemArr.push(payItem.aliPay);
