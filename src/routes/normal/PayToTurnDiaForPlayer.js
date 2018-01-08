@@ -23,7 +23,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     this.state = {
       payPickerVisible: false,
       // selectPayType: this.Enum.payType.WECHAT,
-      selectPayType: {},
+      selectPayInfo: null,
       isAutoSave: true,
       payTipVisible: false,
     };
@@ -65,7 +65,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
   async componentWillMount() {
     const payItemArr = this.payItemArr();
     this.setState({
-      selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : {},
+      selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : null,
     });
   }
   // 跳出支付picker
@@ -176,11 +176,12 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     const { diamond, playerName, playerId } = this.query;
     // const goodsMoneyLabel = this.helps.parseFloatMoney(goodsMoney);
     // const masonryCountLabel = this.helps.transMoenyUnit(masonryCount);
+    const payInfo = selectPayInfo || payItemArr[0] || {};
     const {
       label,
       imgSourceKey,
       payType,
-    } = selectPayInfo;
+    } = payInfo;
     const price = this.helps.parseFloatMoney(diamond * 10);
     const hasPowerToGive = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer');
     const { ALI } = this.Enum.payType;

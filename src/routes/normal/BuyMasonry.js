@@ -21,11 +21,9 @@ class BuyMasonry extends BaseComponent {
     super(props);
     this.state = {
       goods: [],
-      selectShopId: -1, // 选择的商品id
       record: [],
       payPickerVisible: false,
-      // selectPayType: this.Enum.payType.WECHAT,
-      selectPayType: {},
+      selectPayInfo: null,
       payTipVisible: false,
     };
     const query = this.router.getQuery();
@@ -67,7 +65,7 @@ class BuyMasonry extends BaseComponent {
   async componentWillMount() {
     const payItemArr = this.payItemArr();
     this.setState({
-      selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : {},
+      selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : null,
     });
   }
   // 跳出支付picker
@@ -144,16 +142,17 @@ class BuyMasonry extends BaseComponent {
   render() {
     const { payPickerVisible, selectPayInfo, payTipVisible } = this.state;
     const { inviteCode, canCashCount } = this.props;
-    const payItemArr = this.payItemArr();
     const { goodsMoney, masonryCount } = this.query;
+    const payItemArr = this.payItemArr();
+    const payInfo = selectPayInfo || payItemArr[0] || {};
     const goodsMoneyLabel = this.helps.parseFloatMoney(goodsMoney);
+    const { ALI } = this.Enum.payType;
+    const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
     const {
       label,
       imgSourceKey,
       payType,
-    } = selectPayInfo;
-    const { ALI } = this.Enum.payType;
-    const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
+    } = payInfo;
     return (
       <div className={styles.container}>
         <Title>确认订单</Title>
