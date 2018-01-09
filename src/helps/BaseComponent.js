@@ -10,6 +10,8 @@ import help from './help';
 import helper from '../extends/helper';
 import Enum, { powerEnum } from '../extends/Enum';
 
+console.log(helper)
+
 export default class BaseComponent extends React.Component {
   constructor(props) {
     super(props);

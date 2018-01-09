@@ -35,3 +35,5 @@ export const transCountUnit = (count) => {
   }
   return transCount;
 };
+
+export default exports;
