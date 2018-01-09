@@ -78,7 +78,7 @@ class TurnDiaForAgentOrderDetail extends BaseComponent {
             </div>
             <div>
               <div>购买前:<span className={styles.count}>{ payzDiaCountBefore }</span>个</div>
-              <div>购买前:<span className={styles.count}>{ payzDiaCountAfter }</span>个</div>
+              <div>购买后:<span className={styles.count}>{ payzDiaCountAfter }</span>个</div>
             </div>
           </div>
           <div className={styles.orderInfoItem}>

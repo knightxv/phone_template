@@ -117,27 +117,28 @@ class BuyMasonry extends BaseComponent {
     const { selectPayInfo } = this.state;
     const { shopId } = this.query;
     const payTypeSelect = selectPayInfo.payType;
-    const { WECHAT, ALI } = this.Enum.payType;
-    if (this.helps.isWechat && payTypeSelect === ALI) {
-      // this.message.info('请用手机浏览器打开');
-      this.togglePayTipPicker();
+    const { WECHAT, ALI, BALANCE } = this.Enum.payType;
+    // if (this.helps.isWechat && payTypeSelect === ALI) {
+    //   // this.message.info('请用手机浏览器打开');
+    //   this.togglePayTipPicker();
+    //   return;
+    // }
+    if (payTypeSelect === BALANCE) {
+      this.readyToExcharge(shopId);
       return;
     }
-    if (payTypeSelect === WECHAT) {
-      this.goToPay(WECHAT, shopId);
-    } else if (payTypeSelect === ALI) {
-      this.goToPay(ALI, shopId);
-    } else {
-      this.readyToExcharge(shopId);
+    if (this.helps.isWechat) {
+      this.message.info('微信浏览器暂不支持此支付方式，请使用其他浏览器进行登录');
+      return;
     }
+    this.goToPay(payTypeSelect, shopId);
   }
   // 支付宝支付
   togglePayTipPicker = () => {
-    this.message.info('微信浏览器暂不支持此支付方式');
     // 弹出picker
-    // this.setState({
-    //   payTipVisible: !this.state.payTipVisible,
-    // });
+    this.setState({
+      payTipVisible: !this.state.payTipVisible,
+    });
   }
   render() {
     const { payPickerVisible, selectPayInfo, payTipVisible } = this.state;

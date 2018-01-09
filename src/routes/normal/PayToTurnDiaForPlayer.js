@@ -133,11 +133,17 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       this.readyToExcharge();
       return;
     }
-    if (this.helps.isWechat && payTypeSelect === ALI) {
-      this.togglePayTipPicker();
+    // 临时
+    if (this.helps.isWechat) {
+      this.message.info('微信浏览器暂不支持此支付方式，请使用其他浏览器进行登录');
       return;
     }
+    // if (this.helps.isWechat && payTypeSelect === ALI) {
+    //   this.togglePayTipPicker();
+    //   return;
+    // }
     this.goToPay();
+    
   }
   goToPay = async () => {
     const { selectPayInfo, isAutoSave } = this.state;
