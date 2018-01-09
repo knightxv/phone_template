@@ -236,6 +236,10 @@ function RouterConfig({ history, app }) {
       path: '/noticeDetail',
       component: () => import('./routes/NoticeDetail'),
     },
+    {
+      path: '/forgetPassword',
+      component: () => import('./routes/ForgetPassword'),
+    },
   ];
   const loadingComponent = (componentPromise) => {
     return () => {

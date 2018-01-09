@@ -5,10 +5,10 @@ import { Helmet } from 'react-helmet';
 import { InputItem, Button } from '@/helps/antdComponent/index.js';
 // import Button from '@/helps/antdComponent/Button';
 import BaseComponent from '@/helps/BaseComponent';
-import { WhiteSpace, Title, IconImg } from '@/helps/styleComponent';
-import styles from './Login.css';
+import { Title, IconImg } from '@/helps/styleComponent';
+import styles from './Login.less';
 
-// const logoSource = require('@/assets/adang_logo.png');
+const wxIcon = require('../../assets/wx.png');
 
 class Login extends BaseComponent {
   constructor(props) {
@@ -61,10 +61,19 @@ class Login extends BaseComponent {
     // } else {
     // }
   }
+  // 跳转忘记密码
+  forgetPwd = () => {
+    this.router.go('/forgetPassword');
+  }
+  // 微信登录
+  wechatLogin = () => {
+    this.message.info('跳转授权地址');
+  }
   render() {
     const { loginLoading, loginID, password } = this.state;
     const { iconLogo } = this.props;
     const { gameName } = this.props;
+    const btnDisabled = !loginID || !password;
     return (
       <div className={styles.container}>
         <Title>代理登录</Title>
@@ -82,23 +91,44 @@ class Login extends BaseComponent {
                 className={styles.loginInput}
                 onChange={value => this.setState({ loginID: value })}
                 value={loginID}
-                placeholder="请输入账号名/姓名"
-              >账号名:</InputItem>
+                clear
+                placeholder="代理用户名/手机号"
+              />
             </div>
             <div className={styles.inputWrap}>
               <InputItem
                 className={styles.loginInput}
                 type="password"
-                placeholder="请输入密码"
+                placeholder="代理登录密码"
                 value={password}
+                clear
                 onChange={value => this.setState({ password: value })}
-              >　密码:</InputItem>
+              />
             </div>
           </div>
-          <WhiteSpace />
-          <Button className={styles.loginBtn} loading={loginLoading} onClick={this.login}>登录</Button>
+          <div className={styles.forgetPwdWrap}>
+            <span onClick={this.forgetPwd}>忘记密码?</span>
+          </div>
+          <Button
+            className={styles.loginBtn}
+            loading={loginLoading}
+            onClick={this.login}
+            disabled={btnDisabled}
+          >
+            登录
+          </Button>
           <div className={styles.registerTip}>
-            还没创建账号?点击<span className={styles.registerLabel} onClick={this.navigateToRegister}>创建账号</span>
+            <span
+              className={styles.registerLabel}
+              onClick={this.navigateToRegister}
+            >注册账号</span>
+          </div>
+          <div
+            className={styles.wechatLoginWrap}
+            onClick={this.wechatLogin}
+          >
+            <IconImg className={styles.wxLoginIcon} src={wxIcon} />
+            <div>微信登录</div>
           </div>
         </div>
       </div>

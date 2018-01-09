@@ -1,15 +1,12 @@
+import { window } from 'global';
 import Http from '@/helps/Http';
 import Toast from '@/helps/antdComponent/Toast';
-
-let remoteUrl = '';
-if (process.env.NODE_ENV === 'development') {
-  remoteUrl = 'http://120.77.87.4:8081'; // http://192.168.2.66:8081
-}
+import { remoteUrl, httpDebug } from '@/config/index';
 // set window.HttpDebug = true; t
 const webHttpConfig = {
   // getConfigUrl: '/config',
   // httpConfigKey: 'JavaWebPublicServerUrl',
-  isDebug: false,
+  isDebug: httpDebug,
   getFetchUrl() {
     return remoteUrl;
   },
