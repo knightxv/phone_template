@@ -9,9 +9,9 @@ function RouterConfig({ history, app }) {
     {
       path: '/login',
       component: () => import('./routes/normal/Login'),
-      models: () => [
-        import('./models/agent'),
-      ],
+      // models: () => [
+      //   import('./models/agent'),
+      // ],
     },
     {
       path: '/homePage',
@@ -30,6 +30,13 @@ function RouterConfig({ history, app }) {
     {
       path: '/inviteToAgent',
       component: () => import('./routes/normal/InviteToAgent'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
+      path: '/inviteToPlayer',
+      component: () => import('./routes/normal/InviteToPlayer'),
       models: () => [
         import('./models/agent'),
       ],
@@ -161,8 +168,22 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
+      path: '/bindFail',
+      component: () => import('./routes/normal/BindFail'),
+      // models: () => [
+      //   import('./models/agent'),
+      // ],
+    },
+    {
       path: '/payFail',
       component: () => import('./routes/normal/PayFail'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
+      path: '/setUserInfo',
+      component: () => import('./routes/normal/SetUserInfo'),
       models: () => [
         import('./models/agent'),
       ],
@@ -173,6 +194,25 @@ function RouterConfig({ history, app }) {
       models: () => [
         import('./models/agent'),
       ],
+    },
+    {
+      path: '/setInfo',
+      component: () => import('./routes/normal/SetInfo'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
+      path: '/pcWechatLogin',
+      component: () => import('./routes/normal/PcWechatLogin'),
+    },
+    {
+      path: '/wechatBindPhone',
+      component: () => import('./routes/normal/WechatBindPhone'),
+    },
+    {
+      path: '/inviteAgentMiddle',
+      component: () => import('./routes/normal/InviteAgentMiddle'),
     },
     // 总代理
     {
@@ -235,6 +275,10 @@ function RouterConfig({ history, app }) {
     {
       path: '/noticeDetail',
       component: () => import('./routes/NoticeDetail'),
+    },
+    {
+      path: '/wechatAuth',
+      component: () => import('./routes/WechatAuth'),
     },
     {
       path: '/forgetPassword',

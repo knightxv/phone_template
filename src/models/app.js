@@ -1,17 +1,17 @@
-
 import webHttp from '../extends/http/webHttp';
 
 export default {
   namespace: 'app',
   state: {
+    componentLoading: false, // 组件是否在加载
+
+    // 请求的数据
     gameName: '',
     companyName: '', // 公司名字
     iconLogo: '', // logo图片地址
-    invitePlayLink: '', // 邀请玩家链接
+    // invitePlayLink: '', // 邀请玩家链接
     inviteAgentBg: '', // 邀请代理图片地址
-    // loginID: '',
-    // password: '',
-    componentLoading: false, // 组件是否在加载
+    serverInfo: [], // 服务器信息
   },
   reducers: {
     updateAppInfo(state, { payload }) {

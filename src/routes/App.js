@@ -16,7 +16,7 @@ class App extends BaseComponent {
       </div>);
     }
     return (
-      <div id="container" className="routerContainer">
+      <div id="container">
         {
           this.props.children
         }

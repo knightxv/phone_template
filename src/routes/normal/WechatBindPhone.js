@@ -10,10 +10,11 @@ import BaseComponent from '@/helps/BaseComponent';
 import { Title } from '@/helps/styleComponent';
 import styles from './Register.less';
 
-class Register extends BaseComponent {
+class WechatBindPhone extends BaseComponent {
   constructor(props) {
     super(props);
     const { pCode } = this.router.getQuery();
+    this.hasCode = !!pCode;
     // this.hasPcode = !!pCode; // 上级代理的邀请码
     this.state = {
       phone: '',
@@ -34,18 +35,17 @@ class Register extends BaseComponent {
     const registerProvince = ipInfo ? `${ipInfo.province}省` : '';
     const registerCity = ipInfo ? `${ipInfo.city}市` : '';
     const password = 123456; // 默认密码
-    const res = await this.http.webHttp.get('/spreadApi/register',
+    const res = await this.http.webHttp.get('/spreadApi/wechat/bindPhone',
     { phone, pCode, verifyCode, password, registerProvince, registerCity });
     if (res.isSuccess) {
-      // Toast.info('注册成功');
-      const resLogin = await this.http.webHttp.get('/spreadApi/login', { loginID: phone, password });
-      if (resLogin.isSuccess) {
+      const { isNewUser } = res.data;
+      if (isNewUser) {
         this.router.go('/setUserInfo');
       } else {
-        this.message.toast(resLogin.info || '网络繁忙,请重试');
+        this.router.go('/homePage');
       }
     } else {
-      this.message.toast(res.info);
+      this.message.info(res.info || '绑定失败');
     }
   }
   navigateToAgreen = () => {
@@ -102,12 +102,12 @@ class Register extends BaseComponent {
     // const hasCode = this.hasCode;
     return (
       <div className={styles.container}>
-        <Title>申请代理</Title>
+        <Title>绑定手机</Title>
         <Helmet>
-          <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
+          <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js" />
         </Helmet>
         <NavBar
-          title="申请代理"
+          title="绑定手机"
           onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
@@ -131,14 +131,15 @@ class Register extends BaseComponent {
                   onClick={this.getVerifyCode}
                 >
                   { !isShowElseTime ? '获取验证码' : `重新发送(${getVerifyCodeElseTime}s)` }
-               </div>}
+                </div>}
               />
             </div>
             <div className={styles.inputWrap}>
               <InputItem
+                disabled={this.hasCode}
                 value={pCode}
                 onChange={value => this.setState({ pCode: value })}
-                placeholder="请输入代理的邀请码(选填)"
+                placeholder="请输入代理的邀请码(已注册账户填写无效)"
               />
             </div>
             <div className={styles.registerWrap}>
@@ -163,11 +164,4 @@ class Register extends BaseComponent {
   }
 }
 
-
-function mapStateToProps(state) {
-  return {
-    ...state.agent,
-  };
-}
-
-export default connect(mapStateToProps)(Register);
+export default connect()(WechatBindPhone);

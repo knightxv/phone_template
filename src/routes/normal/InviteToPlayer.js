@@ -1,10 +1,14 @@
 import React from 'react';
 import { connect } from 'dva';
+// import CopyToClipboard from 'react-copy-to-clipboard';
+// import { ActionSheet } from 'antd-mobile';
 import QRCode from 'qrcode.react';
 
+// import { isWechat } from '@/helps/help';
 import NavBar from '@/helps/antdComponent/NavBar';
+// import { Icon } from '@/helps/antdComponent/index.js';
 import BaseComponent from '@/helps/BaseComponent';
-import { Title } from '@/helps/styleComponent';
+import { Title, FlexRow } from '@/helps/styleComponent';
 import styles from './InviteToAgent.less';
 
 const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);
@@ -15,12 +19,13 @@ if (isIPhone) {
   };
 }
 
-class InviteToAgent extends BaseComponent {
+class InviteToPlayer extends BaseComponent {
   constructor(props) {
     super(props);
+    // const { proxyid } = props;
     this.state = {
       linkSrc: '',
-      registerLink: '',
+      inviteLink: '',
     };
   }
   createImage = (source) => {
@@ -33,15 +38,43 @@ class InviteToAgent extends BaseComponent {
     });
   }
   async componentDidMount() {
-    const { inviteCode, inviteAgentBg } = this.props;
-    const winLoc = window.location;
-    const origin = winLoc.origin;
-    const pathname = winLoc.pathname;
-    const registerLink = `${origin}${pathname}#/inviteAgentMiddle?pCode=${inviteCode}`;
+    const { inviteCode, invitePlayerBg } = this.props;
+    let serverInfo = this.props.serverInfo;
+    if (!serverInfo || serverInfo.length < 1) {
+      const res = await this.http.webHttp.get('/spreadApi/getPlatformInfo');
+      if (res.isSuccess) {
+        serverInfo = res.data.serverInfo;
+      } else {
+        this.message.info('网络异常,请重试');
+      }
+      if (!serverInfo || serverInfo.length < 1) {
+        this.message.info('没有可选的游戏');
+        this.router.go('/login');
+        return;
+      }
+    }
+    const gameInfo = serverInfo[0];
+    const { accountServerIP, accountServerPort, appDownLoadUrl, weChatMPID, gameID } = gameInfo;
+    const inviteLink = `http://${accountServerIP}:${accountServerPort}/WeChatAuthorize?ddmmp=${weChatMPID}&redirect=${appDownLoadUrl}?gameID=${gameID}&reqdeleInviter=${inviteCode}&actionType=invitePlayer`;
     await this.setStateAsync({
-      registerLink,
+      inviteLink,
     });
-    await this.makeImage(inviteCode, inviteAgentBg);
+    await this.makeImage(inviteCode, invitePlayerBg);
+    // if (this.canvasNode && this.canvasNode._canvas.toDataURL) {
+    //   const imgData = this.canvasNode._canvas.toDataURL('image/png');
+    //   this.setState({
+    //     linkSrc: imgData,
+    //   });
+    // }
+    // const { inviteCode, inviteAgentBg } = this.props;
+    // const winLoc = window.location;
+    // const origin = winLoc.origin;
+    // const pathname = winLoc.pathname;
+    // const registerLink = `${origin}${pathname}#/inviteAgentMiddle?pCode=${inviteCode}`;
+    // await this.setStateAsync({
+    //   registerLink,
+    // });
+    // await this.makeImage(inviteCode, inviteAgentBg);
   }
   makeImage = async (code, bg) => {
     const ctx = this.bgCanvas.getContext('2d');
@@ -66,14 +99,14 @@ class InviteToAgent extends BaseComponent {
     });
   }
   render() {
-    const { linkSrc, registerLink } = this.state;
+    const { linkSrc, inviteLink } = this.state;
     const canvasWith = this.contentContainer ? this.contentContainer.offsetWidth : 0;
     const canvasHeight = this.contentContainer ? this.contentContainer.offsetHeight : 0;
     return (
       <div className={styles.container}>
-        <Title>邀请成为代理</Title>
+        <Title>邀请成为玩家</Title>
         <NavBar
-          title="邀请成为代理"
+          title="邀请成为玩家"
           onClick={this.router.back}
         />
         <div className={styles.contentContainer} ref={(node) => { this.contentContainer = node; }}>
@@ -92,28 +125,13 @@ class InviteToAgent extends BaseComponent {
           <QRCode
             ref={(node) => { this.canvasNode = node; }}
             size={100}
-            value={registerLink}
+            value={inviteLink}
           />
         </div>
       </div>
     );
   }
 }
-
-// const WrapContent = ({ inviteAgentBg, children }) => {
-//   if (inviteAgentBg) {
-//     return (<div className={styles.contentContainer}>
-//       <img className={styles.contentBg} src={inviteAgentBg} />
-//       <div className={styles.bgContentWrap}>
-//         { children }
-//       </div>
-//     </div>);
-//   } else {
-//     return (<div className={styles.contentContainer}>
-//       { children }
-//     </div>);
-//   }
-// };
 
 function mapStateToProps(state) {
   return {
@@ -122,20 +140,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(InviteToAgent);
+export default connect(mapStateToProps)(InviteToPlayer);
 
-/*
-<div
-  onClick={() => navigate(registerRouterName, params)}
-  className={styles.linkText}
-  rel="noopener noreferrer"
->
-  {registerLink}
-</div>
-<CopyToClipboard
-  text={registerLink}
-  onCopy={this.onCopy}
->
-  <Button className={styles.linkBtn}>点击复制</Button>
-</CopyToClipboard>
-*/

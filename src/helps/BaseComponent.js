@@ -5,12 +5,11 @@ import { window } from 'global';
 import Toast from './antdComponent/Toast';
 // import * as ToolComponents from './styleComponent';
 import webHttp from '../extends/http/webHttp';
+import accountHttp from '../extends/http/accountHttp';
 import './config';
 import help from './help';
 import helper from '../extends/helper';
 import Enum, { powerEnum } from '../extends/Enum';
-
-console.log(helper)
 
 export default class BaseComponent extends React.Component {
   constructor(props) {
@@ -25,6 +24,7 @@ export default class BaseComponent extends React.Component {
 
     this.http = {
       webHttp,
+      accountHttp,
       // fetch,
     };
 
@@ -76,6 +76,7 @@ export default class BaseComponent extends React.Component {
         return /^1[34578]\d{9}$/.test(text);
       },
     };
+
   }
   // hasPower(...powers) {
   //   const { powerList } = this.props;
@@ -104,6 +105,11 @@ export default class BaseComponent extends React.Component {
   hasPowerSome(...powers) {
     return powers.some((powerName) => {
       return this.hasPower(powerName);
+    });
+  }
+  setStateAsync = (state) => {
+    return new Promise((resolve) => {
+      this.setState(state, resolve);
     });
   }
 }

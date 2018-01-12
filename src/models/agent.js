@@ -6,6 +6,8 @@ const REGETVERIFYCODETIME = 60;
 export default {
   namespace: 'agent',
   state: {
+    // userName: '',
+    
     // inviteCode: 0, // 邀请码
     // masonry: 0, // 砖石
     // rechargeOfToday: 0, // 今日充值

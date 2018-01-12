@@ -86,3 +86,8 @@
 :global(.am-modal-transparent) {
     width: 100vw!important;
 }
+:global(.am-action-sheet-share-list-item) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
