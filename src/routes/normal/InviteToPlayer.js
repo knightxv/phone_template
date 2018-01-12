@@ -8,16 +8,8 @@ import QRCode from 'qrcode.react';
 import NavBar from '@/helps/antdComponent/NavBar';
 // import { Icon } from '@/helps/antdComponent/index.js';
 import BaseComponent from '@/helps/BaseComponent';
-import { Title, FlexRow } from '@/helps/styleComponent';
+import { Title } from '@/helps/styleComponent';
 import styles from './InviteToAgent.less';
-
-const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);
-let wrapProps;
-if (isIPhone) {
-  wrapProps = {
-    onTouchStart: e => e.preventDefault(),
-  };
-}
 
 class InviteToPlayer extends BaseComponent {
   constructor(props) {
@@ -27,6 +19,7 @@ class InviteToPlayer extends BaseComponent {
       linkSrc: '',
       inviteLink: '',
     };
+    this.isLoad = false; // 是否拿到数据(确保只执行一次，相对于componentDidMount,解决重新刷新页面问题)
   }
   createImage = (source) => {
     return new Promise((resolve) => {
@@ -37,7 +30,8 @@ class InviteToPlayer extends BaseComponent {
       };
     });
   }
-  async componentDidMount() {
+  onLoad = async () => {
+    this.isGetData = true;
     const { inviteCode, invitePlayerBg } = this.props;
     let serverInfo = this.props.serverInfo;
     if (!serverInfo || serverInfo.length < 1) {
@@ -60,21 +54,6 @@ class InviteToPlayer extends BaseComponent {
       inviteLink,
     });
     await this.makeImage(inviteCode, invitePlayerBg);
-    // if (this.canvasNode && this.canvasNode._canvas.toDataURL) {
-    //   const imgData = this.canvasNode._canvas.toDataURL('image/png');
-    //   this.setState({
-    //     linkSrc: imgData,
-    //   });
-    // }
-    // const { inviteCode, inviteAgentBg } = this.props;
-    // const winLoc = window.location;
-    // const origin = winLoc.origin;
-    // const pathname = winLoc.pathname;
-    // const registerLink = `${origin}${pathname}#/inviteAgentMiddle?pCode=${inviteCode}`;
-    // await this.setStateAsync({
-    //   registerLink,
-    // });
-    // await this.makeImage(inviteCode, inviteAgentBg);
   }
   makeImage = async (code, bg) => {
     const ctx = this.bgCanvas.getContext('2d');
@@ -87,10 +66,10 @@ class InviteToPlayer extends BaseComponent {
     const imgData = this.canvasNode._canvas.toDataURL('image/png');
     const qrcodeImg = await this.createImage(imgData);
     const putLeft = (this.bgCanvas.width - qrcodeImg.width) / 2;
-    const putTop = (this.bgCanvas.height - qrcodeImg.height) / 2;
+    const putTop = 160;
     ctx.drawImage(qrcodeImg, putLeft, putTop);
     // 画文字
-    ctx.font = '18px Arial';
+    ctx.font = '14px Arial';
     ctx.fillStyle = '#000';
     ctx.fillText(`邀请码：${code}`, putLeft, putTop - 10);
     const linkSrc = this.bgCanvas.toDataURL('image/png');
@@ -100,8 +79,13 @@ class InviteToPlayer extends BaseComponent {
   }
   render() {
     const { linkSrc, inviteLink } = this.state;
-    const canvasWith = this.contentContainer ? this.contentContainer.offsetWidth : 0;
-    const canvasHeight = this.contentContainer ? this.contentContainer.offsetHeight : 0;
+    const { inviteCode } = this.props;
+    const canvasWidth = document.documentElement.offsetWidth > 750 ? 750 : document.documentElement.offsetWidth;
+    const canvasHeight = document.documentElement.offsetHeight > 1134 ? 1134 : document.documentElement.offsetHeight;
+    if (inviteCode && !this.isLoad) {
+      this.isLoad = true;
+      this.onLoad();
+    }
     return (
       <div className={styles.container}>
         <Title>邀请成为玩家</Title>
@@ -109,12 +93,12 @@ class InviteToPlayer extends BaseComponent {
           title="邀请成为玩家"
           onClick={this.router.back}
         />
-        <div className={styles.contentContainer} ref={(node) => { this.contentContainer = node; }}>
-          <img className={styles.linkImgSouce} src={linkSrc} />
+        <div className={styles.contentContainer}>
+          { linkSrc && <img className={styles.linkImgSouce} src={linkSrc} /> }
         </div>
         <div style={{ display: 'none' }}>
           <canvas
-            width={canvasWith}
+            width={canvasWidth}
             height={canvasHeight}
             ref={(node) => { this.bgCanvas = node; }}
           >
@@ -124,7 +108,7 @@ class InviteToPlayer extends BaseComponent {
         <div style={{ display: 'none' }}>
           <QRCode
             ref={(node) => { this.canvasNode = node; }}
-            size={100}
+            size={parseInt(canvasWidth * 0.2)}
             value={inviteLink}
           />
         </div>

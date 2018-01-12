@@ -71,7 +71,6 @@ class Login extends BaseComponent {
       }
       if (!serverInfo || serverInfo.length < 1) {
         this.message.info('没有可选的游戏');
-        this.router.go('/login');
         return;
       }
     }

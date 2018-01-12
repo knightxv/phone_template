@@ -24,6 +24,24 @@ class WechatAuth extends BaseComponent {
       this.router.go('/login');
       return;
     }
+    // pc登录流程
+    if (actionType === 'pcLogin') {
+      const { uuid } = this.router.getQuery();
+      const pcLoginRes = await this.http.webHttp.get('/spreadApi/wechat/pcWeChatLogin', {
+        uuid, token, accountId, headImageUrl,
+      });
+      if (pcLoginRes.isSuccess) {
+        // this.message.info('验证成功'); // 跳转登录成功页面
+        this.router.go('/pcLoginResult', {
+          result: 0,
+        });
+      } else {
+        this.router.go('/pcLoginResult', {
+          result: 1,
+        });
+      }
+      return;
+    }
     const webParams = {
       accountId,
       headImageUrl,
@@ -46,6 +64,7 @@ class WechatAuth extends BaseComponent {
       }
       return;
     }
+    
 
     // 邀请代理流程
     if (actionType === 'inviteProxy') {

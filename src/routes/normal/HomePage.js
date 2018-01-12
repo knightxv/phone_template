@@ -25,9 +25,8 @@ const IconSource = {
   notice: require('../../assets/gg.png'),
   sys: require('../../assets/saoyisao.png'),
   link: require('../../assets/link.png'),
+  share: require('../../assets/share.png'),
 };
-
-const rankingLimit = 50; // 控制排行是否显示
 
 class HomePage extends BaseComponent {
   constructor(props) {
@@ -140,6 +139,10 @@ class HomePage extends BaseComponent {
         </CopyToClipboard>,
         title: '复制链接',
       },
+      {
+        icon: <img className={styles.shareIcon} src={IconSource.share} />,
+        title: '分享链接',
+      },
       // {
       //   icon: <img className={styles.shareIcon} src={IconSource.link} />,
       //   title: '分享到朋友圈',
@@ -163,7 +166,6 @@ class HomePage extends BaseComponent {
       }
       if (!serverInfo || serverInfo.length < 1) {
         this.message.info('没有可选的游戏');
-        this.router.go('/login');
         return;
       }
     }
@@ -187,6 +189,10 @@ class HomePage extends BaseComponent {
           <img className={styles.shareIcon} src={IconSource.link} />
         </CopyToClipboard>,
         title: '复制链接',
+      },
+      {
+        icon: <img className={styles.shareIcon} src={IconSource.share} />,
+        title: '分享链接',
       },
     ];
     ActionSheet.showShareActionSheetWithOptions({

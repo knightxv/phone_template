@@ -20,9 +20,10 @@ class SetInfo extends BaseComponent {
     const { userName } = this.state;
     const res = await this.http.webHttp.get('/spreadApi/setUserInfo', { userName });
     if (res.isSuccess) {
+      this.message.toast(res.info || '修改成功');
       this.router.back();
     } else {
-      this.message.toast(res.info || '设置失败');
+      this.message.toast(res.info || '修改失败');
     }
   }
   render() {

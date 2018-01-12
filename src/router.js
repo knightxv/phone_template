@@ -189,6 +189,10 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
+      path: '/pcLoginResult',
+      component: () => import('./routes/normal/PcLoginResult'),
+    },
+    {
       path: '/stepRebate',
       component: () => import('./routes/normal/StepRebate'),
       models: () => [
