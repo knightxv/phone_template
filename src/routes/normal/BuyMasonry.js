@@ -63,6 +63,10 @@ class BuyMasonry extends BaseComponent {
     return payItemArr;
   }
   async componentWillMount() {
+    if (this.props.history.length < 1) {
+      this.router.go('/homePage');
+      return;
+    }
     const payItemArr = this.payItemArr();
     this.setState({
       selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : null,
@@ -114,8 +118,12 @@ class BuyMasonry extends BaseComponent {
     this.message.info(res.info || '充值失败，请重试');
   }
   buyGood = () => {
-    const { selectPayInfo } = this.state;
+    let { selectPayInfo } = this.state;
     const { shopId } = this.query;
+    if (!selectPayInfo) {
+      selectPayInfo = this.payItemArr()[0];
+    }
+    
     const payTypeSelect = selectPayInfo.payType;
     const { WECHAT, ALI, BALANCE } = this.Enum.payType;
     // if (this.helps.isWechat && payTypeSelect === ALI) {

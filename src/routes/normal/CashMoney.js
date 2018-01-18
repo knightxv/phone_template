@@ -281,6 +281,7 @@ class AgencyExtractMoney extends BaseComponent {
               }) => {
                 return (
                   <div className={styles.listWrap} style={style}>
+                    <div style={{ height: '1rem' }} />
                     <div className={styles.recordHeader}>
                       <div>
                         本月成功提现金额:<span className={styles.moneyCount}>{ monthCashLabel }</span>元
@@ -289,19 +290,11 @@ class AgencyExtractMoney extends BaseComponent {
                       提现成功总金额:<span className={styles.moneyCount}>{ allCashLabel }</span>元
                       </div>
                     </div>
-                    {
-                      wasSticky
-                      ? <ScrollListView
-                        data={record}
-                        renderRow={this.renderRow}
-                        getNode={(node) => { this.scroll = node; }}
-                      />
-                      : <BodyScrollListView
-                        data={record}
-                        renderRow={this.renderRow}
-                        getNode={(node) => { this.scroll = node; }}
-                      />
-                    }
+                    <ScrollListView
+                      data={record}
+                      renderRow={this.renderRow}
+                      getNode={(node) => { this.scroll = node; }}
+                    />
                     {
                       wasSticky && <ScrollTop onClick={this.scrollTop} />
                     }

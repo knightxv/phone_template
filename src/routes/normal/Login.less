@@ -3,10 +3,13 @@
     min-height: 100%;
     background: @bgColor;
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 .logoWrap {
     margin: 0px auto 0px;
-    padding-top: 20px;
+    padding-top: .4rem;
+    padding-bottom: .5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,7 +35,7 @@
 }
 
 .logoTitle {
-    font-size: .36rem;
+    font-size: .44rem;
     padding: .3rem 0;
     font-weight: 600;
 }
@@ -51,17 +54,23 @@
 
 .contentContainer {
     margin: 0 0.22rem;
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .registerTip {
     font-size: 0.28rem;
     color: #9c9c9c;
-    margin: 0.3rem;
+    margin-top: 0.6rem;
     text-align: center;
 }
 
 .registerLabel {
-    color: #000;
+    color: #333;
+    font-size: .32rem;
 }
 
 .forgetPwdWrap {
@@ -74,10 +83,26 @@
 }
 
 .wechatLoginWrap {
-    display: flex;
-    flex-direction: column;
+    .flexRow(center);
     align-items: center;
+    padding-bottom: 1rem;
+    
 }
 .wxLoginIcon {
     padding: .2rem 0 .1rem;
+    width: .8rem;
+    height: 1rem;
+    display: block;
+}
+.wechatLogin {
+    .border(#000);
+    .flexRow();
+    padding: 0 .2rem;
+    border-radius: 5px;
+    box-shadow:  2px 2px 3px rgba(0, 0, 0, .5);
+}
+
+.wechatLoginLabel {
+    color: #000;
+    padding-left: .2rem;
 }

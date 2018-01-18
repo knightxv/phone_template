@@ -42,10 +42,10 @@ class Register extends BaseComponent {
       if (resLogin.isSuccess) {
         this.router.go('/setUserInfo');
       } else {
-        this.message.toast(resLogin.info || '网络繁忙,请重试');
+        this.message.info(resLogin.info || '网络繁忙,请重试');
       }
     } else {
-      this.message.toast(res.info);
+      this.message.info(res.info);
     }
   }
   navigateToAgreen = () => {
@@ -72,7 +72,7 @@ class Register extends BaseComponent {
       this.message.info(verifyRes.info || '获取验证码失败');
       return;
     }
-    this.message.info('获取验证码');
+    this.message.info('验证码已发送');
     await this.setStateAsync({
       getVerifyCodeElseTime: 60,
     });
@@ -100,6 +100,7 @@ class Register extends BaseComponent {
     const isShowElseTime = !isCanReGetVerifyCode; // 是否显示剩余时间
     const isCanGetVerifyCode = isCanReGetVerifyCode && this.valid.phone(phone);
     // const hasCode = this.hasCode;
+    const btnDisabled = !this.valid.phone(phone) || !verifyCode;
     return (
       <div className={styles.container}>
         <Title>申请代理</Title>
@@ -114,6 +115,7 @@ class Register extends BaseComponent {
           <div>
             <div className={styles.inputWrap}>
               <InputItem
+                clear
                 value={phone}
                 onChange={value => this.setState({ phone: value })}
                 placeholder="请输入手机号"
@@ -122,6 +124,7 @@ class Register extends BaseComponent {
             <div className={styles.inputWrap}>
               <InputItem
                 type="number"
+                clear
                 maxLength={4}
                 value={verifyCode}
                 onChange={value => this.setState({ verifyCode: value })}
@@ -136,6 +139,7 @@ class Register extends BaseComponent {
             </div>
             <div className={styles.inputWrap}>
               <InputItem
+                clear
                 value={pCode}
                 onChange={value => this.setState({ pCode: value })}
                 placeholder="请输入代理的邀请码(选填)"
@@ -143,6 +147,7 @@ class Register extends BaseComponent {
             </div>
             <div className={styles.registerWrap}>
               <Button
+                disabled={btnDisabled}
                 style={{ width: '100%' }}
                 onClick={this.register}
               >确认</Button>

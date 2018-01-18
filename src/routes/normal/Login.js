@@ -9,7 +9,7 @@ import BaseComponent from '@/helps/BaseComponent';
 import { Title, IconImg } from '@/helps/styleComponent';
 import styles from './Login.less';
 
-const wxIcon = require('../../assets/wx.png');
+const wxIcon = require('../../assets/wx_login.png');
 
 class Login extends BaseComponent {
   constructor(props) {
@@ -91,47 +91,49 @@ class Login extends BaseComponent {
           <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
         </Helmet>
         <div className={styles.contentContainer}>
-          <div className={styles.logoWrap}>
-            { iconLogo && <IconImg className={styles.logo} src={iconLogo} />}
-            <span className={styles.logoTitle}>{gameName}</span>
-          </div>
           <div>
-            <div className={styles.inputWrap}>
-              <InputItem
-                className={styles.loginInput}
-                onChange={value => this.setState({ loginID: value })}
-                value={loginID}
-                clear
-                placeholder="代理用户名/手机号"
-              />
+            <div className={styles.logoWrap}>
+              { iconLogo && <IconImg className={styles.logo} src={iconLogo} />}
+              <span className={styles.logoTitle}>{gameName}</span>
             </div>
-            <div className={styles.inputWrap}>
-              <InputItem
-                className={styles.loginInput}
-                type="password"
-                placeholder="代理登录密码"
-                value={password}
-                clear
-                onChange={value => this.setState({ password: value })}
-              />
+            <div>
+              <div className={styles.inputWrap}>
+                <InputItem
+                  className={styles.loginInput}
+                  onChange={value => this.setState({ loginID: value })}
+                  value={loginID}
+                  clear
+                  placeholder="代理用户名/手机号"
+                />
+              </div>
+              <div className={styles.inputWrap}>
+                <InputItem
+                  className={styles.loginInput}
+                  type="password"
+                  placeholder="代理登录密码"
+                  value={password}
+                  clear
+                  onChange={value => this.setState({ password: value })}
+                />
+              </div>
             </div>
-          </div>
-          <div className={styles.forgetPwdWrap}>
-            <span onClick={this.forgetPwd}>忘记密码?</span>
-          </div>
-          <Button
-            className={styles.loginBtn}
-            loading={loginLoading}
-            onClick={this.login}
-            disabled={btnDisabled}
-          >
-            登录
-          </Button>
-          <div className={styles.registerTip}>
-            <span
-              className={styles.registerLabel}
-              onClick={this.navigateToRegister}
-            >注册账号</span>
+            <div className={styles.forgetPwdWrap}>
+              <span onClick={this.forgetPwd}>忘记密码?</span>
+            </div>
+            <Button
+              className={styles.loginBtn}
+              loading={loginLoading}
+              onClick={this.login}
+              disabled={btnDisabled}
+            >
+              登录
+            </Button>
+            <div className={styles.registerTip}>
+              <span
+                className={styles.registerLabel}
+                onClick={this.navigateToRegister}
+              >申请账号</span>
+            </div>
           </div>
           {
             (this.helps.system() === 'PC' || this.helps.isWechat) &&
@@ -139,8 +141,10 @@ class Login extends BaseComponent {
               className={styles.wechatLoginWrap}
               onClick={this.wechatLogin}
             >
-              <IconImg className={styles.wxLoginIcon} src={wxIcon} />
-              <div>微信登录</div>
+              <div className={styles.wechatLogin}>
+                <IconImg className={styles.wxLoginIcon} src={wxIcon} />
+                <span className={styles.wechatLoginLabel}>微信登录</span>
+              </div>
             </div>
           }
         </div>

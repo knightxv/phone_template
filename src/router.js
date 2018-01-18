@@ -161,8 +161,8 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
-      path: '/orderForAgentTurnDiaForAgent',
-      component: () => import('./routes/normal/OrderForAgentTurnDiaForAgent'),
+      path: '/orderForAgentBuyDia',
+      component: () => import('./routes/normal/OrderForAgentBuyDia'),
       models: () => [
         import('./models/agent'),
       ],

@@ -102,6 +102,7 @@ class ForgetPassword extends BaseComponent {
         <div className={styles.contentContainer}>
           <div className={styles.inputWrap}>
             <InputItem
+              clear
               value={phone}
               onChange={value => this.setState({ phone: value })}
               placeholder="请输入手机号码"
@@ -109,6 +110,7 @@ class ForgetPassword extends BaseComponent {
           </div>
           <div className={styles.inputWrap}>
             <InputItem
+              clear
               value={verifyCode}
               onChange={value => this.setState({ verifyCode: value })}
               placeholder="请输入短信验证码"
@@ -122,6 +124,7 @@ class ForgetPassword extends BaseComponent {
           </div>
           <div className={styles.inputWrap}>
             <InputItem
+              clear
               value={newPwd}
               type="password"
               onChange={value => this.setState({ newPwd: value })}

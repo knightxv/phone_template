@@ -20,14 +20,15 @@ class SetInfo extends BaseComponent {
     const { userName } = this.state;
     const res = await this.http.webHttp.get('/spreadApi/setUserInfo', { userName });
     if (res.isSuccess) {
-      this.message.toast(res.info || '修改成功');
+      this.message.info(res.info || '修改成功');
       this.router.back();
     } else {
-      this.message.toast(res.info || '修改失败');
+      this.message.info(res.info || '修改失败');
     }
   }
   render() {
     const { userName } = this.state;
+    const btnDisabled = !userName;
     return (
       <div className={styles.container}>
         <Title>设置昵称</Title>
@@ -47,6 +48,7 @@ class SetInfo extends BaseComponent {
             </div>
             <div className={styles.registerWrap}>
               <Button
+                disabled={btnDisabled}
                 onClick={this.confimToSet}
               >确定</Button>
             </div>

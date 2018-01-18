@@ -63,6 +63,10 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     return payItemArr;
   }
   async componentWillMount() {
+    if (this.props.history.length < 1) {
+      this.router.go('/homePage');
+      return;
+    }
     const payItemArr = this.payItemArr();
     this.setState({
       selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : null,
@@ -126,7 +130,10 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     // });
   }
   payToTurn =() => {
-    const { selectPayInfo } = this.state;
+    let { selectPayInfo } = this.state;
+    if (!selectPayInfo) {
+      selectPayInfo = this.payItemArr()[0];
+    }
     const payTypeSelect = selectPayInfo.payType;
     const { BALANCE, ALI } = this.Enum.payType;
     if (payTypeSelect === BALANCE) {

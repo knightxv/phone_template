@@ -151,7 +151,7 @@ class AgencyPay extends BaseComponent {
             <Button onClick={this.goToBuyGoods} className={styles.payBtn}>立即购买</Button>
           </div>
         </div>
-        <StickyContainer className={styles.stickyContainer} >
+        <StickyContainer>
           <Sticky>
             {
               ({
@@ -166,6 +166,7 @@ class AgencyPay extends BaseComponent {
                 // console.log(wasSticky)
                 return (
                   <div className={styles.listWrap} style={style}>
+                    <div style={{ height: '1rem' }} />
                     <div className={styles.recordHeader}>
                       <div>
                         本月购钻数量:<span className={styles.countLabel}>{ monthCount }</span>个
@@ -174,22 +175,13 @@ class AgencyPay extends BaseComponent {
                         总购钻数量:<span className={styles.countLabel}>{ allCount }</span>个
                       </div>
                     </div>
-                    {
-                      wasSticky
-                      ? <ScrollListView
-                        data={record}
-                        renderRow={this.renderRow}
-                        ref={(node) => { this.scrollView = node; }}
-                        ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
-                        getNode={(node) => { this.scroll = node; }}
-                      />
-                      : <BodyScrollListView
-                        data={record}
-                        renderRow={this.renderRow}
-                        ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
-                        getNode={(node) => { this.scroll = node; }}
-                      />
-                    }
+                    <ScrollListView
+                      data={record}
+                      renderRow={this.renderRow}
+                      ref={(node) => { this.scrollView = node; }}
+                      ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
+                      getNode={(node) => { this.scroll = node; }}
+                    />
                     {
                       wasSticky && <ScrollTop onClick={this.scrollTop} />
                     }

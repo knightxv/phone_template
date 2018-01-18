@@ -54,7 +54,6 @@ class BuyDiaOrderDetail extends BaseComponent {
     const payDateTime = new Date(createTime).format('yyyy-MM-dd hh:mm:ss');
     const orderPayMoneyLabel = this.helps.parseFloatMoney(orderPayMoney);
     const orderCountLabel = orderCount;
-    console.log(this.Enum.payTypeLabel, payType)
     const payTypeLabel = this.Enum.payTypeLabel[payType];
     return (
       <div className={styles.container}>

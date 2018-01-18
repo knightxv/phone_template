@@ -34,7 +34,8 @@ class InviteAgentMiddle extends BaseComponent {
     const gameInfo = serverInfo[0];
     const { accountServerIP, accountServerPort, weChatMPID } = gameInfo;
     const origin = window.location.origin;
-    const inviteLink = `http://${accountServerIP}:${accountServerPort}/WeChatAuthorize?ddmmp=${weChatMPID}&redirect=${origin}/generalManage/wechat.html&reqdeleInviter=${pCode}&actionType=inviteProxy`;
+    const noPortOrigin = origin.replace(/:\d+/, '');
+    const inviteLink = `http://${accountServerIP}:${accountServerPort}/WeChatAuthorize?ddmmp=${weChatMPID}&redirect=${noPortOrigin}/generalManage/wechat.html&reqdeleInviter=${pCode}&actionType=inviteProxy`;
     window.location.href = inviteLink;
   }
   render() {

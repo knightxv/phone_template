@@ -19,6 +19,7 @@ class InviteToAgent extends BaseComponent {
   createImage = (source) => {
     return new Promise((resolve) => {
       const img = new Image();
+      img.crossOrigin = '*';
       img.src = source;
       img.onload = () => {
         resolve(img);
@@ -30,7 +31,8 @@ class InviteToAgent extends BaseComponent {
     const winLoc = window.location;
     const origin = winLoc.origin;
     const pathname = winLoc.pathname;
-    const registerLink = `${origin}${pathname}#/inviteAgentMiddle?pCode=${inviteCode}`;
+    const noPortOrigin = origin.replace(/:\d+/, '');
+    const registerLink = `${noPortOrigin}${pathname}#/inviteAgentMiddle?pCode=${inviteCode}`;
     await this.setStateAsync({
       registerLink,
     });
@@ -38,6 +40,7 @@ class InviteToAgent extends BaseComponent {
   }
   makeImage = async (code, bg) => {
     const ctx = this.bgCanvas.getContext('2d');
+    const codeWidth = this.canvasNode._canvas.width;
     // 画背景
     if (bg) {
       const bgImg = await this.createImage(bg);
@@ -47,12 +50,16 @@ class InviteToAgent extends BaseComponent {
     const imgData = this.canvasNode._canvas.toDataURL('image/png');
     const qrcodeImg = await this.createImage(imgData);
     const putLeft = (this.bgCanvas.width - qrcodeImg.width) / 2;
-    const putTop = 160;
+    const putTop = 130;
     ctx.drawImage(qrcodeImg, putLeft, putTop);
+    // 画文字的背景
+    ctx.fillStyle = '#fff'; 
+    ctx.fillRect(putLeft, putTop - 30, codeWidth, 30);
     // 画文字
     ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
     ctx.fillStyle = '#000';
-    ctx.fillText(`邀请码：${code}`, putLeft, putTop - 10);
+    ctx.fillText(`邀请码：${code}`, this.bgCanvas.width / 2, putTop - 10);
     const linkSrc = this.bgCanvas.toDataURL('image/png');
     this.setState({
       linkSrc,
@@ -89,7 +96,7 @@ class InviteToAgent extends BaseComponent {
         <div style={{ display: 'none' }}>
           <QRCode
             ref={(node) => { this.canvasNode = node; }}
-            size={parseInt(canvasWidth * 0.2)}
+            size={parseInt(canvasWidth * 0.15)}
             value={registerLink}
           />
         </div>

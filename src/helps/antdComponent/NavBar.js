@@ -30,6 +30,8 @@ color: #fff;
 position: absolute;
 left: 0;
 width: 100%;
+height: 100%;
+line-height: 1rem;
 text-align: center;
 z-index: -1;
 `;

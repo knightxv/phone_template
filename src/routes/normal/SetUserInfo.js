@@ -45,7 +45,6 @@ class SetUserInfo extends BaseComponent {
         <Title>设置账户信息</Title>
         <NavBar
           title="设置账户信息"
-          onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
           <div>

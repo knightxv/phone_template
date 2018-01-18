@@ -252,40 +252,43 @@ class TurnDiaForAgent extends BaseComponent {
           title="给代理充钻"
           onClick={this.router.back}
         />
-        <div className={styles.playerInputWrap}>
-          <InputItem
-            onChange={this.idValChange}
-            value={agentId}
-            type="number"
-            maxLength={8}
-            clear
-            placeholder="请输入代理ID"
-            extra={<Button size="small" onClick={this.showChoosePlayerPicker}>选择代理</Button>}
-          >代理ID</InputItem>
-          {
-            agentNotFind && <div className={styles.playerNotFind}>代理不存在</div>
-          }
-          {
-            agentName && <div className={styles.playerName}>{agentName}</div>
-          }
-        </div>
-        <WhiteSpace />
-        <div className={styles.playerInputWrap}>
-          <InputItem
-            onChange={this.diamondChange}
-            value={diamond}
-            type="number"
-            clear
-            placeholder={`本次最多转出${masonry}个钻`}
-          >钻石数量</InputItem>
-        </div>
-        <div className={styles.payBtnWrap}>
-          <Button
-            className={styles.payBtn}
-            onClick={this.goToNext}
-          >
-          下一步
-          </Button>
+        <div>
+          <div className={styles.playerInputWrap}>
+            <InputItem
+              onChange={this.idValChange}
+              value={agentId}
+              type="number"
+              maxLength={8}
+              clear
+              placeholder="请输入代理ID"
+              extra={<Button size="small" onClick={this.showChoosePlayerPicker}>选择代理</Button>}
+            >代理ID</InputItem>
+            {
+              agentNotFind && <div className={styles.playerNotFind}>代理不存在</div>
+            }
+            {
+              agentName && <div className={styles.playerName}>{agentName}</div>
+            }
+          </div>
+          <WhiteSpace />
+          <div className={styles.playerInputWrap}>
+            <InputItem
+              onChange={this.diamondChange}
+              value={diamond}
+              type="number"
+              clear
+              maxLength={8}
+              placeholder={`本次最多转出${masonry}个钻`}
+            >钻石数量</InputItem>
+          </div>
+          <div className={styles.payBtnWrap}>
+            <Button
+              className={styles.payBtn}
+              onClick={this.goToNext}
+            >
+            下一步
+            </Button>
+          </div>
         </div>
         <StickyContainer>
           <Sticky>
@@ -301,21 +304,13 @@ class TurnDiaForAgent extends BaseComponent {
               }) => {
                 return (
                   <div className={styles.listWrap} style={style}>
-                    {
-                      wasSticky
-                      ? <ScrollListView
-                        data={record}
-                        renderHeader={this.renderRecordHeader}
-                        renderRow={this.renderRow}
-                        getNode={(node) => { this.scroll = node; }}
-                      />
-                        : <BodyScrollListView
-                          data={record}
-                          renderHeader={this.renderRecordHeader}
-                          renderRow={this.renderRow}
-                          getNode={(node) => { this.scroll = node; }}
-                        />
-                    }
+                    <div style={{ height: '1rem' }} />
+                    { this.renderRecordHeader() }
+                    <ScrollListView
+                      data={record}
+                      renderRow={this.renderRow}
+                      getNode={(node) => { this.scroll = node; }}
+                    />
                     {
                       wasSticky && <ScrollTop onClick={this.scrollTop} />
                     }
