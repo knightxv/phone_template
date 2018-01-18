@@ -162,7 +162,7 @@ class HomePage extends BaseComponent {
   // 分享代理链接
   shareAgentLink = async () => {
     let serverInfo = this.props.serverInfo;
-    const { inviteCode } = this.props;
+    const { inviteCode, gameName } = this.props;
     if (!serverInfo || serverInfo.length < 1) {
       const res = await this.http.webHttp.get('/spreadApi/getPlatformInfo');
       if (res.isSuccess) {
@@ -186,17 +186,17 @@ class HomePage extends BaseComponent {
     };
     const linkQueryStr = querystring.stringify(queryLink);
     const shareInfo = {
-      title: '邀请代理',
+      title: `[${gameName}]代理中心`,
       link: `${noPortOrigin}/generalManage/redirect.html?${linkQueryStr}`,
-      imgUrl: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1353060910,1190307238&fm=27&gp=0.jpg',
-      desc: '诚招代理，月入百万',
+      imgUrl: `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
+      desc: '高收入、零成本做代理，年薪百万不是梦！',
     };
     await wechatSdkManage.shareLink(shareInfo);
     this.toggleSharePlayertImg();
   }
   // 分享玩家链接
   sharePlayerLink = async () => {
-    const { inviteCode } = this.props;
+    const { inviteCode, gameName } = this.props;
     let serverInfo = this.props.serverInfo;
     if (!serverInfo || serverInfo.length < 1) {
       const res = await this.http.webHttp.get('/spreadApi/getPlatformInfo');
@@ -220,10 +220,10 @@ class HomePage extends BaseComponent {
     };
     const linkQueryStr = querystring.stringify(queryLink);
     const shareInfo = {
-      title: '邀请玩家',
+      title: `[${gameName}]代理中心`,
       link: `${noPortOrigin}/generalManage/redirect.html?${linkQueryStr}`,
-      imgUrl: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=824811468,1294472929&fm=27&gp=0.jpg',
-      desc: '你渴望力量吗',
+      imgUrl: `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
+      desc: '平台稳定绝无外挂',
     };
     await wechatSdkManage.shareLink(shareInfo);
     this.toggleSharePlayertImg();
