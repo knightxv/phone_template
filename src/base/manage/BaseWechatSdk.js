@@ -34,12 +34,7 @@ class BaseWechatSdk {
         jsApiList: this.jsApiList,
         success(res) {
           self.checkApiResult(res);
-        },
-        fail(err) {
-          alert('err');
-          alert(JSON.stringify(err));
-          // console.log(err);
-        },
+        }
       });
     });
     this.wx.error((res) => {
@@ -47,7 +42,7 @@ class BaseWechatSdk {
     });
   }
   async checkApiResult(res) {
-    console.log(`set in ${JSON.stringify(res)}`);
+    console.log(`base wechat sdk set in ${JSON.stringify(res)}`);
     this.checkResult = res.checkResult;
     if (/:ok/.test(res.errMsg)) {
       this.configSuccess && this.configSuccess(res);
