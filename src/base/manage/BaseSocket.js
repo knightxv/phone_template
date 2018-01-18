@@ -4,6 +4,7 @@ class BaseSocket {
     this.linkUrl = linkUrl;
     this.eventArr = []; // 监听的事件
     this.toDoList = []; // 当socket状态处于不可用状态（未初始化回去，待重连时，待办事件）
+    this.connect();
   }
   connect = () => {
     const linkUrl = this.linkUrl;
