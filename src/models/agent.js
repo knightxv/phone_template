@@ -119,7 +119,7 @@ export default {
             });
             // 连接socket
             const inviteCode = res.data.inviteCode;
-            socketManage.send(inviteCode);
+            socketManage.sendMsg(inviteCode);
             // socketManage.on(socketManage.EventType.ReLoadAgentInfo,);
           } else if (res.status === 'failed' && res.code === 2) {
             dispatch(routerRedux.push('/login'));
