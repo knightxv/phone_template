@@ -56,7 +56,6 @@ class HomePage extends BaseComponent {
   async componentWillMount() {
     // const { powerList } = this.props;
     // 获取个人数据
-
     const res = await this.http.webHttp.get('/spreadApi/getUserInfo');
     if (res.isSuccess) {
       this.props.dispatch({ type: 'agent/updateAppInfo',
@@ -67,8 +66,20 @@ class HomePage extends BaseComponent {
       this.message.info(res.info);
       return;
     }
-    const params = { type: this.Enum.htmlTextType.notice_normalAgency };
+    // 连接socket
+    this.socketManage.sendMsg(res.data.inviteCode);
+    this.socketManage.on(this.socketManage.EventType.ReLoadAgentInfo, async () => {
+      const updateRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
+      if (updateRes.isSuccess) {
+        this.props.dispatch({ type: 'agent/updateAppInfo',
+          payload: {
+            ...updateRes.data,
+          },
+        });
+      }
+    });
     // 获取首页额外数据
+    const params = { type: this.Enum.htmlTextType.notice_normalAgency };
     const extraRes = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', params);
     if (extraRes.isSuccess) {
       // const { rankTipVisible, noticeVisible, noticeInfo } = res.data;
@@ -89,6 +100,7 @@ class HomePage extends BaseComponent {
     this.router.go(touterName);
   }
   logout = async () => {
+    this.socketManage.off(this.socketManage.EventType.ReLoadAgentInfo);
     await this.http.webHttp.get('/spreadApi/logout');
     this.navigate('/login');
   }
@@ -186,10 +198,10 @@ class HomePage extends BaseComponent {
     };
     const linkQueryStr = querystring.stringify(queryLink);
     const shareInfo = {
-      title: `[${gameName}]代理中心`,
+      title: `${gameName}诚招代理`,
       link: `${noPortOrigin}/generalManage/redirect.html?${linkQueryStr}`,
       imgUrl: `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
-      desc: '高收入、零成本做代理，年薪百万不是梦！',
+      desc: '高收入、零成本做代理，年薪百万不是梦',
     };
     await wechatSdkManage.shareLink(shareInfo);
     this.toggleSharePlayertImg();
@@ -220,7 +232,7 @@ class HomePage extends BaseComponent {
     };
     const linkQueryStr = querystring.stringify(queryLink);
     const shareInfo = {
-      title: `[${gameName}]代理中心`,
+      title: `快来玩${gameName}吧~`,
       link: `${noPortOrigin}/generalManage/redirect.html?${linkQueryStr}`,
       imgUrl: `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
       desc: '平台稳定绝无外挂',

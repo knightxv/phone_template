@@ -10,6 +10,7 @@ import './config';
 import help from './help';
 import helper from '../extends/helper';
 import Enum, { powerEnum } from '../extends/Enum';
+import socketManage from '../extends/Socket';
 
 export default class BaseComponent extends React.Component {
   constructor(props) {
@@ -21,6 +22,9 @@ export default class BaseComponent extends React.Component {
     };
     // 枚举
     this.Enum = Enum;
+
+    // socketManage
+    this.socketManage = socketManage;
 
     this.http = {
       webHttp,

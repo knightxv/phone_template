@@ -1,0 +1,1 @@
+要公用提取到公用包(这个base包，暂时还有完全用到，等有空再把base整理完，替换到helps),一般新建新项目只要copy（base, config,components, [extends]）

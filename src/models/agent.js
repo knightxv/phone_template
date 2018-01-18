@@ -1,6 +1,7 @@
 import { delay } from '@/helps/help';
 import fetch from 'dva/fetch';
 import { routerRedux } from 'dva/router';
+import socketManage from '../extends/Socket';
 
 const REGETVERIFYCODETIME = 60;
 export default {
@@ -109,12 +110,17 @@ export default {
           })
           .then(res => res.json());
           if (res.status === 'success') {
+            // 更新数据
             dispatch({
               type: 'updateAppInfo',
               payload: {
                 ...res.data,
               },
             });
+            // 连接socket
+            const inviteCode = res.data.inviteCode;
+            socketManage.send(inviteCode);
+            // socketManage.on(socketManage.EventType.ReLoadAgentInfo,);
           } else if (res.status === 'failed' && res.code === 2) {
             dispatch(routerRedux.push('/login'));
           }
