@@ -25,7 +25,6 @@ class WechatSdk extends BaseWechatSdk {
       console.log('没有可选的游戏');
       return;
     }
-    console.log(serverInfo[0]);
     const { weChatMPID, accountServerIP, accountServerPort } = serverInfo[0];
     const authBody = {
       Head: 0xFF06,
