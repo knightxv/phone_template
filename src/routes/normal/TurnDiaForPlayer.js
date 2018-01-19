@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import classNames from 'classnames';
+// import classNames from 'classnames';
 
 import ScrollTop from '@/components/ScrollTop';
 import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
@@ -145,7 +145,10 @@ class TurnDiaForPlayer extends BaseComponent {
   }
   // 获取玩家数据
   getPlayer = async () => {
-    const res = await this.http.webHttp.get('/spreadApi/getPlayers');
+    const { serverid } = this.router.getQuery();
+    const res = await this.http.webHttp.get('/spreadApi/getPlayers', {
+      serverid,
+    });
     if (res.isSuccess) {
       this.setState({
         players: res.data || [],
@@ -177,7 +180,7 @@ class TurnDiaForPlayer extends BaseComponent {
       this.message.info(errorTip);
       return;
     }
-    if (!diamond) {
+    if (!diamond || diamond == 0) {
       this.message.info('请选择钻石个数');
       return;
     }
@@ -323,49 +326,52 @@ class TurnDiaForPlayer extends BaseComponent {
           title="给玩家充钻"
           onClick={this.router.back}
         />
-        <div className={styles.playerInputWrap}>
-          <InputItem
-            onChange={this.idValChange}
-            value={playerId}
-            type="number"
-            maxLength={8}
-            clear
-            placeholder="请输入玩家ID"
-            extra={<Button size="small" onClick={this.showChoosePlayerPicker}>选择玩家</Button>}
-          >玩家ID</InputItem>
-          {
-            errorTip && <div className={styles.playerNotFind}>{ errorTip }</div>
-          }
-          {
-            playerName && <div className={styles.playerName}>{playerName}</div>
-          }
-        </div>
-        <WhiteSpace />
-        <div className={styles.playerInputWrap}>
-          <InputItem
-            onChange={this.diamondChange}
-            value={diamond}
-            type="number"
-            clear
-            placeholder={`本次最多转出${masonry}个钻`}
-          >钻石数量</InputItem>
-        </div>
-        {
-          hasPowerToGive &&
-          <div>
-            <div className={styles.priceTip}>注:玩家购钻价格统一0.1元/钻</div>
-            <div className={styles.priceWrap}>
-              价格:<span className={styles.money}>{ moneyFloat}</span>元
-            </div>
+        <div className={styles.payWrap}>
+          <div className={styles.playerInputWrap}>
+            <InputItem
+              onChange={this.idValChange}
+              value={playerId}
+              type="number"
+              maxLength={8}
+              clear
+              placeholder="请输入玩家ID"
+              extra={<Button size="small" onClick={this.showChoosePlayerPicker}>选择玩家</Button>}
+            >玩家ID</InputItem>
+            {
+              errorTip && <div className={styles.playerNotFind}>{ errorTip }</div>
+            }
+            {
+              playerName && <div className={styles.playerName}>{playerName}</div>
+            }
           </div>
-        }
-        <div className={styles.payBtnWrap}>
-          <Button
-            className={styles.payBtn}
-            onClick={this.goToNext}
-          >
-          下一步
-          </Button>
+          <WhiteSpace />
+          <div className={styles.playerInputWrap}>
+            <InputItem
+              onChange={this.diamondChange}
+              value={diamond}
+              type="number"
+              clear
+              maxLength={8}
+              placeholder={`本次最多转出${masonry}个钻`}
+            >钻石数量</InputItem>
+          </div>
+          {
+            hasPowerToGive &&
+            <div>
+              <div className={styles.priceTip}>注:玩家购钻价格统一0.1元/钻</div>
+              <div className={styles.priceWrap}>
+                价格:<span className={styles.money}>{ moneyFloat}</span>元
+              </div>
+            </div>
+          }
+          <div className={styles.payBtnWrap}>
+            <Button
+              className={styles.payBtn}
+              onClick={this.goToNext}
+            >
+            下一步
+            </Button>
+          </div>
         </div>
         <StickyContainer>
           <Sticky>
@@ -381,21 +387,13 @@ class TurnDiaForPlayer extends BaseComponent {
               }) => {
                 return (
                   <div className={styles.listWrap} style={style}>
-                    {
-                      wasSticky
-                      ? <ScrollListView
-                        data={record}
-                        renderRow={this.renderRow}
-                        renderHeader={this.renderRecordHeader}
-                        getNode={(node) => { this.scroll = node; }}
-                      />
-                        : <BodyScrollListView
-                          data={record}
-                          renderRow={this.renderRow}
-                          renderHeader={this.renderRecordHeader}
-                          getNode={(node) => { this.scroll = node; }}
-                        />
-                    }
+                    <div style={{ height: '1rem' }} />
+                    { this.renderRecordHeader() }
+                    <ScrollListView
+                      data={record}
+                      renderRow={this.renderRow}
+                      getNode={(node) => { this.scroll = node; }}
+                    />
                     {
                       wasSticky && <ScrollTop onClick={this.scrollTop} />
                     }

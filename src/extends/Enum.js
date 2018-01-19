@@ -45,7 +45,8 @@ export const payType = {
 export const payTypeLabel = {
   [payType.WECHAT]: '微信',
   [payType.ALI]: '支付宝',
-  [payType.BALANCE]: '余额支付',
+  [payType.MANAGE]: '和客服购买',
+  [payType.BALANCE]: '使用余额购买',
 };
 
 export const resolveStatus = {

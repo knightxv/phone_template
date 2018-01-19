@@ -23,7 +23,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     this.state = {
       payPickerVisible: false,
       // selectPayType: this.Enum.payType.WECHAT,
-      selectPayType: {},
+      selectPayInfo: null,
       isAutoSave: true,
       payTipVisible: false,
     };
@@ -51,21 +51,25 @@ class PayToTurnDiaForPlayer extends BaseComponent {
   payItemArr = () => {
     const payItem = this.payItem;
     const payItemArr = [];
+    if (this.hasPower('AgentTurnDiaToPlayerDirect')) {
+      payItemArr.push(payItem.balance);
+    }
     if (this.hasPower('wechatPayForAgentTurnDiaToPlayer')) {
       payItemArr.push(payItem.wechat);
     }
     if (this.hasPower('AliPayForAgentTurnDiaToPlayer')) {
       payItemArr.push(payItem.aliPay);
     }
-    if (this.hasPower('AgentTurnDiaToPlayerDirect')) {
-      payItemArr.push(payItem.balance);
-    }
     return payItemArr;
   }
   async componentWillMount() {
+    if (this.props.history.length < 1) {
+      this.router.go('/homePage');
+      return;
+    }
     const payItemArr = this.payItemArr();
     this.setState({
-      selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : {},
+      selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : null,
     });
   }
   // 跳出支付picker
@@ -111,30 +115,45 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     this.message.info(res.info || '赠送成功,请耐心等待');
     if (res.isSuccess) {
       this.router.back();
-      // this.router.go('/turnDiaForPlayerOrderDetail', {
-      //   orderId,
-      //   serverid,
-      // });
+    }
+    const updateRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
+    if (updateRes.isSuccess) {
+      this.props.dispatch({ type: 'agent/updateAppInfo',
+        payload: {
+          ...updateRes.data,
+        } });
     }
   }
+  // 支付宝支付
   togglePayTipPicker = () => {
-    this.setState({
-      payTipVisible: !this.state.payTipVisible,
-    });
+    this.message.info('微信浏览器暂不支持此支付方式');
+    // 弹出picker
+    // this.setState({
+    //   payTipVisible: !this.state.payTipVisible,
+    // });
   }
   payToTurn =() => {
-    const { selectPayInfo } = this.state;
+    let { selectPayInfo } = this.state;
+    if (!selectPayInfo) {
+      selectPayInfo = this.payItemArr()[0];
+    }
     const payTypeSelect = selectPayInfo.payType;
     const { BALANCE, ALI } = this.Enum.payType;
     if (payTypeSelect === BALANCE) {
       this.readyToExcharge();
       return;
     }
-    if (this.helps.isWechat && payTypeSelect === ALI) {
-      this.togglePayTipPicker();
+    // 临时
+    if (this.helps.isWechat) {
+      this.message.info('微信浏览器暂不支持此支付方式，请使用其他浏览器进行登录');
       return;
     }
+    // if (this.helps.isWechat && payTypeSelect === ALI) {
+    //   this.togglePayTipPicker();
+    //   return;
+    // }
     this.goToPay();
+    
   }
   goToPay = async () => {
     const { selectPayInfo, isAutoSave } = this.state;
@@ -173,11 +192,12 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     const { diamond, playerName, playerId } = this.query;
     // const goodsMoneyLabel = this.helps.parseFloatMoney(goodsMoney);
     // const masonryCountLabel = this.helps.transMoenyUnit(masonryCount);
+    const payInfo = selectPayInfo || payItemArr[0] || {};
     const {
       label,
       imgSourceKey,
       payType,
-    } = selectPayInfo;
+    } = payInfo;
     const price = this.helps.parseFloatMoney(diamond * 10);
     const hasPowerToGive = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer');
     const { ALI } = this.Enum.payType;

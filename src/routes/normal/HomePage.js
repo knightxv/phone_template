@@ -1,15 +1,20 @@
 import React from 'react';
 import { connect } from 'dva';
 
-// import { NoticeBar, WhiteSpace, Icon } from 'antd-mobile';
+import { ActionSheet } from 'antd-mobile';
+import querystring from 'querystring';
 // import PropTypes from 'prop-types';
 import BaseComponent from '@/helps/BaseComponent';
+import CopyToClipboard from 'react-copy-to-clipboard';
 import NavBar from '@/helps/antdComponent/NavBar';
 import NoticeBar from '@/helps/antdComponent/NoticeBar';
 // import Icon from '@/helps/antdComponent/Icon';
-import { Button, Icon } from '@/helps/antdComponent/index.js';
-import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, Avatar, IconImg } from '@/helps/styleComponent';
+import { Button, Icon, Modal } from '@/helps/antdComponent/index.js';
+// import {} from ''
+import Avatar from '@/components/Avatar';
+import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, IconImg } from '@/helps/styleComponent';
 import styles from './HomePage.less';
+import wechatSdkManage from '../../extends/wechatSdk';
 
 // import { htmlTextType } from '../utils/typeDefine';
 const IconSource = {
@@ -17,13 +22,17 @@ const IconSource = {
   turnDia_agent: require('../../assets/turnDia_agent.png'),
   turnDia_play: require('../../assets/turnDia_play.png'),
   invite: require('../../assets/invite.png'),
+  invite_player: require('../../assets/invite_player.png'),
   bank: require('../../assets/bank.png'),
   fanli: require('../../assets/fanli.png'),
   xjfl: require('../../assets/xjfl.png'),
   notice: require('../../assets/gg.png'),
+  sys: require('../../assets/share_code.png'),
+  link: require('../../assets/share_link.png'),
+  share: require('../../assets/share_friend.png'),
+  shareAgent: require('../../assets/shareAgent.png'),
+  sharePlayer: require('../../assets/sharePlayer.png'),
 };
-
-const rankingLimit = 50; // 控制排行是否显示
 
 class HomePage extends BaseComponent {
   constructor(props) {
@@ -32,6 +41,8 @@ class HomePage extends BaseComponent {
       isTipShow: false, // 是否显示提示
       noticeInfo: '', // 公告信息
       priceInfoVisible: false, // 奖励说明是否显示
+      shareAgentVisible: false, // 分享代理的图片
+      sharePlayerVisible: false, // 分享玩家的图片
     };
   }
   powerManage = () => {
@@ -55,8 +66,20 @@ class HomePage extends BaseComponent {
       this.message.info(res.info);
       return;
     }
-    const params = { type: this.Enum.htmlTextType.notice_normalAgency };
+    // 连接socket
+    this.socketManage.sendMsg(res.data.inviteCode);
+    this.socketManage.on(this.socketManage.EventType.ReLoadAgentInfo, async () => {
+      const updateRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
+      if (updateRes.isSuccess) {
+        this.props.dispatch({ type: 'agent/updateAppInfo',
+          payload: {
+            ...updateRes.data,
+          },
+        });
+      }
+    });
     // 获取首页额外数据
+    const params = { type: this.Enum.htmlTextType.notice_normalAgency };
     const extraRes = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', params);
     if (extraRes.isSuccess) {
       // const { rankTipVisible, noticeVisible, noticeInfo } = res.data;
@@ -77,6 +100,7 @@ class HomePage extends BaseComponent {
     this.router.go(touterName);
   }
   logout = async () => {
+    this.socketManage.off(this.socketManage.EventType.ReLoadAgentInfo);
     await this.http.webHttp.get('/spreadApi/logout');
     this.navigate('/login');
   }
@@ -103,17 +127,237 @@ class HomePage extends BaseComponent {
       }
     }
   }
+  copyResult = (text, result) => {
+    if (result && !this.helps.isWechat) {
+      this.message.info('复制成功');
+    } else {
+      this.message.info('复制失败，当前浏览器不支持复制');
+    }
+  }
+  showShareAgentAction = () => {
+    const { inviteCode } = this.props;
+    const winLoc = window.location;
+    const origin = winLoc.origin;
+    const pathname = winLoc.pathname;
+    const inviteLink = `${origin}${pathname}#/inviteAgentMiddle?pCode=${inviteCode}`;
+    const dataList = [
+      {
+        icon: <img
+          className={styles.shareIcon}
+          onClick={() => this.navigate('/inviteToAgent')}
+          src={IconSource.sys}
+        />,
+        title: '查看二维码',
+      },
+      {
+        icon: <CopyToClipboard
+          text={inviteLink}
+          onCopy={this.copyResult}
+        >
+          <img className={styles.shareIcon} src={IconSource.link} />
+        </CopyToClipboard>,
+        title: '复制链接',
+      },
+    ];
+    if (this.helps.isWeixinBrowser()) {
+      dataList.push({
+        icon: <img onClick={this.shareAgentLink} className={styles.shareIcon} src={IconSource.share} />,
+        title: '分享链接',
+      });
+    }
+    ActionSheet.showShareActionSheetWithOptions({
+      options: dataList,
+      // title: 'title',
+      message: '邀请下级代理',
+    });
+  }
+  // 分享代理链接
+  shareAgentLink = async () => {
+    let serverInfo = this.props.serverInfo;
+    const { inviteCode } = this.props;
+    if (!serverInfo || serverInfo.length < 1) {
+      const res = await this.http.webHttp.get('/spreadApi/getPlatformInfo');
+      if (res.isSuccess) {
+        serverInfo = res.data.serverInfo;
+      } else {
+        this.message.info('网络异常,请重试');
+      }
+      if (!serverInfo || serverInfo.length < 1) {
+        this.message.info('没有可选的游戏');
+        this.router.go('/login');
+        return;
+      }
+    }
+    const gameInfo = serverInfo[0];
+    const { accountServerIP, accountServerPort, weChatMPID, serverID } = gameInfo;
+    const gameListRes = await this.http.webHttp.get('/spreadApi/getGameList');
+    if (!gameListRes.isSuccess) {
+      this.message.info('获取游戏失败');
+      return;
+    }
+    let gameName = '';
+    const isFindGame = gameListRes.data.some((game) => {
+      if (game.serverid == serverID) {
+        gameName = game.gameName;
+        return true;
+      }
+      return false;
+    });
+    if (!isFindGame && gameListRes.data[0]) {
+      gameName = gameListRes.data[0].gameName;
+    }
+    if (!gameName) {
+      this.message.info('没有可选的游戏');
+      return;
+    }
+    const origin = window.location.origin;
+    const noPortOrigin = origin.replace(/:\d+/, '');
+    const inviteLink = `http://${accountServerIP}:${accountServerPort}/WeChatAuthorize?ddmmp=${weChatMPID}&redirect=${origin}/generalManage/wechat.html&reqdeleInviter=${inviteCode}&actionType=inviteProxy`;
+    const queryLink = {
+      redirect: inviteLink,
+    };
+    const linkQueryStr = querystring.stringify(queryLink);
+    const shareInfo = {
+      title: `${gameName}诚招代理`,
+      link: `${noPortOrigin}/generalManage/redirect.html?${linkQueryStr}`,
+      imgUrl: `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
+      desc: '高收入、零成本做代理，年薪百万不是梦',
+    };
+    await wechatSdkManage.shareLink(shareInfo);
+    this.toggleSharePlayertImg();
+  }
+  // 分享玩家链接
+  sharePlayerLink = async () => {
+    const { inviteCode } = this.props;
+    let serverInfo = this.props.serverInfo;
+    if (!serverInfo || serverInfo.length < 1) {
+      const res = await this.http.webHttp.get('/spreadApi/getPlatformInfo');
+      if (res.isSuccess) {
+        serverInfo = res.data.serverInfo;
+      } else {
+        this.message.info('网络异常,请重试');
+      }
+      if (!serverInfo || serverInfo.length < 1) {
+        this.message.info('没有可选的游戏');
+        return;
+      }
+    }
+    const origin = window.location.origin;
+    const noPortOrigin = origin.replace(/:\d+/, '');
+    const gameInfo = serverInfo[0];
+    const { accountServerIP, accountServerPort, appDownLoadUrl, weChatMPID, gameID, serverID } = gameInfo;
+    const inviteLink = `http://${accountServerIP}:${accountServerPort}/WeChatAuthorize?ddmmp=${weChatMPID}&redirect=${appDownLoadUrl}?gameID=${gameID}&reqdeleInviter=${inviteCode}&actionType=invitePlayer`;
+    const queryLink = {
+      redirect: inviteLink,
+    };
+    const linkQueryStr = querystring.stringify(queryLink);
+    const gameListRes = await this.http.webHttp.get('/spreadApi/getGameList');
+    if (!gameListRes.isSuccess) {
+      this.message.info('获取游戏失败');
+      return;
+    }
+    let gameName = '';
+    let gameIcon = '';
+    const isFindGame = gameListRes.data.some((game) => {
+      if (game.serverid == serverID) {
+        gameName = game.gameName;
+        gameIcon = game.gameIcon;
+        return true;
+      }
+      return false;
+    });
+    if (!isFindGame && gameListRes.data[0]) {
+      gameName = gameListRes.data[0].gameName;
+      gameIcon = gameListRes.data[0].gameIcon;
+    }
+    if (!gameName) {
+      this.message.info('没有可选的游戏');
+      return;
+    }
+    const shareInfo = {
+      title: `快来玩${gameName}吧~`,
+      link: `${noPortOrigin}/generalManage/redirect.html?${linkQueryStr}`,
+      imgUrl: gameIcon || `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
+      desc: '平台稳定绝无外挂',
+    };
+    await wechatSdkManage.shareLink(shareInfo);
+    this.toggleSharePlayertImg();
+    // const query = querystring.stringify(shareQuery);
+    // window.location.href = `http://res.ddmh5.com:81/wechatShare/index.html?${query}`;
+  }
+  showSharePlayerAction = async () => {
+    const { inviteCode } = this.props;
+    let serverInfo = this.props.serverInfo;
+    if (!serverInfo || serverInfo.length < 1) {
+      const res = await this.http.webHttp.get('/spreadApi/getPlatformInfo');
+      if (res.isSuccess) {
+        serverInfo = res.data.serverInfo;
+      } else {
+        this.message.info('网络异常,请重试');
+      }
+      if (!serverInfo || serverInfo.length < 1) {
+        this.message.info('没有可选的游戏');
+        return;
+      }
+    }
+    const gameInfo = serverInfo[0];
+    const { accountServerIP, accountServerPort, appDownLoadUrl, weChatMPID, gameID } = gameInfo;
+    const inviteLink = `http://${accountServerIP}:${accountServerPort}/WeChatAuthorize?ddmmp=${weChatMPID}&redirect=${appDownLoadUrl}?gameID=${gameID}&reqdeleInviter=${inviteCode}&actionType=invitePlayer`;
+    const dataList = [
+      {
+        icon: <img
+          className={styles.shareIcon}
+          onClick={() => this.navigate('/inviteToPlayer')}
+          src={IconSource.sys}
+        />,
+        title: '查看二维码',
+      },
+      {
+        icon: <CopyToClipboard
+          text={inviteLink}
+          onCopy={this.copyResult}
+        >
+          <img className={styles.shareIcon} src={IconSource.link} />
+        </CopyToClipboard>,
+        title: '复制链接',
+      },
+    ];
+    if (this.helps.isWeixinBrowser()) {
+      dataList.push({
+        icon: <img onClick={this.sharePlayerLink} className={styles.shareIcon} src={IconSource.share} />,
+        title: '分享链接',
+      });
+    }
+    ActionSheet.showShareActionSheetWithOptions({
+      options: dataList,
+      // title: 'title',
+      message: '邀请下级玩家',
+    });
+  }
+  setUserInfo = () => {
+    this.router.go('/setInfo');
+  }
+  toggleShareAgentImg = () => {
+    this.setState({
+      shareAgentVisible: !this.state.shareAgentVisible,
+    });
+  }
+  toggleSharePlayertImg = () => {
+    this.setState({
+      sharePlayerVisible: !this.state.sharePlayerVisible,
+    });
+  }
   render() {
-    const { noticeInfo, priceInfoVisible } = this.state;
+    const { noticeInfo, priceInfoVisible, shareAgentVisible, sharePlayerVisible } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(noticeInfo);
     const noticeVisible = !!noticeInfo;
-    const { inviteCode, canCashCount, ranking, masonry, saleDiamondsOfThisMonth,
+    const { inviteCode, canCashCount, masonry, userName, avatar,
     // balancePayToday, savePlayerCount, saveAgentCount, myUnderAgentCount, myPlayerCount,
-    // masonryIncomeToday, masonryPayToday, balanceIncomeToday,
-    // rechargeOfToday, rechargeOfYesterDay, cashCountlog,
+    // masonryIncomeToday, masonryPayToday, balanceIncomeToday, saleDiamondsOfThisMonth,
+    // rechargeOfToday, rechargeOfYesterDay, cashCountlog, ranking,
     } = this.props;
-    const isRankingShow = ranking && ranking <= rankingLimit; // 当排行小于50
     const unitCanCashCount = this.helps.parseFloatMoney(canCashCount); // 未提现(余额)
+    // const isRankingShow = ranking && ranking <= rankingLimit; // 当排行小于50
     // const unitRechargeOfToday = parseFloat(rechargeOfToday / 100); // 玩家今日充值
     // const unitRechargeOfYesterDay = parseFloat(rechargeOfYesterDay / 100); // 玩家昨日充值
     // const unitCashCountlog = parseFloat(cashCountlog / 100); // 已提现
@@ -139,28 +383,33 @@ class HomePage extends BaseComponent {
           onClick={this.navigateNotice}
         >
           <FlexRow>
-            <span dangerouslySetInnerHTML={notiveInfoHtml} />
+            <span className={styles.noticeLabel} dangerouslySetInnerHTML={notiveInfoHtml} />
           </FlexRow>
         </NoticeBar>
       }
       <div className={styles.headerModule}>
         <FlexRowBetweenWingSpace>
-          <div className={styles.titleWrap}>
+          {/* <div className={styles.titleWrap}>
               我的排名:<span className={styles.rankColor}>{ isRankingShow ? ranking : '未上榜'}</span>
-          </div>
+          </div> */}
           {
             priceInfoVisible && <p className={styles.prizeLabel} onClick={() => this.navigate('/rankExplain')}>奖励规则</p>
           }
         </FlexRowBetweenWingSpace>
-        <FlexRow className={styles.userInfoWrap}>
-          <Avatar className={styles.userAvatar} />
-          <div className={styles.userInfo}>
-            <p className={styles.saleDiamondsOfThisMonthLabel}>
-              本月销钻数量：<span className={styles.saleDiamondsLabel}>{saleDiamondsOfThisMonth || 0}</span>
-            </p>
-            <p>ID：{inviteCode}</p>
+        <div className={styles.userInfoContainer} onClick={this.setUserInfo}>
+          <div className={styles.userInfoWrap}>
+            <Avatar src={avatar} className={styles.userAvatar} />
+            <div className={styles.userInfo}>
+              <p className={styles.userNameLabel}>
+                { userName || '昵称' }
+              </p>
+              <p>邀请码：{inviteCode}</p>
+            </div>
           </div>
-        </FlexRow>
+          <div>
+            <Icon type="right" />
+          </div>
+        </div>
       </div>
       <div className={styles.countContainer}>
         <div className={styles.countWrap}>
@@ -191,7 +440,7 @@ class HomePage extends BaseComponent {
           <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/turnDiaForPlayer')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.turnDia_play} />
-              <span>给玩家充钻</span>
+              <span>替玩家购钻</span>
             </FlexRow>
             <Icon type="right" />
             {/* <FlexRow className={styles.titleWrap}>
@@ -225,21 +474,43 @@ class HomePage extends BaseComponent {
           </FlexRowBetweenWingSpace>
         } */}
       </div>
-      { this.hasPower('stepRebate') && <WhiteSpace /> }
+      <WhiteSpace />
       <div className={styles.module}>
+        {/* 邀请成为我的下级代理 */}
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={this.showShareAgentAction}>
+          <FlexRow className={styles.navigateTitleWrap}>
+            <IconImg className={styles.titleIconImg} src={IconSource.invite} />
+            <span>邀请下级代理</span>
+          </FlexRow>
+          <Icon type="right" />
+          {/* <FlexRow className={styles.titleWrap}>
+          <Icon type="right" />
+        </FlexRow> */}
+        </FlexRowBetweenWingSpace>
+        {/* 邀请成为我的下级玩家 */}
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={this.showSharePlayerAction}>
+          <FlexRow className={styles.navigateTitleWrap}>
+            <IconImg className={styles.titleIconImg} src={IconSource.invite_player} />
+            <span>邀请下级玩家</span>
+          </FlexRow>
+          <Icon type="right" />
+          {/* <FlexRow className={styles.titleWrap}>
+          <Icon type="right" />
+        </FlexRow> */}
+        </FlexRowBetweenWingSpace>
         {/* 代理阶梯返利 */}
         {
-          this.hasPower('stepRebate') &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/stepRebate')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
-              <span>代理阶梯返利</span>
-            </FlexRow>
-            <Icon type="right" />
-          </FlexRowBetweenWingSpace>
-        }
+        this.hasPower('stepRebate') &&
+        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/stepRebate')}>
+          <FlexRow className={styles.navigateTitleWrap}>
+            <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
+            <span>代理阶梯返利</span>
+          </FlexRow>
+          <Icon type="right" />
+        </FlexRowBetweenWingSpace>
+      }
       </div>
-      
+
       { havePowerToBanlance && <WhiteSpace /> }
       { havePowerToBanlance &&
         <div className={styles.module}>
@@ -255,17 +526,6 @@ class HomePage extends BaseComponent {
       }
       <WhiteSpace />
       <div className={styles.module}>
-        {/* 邀请成为我的下级代理 */}
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/inviteToAgent')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.invite} />
-            <span>邀请成为我的下级代理</span>
-          </FlexRow>
-          <Icon type="right" />
-          {/* <FlexRow className={styles.titleWrap}>
-            <Icon type="right" />
-          </FlexRow> */}
-        </FlexRowBetweenWingSpace>
         {/* 查看下级钻石抽成情况 */}
         {
           this.hasPower('underAgentPercentage') &&
@@ -290,7 +550,30 @@ class HomePage extends BaseComponent {
           <Button type="danger" className={styles.optionQuitBtn} onClick={this.logout}>退出</Button>
         </div>
       </div>
-
+      {/* 分享代理 */}
+      <Modal
+        transparent
+        maskClosable
+        className={styles.payModal}
+        visible={shareAgentVisible}
+        onClose={this.toggleShareAgentImg}
+      >
+        <div onClick={this.toggleShareAgentImg} className={styles.payPicker}>
+          <img className={styles.shareImg} src={IconSource.shareAgent} />
+        </div>
+      </Modal>
+      {/* 分享玩家 */}
+      <Modal
+        transparent
+        maskClosable
+        className={styles.payModal}
+        visible={sharePlayerVisible}
+        onClose={this.toggleSharePlayertImg}
+      >
+        <div onClick={this.toggleSharePlayertImg} className={styles.sharePicker}>
+          <img className={styles.shareImg} src={IconSource.sharePlayer} />
+        </div>
+      </Modal>
     </div>);
   }
 }
@@ -304,6 +587,7 @@ HomePage.propTypes = {
 const mapStateToProps = (state) => {
   return {
     ...state.agent,
+    ...state.app,
   };
 };
 

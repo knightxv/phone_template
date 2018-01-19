@@ -53,7 +53,7 @@ class BuyDiaOrderDetail extends BaseComponent {
     } = this.state;
     const payDateTime = new Date(createTime).format('yyyy-MM-dd hh:mm:ss');
     const orderPayMoneyLabel = this.helps.parseFloatMoney(orderPayMoney);
-    const orderCountLabel = this.helps.transCountUnit(orderCount);
+    const orderCountLabel = orderCount;
     const payTypeLabel = this.Enum.payTypeLabel[payType];
     return (
       <div className={styles.container}>
@@ -72,7 +72,7 @@ class BuyDiaOrderDetail extends BaseComponent {
               text={orderId}
               onCopy={this.copyOrderId}
             >
-              <Button>复制订单号</Button>
+              <Button className={styles.copyBtn}>复制订单号</Button>
             </CopyToClipboard>
           </div>
           <div className={styles.orderInfoRowItem}>
@@ -82,7 +82,7 @@ class BuyDiaOrderDetail extends BaseComponent {
             </div>
             <div>
               <div>购买前:<span className={styles.count}>{ payCountBefore }</span>个</div>
-              <div>购买前:<span className={styles.count}>{ payCountAfter }</span>个</div>
+              <div>购买后:<span className={styles.count}>{ payCountAfter }</span>个</div>
             </div>
           </div>
           <div className={styles.orderInfoItem}>
@@ -94,11 +94,11 @@ class BuyDiaOrderDetail extends BaseComponent {
           <div className={styles.orderInfoItem}>
             <div className={styles.payInfoTitle}>购钻价格</div>
             <div className={styles.orderIdLabel}>
-              <span className={styles.count}>{ orderPayMoneyLabel }</span>元
+              <span className={styles.count}>￥{ orderPayMoneyLabel }</span>
             </div>
           </div>
           <div className={styles.orderInfoItem}>
-            <div className={styles.payInfoTitle}>付款方式</div>
+            <div className={styles.payInfoTitle}>支付方式</div>
             <div className={styles.orderIdLabel}>
               { payTypeLabel }支付
             </div>

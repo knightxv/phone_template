@@ -1,10 +1,14 @@
 import { delay } from '@/helps/help';
 import fetch from 'dva/fetch';
+import { routerRedux } from 'dva/router';
+import socketManage from '../extends/Socket';
 
 const REGETVERIFYCODETIME = 60;
 export default {
   namespace: 'agent',
   state: {
+    // userName: '',
+    
     // inviteCode: 0, // 邀请码
     // masonry: 0, // 砖石
     // rechargeOfToday: 0, // 今日充值
@@ -83,25 +87,44 @@ export default {
     },
   },
   subscriptions: {
-      async setup({ dispatch, history }) {  // eslint-disable-line\
+      async setup({ dispatch, history }) {  // eslint-disable-line
+        // 计时器（待做）
         dispatch({
           type: 'updateAppInfo',
           payload: {
             getVerifyCodeElseTime: 0,
           },
         });
-        const res = await fetch('/spreadApi/getUserInfo',{
-          method: 'GET',
-          mode: 'cors',
-          credentials: 'include',
-        })
-        .then(res => res.json())
-        dispatch({
-          type: 'updateAppInfo',
-          payload: {
-            ...res.data,
-          },
-        });
+        // 重新刷新页面获取用户信息
+        const whitePathName = ['/login', '/homaPage']; // 哪些路由不需要重新获取个人信息
+        const pathName = history.location.pathname;
+        let remoteUrl = '';
+        if (process.env.NODE_ENV === 'development') {
+          remoteUrl = 'http://120.77.87.4:8081'; // http://192.168.2.66:8081
+        }
+        if (whitePathName.indexOf(pathName) === -1) {
+          const res = await fetch(`${remoteUrl}/spreadApi/getUserInfo`, {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'include',
+          })
+          .then(res => res.json());
+          if (res.status === 'success') {
+            // 更新数据
+            dispatch({
+              type: 'updateAppInfo',
+              payload: {
+                ...res.data,
+              },
+            });
+            // 连接socket
+            const inviteCode = res.data.inviteCode;
+            socketManage.sendMsg(inviteCode);
+            // socketManage.on(socketManage.EventType.ReLoadAgentInfo,);
+          } else if (res.status === 'failed' && res.code === 2) {
+            dispatch(routerRedux.push('/login'));
+          }
+        }
       },
   },
 };

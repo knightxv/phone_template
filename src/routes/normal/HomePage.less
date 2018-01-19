@@ -16,12 +16,15 @@
     background: @baseColor;
 }
 
-.userInfoWrap {
+.userInfoContainer {
+    .flexRow(space-between);
     color: #fff;
-    height: 1.4rem;
+    padding: .2rem;
     border-bottom: 1px solid #eee;
 }
-
+.userInfoWrap {
+    .flexRow();
+}
 .userInfo {
     display: flex;
     flex-direction: column;
@@ -54,7 +57,7 @@
 } */
 
 .userAvatar {
-    margin: 0 .2rem;
+    margin-right: .2rem;
 }
 
 .countLabel {
@@ -113,9 +116,9 @@
     /* background: rgba(0, 0, 0, 0.1); */
 }
 
-.saleDiamondsOfThisMonthLabel {
+.userNameLabel {
     color: #fff;
-    font-size: 0.32rem;
+    padding-bottom: .16rem;
 }
 
 .saleDiamondsLabel {
@@ -141,6 +144,7 @@
 }
 .prizeLabel {
     color: #fff;
+    padding-top: .1rem;
 }
 .countContainer {
     display: flex;
@@ -160,4 +164,41 @@
 .homePageHeader {
     background: @baseColor!important;
     color: #fff;
+}
+.shareIcon {
+    width: 100%;
+    height: 100%;
+    padding: .2rem;
+    display: block;
+    background: #fff;
+}
+.payPicker {
+    color: #333;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sharePicker {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .8);
+}
+.shareImg {
+    width: 100%;
+    display: block;
+}
+
+.noticeLabel {
+    color: #ff9500!important;
+    background: none!important;
 }

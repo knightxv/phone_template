@@ -21,11 +21,9 @@ class BuyMasonry extends BaseComponent {
     super(props);
     this.state = {
       goods: [],
-      selectShopId: -1, // 选择的商品id
       record: [],
       payPickerVisible: false,
-      // selectPayType: this.Enum.payType.WECHAT,
-      selectPayType: {},
+      selectPayInfo: null,
       payTipVisible: false,
     };
     const query = this.router.getQuery();
@@ -53,21 +51,25 @@ class BuyMasonry extends BaseComponent {
   payItemArr = () => {
     const payItem = this.payItem;
     const payItemArr = [];
+    if (this.hasPower('AgentBuyDiabanlancePay')) {
+      payItemArr.push(payItem.balance);
+    }
     if (this.hasPower('AgentBuyDiawechatPay')) {
       payItemArr.push(payItem.wechat);
     }
     if (this.hasPower('AgentBuyDiaAliPay')) {
       payItemArr.push(payItem.aliPay);
     }
-    if (this.hasPower('AgentBuyDiabanlancePay')) {
-      payItemArr.push(payItem.balance);
-    }
     return payItemArr;
   }
   async componentWillMount() {
+    if (this.props.history.length < 1) {
+      this.router.go('/homePage');
+      return;
+    }
     const payItemArr = this.payItemArr();
     this.setState({
-      selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : {},
+      selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : null,
     });
   }
   // 跳出支付picker
@@ -111,29 +113,37 @@ class BuyMasonry extends BaseComponent {
       this.router.go('/buyDiaOrderStatu', {
         orderId,
       });
-      return false;
+    } else {
+      this.message.info(res.info || '充值失败，请重试');
     }
-    this.message.info(res.info || '充值失败，请重试');
   }
   buyGood = () => {
-    const { selectPayInfo } = this.state;
+    let { selectPayInfo } = this.state;
     const { shopId } = this.query;
+    if (!selectPayInfo) {
+      selectPayInfo = this.payItemArr()[0];
+    }
+    
     const payTypeSelect = selectPayInfo.payType;
-    const { WECHAT, ALI } = this.Enum.payType;
-    if (this.helps.isWechat && payTypeSelect === ALI) {
-      // this.message.info('请用手机浏览器打开');
-      this.togglePayTipPicker();
+    const { WECHAT, ALI, BALANCE } = this.Enum.payType;
+    // if (this.helps.isWechat && payTypeSelect === ALI) {
+    //   // this.message.info('请用手机浏览器打开');
+    //   this.togglePayTipPicker();
+    //   return;
+    // }
+    if (payTypeSelect === BALANCE) {
+      this.readyToExcharge(shopId);
       return;
     }
-    if (payTypeSelect === WECHAT) {
-      this.goToPay(WECHAT, shopId);
-    } else if (payTypeSelect === ALI) {
-      this.goToPay(ALI, shopId);
-    } else {
-      this.readyToExcharge(shopId);
+    if (this.helps.isWechat) {
+      this.message.info('微信浏览器暂不支持此支付方式，请使用其他浏览器进行登录');
+      return;
     }
+    this.goToPay(payTypeSelect, shopId);
   }
+  // 支付宝支付
   togglePayTipPicker = () => {
+    // 弹出picker
     this.setState({
       payTipVisible: !this.state.payTipVisible,
     });
@@ -141,17 +151,17 @@ class BuyMasonry extends BaseComponent {
   render() {
     const { payPickerVisible, selectPayInfo, payTipVisible } = this.state;
     const { inviteCode, canCashCount } = this.props;
-    const payItemArr = this.payItemArr();
     const { goodsMoney, masonryCount } = this.query;
+    const payItemArr = this.payItemArr();
+    const payInfo = selectPayInfo || payItemArr[0] || {};
     const goodsMoneyLabel = this.helps.parseFloatMoney(goodsMoney);
-    const masonryCountLabel = this.helps.transMoenyUnit(masonryCount);
+    const { ALI } = this.Enum.payType;
+    const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
     const {
       label,
       imgSourceKey,
       payType,
-    } = selectPayInfo;
-    const { ALI } = this.Enum.payType;
-    const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
+    } = payInfo;
     return (
       <div className={styles.container}>
         <Title>确认订单</Title>
@@ -164,13 +174,13 @@ class BuyMasonry extends BaseComponent {
             <div className={styles.headerInfoWrap}>
               <IconImg className={styles.masonryIcon} src={imgSource.masonry} />
               <div className={styles.masonryInfo}>
-                <div className={styles.masonryCountLabel}>{ masonryCountLabel }钻石</div>
+                <div className={styles.masonryCountLabel}>{ masonryCount }钻石</div>
                 <div className={styles.masonryMoenyLabel}>￥{ goodsMoneyLabel }</div>
               </div>
             </div>
             <div>
               <div className={styles.rowItemWrap}>
-                <div>收款代理ID</div>
+                <div>代理ID</div>
                 <div>{ inviteCode }</div>
               </div>
               <div className={styles.rowItemWrap} onClick={this.togglePayPicker}>

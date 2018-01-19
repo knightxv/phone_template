@@ -1,20 +1,19 @@
 import React from 'react';
 import { connect } from 'dva';
+import { window } from 'global';
 
 import { Helmet } from 'react-helmet';
 import { InputItem, Button } from '@/helps/antdComponent/index.js';
 // import Button from '@/helps/antdComponent/Button';
 import BaseComponent from '@/helps/BaseComponent';
-import { WhiteSpace, Title, IconImg } from '@/helps/styleComponent';
-import styles from './Login.css';
+import { Title, IconImg } from '@/helps/styleComponent';
+import styles from './Login.less';
 
-// const logoSource = require('@/assets/adang_logo.png');
+const wxIcon = require('../../assets/wx_login.png');
 
 class Login extends BaseComponent {
   constructor(props) {
     super(props);
-    const { pCode } = this.router.getQuery();
-    this.pCode = pCode; // 上级邀请码
     // const { loginID, password } = this.props;
     const loginID = this.helps.getCookie('userName');
     const password = this.helps.getCookie('password');
@@ -40,31 +39,51 @@ class Login extends BaseComponent {
     this.helps.saveCookie('userName', loginID);
     this.helps.saveCookie('password', password);
     // 保存账号密码(不存localstorage,微信会自动清除)
-    
     this.router.go('/homePage');
   }
   navigateToRegister = () => {
-    if (this.pCode) {
+    const { pCode } = this.router.getQuery();
+    if (pCode) {
       this.router.go('/register', {
-        code: this.pCode,
+        pCode,
       });
     } else {
       this.router.go('/register');
     }
-    // if (this.pid) {
-    //   this.props.dispatch(this.helps.routerRedux.push({
-    //     pathname: '/register',
-    //     query: {
-    //       pid: this.pid,
-    //     },
-    //   }));
-    // } else {
-    // }
+  }
+  // 跳转忘记密码
+  forgetPwd = () => {
+    this.router.go('/forgetPassword');
+  }
+  // 微信登录
+  wechatLogin = async () => {
+    if (this.helps.system() === 'PC') {
+      this.router.go('/pcWechatLogin');
+      return; 
+    }
+    let serverInfo = this.props.serverInfo;
+    if (!serverInfo || serverInfo.length < 1) {
+      const res = await this.http.webHttp.get('/spreadApi/getPlatformInfo');
+      if (res.isSuccess) {
+        serverInfo = res.data.serverInfo;
+      } else {
+        this.message.info('网络异常,请重试');
+      }
+      if (!serverInfo || serverInfo.length < 1) {
+        this.message.info('没有可选的游戏');
+        return;
+      }
+    }
+    const gameInfo = serverInfo[0];
+    const { accountServerIP, accountServerPort, weChatMPID } = gameInfo;
+    const origin = window.location.origin;
+    const inviteLink = `http://${accountServerIP}:${accountServerPort}/WeChatAuthorize?ddmmp=${weChatMPID}&redirect=${origin}/generalManage/wechat.html&actionType=login`;
+    window.location.href = inviteLink;
   }
   render() {
     const { loginLoading, loginID, password } = this.state;
-    const { iconLogo } = this.props;
-    const { gameName } = this.props;
+    const { iconLogo, gameName } = this.props;
+    const btnDisabled = !loginID || !password;
     return (
       <div className={styles.container}>
         <Title>代理登录</Title>
@@ -72,34 +91,62 @@ class Login extends BaseComponent {
           <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
         </Helmet>
         <div className={styles.contentContainer}>
-          <div className={styles.logoWrap}>
-            { iconLogo && <IconImg className={styles.logo} src={iconLogo} />}
-            <span className={styles.logoTitle}>{gameName}</span>
-          </div>
           <div>
-            <div className={styles.inputWrap}>
-              <InputItem
-                className={styles.loginInput}
-                onChange={value => this.setState({ loginID: value })}
-                value={loginID}
-                placeholder="请输入账号名/姓名"
-              >账号名:</InputItem>
+            <div className={styles.logoWrap}>
+              { iconLogo && <IconImg className={styles.logo} src={iconLogo} />}
+              <span className={styles.logoTitle}>{gameName}</span>
             </div>
-            <div className={styles.inputWrap}>
-              <InputItem
-                className={styles.loginInput}
-                type="password"
-                placeholder="请输入密码"
-                value={password}
-                onChange={value => this.setState({ password: value })}
-              >　密码:</InputItem>
+            <div>
+              <div className={styles.inputWrap}>
+                <InputItem
+                  className={styles.loginInput}
+                  onChange={value => this.setState({ loginID: value })}
+                  value={loginID}
+                  clear
+                  placeholder="代理用户名/手机号"
+                />
+              </div>
+              <div className={styles.inputWrap}>
+                <InputItem
+                  className={styles.loginInput}
+                  type="password"
+                  placeholder="代理登录密码"
+                  value={password}
+                  clear
+                  onChange={value => this.setState({ password: value })}
+                />
+              </div>
+            </div>
+            <div className={styles.forgetPwdWrap}>
+              <span onClick={this.forgetPwd}>忘记密码?</span>
+            </div>
+            <Button
+              className={styles.loginBtn}
+              loading={loginLoading}
+              onClick={this.login}
+              disabled={btnDisabled}
+            >
+              登录
+            </Button>
+            <div className={styles.registerTip}>
+              <span
+                className={styles.registerLabel}
+                onClick={this.navigateToRegister}
+              >申请账号</span>
             </div>
           </div>
-          <WhiteSpace />
-          <Button className={styles.loginBtn} loading={loginLoading} onClick={this.login}>登录</Button>
-          <div className={styles.registerTip}>
-            还没创建账号?点击<span className={styles.registerLabel} onClick={this.navigateToRegister}>创建账号</span>
-          </div>
+          {
+            (this.helps.system() === 'PC' || this.helps.isWechat) &&
+            <div
+              className={styles.wechatLoginWrap}
+              onClick={this.wechatLogin}
+            >
+              <div className={styles.wechatLogin}>
+                <IconImg className={styles.wxLoginIcon} src={wxIcon} />
+                <span className={styles.wechatLoginLabel}>微信登录</span>
+              </div>
+            </div>
+          }
         </div>
       </div>
     );
@@ -109,7 +156,6 @@ class Login extends BaseComponent {
 function mapStateToProps(state) {
   return {
     ...state.app,
-    ...state.agent,
   };
 }
 

@@ -8,22 +8,23 @@ import NavBar from '@/helps/antdComponent/NavBar';
 import { Title, WhiteSpace } from '@/helps/styleComponent';
 import styles from './TurnDiaForAgentOrderDetail.less';
 
-class OrderForAgentTurnDiaForAgent extends BaseComponent {
+class OrderForAgentBuyDia extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
+      createTime: 0,
+      orderCount: 0,
       orderId: '',
-      payzDiaCountBefore: '',
-      payzDiaCountAfter: '',
-      userBalance: '',
-      turnOutCount: '',
-      orderinfo: '',
-      createTime: '',
+      orderPayMoney: '',
+      orderUserId: '',
+      payCountBefore: 0,
+      payCountAfter: 0,
+      payType: 0,
     };
   }
   async componentWillMount() {
     const { orderId } = this.router.getQuery();
-    const res = await this.http.webHttp.get('/spreadApi/sellAgentDiaOrderInfo', {
+    const res = await this.http.webHttp.get('/spreadApi/buyDiaOrderInfo', {
       orderId,
     });
     if (res.isSuccess) {
@@ -41,16 +42,19 @@ class OrderForAgentTurnDiaForAgent extends BaseComponent {
   }
   render() {
     const {
-      orderId,
-      payzDiaCountBefore,
-      payzDiaCountAfter,
-      userBalance,
-      orderinfo,
       createTime,
+      orderCount,
+      orderId,
+      orderPayMoney,
+      payCountBefore,
+      payCountAfter,
+      orderUserId,
+      payType,
     } = this.state;
     const payDateTime = new Date(createTime).format('yyyy-MM-dd hh:mm:ss');
-    // const orderCountLabel = this.helps.transCountUnit(orderCount);
-    // const payTypeLabel = this.Enum.payTypeLabel[payType];
+    const orderPayMoneyLabel = this.helps.parseFloatMoney(orderPayMoney);
+    const orderCountLabel = orderCount;
+    const payTypeLabel = this.Enum.payTypeLabel[payType];
     return (
       <div className={styles.container}>
         <Title>订单详情</Title>
@@ -68,39 +72,50 @@ class OrderForAgentTurnDiaForAgent extends BaseComponent {
               text={orderId}
               onCopy={this.copyOrderId}
             >
-              <Button size="small">复制订单号</Button>
+              <Button className={styles.copyBtn}>复制订单号</Button>
             </CopyToClipboard>
           </div>
           <div className={styles.orderInfoRowItem}>
             <div>
-              <div className={styles.payInfoTitle}>转钻账户</div>
-              <span className={styles.orderIdLabel}>{ userBalance }</span>
+              <div className={styles.payInfoTitle}>购钻账户</div>
+              <span className={styles.orderIdLabel}>{ orderUserId }</span>
             </div>
             <div>
-              <div>购买前:<span className={styles.count}>{ payzDiaCountBefore }</span>个</div>
-              <div>购买前:<span className={styles.count}>{ payzDiaCountAfter }</span>个</div>
+              <div>购买前:<span className={styles.count}>{ payCountBefore }</span>个</div>
+              <div>购买后:<span className={styles.count}>{ payCountAfter }</span>个</div>
             </div>
           </div>
           <div className={styles.orderInfoItem}>
-            <div className={styles.payInfoTitle}>订单信息</div>
+            <div className={styles.payInfoTitle}>购钻数量</div>
             <div className={styles.orderIdLabel}>
-              { orderinfo }
+              <span className={styles.count}>{ orderCountLabel }</span>个
             </div>
           </div>
-
+          <div className={styles.orderInfoItem}>
+            <div className={styles.payInfoTitle}>购钻价格</div>
+            <div className={styles.orderIdLabel}>
+              <span className={styles.count}>￥{ orderPayMoneyLabel }</span>
+            </div>
+          </div>
+          <div className={styles.orderInfoItem}>
+            <div className={styles.payInfoTitle}>支付方式</div>
+            <div className={styles.orderIdLabel}>
+              { payTypeLabel }支付
+            </div>
+          </div>
           <div className={styles.orderTimeItem}>
-            <div className={styles.payInfoTitle}>订单提交时间</div>
+            <div className={styles.payInfoTitle}>付款时间</div>
             <div className={styles.orderIdLabel}>
               { payDateTime }
             </div>
           </div>
         </div>
         <div className={styles.backBtnWrap}>
-          <Button onClick={() => this.router.go('/homePage')}>返回</Button>
+          <Button onClick={this.router.back}>返回</Button>
         </div>
       </div>
     );
   }
 }
 
-export default connect()(OrderForAgentTurnDiaForAgent);
+export default connect()(OrderForAgentBuyDia);

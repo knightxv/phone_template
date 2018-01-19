@@ -32,10 +32,19 @@ class PayToTurnDiaForAgent extends BaseComponent {
       diamond,
       isSaveCommon: isAutoSave,
     });
+    const userInfoRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
+    if (userInfoRes.isSuccess) {
+      this.props.dispatch({ type: 'agent/updateAppInfo',
+        payload: {
+          ...userInfoRes.data,
+        } });
+    }
     if (res.isSuccess) {
       this.router.back();
+      this.message.info(res.info || '赠送成功');
+    } else {
+      this.message.info(res.info || '赠送失败');
     }
-    this.message.info(res.info || '赠送成功');
   }
   toggleSave = () => {
     this.setState({

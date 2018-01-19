@@ -2,7 +2,7 @@ import dva from 'dva';
 
 // import { window } from 'global';
 import { persistStore, autoRehydrate } from 'redux-persist';
-import Promise from 'promise';
+// import Promise from 'promise';
 // import { browserHistory } from 'dva/router';
 // import { useRouterHistory } from 'dva/router';
 // import { createHashHistory } from 'history';
@@ -11,7 +11,9 @@ import Promise from 'promise';
 window.isSupport = true;
 if(!window.Promise) {
   // document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
-  window.Promise = Promise ;
+  import(/* webpackChunkName: 'Promise' */'promise').then((Promise) => {
+    window.Promise = Promise ;
+  });
 }
 
 // 1. Initialize

@@ -42,7 +42,7 @@ class EditPsd extends BaseComponent {
     }
   }
   render() {
-    const { editLoading } = this.state;
+    const { editLoading, oldPsd, newPsd, rePsd } = this.state;
     return (
       <div className={styles.container}>
         <Title>修改密码</Title>
@@ -54,6 +54,8 @@ class EditPsd extends BaseComponent {
           <div className={styles.inputContainer}>
             <div className={styles.inputWrap}>
               <InputItem
+                clear
+                value={oldPsd}
                 type="password"
                 onChange={value => this.setState({ oldPsd: value })}
                 placeholder="如果包含字母，请注意区分大小写"
@@ -61,14 +63,18 @@ class EditPsd extends BaseComponent {
             </div>
             <div className={styles.inputWrap}>
               <InputItem
+                clear
                 type="password"
+                value={newPsd}
                 onChange={value => this.setState({ newPsd: value })}
                 placeholder="输入新密码，请注意区分大小写"
               >　新密码:</InputItem>
             </div>
             <div className={styles.inputWrap}>
               <InputItem
+                clear
                 type="password"
+                value={rePsd}
                 onChange={value => this.setState({ rePsd: value })}
                 placeholder="再次输入新密码，确认输入无误"
               >确认密码:</InputItem>

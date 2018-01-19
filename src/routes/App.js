@@ -5,10 +5,6 @@ import { ActivityIndicator } from 'antd-mobile';
 import BaseComponent from '../helps/BaseComponent';
 
 class App extends BaseComponent {
-  // async componentWillMount() {
-    // const http = this.helps.webHttp;
-    // const res = await http.get('/api/userInfo');
-  // }
   render() {
     if (this.props.componentLoading) {
       return (<div style={{ display: 'flex', flexDirection: 'colunm', paddingTop: '3rem', justifyContent: 'center' }}>
@@ -16,7 +12,7 @@ class App extends BaseComponent {
       </div>);
     }
     return (
-      <div id="container" className="routerContainer">
+      <div id="container">
         {
           this.props.children
         }

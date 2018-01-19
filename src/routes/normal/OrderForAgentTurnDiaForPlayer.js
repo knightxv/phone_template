@@ -105,7 +105,7 @@ class OrderForAgentTurnDiaForPlayer extends BaseComponent {
             <div className={styles.orderInfoItem}>
               <div className={styles.payInfoTitle}>交易金额</div>
               <div className={styles.orderIdLabel}>
-                <span className={styles.count}>{ payMoneyLabel }</span>元
+                <span className={styles.count}>￥{ payMoneyLabel }</span>
               </div>
             </div>
           }

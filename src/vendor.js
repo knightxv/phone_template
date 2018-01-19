@@ -1,5 +1,5 @@
 
-import 'dva';
+// import 'dva';
 import '@/helps/BaseComponent';
 
 import 'antd-mobile/dist/antd-mobile.min.css';

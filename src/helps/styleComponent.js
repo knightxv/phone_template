@@ -97,14 +97,3 @@ exports.NetImg = ({ ...props }) => {
   );
 };
 
-exports.Avatar = ({ src, ...props }) => {
-  // const imgPrefix = window.httpConfig ? window.httpConfig.JavaWebPublicServerUrl : '';
-  return (
-    <img
-      src={require('../assets/avatar.png')}
-      style={{ width: '.8rem', height: '.8rem', borderRadius: '50%' }}
-      {...props}
-    />
-  );
-};
-

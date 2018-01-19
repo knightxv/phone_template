@@ -2,14 +2,18 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import querystring from 'querystring';
 import { window } from 'global';
-import Toast from './antdComponent/Toast';
+// import Toast from './antdComponent/Toast';
+// // import * as ToolComponents from './styleComponent';
+// import webHttp from '../extends/http/webHttp';
+// import accountHttp from '../extends/http/accountHttp';
+// import './config';
+// import help from './help';
+// import helper from '../extends/helper';
+// import Enum, { powerEnum } from '../extends/Enum';
 
-// import * as ToolComponents from './styleComponent';
-import webHttp from '../extends/http/webHttp';
-import './config';
-import help from './help';
-import Enum, { powerEnum } from '../extends/Enum';
-
+// 项目基于此开发
+// 引入extends
+// 添加公用函数
 
 export default class BaseComponent extends React.Component {
   constructor(props) {
@@ -17,49 +21,14 @@ export default class BaseComponent extends React.Component {
     // 工具
     this.helps = {
       ...help,
-      // 这两个要整理到helps上
-      parseFloatMoney(money) {
-        if (isNaN(money)) {
-          return '';
-        }
-        return parseFloat(money / 100).toFixed(2);
-      },
-      parseIntMoney(money) {
-        if (isNaN(money)) {
-          return '';
-        }
-        return parseInt(money / 100);
-      },
-      transMoenyUnit(count) {
-        if (isNaN(count)) {
-          return '';
-        }
-        const transCount = count.toString();
-        if (transCount.length === 4) {
-          return `${parseFloat(transCount / 1000)}千`;
-        } else if (transCount.length > 4) {
-          return `${parseFloat(transCount / 10000)}万`;
-        }
-        return transCount;
-      },
-      transCountUnit(count) {
-        if (isNaN(count)) {
-          return '';
-        }
-        const transCount = count.toString();
-        if (transCount.length === 4) {
-          return `${parseFloat(transCount / 1000)}千`;
-        } else if (transCount.length > 4) {
-          return `${parseFloat(transCount / 10000)}万`;
-        }
-        return transCount;
-      },
+      ...helper,
     };
     // 枚举
     this.Enum = Enum;
 
     this.http = {
       webHttp,
+      accountHttp,
       // fetch,
     };
 
@@ -102,6 +71,16 @@ export default class BaseComponent extends React.Component {
         Toast.info(message, 1, null, false);
       },
     };
+
+    this.valid = {
+      phone: (text) => {
+        if (typeof text !== 'string') {
+          return false;
+        }
+        return /^1[34578]\d{9}$/.test(text);
+      },
+    };
+
   }
   // hasPower(...powers) {
   //   const { powerList } = this.props;
@@ -114,7 +93,7 @@ export default class BaseComponent extends React.Component {
   //     }) > -1;
   //   });
   // }
-  // 是否有某个权限
+  // 是否有权限
   hasPower(powerName, powerVal) {
     const { powerList } = this.props;
     const powerKey = powerEnum[powerName];
@@ -130,6 +109,11 @@ export default class BaseComponent extends React.Component {
   hasPowerSome(...powers) {
     return powers.some((powerName) => {
       return this.hasPower(powerName);
+    });
+  }
+  setStateAsync = (state) => {
+    return new Promise((resolve) => {
+      this.setState(state, resolve);
     });
   }
 }
