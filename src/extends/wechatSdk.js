@@ -1,5 +1,5 @@
 import BaseWechatSdk from '../base/manage/BaseWechatSdk';
-
+import webHttp from './http/webHttp';
 class WechatSdk extends BaseWechatSdk {
   getJsApiList() {
     this.jsApiList = [
@@ -15,12 +15,24 @@ class WechatSdk extends BaseWechatSdk {
   }
   async setWechatConfig() {
     let url = window.location.href.split('#')[0].replace(/\/$/, ''); // http://192.168.2.88:8000
+    const platRes = await webHttp.get('/spreadApi/getPlatformInfo');
+    if (!platRes.isSuccess) {
+      console.log('获取platfrom info失败');
+      return;
+    }
+    const serverInfo = platRes.data.serverInfo;
+    if (!serverInfo || serverInfo.length < 1) {
+      console.log('没有可选的游戏');
+      return;
+    }
+    console.log(serverInfo[0]);
+    const { weChatMPID, accountServerIP, accountServerPort } = serverInfo[0];
     const authBody = {
       Head: 0xFF06,
-      MPID: 'adgame',
+      MPID: weChatMPID,
       Url: url,
     };
-    const res = await fetch('http://res.ddmh5.com:900/ClientPack', {
+    const res = await fetch(`http://${accountServerIP}:${accountServerPort}/ClientPack`, {
       method: 'POST',
       body: JSON.stringify(authBody),
       headers: {
