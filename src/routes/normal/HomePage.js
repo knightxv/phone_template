@@ -174,7 +174,7 @@ class HomePage extends BaseComponent {
   // 分享代理链接
   shareAgentLink = async () => {
     let serverInfo = this.props.serverInfo;
-    const { inviteCode, gameName } = this.props;
+    const { inviteCode } = this.props;
     if (!serverInfo || serverInfo.length < 1) {
       const res = await this.http.webHttp.get('/spreadApi/getPlatformInfo');
       if (res.isSuccess) {
@@ -189,7 +189,27 @@ class HomePage extends BaseComponent {
       }
     }
     const gameInfo = serverInfo[0];
-    const { accountServerIP, accountServerPort, weChatMPID } = gameInfo;
+    const { accountServerIP, accountServerPort, weChatMPID, serverID } = gameInfo;
+    const gameListRes = await this.http.webHttp.get('/spreadApi/getGameList');
+    if (!gameListRes.isSuccess) {
+      this.message.info('获取游戏失败');
+      return;
+    }
+    let gameName = '';
+    const isFindGame = gameListRes.data.some((game) => {
+      if (game.serverid == serverID) {
+        gameName = game.gameName;
+        return true;
+      }
+      return false;
+    });
+    if (!isFindGame && gameListRes.data[0]) {
+      gameName = gameListRes.data[0].gameName;
+    }
+    if (!gameName) {
+      this.message.info('没有可选的游戏');
+      return;
+    }
     const origin = window.location.origin;
     const noPortOrigin = origin.replace(/:\d+/, '');
     const inviteLink = `http://${accountServerIP}:${accountServerPort}/WeChatAuthorize?ddmmp=${weChatMPID}&redirect=${origin}/generalManage/wechat.html&reqdeleInviter=${inviteCode}&actionType=inviteProxy`;
@@ -208,7 +228,7 @@ class HomePage extends BaseComponent {
   }
   // 分享玩家链接
   sharePlayerLink = async () => {
-    const { inviteCode, gameName } = this.props;
+    const { inviteCode } = this.props;
     let serverInfo = this.props.serverInfo;
     if (!serverInfo || serverInfo.length < 1) {
       const res = await this.http.webHttp.get('/spreadApi/getPlatformInfo');
@@ -225,16 +245,39 @@ class HomePage extends BaseComponent {
     const origin = window.location.origin;
     const noPortOrigin = origin.replace(/:\d+/, '');
     const gameInfo = serverInfo[0];
-    const { accountServerIP, accountServerPort, appDownLoadUrl, weChatMPID, gameID } = gameInfo;
+    const { accountServerIP, accountServerPort, appDownLoadUrl, weChatMPID, gameID, serverID } = gameInfo;
     const inviteLink = `http://${accountServerIP}:${accountServerPort}/WeChatAuthorize?ddmmp=${weChatMPID}&redirect=${appDownLoadUrl}?gameID=${gameID}&reqdeleInviter=${inviteCode}&actionType=invitePlayer`;
     const queryLink = {
       redirect: inviteLink,
     };
     const linkQueryStr = querystring.stringify(queryLink);
+    const gameListRes = await this.http.webHttp.get('/spreadApi/getGameList');
+    if (!gameListRes.isSuccess) {
+      this.message.info('获取游戏失败');
+      return;
+    }
+    let gameName = '';
+    let gameIcon = '';
+    const isFindGame = gameListRes.data.some((game) => {
+      if (game.serverid == serverID) {
+        gameName = game.gameName;
+        gameIcon = game.gameIcon;
+        return true;
+      }
+      return false;
+    });
+    if (!isFindGame && gameListRes.data[0]) {
+      gameName = gameListRes.data[0].gameName;
+      gameIcon = gameListRes.data[0].gameIcon;
+    }
+    if (!gameName) {
+      this.message.info('没有可选的游戏');
+      return;
+    }
     const shareInfo = {
       title: `快来玩${gameName}吧~`,
       link: `${noPortOrigin}/generalManage/redirect.html?${linkQueryStr}`,
-      imgUrl: `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
+      imgUrl: gameIcon || `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
       desc: '平台稳定绝无外挂',
     };
     await wechatSdkManage.shareLink(shareInfo);

@@ -99,6 +99,7 @@ class WechatBindPhone extends BaseComponent {
     const isCanReGetVerifyCode = getVerifyCodeElseTime === 0; // 倒计时是否结束
     const isShowElseTime = !isCanReGetVerifyCode; // 是否显示剩余时间
     const isCanGetVerifyCode = isCanReGetVerifyCode && this.valid.phone(phone);
+    const btnDiabled = !this.valid.phone(phone) || !verifyCode;
     // const hasCode = this.hasCode;
     return (
       <div className={styles.container}>
@@ -144,7 +145,7 @@ class WechatBindPhone extends BaseComponent {
             </div>
             <div className={styles.registerWrap}>
               <Button
-                style={{ width: '100%' }}
+                disabled={btnDiabled}
                 onClick={this.register}
               >确认</Button>
             </div>

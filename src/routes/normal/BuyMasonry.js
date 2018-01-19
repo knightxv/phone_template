@@ -113,9 +113,9 @@ class BuyMasonry extends BaseComponent {
       this.router.go('/buyDiaOrderStatu', {
         orderId,
       });
-      return false;
+    } else {
+      this.message.info(res.info || '充值失败，请重试');
     }
-    this.message.info(res.info || '充值失败，请重试');
   }
   buyGood = () => {
     let { selectPayInfo } = this.state;

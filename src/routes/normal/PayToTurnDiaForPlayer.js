@@ -115,10 +115,13 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     this.message.info(res.info || '赠送成功,请耐心等待');
     if (res.isSuccess) {
       this.router.back();
-      // this.router.go('/turnDiaForPlayerOrderDetail', {
-      //   orderId,
-      //   serverid,
-      // });
+    }
+    const updateRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
+    if (updateRes.isSuccess) {
+      this.props.dispatch({ type: 'agent/updateAppInfo',
+        payload: {
+          ...updateRes.data,
+        } });
     }
   }
   // 支付宝支付

@@ -180,7 +180,7 @@ class TurnDiaForPlayer extends BaseComponent {
       this.message.info(errorTip);
       return;
     }
-    if (!diamond) {
+    if (!diamond || diamond == 0) {
       this.message.info('请选择钻石个数');
       return;
     }
