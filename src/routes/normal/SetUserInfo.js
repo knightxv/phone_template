@@ -40,6 +40,7 @@ class SetUserInfo extends BaseComponent {
   }
   render() {
     const { userName, password, rePwd } = this.state;
+    const btnDiasbled = !userName || !password || !rePwd;
     return (
       <div className={styles.container}>
         <Title>设置账户信息</Title>
@@ -76,6 +77,7 @@ class SetUserInfo extends BaseComponent {
             </div>
             <div className={styles.registerWrap}>
               <Button
+                disabled={btnDiasbled}
                 onClick={this.confimToSet}
               >确定</Button>
             </div>
