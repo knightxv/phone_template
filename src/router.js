@@ -100,9 +100,9 @@ function RouterConfig({ history, app }) {
     {
       path: '/orderForAgentTurnDiaForPlayer',
       component: () => import('./routes/normal/OrderForAgentTurnDiaForPlayer'),
-      models: () => [
-        import('./models/agent'),
-      ],
+      // models: () => [
+      //   import('./models/agent'),
+      // ],
     },
     {
       path: '/turnDiaForAgent',
@@ -163,9 +163,9 @@ function RouterConfig({ history, app }) {
     {
       path: '/orderForAgentBuyDia',
       component: () => import('./routes/normal/OrderForAgentBuyDia'),
-      models: () => [
-        import('./models/agent'),
-      ],
+      // models: () => [
+      //   import('./models/agent'),
+      // ],
     },
     {
       path: '/bindFail',

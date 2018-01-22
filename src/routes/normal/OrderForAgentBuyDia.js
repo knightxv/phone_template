@@ -111,7 +111,7 @@ class OrderForAgentBuyDia extends BaseComponent {
           </div>
         </div>
         <div className={styles.backBtnWrap}>
-          <Button onClick={this.router.back}>返回</Button>
+          <Button onClick={() => this.router.go('/homePage')}>完成</Button>
         </div>
       </div>
     );
