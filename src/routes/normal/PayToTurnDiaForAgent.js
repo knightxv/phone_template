@@ -3,10 +3,9 @@ import { connect } from 'dva';
 // import { window } from 'global';
 import { Checkbox } from 'antd-mobile';
 
-import BaseComponent from '@/helps/BaseComponent';
-import { Button } from '@/helps/antdComponent/index.js';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { Button, NavBar } from '@/components/lazyComponent/antd';
+import { Title } from '@/components/styleComponent';
 import styles from './PayToTurnDiaForPlayer.less';
 
 class PayToTurnDiaForAgent extends BaseComponent {

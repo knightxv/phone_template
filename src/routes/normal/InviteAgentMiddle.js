@@ -1,5 +1,5 @@
 import React from 'react';
-import BaseComponent from '@/helps/BaseComponent';
+import BaseComponent from '@/core/BaseComponent';
 import { connect } from 'dva';
 
 class InviteAgentMiddle extends BaseComponent {

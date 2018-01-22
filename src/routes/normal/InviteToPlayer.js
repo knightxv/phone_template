@@ -1,14 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
-// import CopyToClipboard from 'react-copy-to-clipboard';
-// import { ActionSheet } from 'antd-mobile';
-import QRCode from 'qrcode.react';
+import BaseComponent from '@/core/BaseComponent';
 
-// import { isWechat } from '@/helps/help';
-import NavBar from '@/helps/antdComponent/NavBar';
-// import { Icon } from '@/helps/antdComponent/index.js';
-import BaseComponent from '@/helps/BaseComponent';
-import { Title } from '@/helps/styleComponent';
+import QRCode from 'qrcode.react';
+import NavBar from '@/components/antdComponent/NavBar';
+import { Title } from '@/components/styleComponent';
 import styles from './InviteToAgent.less';
 
 class InviteToPlayer extends BaseComponent {

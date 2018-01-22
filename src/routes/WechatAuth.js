@@ -1,13 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-// import classnames from 'classnames';
-// import { Helmet } from 'react-helmet';
-
-// import { Button, InputItem } from '@/helps/antdComponent/index.js';
-// import InputItem from '@/helps/antdComponent/InputItem';
-// import NavBar from '@/helps/antdComponent/NavBar';
-// import { Title } from '@/helps/styleComponent';
-import BaseComponent from '@/helps/BaseComponent';
+import BaseComponent from '@/core/BaseComponent';
 
 class WechatAuth extends BaseComponent {
   constructor(props) {

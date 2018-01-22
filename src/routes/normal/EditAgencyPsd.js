@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import BaseComponent from '@/helps/BaseComponent';
-import { InputItem, Button } from '@/helps/antdComponent/index.js';
-// import Button from '@/helps/antdComponent/Button';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { InputItem, Button, NavBar } from '@/components/lazyComponent/antd';
+import { Title } from '@/components/styleComponent';
 import styles from './EditAgencyPsd.css';
 
 class EditPsd extends BaseComponent {

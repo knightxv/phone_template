@@ -1,6 +1,6 @@
+import InputItem from './InputItem';
 import styled from 'styled-components';
 import Icon from './Icon';
-import { InputItem } from '@/helps/antdComponent/index.js';
 
 const InputContainer = styled.div`
 background: #efeff4;

@@ -2,7 +2,7 @@
 import { connect } from 'dva';
 
 import styles from './IndexPage.css';
-import BaseComponent from '../helps/BaseComponent';
+import BaseComponent from '../core/BaseComponent';
 
 class IndexPage extends BaseComponent {
   async componentWillMount() {

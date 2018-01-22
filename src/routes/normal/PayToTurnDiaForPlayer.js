@@ -3,10 +3,9 @@ import { connect } from 'dva';
 import { window } from 'global';
 import { Checkbox } from 'antd-mobile';
 
-import BaseComponent from '@/helps/BaseComponent';
-import { Button, Icon, Modal } from '@/helps/antdComponent/index.js';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title, IconImg } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { Button, Icon, Modal, NavBar } from '@/components/lazyComponent/antd';
+import { Title, IconImg } from '@/components/styleComponent';
 import styles from './PayToTurnDiaForPlayer.less';
 
 const imgSource = {

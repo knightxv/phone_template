@@ -2,13 +2,12 @@ import React from 'react';
 import { connect } from 'dva';
 import ScrollTop from '@/components/ScrollTop';
 
+import BaseComponent from '@/core/BaseComponent';
 import classnames from 'classnames';
 import { StickyContainer, Sticky } from 'react-sticky';
-import BaseComponent from '@/helps/BaseComponent';
-import { Button, Icon } from '@/helps/antdComponent/index.js';
-import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title, WhiteSpace } from '@/helps/styleComponent';
+import { Button, Icon, NavBar } from '@/components/lazyComponent/antd';
+import { ScrollListView } from '@/components/lazyComponent/ScrollListView';
+import { Title, WhiteSpace } from '@/components/styleComponent';
 import styles from './AgencyPay.less';
 
 // const goodsIds = [1, 2, 3, 4, 5, 6];

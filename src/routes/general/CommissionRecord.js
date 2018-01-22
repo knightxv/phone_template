@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
-import BaseComponent from '@/helps/BaseComponent';
-import { Table } from '@/helps/antdComponent';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import NavBar from '@/components/antdComponent/NavBar';
+import { Title } from '@/components/styleComponent';
 import styles from './CommissionRecord.css';
+
+import { Table } from '../../helps/antdComponent';
 
 const columns = [
   {

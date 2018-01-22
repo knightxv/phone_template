@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title, WhiteSpace } from '@/helps/styleComponent';
-import BaseComponent from '@/helps/BaseComponent';
+import BaseComponent from '@/core/BaseComponent';
+import NavBar from '@/components/antdComponent/NavBar';
+import { Title, WhiteSpace } from '@/components/styleComponent';
 import styles from './RankExplain.css';
 
 // const htmlText = require('../page/rankExplain');

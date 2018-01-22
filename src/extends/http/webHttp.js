@@ -1,6 +1,6 @@
 import { window } from 'global';
-import Http from '@/helps/Http';
-import Toast from '@/helps/antdComponent/Toast';
+import { Toast } from 'antd-mobile';
+import Http from '@/base/manage/Http';
 import { remoteUrl, httpDebug } from '@/config/index';
 // set window.HttpDebug = true; t
 const webHttpConfig = {

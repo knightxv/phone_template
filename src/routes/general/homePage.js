@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'dva';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
+import BaseComponent from '@/core/BaseComponent';
+import Button from '@/components/antdComponent/Button';
+import { WingBlank, WhiteSpace, FlexRow, FlexRowBetween, TitleIcon, Title } from '@/components/styleComponent';
 import styles from './homePage.css';
-import BaseComponent from '@/helps/BaseComponent';
-import Button from '@/helps/antdComponent/Button';
-import { Row, Col } from '@/helps/antdComponent';
-import { WingBlank, WhiteSpace, FlexRow, FlexRowBetween, TitleIcon, Title } from '../../helps/styleComponent';
+
+import { Row, Col } from '../../helps/antdComponent';
 
 class HomePage extends BaseComponent {
   constructor(props) {

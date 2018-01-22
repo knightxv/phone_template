@@ -1,6 +1,6 @@
 
 export default {
   httpDebug: false,
-  remoteUrl: 'http://120.77.87.4:8081',
+  remoteUrl: 'http://adang03cs.ddmh5.com:8083',
 };
 

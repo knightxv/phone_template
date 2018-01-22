@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'dva';
 
 import styles from './EditPsd.css';
-import BaseComponent from '@/helps/BaseComponent';
-import InputItem from '@/helps/antdComponent/InputItem';
-import Button from '@/helps/antdComponent/Button';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title, WhiteSpace, FlexRow } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import InputItem from '@/components/antdComponent/InputItem';
+import Button from '@/components/antdComponent/Button';
+import NavBar from '@/components/antdComponent/NavBar';
+import { Title, WhiteSpace, FlexRow } from '@/components/styleComponent';
 
 class EditPsd extends BaseComponent {
   constructor(props) {

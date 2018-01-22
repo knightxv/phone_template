@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import { Button, Icon } from '@/helps/antdComponent/index.js';
+import BaseComponent from '@/core/BaseComponent';
 
-import BaseComponent from '@/helps/BaseComponent';
-import { Title } from '@/helps/styleComponent';
+import { Button, Icon } from '@/components/lazyComponent/antd';
+import { Title } from '@/components/styleComponent';
 import styles from './BindFail.less';
 
 class BindFail extends BaseComponent {

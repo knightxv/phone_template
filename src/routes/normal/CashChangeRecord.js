@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import BaseComponent from '@/helps/BaseComponent';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { ListViewTable } from '@/helps/antdComponent/index.js';
-import { Title } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+// import NavBar from '@/components/antdComponent/NavBar';
+import { ListViewTable, NavBar } from '@/components/lazyComponent/antd';
+import { Title } from '@/components/styleComponent';
 import styles from './CashChangeRecord.less';
 
 class CashChangeRecord extends BaseComponent {

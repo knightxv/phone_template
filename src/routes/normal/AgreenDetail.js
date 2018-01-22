@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import BaseComponent from '@/helps/BaseComponent';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { WhiteSpace } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import NavBar from '@/components/antdComponent/NavBar';
+import { WhiteSpace } from '@/components/styleComponent';
 import styles from './AgreenDetail.css';
 
 class AgreenDetail extends BaseComponent {

@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import BaseComponent from '@/helps/BaseComponent';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Button, Icon } from '@/helps/antdComponent/index.js';
-import { Title } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { Button, Icon, NavBar } from '@/components/lazyComponent/antd';
+import { Title } from '@/components/styleComponent';
 import styles from './PayFail.less';
 
 class PayFail extends BaseComponent {

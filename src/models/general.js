@@ -1,4 +1,9 @@
-import { delay } from '@/helps/help';
+const delay = (time = 1000) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+};
+
 
 const REGETVERIFYCODETIME = 60;
 

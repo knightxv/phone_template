@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import BaseComponent from '@/helps/BaseComponent';
+import BaseComponent from '@/core/BaseComponent';
 // import NavBar from '@/helps/antdComponent/NavBar';
-import { Icon } from '@/helps/antdComponent/index.js';
-import { Title } from '@/helps/styleComponent';
+import { Icon } from '@/components/lazyComponent/antd';
+import { Title } from '@/components/styleComponent';
 import styles from './PayFail.less';
 
 class PcLoginResult extends BaseComponent {

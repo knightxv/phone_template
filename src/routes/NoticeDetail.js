@@ -1,9 +1,9 @@
 import { connect } from 'dva';
 import React from 'react';
 // import styles from './IndexPage.css';
-import { Title, WhiteSpace } from '@/helps/styleComponent';
-import NavBar from '@/helps/antdComponent/NavBar';
-import BaseComponent from '@/helps/BaseComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { Title, WhiteSpace } from '@/components/styleComponent';
+import NavBar from '@/components/antdComponent/NavBar';
 
 class NoticeDetail extends BaseComponent {
   constructor(props) {
