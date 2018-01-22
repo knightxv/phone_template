@@ -2,10 +2,9 @@ import React from 'react';
 import { connect } from 'dva';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-import BaseComponent from '@/helps/BaseComponent';
-import { Button } from '@/helps/antdComponent/index.js';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title, WhiteSpace } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { Button, NavBar } from '@/components/lazyComponent/antd';
+import { Title, WhiteSpace } from '@/components/styleComponent';
 import styles from './TurnDiaForAgentOrderDetail.less';
 
 class OrderForAgentBuyDia extends BaseComponent {
@@ -111,7 +110,7 @@ class OrderForAgentBuyDia extends BaseComponent {
           </div>
         </div>
         <div className={styles.backBtnWrap}>
-          <Button onClick={this.router.back}>返回</Button>
+          <Button onClick={() => this.router.go('/homePage')}>完成</Button>
         </div>
       </div>
     );

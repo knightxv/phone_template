@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'dva';
+import BaseComponent from '@/core/BaseComponent';
+
 import { province as provinceData, city as cityData } from '@/data/position';
 import styles from './CashMoeny.css';
+import NavBar from '@/components/antdComponent/NavBar';
+import Button from '@/components/antdComponent/Button';
+import InputItem from '@/components/antdComponent/InputItem';
+import { FlexRow, Flex, WhiteSpace, Title } from '@/components/styleComponent';
+
 import { Select } from '@/helps/antdComponent';
-import NavBar from '@/helps/antdComponent/NavBar';
-import Button from '@/helps/antdComponent/Button';
-import InputItem from '@/helps/antdComponent/InputItem';
-import BaseComponent from '@/helps/BaseComponent';
-import { FlexRow, Flex, WhiteSpace, Title } from '@/helps/styleComponent';
 
 import bankData from '../../data/bank';
 

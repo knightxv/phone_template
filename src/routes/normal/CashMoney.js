@@ -1,17 +1,15 @@
 import React from 'react';
 import { connect } from 'dva';
 
+import BaseComponent from '@/core/BaseComponent';
+
 import ScrollTop from '@/components/ScrollTop';
 import { List } from 'antd-mobile';
 import { region } from '@/data/region';
-import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
-import { StickyContainer, Sticky } from '@/helps/lazyComponent/ReactSticky';
-import { InputItem, Button, SelectPicker } from '@/helps/antdComponent/index.js';
-// import Button from '@/helps/antdComponent/Button';
-// import SelectPicker from '@/helps/antdComponent/SelectPicker';
-import NavBar from '@/helps/antdComponent/NavBar';
-import BaseComponent from '@/helps/BaseComponent';
-import { FlexRow, Flex, WhiteSpace, Title } from '@/helps/styleComponent';
+import { ScrollListView } from '@/components/lazyComponent/ScrollListView';
+import { StickyContainer, Sticky } from '@/components/lazyComponent/ReactSticky';
+import { InputItem, Button, SelectPicker, NavBar } from '@/components/lazyComponent/antd';
+import { FlexRow, Flex, WhiteSpace, Title } from '@/components/styleComponent';
 import bankData from '@/data/bank';
 
 import styles from './CashMoney.less';

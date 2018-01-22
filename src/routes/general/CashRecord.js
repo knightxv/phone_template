@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
+import BaseComponent from '@/core/BaseComponent';
+
 import styles from './CashRecord.css';
-import BaseComponent from '../../helps/BaseComponent';
+import NavBar from '@/components/antdComponent/NavBar';
+import { Title } from '@/components/styleComponent';
+
 import { Table } from '../../helps/antdComponent';
-import NavBar from '../../helps/antdComponent/NavBar';
-import { Title } from '../../helps/styleComponent';
 
 const statusMap = {
   0: '审核中',

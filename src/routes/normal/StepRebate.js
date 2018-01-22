@@ -2,13 +2,10 @@ import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 
-import BaseComponent from '@/helps/BaseComponent';
-import { Button, DatePicker, Icon } from '@/helps/antdComponent/index.js';
-// import Button from '@/helps/antdComponent/Button';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { Button, DatePicker, Icon, NavBar } from '@/components/lazyComponent/antd';
+import { Title, IconImg } from '@/components/styleComponent';
 import styles from './StepRebate.less';
-import { IconImg } from '../../helps/styleComponent';
 
 const imgSource = {
   titleIcon: require('../../assets/fanli_icon.png'),

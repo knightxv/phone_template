@@ -3,10 +3,9 @@ import { connect } from 'dva';
 import { window } from 'global';
 
 import { Helmet } from 'react-helmet';
-import { InputItem, Button } from '@/helps/antdComponent/index.js';
-// import Button from '@/helps/antdComponent/Button';
-import BaseComponent from '@/helps/BaseComponent';
-import { Title, IconImg } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { InputItem, Button } from '@/components/lazyComponent/antd';
+import { Title, IconImg } from '@/components/styleComponent';
 import styles from './Login.less';
 
 const wxIcon = require('../../assets/wx_login.png');

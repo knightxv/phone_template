@@ -1,38 +1,21 @@
-import React from 'react';
+
 import { routerRedux } from 'dva/router';
 import querystring from 'querystring';
 import { window } from 'global';
-// import Toast from './antdComponent/Toast';
-// // import * as ToolComponents from './styleComponent';
-// import webHttp from '../extends/http/webHttp';
-// import accountHttp from '../extends/http/accountHttp';
-// import './config';
-// import help from './help';
-// import helper from '../extends/helper';
-// import Enum, { powerEnum } from '../extends/Enum';
+import BaseClass from '../base/BaseClass';
+import appExtends from '../extends/index';
+
 
 // 项目基于此开发
 // 引入extends
 // 添加公用函数
+Object.assign(BaseClass.prototype, appExtends);
 
-export default class BaseComponent extends React.Component {
+export default class BaseComponent extends BaseClass {
   constructor(props) {
     super(props);
-    // 工具
-    this.helps = {
-      ...help,
-      ...helper,
-    };
-    // 枚举
-    this.Enum = Enum;
 
-    this.http = {
-      webHttp,
-      accountHttp,
-      // fetch,
-    };
-
-    // 提供路由服务（对help的扩展，专门针对路由管理）
+    // 提供路由服务（专门针对路由管理）
     const self = this;
     this.router = {
       getQuery() {
@@ -64,23 +47,6 @@ export default class BaseComponent extends React.Component {
         self.props.dispatch(routerRedux.goBack());
       },
     };
-
-    // 提示
-    this.message = {
-      info(message) {
-        Toast.info(message, 1, null, false);
-      },
-    };
-
-    this.valid = {
-      phone: (text) => {
-        if (typeof text !== 'string') {
-          return false;
-        }
-        return /^1[34578]\d{9}$/.test(text);
-      },
-    };
-
   }
   // hasPower(...powers) {
   //   const { powerList } = this.props;
@@ -96,7 +62,7 @@ export default class BaseComponent extends React.Component {
   // 是否有权限
   hasPower(powerName, powerVal) {
     const { powerList } = this.props;
-    const powerKey = powerEnum[powerName];
+    const powerKey = this.Enum.powerEnum[powerName];
     if (!powerList || typeof powerList[powerKey] === 'undefined') {
       return false;
     }
@@ -117,3 +83,5 @@ export default class BaseComponent extends React.Component {
     });
   }
 }
+
+

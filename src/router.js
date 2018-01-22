@@ -23,9 +23,6 @@ function RouterConfig({ history, app }) {
     {
       path: '/rankExplain',
       component: () => import('./routes/normal/RankExplain'),
-      models: () => [
-        import('./models/agent'),
-      ],
     },
     {
       path: '/inviteToAgent',
@@ -79,16 +76,10 @@ function RouterConfig({ history, app }) {
     {
       path: '/register',
       component: () => import('./routes/normal/Register'),
-      models: () => [
-        import('./models/agent'),
-      ],
     },
     {
       path: '/AgreenDetail',
       component: () => import('./routes/normal/AgreenDetail'),
-      models: () => [
-        import('./models/agent'),
-      ],
     },
     {
       path: '/payToTurnDiaForPlayer',
@@ -100,9 +91,9 @@ function RouterConfig({ history, app }) {
     {
       path: '/orderForAgentTurnDiaForPlayer',
       component: () => import('./routes/normal/OrderForAgentTurnDiaForPlayer'),
-      models: () => [
-        import('./models/agent'),
-      ],
+      // models: () => [
+      //   import('./models/agent'),
+      // ],
     },
     {
       path: '/turnDiaForAgent',
@@ -163,16 +154,13 @@ function RouterConfig({ history, app }) {
     {
       path: '/orderForAgentBuyDia',
       component: () => import('./routes/normal/OrderForAgentBuyDia'),
-      models: () => [
-        import('./models/agent'),
-      ],
+      // models: () => [
+      //   import('./models/agent'),
+      // ],
     },
     {
       path: '/bindFail',
       component: () => import('./routes/normal/BindFail'),
-      // models: () => [
-      //   import('./models/agent'),
-      // ],
     },
     {
       path: '/payFail',
@@ -312,7 +300,7 @@ function RouterConfig({ history, app }) {
                 component={dynamic({
                   app,
                   component: loadingComponent(component),
-                  // component: loadingComponent(component),
+                  // component: component,
                   ...dynamics,
                 })}
               />

@@ -2,13 +2,13 @@
 import { connect } from 'dva';
 import { ActivityIndicator } from 'antd-mobile';
 
-import BaseComponent from '../helps/BaseComponent';
+import BaseComponent from '@/core/BaseComponent';
 
 class App extends BaseComponent {
   render() {
     if (this.props.componentLoading) {
       return (<div style={{ display: 'flex', flexDirection: 'colunm', paddingTop: '3rem', justifyContent: 'center' }}>
-        <ActivityIndicator text="Loading..." size="large"  />
+        <ActivityIndicator text="Loading..." size="large" />
       </div>);
     }
     return (
@@ -23,10 +23,10 @@ class App extends BaseComponent {
 
 App.propTypes = {
 };
-const mapStateToProps = (state) => {
-  return {
-    ...state.app,
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     ...state.app,
+//   };
+// };
 
-export default connect(mapStateToProps)(App);
+export default connect()(App);

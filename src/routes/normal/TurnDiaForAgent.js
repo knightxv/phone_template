@@ -3,16 +3,11 @@ import { connect } from 'dva';
 // import classNames from 'classnames';
 import ScrollTop from '@/components/ScrollTop';
 
-import { BodyScrollListView, ScrollListView } from '@/helps/lazyComponent/ScrollListView';
-import { StickyContainer, Sticky } from '@/helps/lazyComponent/ReactSticky';
-import Button from '@/helps/antdComponent/Button';
-import NavBar from '@/helps/antdComponent/NavBar';
-// import ListView from '@/helps/antdComponent/ListView';
-import { Icon, InputItem, Modal } from '@/helps/antdComponent/index.js';
-import SearchBar from '@/helps/antdComponent/SearchBar';
-// import InputItem from '@/helps/antdComponent/InputItem';
-import BaseComponent from '@/helps/BaseComponent';
-import { WhiteSpace, Title } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { ScrollListView } from '@/components/lazyComponent/ScrollListView';
+import { StickyContainer, Sticky } from '@/components/lazyComponent/ReactSticky';
+import { Icon, InputItem, Modal, SearchBar, NavBar, Button } from '@/components/lazyComponent/antd';
+import { WhiteSpace, Title } from '@/components/styleComponent';
 import styles from './TurnDiaForAgent.less';
 
 class TurnDiaForAgent extends BaseComponent {

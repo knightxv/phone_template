@@ -3,11 +3,9 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import { Helmet } from 'react-helmet';
 
-import { Button, InputItem } from '@/helps/antdComponent/index.js';
-// import InputItem from '@/helps/antdComponent/InputItem';
-import NavBar from '@/helps/antdComponent/NavBar';
-import BaseComponent from '@/helps/BaseComponent';
-import { Title } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { Button, InputItem, NavBar } from '@/components/lazyComponent/antd';
+import { Title } from '@/components/styleComponent';
 import styles from './Register.less';
 
 class Register extends BaseComponent {

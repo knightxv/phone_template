@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import NavBar from '@/helps/antdComponent/NavBar';
-import NoticeBar from '@/helps/antdComponent/NoticeBar';
-import { ListViewTable } from '@/helps/antdComponent/index.js';
-import SearchBar from '@/helps/antdComponent/SearchBar';
-import { Title } from '@/helps/styleComponent';
-import BaseComponent from '@/helps/BaseComponent';
+import BaseComponent from '@/core/BaseComponent';
+import NoticeBar from '@/components/antdComponent/NoticeBar';
+import { ListViewTable, NavBar, SearchBar } from '@/components/lazyComponent/antd';
+import { Title } from '@/components/styleComponent';
 // import { FlexRow, Flex, BaseFont } from '../utils/styleComponent';
 import styles from './MyUnderAgent.less';
 

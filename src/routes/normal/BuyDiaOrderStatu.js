@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import BaseComponent from '@/helps/BaseComponent';
-import { Button, Icon } from '@/helps/antdComponent/index.js';
-import NavBar from '@/helps/antdComponent/NavBar';
-import { Title, WhiteSpace } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import { Button, Icon, NavBar } from '@/components/lazyComponent/antd';
+import { Title, WhiteSpace } from '@/components/styleComponent';
 import styles from './BuyDiaOrderStatu.less';
 
 class BuyDiaOrderStatu extends BaseComponent {

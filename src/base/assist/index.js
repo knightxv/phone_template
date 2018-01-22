@@ -5,7 +5,7 @@ if ('addEventListener' in document) {
     FastClick.attach(document.body);
   }, false);
 }
-
+// 解决rem问题(固定为750)
 import './rem';
 
 // 连字符转驼峰

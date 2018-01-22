@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
-import BaseComponent from '@/helps/BaseComponent';
-import Button from '@/helps/antdComponent/Button';
-import InputItem from '@/helps/antdComponent/InputItem';
-import { Title, NetImg, WhiteSpace, FlexRow } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+import Button from '@/components/antdComponent/Button';
+import InputItem from '@/components/antdComponent/InputItem';
+import { Title, NetImg, WhiteSpace, FlexRow } from '@/components/styleComponent';
 import styles from './login.css';
 
 // const logoSource = require('../../assets/adang_logo.png');

@@ -1,20 +1,19 @@
 import React from 'react';
 import { connect } from 'dva';
 
+import BaseComponent from '@/core/BaseComponent';
 import { ActionSheet } from 'antd-mobile';
 import querystring from 'querystring';
 // import PropTypes from 'prop-types';
-import BaseComponent from '@/helps/BaseComponent';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import NavBar from '@/helps/antdComponent/NavBar';
-import NoticeBar from '@/helps/antdComponent/NoticeBar';
-// import Icon from '@/helps/antdComponent/Icon';
-import { Button, Icon, Modal } from '@/helps/antdComponent/index.js';
+import NoticeBar from '@/components/antdComponent/NoticeBar';
+import { Button, Icon, Modal, NavBar } from '@/components/lazyComponent/antd';
 // import {} from ''
 import Avatar from '@/components/Avatar';
-import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, IconImg } from '@/helps/styleComponent';
+import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, IconImg } from '@/components/styleComponent';
 import styles from './HomePage.less';
 import wechatSdkManage from '../../extends/wechatSdk';
+
 
 // import { htmlTextType } from '../utils/typeDefine';
 const IconSource = {

@@ -4,9 +4,9 @@ import QRCode from 'qrcode.react';
 import UUID from 'uuid-js';
 
 // import InputItem from '@/helps/antdComponent/InputItem';
-import NavBar from '@/helps/antdComponent/NavBar';
-import BaseComponent from '@/helps/BaseComponent';
-import { Title } from '@/helps/styleComponent';
+import BaseComponent from '@/core/BaseComponent';
+// import NavBar from '@/helps/antdComponent/NavBar';
+import { Title } from '@/components/styleComponent';
 import styles from './PcWechatLogin.less';
 
 class PcWechatLogin extends BaseComponent {

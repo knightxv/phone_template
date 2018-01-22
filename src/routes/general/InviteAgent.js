@@ -3,11 +3,11 @@ import { connect } from 'dva';
 import { window } from 'global';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
+import BaseComponent from '@/core/BaseComponent';
 import styles from './InviteAgent.css';
-import { WhiteSpace, WingBlank, Title } from '@/helps/styleComponent';
-import Button from '@/helps/antdComponent/Button';
-import NavBar from '@/helps/antdComponent/NavBar';
-import BaseComponent from '@/helps/BaseComponent';
+import { WhiteSpace, WingBlank, Title } from '@/components/styleComponent';
+import Button from '@/components/antdComponent/Button';
+import NavBar from '@/components/antdComponent/NavBar';
 
 class InviteAgent extends BaseComponent {
   constructor(props) {

@@ -8,7 +8,7 @@ class DatePicker extends React.Component {
     };
   }
   componentDidMount() {
-    import(/* webpackChunkName: 'DatePicker' */'./DatePicker').then((Component) => {
+    import(/* webpackChunkName: 'DatePicker' */'../antdComponent/DatePicker').then((Component) => {
       this.setState({
         Component,
       });
@@ -28,7 +28,7 @@ class SelectPicker extends React.Component {
     };
   }
   componentDidMount() {
-    import(/* webpackChunkName: 'SelectPicker' */'./SelectPicker').then((Component) => {
+    import(/* webpackChunkName: 'SelectPicker' */'../antdComponent/SelectPicker').then((Component) => {
       this.setState({
         Component,
       });
@@ -48,7 +48,7 @@ class Icon extends React.Component {
     };
   }
   componentDidMount() {
-    import(/* webpackChunkName: 'Icon' */'./Icon').then((Component) => {
+    import(/* webpackChunkName: 'Icon' */'../antdComponent/Icon').then((Component) => {
       this.setState({
         Component,
       });
@@ -68,7 +68,7 @@ class Button extends React.Component {
     };
   }
   componentDidMount() {
-    import(/* webpackChunkName: 'Button' */'./Button').then((Component) => {
+    import(/* webpackChunkName: 'Button' */'../antdComponent/Button').then((Component) => {
       this.setState({
         Component,
       });
@@ -88,7 +88,7 @@ class ListView extends React.Component {
     };
   }
   componentDidMount() {
-    import(/* webpackChunkName: 'ListView' */'./ListView').then((Component) => {
+    import(/* webpackChunkName: 'ListView' */'../antdComponent/ListView').then((Component) => {
       this.setState({
         Component,
       });
@@ -109,7 +109,7 @@ class ListViewTable extends React.Component {
     };
   }
   componentDidMount() {
-    import(/* webpackChunkName: 'ListViewTable' */'./ListViewTable').then((res) => {
+    import(/* webpackChunkName: 'ListViewTable' */'../antdComponent/ListViewTable').then((res) => {
       const Component = res.default;
       DataSource = res.DataSource;
       this.setState({
@@ -133,7 +133,7 @@ class InputItem extends React.Component {
     };
   }
   componentDidMount() {
-    import(/* webpackChunkName: 'InputItem' */'./InputItem').then((Component) => {
+    import(/* webpackChunkName: 'InputItem' */'../antdComponent/InputItem').then((Component) => {
       this.setState({
         Component,
       });
@@ -152,7 +152,7 @@ class Modal extends React.Component {
     };
   }
   componentDidMount() {
-    import(/* webpackChunkName: 'Modal' */'./Modal').then((Component) => {
+    import(/* webpackChunkName: 'Modal' */'../antdComponent/Modal').then((Component) => {
       this.setState({
         Component,
       });
@@ -173,6 +173,45 @@ class Modal extends React.Component {
   }
 }
 
+class NavBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      Component: null,
+    };
+  }
+  componentDidMount() {
+    import(/* webpackChunkName: 'NavBar' */'../antdComponent/NavBar').then((Component) => {
+      this.setState({
+        Component,
+      });
+    });
+  }
+  render() {
+    const { Component } = this.state;
+    return (Component ? <Component {...this.props} /> : <div />);
+  }
+}
+
+class SearchBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      Component: null,
+    };
+  }
+  componentDidMount() {
+    import(/* webpackChunkName: 'SearchBar' */'../antdComponent/SearchBar').then((Component) => {
+      this.setState({
+        Component,
+      });
+    });
+  }
+  render() {
+    const { Component } = this.state;
+    return (Component ? <Component {...this.props} /> : <div />);
+  }
+}
 
 export default {
   DatePicker,
@@ -183,4 +222,6 @@ export default {
   ListView,
   InputItem,
   Modal,
+  NavBar,
+  SearchBar,
 };
