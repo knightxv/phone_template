@@ -56,9 +56,9 @@ class Login extends BaseComponent {
   }
   // 微信登录
   wechatLogin = async () => {
-    if (this.helps.system() === 'PC') {
+    if (!this.helps.isWeixinBrowser() && this.helps.system() === 'PC') {
       this.router.go('/pcWechatLogin');
-      return; 
+      return;
     }
     let serverInfo = this.props.serverInfo;
     if (!serverInfo || serverInfo.length < 1) {
@@ -135,7 +135,7 @@ class Login extends BaseComponent {
             </div>
           </div>
           {
-            (this.helps.system() === 'PC' || this.helps.isWechat) &&
+            (this.helps.system() === 'PC' || this.helps.isWeixinBrowser()) &&
             <div
               className={styles.wechatLoginWrap}
               onClick={this.wechatLogin}

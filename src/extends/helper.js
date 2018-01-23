@@ -36,4 +36,10 @@ export const transCountUnit = (count) => {
   return transCount;
 };
 
+// 兼容旧版本
+const isWeixinBrowser = () => {
+  return /micromessenger/.test(window.navigator.userAgent.toLowerCase());
+};
+export const isWechat = isWeixinBrowser();
+
 export default exports;

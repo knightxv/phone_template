@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 
 import BaseComponent from '@/core/BaseComponent';
-import { Button, DatePicker, Icon, NavBar } from '@/components/lazyComponent/antd';
+import { NavBar } from '@/components/lazyComponent/antd';
 import { Title, IconImg } from '@/components/styleComponent';
 import styles from './StepRebateAdded.less';
 
@@ -83,7 +83,7 @@ class StepRebateAdded extends BaseComponent {
             { addedRebateLabel }
           </div>
           <div className={styles.headerLabelTip}>
-            注：本月额外收益=本月阶梯返利*额外返点比例
+            注：本月额外收益=本月阶梯返利 * 额外返点比例
           </div>
         </div>
         <div className={styles.rebateAddedInfo}>
@@ -114,14 +114,14 @@ class StepRebateAdded extends BaseComponent {
             </div>
             {
               limitRecord.length > 0
-              ? (limitRecord.map((data) => {
+              ? (limitRecord.map((data, i) => {
                 const { countTime, addedProfit, monthRebate, stepRebateAddedRate } = data;
                 const timeLabel = new Date(countTime).format('yyyy-MM');
                 const addedProfitLabel = this.helps.parseFloatMoney(addedProfit);
                 const rebateLabel = this.helps.parseFloatMoney(monthRebate);
                 const stepRebateAddedRateLabel = `${stepRebateAddedRate}%`;
                 return (
-                  <div className={styles.recordItemWrap}>
+                  <div className={styles.recordItemWrap} key={i}>
                     <div className={styles.recordItem}>{ timeLabel }</div>
                     <div className={classnames(styles.recordItem, styles.recordItemEvent)}>{ addedProfitLabel }</div>
                     <div className={styles.recordItem}>{ rebateLabel }</div>

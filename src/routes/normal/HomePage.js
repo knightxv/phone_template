@@ -94,6 +94,7 @@ class HomePage extends BaseComponent {
         priceInfoVisible: true,
       });
     }
+    this.shareAgentLink(true);
   }
   navigate = (touterName) => {
     this.router.go(touterName);
@@ -171,7 +172,7 @@ class HomePage extends BaseComponent {
     });
   }
   // 分享代理链接
-  shareAgentLink = async () => {
+  shareAgentLink = async (isShareBack) => {
     let serverInfo = this.props.serverInfo;
     const { inviteCode } = this.props;
     if (!serverInfo || serverInfo.length < 1) {
@@ -223,7 +224,9 @@ class HomePage extends BaseComponent {
       desc: '高收入、零成本做代理，年薪百万不是梦',
     };
     await wechatSdkManage.shareLink(shareInfo);
-    this.toggleShareAgentImg();
+    if (!isShareBack) {
+      this.toggleShareAgentImg();
+    }
   }
   // 分享玩家链接
   sharePlayerLink = async () => {
