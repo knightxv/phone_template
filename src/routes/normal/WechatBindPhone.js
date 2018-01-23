@@ -107,7 +107,7 @@ class WechatBindPhone extends BaseComponent {
         </Helmet>
         <NavBar
           title="绑定手机"
-          onClick={this.router.back}
+          onClick={() => this.router.go('/login')}
         />
         <div className={styles.contentContainer}>
           <div>
