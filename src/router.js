@@ -188,8 +188,8 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
-      path: '/setInfo',
-      component: () => import('./routes/normal/SetInfo'),
+      path: '/stepRebateAdded',
+      component: () => import('./routes/normal/StepRebateAdded'),
       models: () => [
         import('./models/agent'),
       ],

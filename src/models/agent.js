@@ -38,6 +38,7 @@ export default {
 
     //*del loginID: '',
     //*del password: '',
+    stepRebateAddedRate: 0,
 
     // getVerifyCodeElseTime: 0, // 获取验证码剩余的时间（0代表可以重新获取）
   },

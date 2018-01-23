@@ -223,7 +223,7 @@ class HomePage extends BaseComponent {
       desc: '高收入、零成本做代理，年薪百万不是梦',
     };
     await wechatSdkManage.shareLink(shareInfo);
-    this.toggleSharePlayertImg();
+    this.toggleShareAgentImg();
   }
   // 分享玩家链接
   sharePlayerLink = async () => {
@@ -333,9 +333,6 @@ class HomePage extends BaseComponent {
       message: '邀请下级玩家',
     });
   }
-  setUserInfo = () => {
-    this.router.go('/setInfo');
-  }
   toggleShareAgentImg = () => {
     this.setState({
       shareAgentVisible: !this.state.shareAgentVisible,
@@ -350,7 +347,7 @@ class HomePage extends BaseComponent {
     const { noticeInfo, priceInfoVisible, shareAgentVisible, sharePlayerVisible } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(noticeInfo);
     const noticeVisible = !!noticeInfo;
-    const { inviteCode, canCashCount, masonry, userName, avatar,
+    const { inviteCode, canCashCount, masonry, userName, avatar, stepRebateAddedRate,
     // balancePayToday, savePlayerCount, saveAgentCount, myUnderAgentCount, myPlayerCount,
     // masonryIncomeToday, masonryPayToday, balanceIncomeToday, saleDiamondsOfThisMonth,
     // rechargeOfToday, rechargeOfYesterDay, cashCountlog, ranking,
@@ -395,7 +392,7 @@ class HomePage extends BaseComponent {
             priceInfoVisible && <p className={styles.prizeLabel} onClick={() => this.navigate('/rankExplain')}>奖励规则</p>
           }
         </FlexRowBetweenWingSpace>
-        <div className={styles.userInfoContainer} onClick={this.setUserInfo}>
+        <div className={styles.userInfoContainer}>
           <div className={styles.userInfoWrap}>
             <Avatar src={avatar} className={styles.userAvatar} />
             <div className={styles.userInfo}>
@@ -406,7 +403,7 @@ class HomePage extends BaseComponent {
             </div>
           </div>
           <div>
-            <Icon type="right" />
+            {/* <Icon type="right" /> */}
           </div>
         </div>
       </div>
@@ -497,31 +494,46 @@ class HomePage extends BaseComponent {
           <Icon type="right" />
         </FlexRow> */}
         </FlexRowBetweenWingSpace>
-        {/* 代理阶梯返利 */}
-        {
-        this.hasPower('stepRebate') &&
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/stepRebate')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
-            <span>代理阶梯返利</span>
-          </FlexRow>
-          <Icon type="right" />
-        </FlexRowBetweenWingSpace>
-      }
       </div>
-
-      { havePowerToBanlance && <WhiteSpace /> }
-      { havePowerToBanlance &&
-        <div className={styles.module}>
-          {/* 提现 */}
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
+      {/* 代理阶梯返利 */}
+      {
+        this.hasPower('stepRebate') &&
+        <div>
+          <WhiteSpace />
+          <div className={styles.moduleItem} onClick={() => this.navigate('/stepRebate')}>
             <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.bank} />
-              <span>提现</span>
+              <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
+              <span>代理阶梯返利</span>
             </FlexRow>
             <Icon type="right" />
-          </FlexRowBetweenWingSpace>
+          </div>
+          {
+            stepRebateAddedRate != 0 &&
+            (<div className={styles.moduleItem} onClick={() => this.navigate('/stepRebateAdded')}>
+              <FlexRow className={styles.navigateTitleWrap}>
+                <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
+                <span>代理阶梯返利额外返点</span>
+              </FlexRow>
+              <Icon type="right" />
+            </div>)
+          }
         </div>
+        }
+      {/* 提现 */}
+      {
+        havePowerToBanlance &&
+        (<div>
+           <WhiteSpace />
+          <div className={styles.module}>
+            <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
+              <FlexRow className={styles.navigateTitleWrap}>
+                <IconImg className={styles.titleIconImg} src={IconSource.bank} />
+                <span>提现</span>
+              </FlexRow>
+              <Icon type="right" />
+            </FlexRowBetweenWingSpace>
+          </div>
+        </div>)
       }
       <WhiteSpace />
       <div className={styles.module}>

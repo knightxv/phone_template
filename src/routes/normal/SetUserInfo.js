@@ -10,18 +10,17 @@ class SetUserInfo extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
-      userName: '',
       password: '',
       rePwd: '',
     };
   }
   confimToSet = async () => {
-    const { userName, password, rePwd } = this.state;
+    const { password, rePwd } = this.state;
     if (password !== rePwd) {
       this.message.info('两次密码不一致');
       return;
     }
-    const res = await this.http.webHttp.get('/spreadApi/setUserInfo', { userName, password });
+    const res = await this.http.webHttp.get('/spreadApi/setUserInfo', { password });
     if (res.isSuccess) {
       this.router.go('/homePage');
     } else {
@@ -29,7 +28,7 @@ class SetUserInfo extends BaseComponent {
     }
   }
   async componentWillMount() {
-    
+
   }
   setStateAsync = (state) => {
     return new Promise((resolve) => {
@@ -37,24 +36,16 @@ class SetUserInfo extends BaseComponent {
     });
   }
   render() {
-    const { userName, password, rePwd } = this.state;
-    const btnDiasbled = !userName || !password || !rePwd;
+    const { password, rePwd } = this.state;
+    const btnDiasbled = !password || !rePwd;
     return (
       <div className={styles.container}>
-        <Title>设置账户信息</Title>
+        <Title>设置登录密码</Title>
         <NavBar
-          title="设置账户信息"
+          title="设置登录密码"
         />
         <div className={styles.contentContainer}>
           <div>
-            <div className={styles.inputWrap}>
-              <InputItem
-                clear
-                value={userName}
-                onChange={value => this.setState({ userName: value })}
-                placeholder="请输入您的姓名(必填)"
-              />
-            </div>
             <div className={styles.inputWrap}>
               <InputItem
                 clear
