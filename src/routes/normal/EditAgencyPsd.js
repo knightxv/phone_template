@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
+import classnames from 'classnames';
 
 import BaseComponent from '@/core/BaseComponent';
 import { InputItem, Button, NavBar } from '@/components/lazyComponent/antd';
 import { Title } from '@/components/styleComponent';
-import styles from './EditAgencyPsd.css';
+import styles from './EditAgencyPsd.less';
 
 class EditPsd extends BaseComponent {
   constructor(props) {
@@ -48,7 +49,7 @@ class EditPsd extends BaseComponent {
           title="修改密码"
           onClick={this.router.back}
         />
-        <div>
+        <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
           <div className={styles.inputContainer}>
             <div className={styles.inputWrap}>
               <InputItem
@@ -56,8 +57,8 @@ class EditPsd extends BaseComponent {
                 value={oldPsd}
                 type="password"
                 onChange={value => this.setState({ oldPsd: value })}
-                placeholder="如果包含字母，请注意区分大小写"
-              >　原密码:</InputItem>
+                placeholder="请输入旧密码"
+              />
             </div>
             <div className={styles.inputWrap}>
               <InputItem
@@ -65,8 +66,8 @@ class EditPsd extends BaseComponent {
                 type="password"
                 value={newPsd}
                 onChange={value => this.setState({ newPsd: value })}
-                placeholder="输入新密码，请注意区分大小写"
-              >　新密码:</InputItem>
+                placeholder="请输入新密码"
+              />
             </div>
             <div className={styles.inputWrap}>
               <InputItem
@@ -74,8 +75,8 @@ class EditPsd extends BaseComponent {
                 type="password"
                 value={rePsd}
                 onChange={value => this.setState({ rePsd: value })}
-                placeholder="再次输入新密码，确认输入无误"
-              >确认密码:</InputItem>
+                placeholder="确认新密码"
+              />
             </div>
             <div className={styles.editBtnWrap}>
               <Button
@@ -83,7 +84,7 @@ class EditPsd extends BaseComponent {
                 loading={editLoading}
                 onClick={this.editPsd}
               >
-                确认修改
+                确认
               </Button>
             </div>
           </div>

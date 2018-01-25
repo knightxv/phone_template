@@ -10,7 +10,7 @@ import NoticeBar from '@/components/antdComponent/NoticeBar';
 import { Button, Icon, Modal, NavBar } from '@/components/lazyComponent/antd';
 // import {} from ''
 import Avatar from '@/components/Avatar';
-import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, IconImg } from '@/components/styleComponent';
+import { Title, FlexRowBetweenWingSpace, FlexRow, IconImg } from '@/components/styleComponent';
 import styles from './HomePage.less';
 import wechatSdkManage from '../../extends/wechatSdk';
 
@@ -43,6 +43,7 @@ class HomePage extends BaseComponent {
       priceInfoVisible: false, // 奖励说明是否显示
       shareAgentVisible: false, // 分享代理的图片
       sharePlayerVisible: false, // 分享玩家的图片
+      isShowNotice: false, // 是否显示公告
     };
   }
   powerManage = () => {
@@ -104,10 +105,10 @@ class HomePage extends BaseComponent {
     await this.http.webHttp.get('/spreadApi/logout');
     this.navigate('/login');
   }
-  // 跳转到公告详情
-  navigateNotice = async () => {
-    this.navigate('/noticeDetail');
-  }
+  // // 跳转到公告详情
+  // navigateNotice = async () => {
+  //   this.navigate('/noticeDetail');
+  // }
   editPas = () => {
     this.navigate('/EditAgencyPsd');
   }
@@ -344,8 +345,13 @@ class HomePage extends BaseComponent {
       sharePlayerVisible: !this.state.sharePlayerVisible,
     });
   }
+  toggleShowNotice = () => {
+    this.setState({
+      isShowNotice: !this.state.isShowNotice,
+    });
+  }
   render() {
-    const { noticeInfo, priceInfoVisible, shareAgentVisible, sharePlayerVisible } = this.state;
+    const { noticeInfo, priceInfoVisible, shareAgentVisible, sharePlayerVisible, isShowNotice } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(noticeInfo);
     const noticeVisible = !!noticeInfo;
     const { inviteCode, canCashCount, masonry, userName, avatar, stepRebateAddedRate,
@@ -377,7 +383,7 @@ class HomePage extends BaseComponent {
       {
         noticeVisible
         && <NoticeBar
-          onClick={this.navigateNotice}
+          onClick={this.toggleShowNotice}
         >
           {/* <FlexRow>
             <span className={styles.noticeLabel} dangerouslySetInnerHTML={notiveInfoHtml} />
@@ -386,14 +392,6 @@ class HomePage extends BaseComponent {
         </NoticeBar>
       }
       <div className={styles.headerModule}>
-        <FlexRowBetweenWingSpace>
-          {/* <div className={styles.titleWrap}>
-              我的排名:<span className={styles.rankColor}>{ isRankingShow ? ranking : '未上榜'}</span>
-          </div> */}
-          {
-            priceInfoVisible && <p className={styles.prizeLabel} onClick={() => this.navigate('/rankExplain')}>奖励规则</p>
-          }
-        </FlexRowBetweenWingSpace>
         <div className={styles.userInfoContainer}>
           <div className={styles.userInfoWrap}>
             <Avatar src={avatar} className={styles.userAvatar} />
@@ -420,22 +418,22 @@ class HomePage extends BaseComponent {
           </div>
         }
       </div>
-      <div className={styles.module}>
+      <div className={styles.blockContainer}>
         {/* 购买钻石 */}
         {
           havePowerToBuyDia &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/agencyPay')}>
+          <div className={styles.itemModule} onClick={() => this.navigate('/agencyPay')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.buyDia} />
               <span>购买钻石</span>
             </FlexRow>
             <Icon type="right" />
-          </FlexRowBetweenWingSpace>
+          </div>
         }
         {/* 给玩家充钻 */}
         {
           havePowerToRechargeToPlayer &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/turnDiaForPlayer')}>
+          <div className={styles.itemModule} onClick={() => this.goToSelectGame('/turnDiaForPlayer')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.turnDia_play} />
               <span>替玩家购钻</span>
@@ -444,12 +442,12 @@ class HomePage extends BaseComponent {
             {/* <FlexRow className={styles.titleWrap}>
               <p>{savePlayerCount || 0}人</p>
             </FlexRow> */}
-          </FlexRowBetweenWingSpace>
+          </div>
         }
         {/* 给代理充钻 */}
         {
           havePowerToRechargeToAgent &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/turnDiaForAgent')}>
+          <div className={styles.itemModule} onClick={() => this.navigate('/turnDiaForAgent')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.turnDia_agent} />
               <span>给代理充钻</span>
@@ -458,51 +456,32 @@ class HomePage extends BaseComponent {
             {/* <FlexRow className={styles.titleWrap}>
               <p>{saveAgentCount || 0}人</p>
             </FlexRow> */}
-          </FlexRowBetweenWingSpace>
+          </div>
         }
-
-        {/* 钻石变化记录 */}
-        {/* {
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/masonryDerail')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
-              <span>钻石变化记录</span>
-            </FlexRow>
-            <Icon type="right" />
-          </FlexRowBetweenWingSpace>
-        } */}
       </div>
-      <WhiteSpace />
-      <div className={styles.module}>
+      <div className={styles.blockContainer}>
         {/* 邀请成为我的下级代理 */}
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={this.showShareAgentAction}>
+        <div className={styles.itemModule} onClick={this.showShareAgentAction}>
           <FlexRow className={styles.navigateTitleWrap}>
             <IconImg className={styles.titleIconImg} src={IconSource.invite} />
             <span>邀请下级代理</span>
           </FlexRow>
           <Icon type="right" />
-          {/* <FlexRow className={styles.titleWrap}>
-          <Icon type="right" />
-        </FlexRow> */}
-        </FlexRowBetweenWingSpace>
+        </div>
         {/* 邀请成为我的下级玩家 */}
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={this.showSharePlayerAction}>
+        <div className={styles.itemModule} onClick={this.showSharePlayerAction}>
           <FlexRow className={styles.navigateTitleWrap}>
             <IconImg className={styles.titleIconImg} src={IconSource.invite_player} />
             <span>邀请下级玩家</span>
           </FlexRow>
           <Icon type="right" />
-          {/* <FlexRow className={styles.titleWrap}>
-          <Icon type="right" />
-        </FlexRow> */}
-        </FlexRowBetweenWingSpace>
+        </div>
       </div>
       {/* 代理阶梯返利 */}
       {
-        this.hasPower('stepRebate') &&
-        <div>
-          <WhiteSpace />
-          <div className={styles.moduleItem} onClick={() => this.navigate('/stepRebate')}>
+        (this.hasPower('stepRebate') || this.hasPower('underAgentPercentage')) &&
+        <div className={styles.blockContainer}>
+          <div className={styles.itemModule} onClick={() => this.navigate('/stepRebate')}>
             <FlexRow className={styles.navigateTitleWrap}>
               <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
               <span>代理阶梯返利</span>
@@ -511,7 +490,7 @@ class HomePage extends BaseComponent {
           </div>
           {
             stepRebateAddedRate != 0 &&
-            (<div className={styles.moduleItem} onClick={() => this.navigate('/stepRebateAdded')}>
+            (<div className={styles.itemModule} onClick={() => this.navigate('/stepRebateAdded')}>
               <FlexRow className={styles.navigateTitleWrap}>
                 <IconImg className={styles.titleIconImg} src={IconSource.ewfl} />
                 <span>代理阶梯返利额外返点</span>
@@ -519,48 +498,39 @@ class HomePage extends BaseComponent {
               <Icon type="right" />
             </div>)
           }
+          {
+            this.hasPower('underAgentPercentage') &&
+            <div className={styles.itemModule} onClick={() => this.navigate('/myUnderAgent')}>
+              <FlexRow className={styles.navigateTitleWrap}>
+                <IconImg className={styles.titleIconImg} src={IconSource.xjfl} />
+                <span>查看下级钻石抽成情况</span>
+              </FlexRow>
+              <Icon type="right" />
+            </div>
+          }
         </div>
         }
       {/* 提现 */}
       {
         havePowerToBanlance &&
         (<div>
-           <WhiteSpace />
-          <div className={styles.module}>
-            <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
+          <div className={styles.blockContainer}>
+            <div className={styles.itemModule} onClick={() => this.navigate('/cashMoney')}>
               <FlexRow className={styles.navigateTitleWrap}>
                 <IconImg className={styles.titleIconImg} src={IconSource.bank} />
                 <span>提现</span>
               </FlexRow>
               <Icon type="right" />
-            </FlexRowBetweenWingSpace>
+            </div>
           </div>
         </div>)
       }
-      <WhiteSpace />
-      <div className={styles.module}>
-        {/* 查看下级钻石抽成情况 */}
-        {
-          this.hasPower('underAgentPercentage') &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.xjfl} />
-              <span>查看下级钻石抽成情况</span>
-            </FlexRow>
-            <Icon type="right" />
-            {/* <FlexRow className={styles.titleWrap}>
-              <p>{myUnderAgentCount}人</p>
-              <Icon type="right" />
-            </FlexRow> */}
-          </FlexRowBetweenWingSpace>
-        }
-      </div>
       <div className={styles.btnContainer}>
         <div className={styles.btnWrap}>
           <Button className={styles.optionEditBtn} onClick={this.editPas}>修改密码</Button>
         </div>
         <div className={styles.btnWrap}>
-          <Button type="danger" className={styles.optionQuitBtn} onClick={this.logout}>退出</Button>
+          <Button type="danger" className={styles.optionQuitBtn} onClick={this.logout}>安全退出</Button>
         </div>
       </div>
       {/* 分享代理 */}
@@ -585,6 +555,25 @@ class HomePage extends BaseComponent {
       >
         <div onClick={this.toggleSharePlayertImg} className={styles.sharePicker}>
           <img className={styles.shareImg} src={IconSource.sharePlayer} />
+        </div>
+      </Modal>
+      {/* 公告 */}
+      <Modal
+        transparent
+        maskClosable
+        className={styles.payModal}
+        visible={isShowNotice}
+        onClose={this.toggleShowNotice}
+      >
+        <div className={styles.sharePicker}>
+          <div className={styles.noticeContainer}>
+            <div className={styles.noticeWrap}>
+              <div dangerouslySetInnerHTML={notiveInfoHtml} />
+            </div>
+            <Button type="danger" className={styles.optionQuitBtn} onClick={this.toggleShowNotice}>
+              关闭
+            </Button>
+          </div>
         </div>
       </Modal>
     </div>);

@@ -110,7 +110,7 @@ class WechatBindPhone extends BaseComponent {
           onClick={() => this.router.go('/login')}
         />
         <div className={styles.contentContainer}>
-          <div>
+          <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
             <div className={styles.inputWrap}>
               <InputItem
                 value={phone}
@@ -145,7 +145,7 @@ class WechatBindPhone extends BaseComponent {
               <Button
                 disabled={btnDiabled}
                 onClick={this.register}
-              >确认</Button>
+              >下一步</Button>
             </div>
           </div>
           {

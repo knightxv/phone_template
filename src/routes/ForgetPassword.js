@@ -20,7 +20,7 @@ class ForgetPassword extends BaseComponent {
     };
   }
   async componentWillMount() {
-    
+
   }
   checkPhoneValid = () => {
     const { phone } = this.state;
@@ -97,7 +97,7 @@ class ForgetPassword extends BaseComponent {
           title="忘记密码"
           onClick={this.router.back}
         />
-        <div className={styles.contentContainer}>
+        <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
           <div className={styles.inputWrap}>
             <InputItem
               clear
@@ -137,9 +137,9 @@ class ForgetPassword extends BaseComponent {
               placeholder="请确认密码"
             />
           </div>
-        </div>
-        <div className={styles.confimBtnWrap}>
-          <Button onClick={this.reSetPwd}>确定</Button>
+          <div className={styles.confimBtnWrap}>
+            <Button onClick={this.reSetPwd}>确定</Button>
+          </div>
         </div>
       </div>
     );

@@ -119,3 +119,7 @@
 :global(.am-action-sheet-share-list) {
     padding-left: .15rem;
 }
+:global(.am-button-primary.am-button-disabled) {
+    color: #fefefe;
+    background-color: #d3d6db;
+}

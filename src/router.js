@@ -263,11 +263,6 @@ function RouterConfig({ history, app }) {
         import('./models/general'),
       ],
     },
-    // 公用
-    {
-      path: '/noticeDetail',
-      component: () => import('./routes/NoticeDetail'),
-    },
     {
       path: '/wechatAuth',
       component: () => import('./routes/WechatAuth'),

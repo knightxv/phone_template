@@ -18,9 +18,7 @@
 
 .userInfoContainer {
     .flexRow(space-between);
-    color: #fff;
     padding: .2rem;
-    border-bottom: 1px solid #eee;
 }
 .userInfoWrap {
     .flexRow();
@@ -77,8 +75,8 @@
 }
 
 .titleIconImg {
-    width: .5rem;
-    height: .5rem;
+    width: .6rem;
+    height: .6rem;
     margin-right: .2rem;
 }
 
@@ -117,7 +115,6 @@
 }
 
 .userNameLabel {
-    color: #fff;
     padding-bottom: .16rem;
 }
 
@@ -137,29 +134,27 @@
 .optionQuitBtn {
     background: @red;
     color: #fff;
+    .border(@red);
 }
 
 .headerModule {
-    background: @baseColor;
+  // background: @baseColor;
 }
 .prizeLabel {
-    color: #fff;
     padding-top: .1rem;
+
 }
 .countContainer {
     display: flex;
     flex-direction: row;
-}
-.countWrap {
-    flex: 1;
-    padding: .2rem .2rem;
+    justify-content: space-between;
     background: @baseColor;
     color: #fff;
-    .borRig();
+    padding: .2rem .2rem;
 }
 
 .btnContainer {
-    padding-bottom: .2rem;
+    padding: .2rem 0;
 }
 .homePageHeader {
     background: @baseColor!important;
@@ -205,9 +200,24 @@
   }
 }
 
-.moduleItem {
+.itemModule {
     .flexRow(space-between);
     background: #fff;
     .borBot();
     padding: 0 .2rem;
+}
+
+.noticeContainer {
+  height: 80%;
+  margin: .6rem .3rem 0;
+  padding: .2rem;
+  background: @bgColor;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.noticeWrap {
+  flex: 1;
+  text-align: left;
 }

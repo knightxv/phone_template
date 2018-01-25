@@ -110,7 +110,7 @@ class Register extends BaseComponent {
           onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
-          <div>
+          <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
             <div className={styles.inputWrap}>
               <InputItem
                 clear

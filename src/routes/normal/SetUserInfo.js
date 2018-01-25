@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 
+import classnames from 'classnames';
 import BaseComponent from '@/core/BaseComponent';
 import { Button, InputItem, NavBar } from '@/components/lazyComponent/antd';
 import { Title } from '@/components/styleComponent';
@@ -45,7 +46,7 @@ class SetUserInfo extends BaseComponent {
           title="设置登录密码"
         />
         <div className={styles.contentContainer}>
-          <div>
+          <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
             <div className={styles.inputWrap}>
               <InputItem
                 clear

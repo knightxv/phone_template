@@ -9,7 +9,6 @@
 .logoWrap {
     margin: 0px auto 0px;
     padding-top: .4rem;
-    padding-bottom: .5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,17 +22,6 @@
     display: block;
     vertical-align: middle;
 }
-/* @media screen and (max-width: 768px) {
-    .logo {
-        width: 38px;
-        height: 26px;
-        display: inline-block;
-    }
-} */
-.loginInput {
-    margin-top: 12px;
-}
-
 .logoTitle {
     font-size: .44rem;
     padding: .3rem 0;
@@ -41,24 +29,23 @@
 }
 
 .loginBtn {
-    display: block;
-    width: 100%;
+  margin-top: .4rem;
+  display: block;
+  width: 100%;
 }
 
 .inputWrap {
     background: #fff;
-    border-radius: 5px;
     margin: 0rem 0 0;
     .borBot();
 }
 
 .contentContainer {
-    margin: 0 0.22rem;
-    flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    // flex: 1;
+    // height: 100%;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: space-between;
 }
 
 .registerTip {
@@ -76,33 +63,42 @@
 .forgetPwdWrap {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
-    padding: .2rem;
-    color: @gray;
+    justify-content: space-between;
+    padding-top: .2rem;
     font-size: .3rem;
 }
 
-.wechatLoginWrap {
-    .flexRow(center);
-    align-items: center;
-    padding-bottom: 1rem;
-    
-}
 .wxLoginIcon {
-    padding: .2rem 0 .1rem;
-    width: .8rem;
-    height: 1rem;
-    display: block;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  display: block;
+
+}
+.wechatLoginWrap {
+
 }
 .wechatLogin {
-    .border(#000);
-    .flexRow();
-    padding: 0 .2rem;
-    border-radius: 5px;
-    box-shadow:  2px 2px 3px rgba(0, 0, 0, .5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 .2rem;
+  border-radius: 5px;
 }
 
 .wechatLoginLabel {
     color: #000;
     padding-left: .2rem;
+}
+.loginTip {
+  padding: 0 .2rem;
+}
+.loginLineWrap {
+  .flexRow();
+  padding: .2rem 1rem;
+}
+.line {
+  flex: 1;
+  height: 1px;
+  background: @gray;
 }

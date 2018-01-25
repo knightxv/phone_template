@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { window } from 'global';
+import classnames from 'classnames';
 
 import { Helmet } from 'react-helmet';
 import BaseComponent from '@/core/BaseComponent';
@@ -92,13 +93,12 @@ class Login extends BaseComponent {
         <div className={styles.contentContainer}>
           <div>
             <div className={styles.logoWrap}>
-              { iconLogo && <IconImg className={styles.logo} src={iconLogo} />}
-              <span className={styles.logoTitle}>{gameName}</span>
+              { iconLogo && <IconImg className={styles.logo} src={iconLogo} /> }
+              <div className={styles.logoTitle}>登入{gameName}</div>
             </div>
-            <div>
+            <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
               <div className={styles.inputWrap}>
                 <InputItem
-                  className={styles.loginInput}
                   onChange={value => this.setState({ loginID: value })}
                   value={loginID}
                   clear
@@ -107,7 +107,6 @@ class Login extends BaseComponent {
               </div>
               <div className={styles.inputWrap}>
                 <InputItem
-                  className={styles.loginInput}
                   type="password"
                   placeholder="代理登录密码"
                   value={password}
@@ -115,32 +114,35 @@ class Login extends BaseComponent {
                   onChange={value => this.setState({ password: value })}
                 />
               </div>
-            </div>
-            <div className={styles.forgetPwdWrap}>
-              <span onClick={this.forgetPwd}>忘记密码?</span>
-            </div>
-            <Button
-              className={styles.loginBtn}
-              loading={loginLoading}
-              onClick={this.login}
-              disabled={btnDisabled}
-            >
-              登录
-            </Button>
-            <div className={styles.registerTip}>
-              <span
-                className={styles.registerLabel}
-                onClick={this.navigateToRegister}
-              >申请账号</span>
+              <Button
+                className={styles.loginBtn}
+                loading={loginLoading}
+                onClick={this.login}
+                disabled={btnDisabled}
+              >
+                登录
+              </Button>
+              <div className={styles.forgetPwdWrap}>
+                <span onClick={this.forgetPwd}>忘记密码?</span>
+                <span
+                  className={styles.registerLabel}
+                  onClick={this.navigateToRegister}
+                >申请代理</span>
+              </div>
             </div>
           </div>
           {
             (this.helps.system() === 'PC' || this.helps.isWeixinBrowser()) &&
-            <div
-              className={styles.wechatLoginWrap}
-              onClick={this.wechatLogin}
-            >
-              <div className={styles.wechatLogin}>
+            <div className={styles.wechatLoginWrap}>
+              <div className={styles.loginLineWrap}>
+                <div className={styles.line}></div>
+                <div className={styles.loginTip}>其他登入方式</div>
+                <div className={styles.line}></div>
+              </div>
+              <div
+                className={styles.wechatLogin}
+                onClick={this.wechatLogin}
+              >
                 <IconImg className={styles.wxLoginIcon} src={wxIcon} />
                 <span className={styles.wechatLoginLabel}>微信登录</span>
               </div>
