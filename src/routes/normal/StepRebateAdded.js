@@ -7,13 +7,17 @@ import { NavBar } from '@/components/lazyComponent/antd';
 import { Title, IconImg } from '@/components/styleComponent';
 import styles from './StepRebateAdded.less';
 
+const imgSource = {
+  look: require('../../assets/chakan.png'),
+};
+
 class StepRebateAdded extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
       addedRebate: '-', // 额外收益
       stepRebate: '-', // 阶梯返利
-      rebateRate: '-', // 阶梯比例
+      addedRebateRate: '-', // 阶梯比例
       page: 0,
       record: [
       ],
@@ -21,7 +25,7 @@ class StepRebateAdded extends BaseComponent {
     this.showItemLength = 6;
   }
   async componentWillMount() {
-    const res = await this.http.webHttp.get('/spreadApi/rebate/rebateInfo');
+    const res = await this.http.webHttp.get('/spreadApi/rebate/agentAddedRebateInfo');
     if (!res.isSuccess) {
       return;
     }
@@ -59,7 +63,7 @@ class StepRebateAdded extends BaseComponent {
     });
   }
   render() {
-    const { record, page, addedRebate, stepRebate, rebateRate } = this.state;
+    const { record, page, addedRebate, stepRebate, addedRebateRate } = this.state;
     const showItemLength = this.showItemLength;
     const limitRecord = record.slice(page * showItemLength, (page + 1) * showItemLength);
     const addedRebateLabel = this.helps.parseFloatMoney(addedRebate);
@@ -80,30 +84,30 @@ class StepRebateAdded extends BaseComponent {
             本月额外收益（元）
           </div>
           <div className={styles.rebateAddedMoney}>
-            { addedRebateLabel }
+            { addedRebateLabel || '-' }
           </div>
-          <div className={styles.headerLabelTip}>
+          <div className={styles.headerLabelAssistTip}>
             注：本月额外收益=本月阶梯返利 * 额外返点比例
           </div>
         </div>
         <div className={styles.rebateAddedInfo}>
           <div className={styles.rebateInfoItem}>
-            <div>{ stepRebateLabel }元</div>
+            <div>{ stepRebateLabel || '-' }元</div>
             <div className={styles.rebateInfoTip}>本月阶梯返利</div>
           </div>
           <div className={styles.rebateInfoItem}>
-            <div>{ rebateRate }%</div>
+            <div>{ addedRebateRate }%</div>
             <div className={styles.rebateInfoTip}>额外返点比例</div>
           </div>
         </div>
         {/* 额外返利记录 */}
         <div>
           <div className={styles.rebateAddedRecordTitleWrap}>
-            额外返利记录
+            <IconImg className={styles.lookIcon} src={imgSource.look} /><span>额外返利记录</span>
           </div>
           <div className={styles.rebateAddedRecordInfoWrap}>
-            <div>{ rebateAllCountLabel }元</div>
-            <div className={styles.rebateAddedRecordInfoTip}>累积额外收益</div>
+            <div className={styles.rebateAllCountLabel}>{ rebateAllCountLabel }元</div>
+            <div className={styles.rebateAddedRecordInfoTip}>累积额外收益(元)</div>
           </div>
           <div>
             <div className={styles.recordItemWrap}>
@@ -122,10 +126,10 @@ class StepRebateAdded extends BaseComponent {
                 const stepRebateAddedRateLabel = `${stepRebateAddedRate}%`;
                 return (
                   <div className={styles.recordItemWrap} key={i}>
-                    <div className={styles.recordItem}>{ timeLabel }</div>
-                    <div className={classnames(styles.recordItem, styles.recordItemEvent)}>{ addedProfitLabel }</div>
-                    <div className={styles.recordItem}>{ rebateLabel }</div>
-                    <div className={classnames(styles.recordItem, styles.recordItemEvent)}>{ stepRebateAddedRateLabel }</div>
+                    <div className={styles.recordItemRow}>{ timeLabel }</div>
+                    <div className={classnames(styles.recordItemRow, styles.recordItemRowAdded)}>{ addedProfitLabel }</div>
+                    <div className={classnames(styles.recordItemRow, styles.recordItemRowStepMoney)}>{ rebateLabel }</div>
+                    <div className={styles.recordItemRow}>{ stepRebateAddedRateLabel }</div>
                   </div>
                 );
               }))

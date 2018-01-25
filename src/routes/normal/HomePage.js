@@ -31,6 +31,7 @@ const IconSource = {
   share: require('../../assets/share_friend.png'),
   shareAgent: require('../../assets/shareAgent.png'),
   sharePlayer: require('../../assets/sharePlayer.png'),
+  ewfl: require('../../assets/ewfl.png'),
 };
 
 class HomePage extends BaseComponent {
@@ -94,7 +95,6 @@ class HomePage extends BaseComponent {
         priceInfoVisible: true,
       });
     }
-    this.shareAgentLink(true);
   }
   navigate = (touterName) => {
     this.router.go(touterName);
@@ -172,7 +172,7 @@ class HomePage extends BaseComponent {
     });
   }
   // 分享代理链接
-  shareAgentLink = async (isShareBack) => {
+  shareAgentLink = async () => {
     let serverInfo = this.props.serverInfo;
     const { inviteCode } = this.props;
     if (!serverInfo || serverInfo.length < 1) {
@@ -224,9 +224,7 @@ class HomePage extends BaseComponent {
       desc: '高收入、零成本做代理，年薪百万不是梦',
     };
     await wechatSdkManage.shareLink(shareInfo);
-    if (!isShareBack) {
-      this.toggleShareAgentImg();
-    }
+    this.toggleShareAgentImg();
   }
   // 分享玩家链接
   sharePlayerLink = async () => {
@@ -514,7 +512,7 @@ class HomePage extends BaseComponent {
             stepRebateAddedRate != 0 &&
             (<div className={styles.moduleItem} onClick={() => this.navigate('/stepRebateAdded')}>
               <FlexRow className={styles.navigateTitleWrap}>
-                <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
+                <IconImg className={styles.titleIconImg} src={IconSource.ewfl} />
                 <span>代理阶梯返利额外返点</span>
               </FlexRow>
               <Icon type="right" />

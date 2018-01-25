@@ -149,7 +149,7 @@ class AgencyExtractMoney extends BaseComponent {
         record: res.data || [],
       });
     } else {
-      this.helps.toast(res.info || '请求错误');
+      this.helps.info(res.info || '请求错误');
     }
   }
   scrollTop = () => {

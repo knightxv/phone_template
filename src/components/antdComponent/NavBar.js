@@ -15,7 +15,7 @@ width: 100%;
 max-width: 750px;
 top: 0;
 z-index: 999;
-background: #295bac;
+background: #4889db;
 `;
 const NavBarSideWrap = styled.div`
 min-width: 36px;

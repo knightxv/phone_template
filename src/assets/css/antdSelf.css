@@ -61,8 +61,8 @@
     color: #fff;
 }
 :global(.am-button-primary) {
-    background: #295bac;
-    border: 1px solid #295bac;
+    background: #4889db;
+    border: 1px solid #4889db;
     color: #fff;
 }
 :global(.am-button) {

@@ -4,6 +4,7 @@ import fetch from 'dva/fetch';
 import { routerRedux } from 'dva/router';
 import socketManage from '../extends/Socket';
 import { remoteUrl } from '@/config/index';
+import wechatSdkManage from '../extends/wechatSdk';
 
 const delay = (time = 1000) => {
   return new Promise((resolve) => {
@@ -17,7 +18,7 @@ export default {
   namespace: 'agent',
   state: {
     // userName: '',
-    
+
     // inviteCode: 0, // 邀请码
     // masonry: 0, // 砖石
     // rechargeOfToday: 0, // 今日充值
@@ -116,6 +117,25 @@ export default {
             dispatch(routerRedux.push('/login'));
           }
         }
+        // 默认分享登录页
+        const origin = window.location.origin;
+        const noPortOrigin = origin.replace(/:\d+/, '');
+        const gameListRes = await fetch(`${remoteUrl}/spreadApi/getGameList`, {
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'include',
+        }).then(res => res.json());
+        let gameName = '';
+        if (gameListRes.isSuccess && gameListRes.data[0]) {
+          gameName = gameListRes.data[0].gameName;
+        }
+        const shareInfo = {
+          title: `${gameName}游戏诚招代理`,
+          link: `${noPortOrigin}/generalManage/index.html`,
+          imgUrl: `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
+          desc: '高收入、零成本做代理，年薪百万不是梦',
+        };
+        await wechatSdkManage.shareLink(shareInfo);
       },
   },
 };
