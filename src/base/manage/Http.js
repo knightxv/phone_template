@@ -45,7 +45,7 @@ const httpRequest = (fetchUrl, fetchOption) => {
 const getDefaultOption = {
   method: 'GET',
   mode: 'cors',
-  credentials: 'include', // same-origin
+  credentials: 'include', // same-origin include
   headers: {
       // 'Access-Control-Allow-Origin': '*',
       // 'Content-Type': 'text/plain',
@@ -155,9 +155,10 @@ class Http {
     return httpConfig[httpConfigKey];
   }
   httpLog(type, url, params, response) {
-    console.log(`${type} : ${url}`);
-    console.log('params : ', params);
-    console.log('response : ', response);
+    console.group(`${type} : ${url}`);
+    console.log('参数 : ', params);
+    console.log('返回 : ', response);
+    console.groupEnd();
   }
   get(...arg) {
     const self = this;

@@ -30,7 +30,7 @@ class StepRebate extends BaseComponent {
     const monthFirstDayStamp = this.helps.getMonthTimeStamp();
     this.getRebateList(monthFirstDayStamp);
     this.getMonthRebateInfo(monthFirstDayStamp);
-    
+
     // const rebateTextKey = this.Enum.htmlTextType.rebateText;
     const rebateStatuMapRes = await this.http.webHttp.get('/spreadApi/rebate/ruleStatu');
     if (rebateStatuMapRes.isSuccess) {
@@ -200,8 +200,8 @@ class StepRebate extends BaseComponent {
               limitUnderAgentRebate.map(rebateData => (
                 <div className={classnames(styles.rowItem, styles.rebateListRowItem)} key={rebateData.agentId}>
                   <div className={classnames(styles.colItem, styles.rowBodyItem)}>
-                    {/* { rebateData.agentName }<br /> */}
-                    { rebateData.agentId }
+                    <div className={styles.rowAgentName}>{ rebateData.agentName }</div>
+                    <div className={styles.rowAgentId}>{ rebateData.agentId }</div>
                   </div>
                   <div className={classnames(styles.colItem, styles.rowBodyItem)}>{ rebateData.underAgentCount }</div>
                   <div className={classnames(styles.colItem, styles.colcountItem)}>
@@ -247,7 +247,7 @@ class StepRebate extends BaseComponent {
                   </div>
                 ))
               }
-              
+
             </div>
           }
           <div className={styles.rebateStatuWrap}>

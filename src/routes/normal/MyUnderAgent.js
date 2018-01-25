@@ -78,6 +78,13 @@ class MyUnderAgent extends BaseComponent {
       {
         dataIndex: 'agentInviteCode',
         title: '代理ID',
+        render(rowVal) {
+          const { agentInviteCode, underAgentName } = rowVal;
+          return (<div className={styles.rowItemWrap}>
+            <div className={styles.agentName}> { underAgentName } </div>
+            <div> { agentInviteCode } </div>
+          </div>);
+        },
       },
       {
         dataIndex: 'CommissionOfAll',

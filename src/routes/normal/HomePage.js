@@ -379,9 +379,10 @@ class HomePage extends BaseComponent {
         && <NoticeBar
           onClick={this.navigateNotice}
         >
-          <FlexRow>
+          {/* <FlexRow>
             <span className={styles.noticeLabel} dangerouslySetInnerHTML={notiveInfoHtml} />
-          </FlexRow>
+          </FlexRow> */}
+          <div className={styles.noticeLabel} dangerouslySetInnerHTML={notiveInfoHtml} />
         </NoticeBar>
       }
       <div className={styles.headerModule}>

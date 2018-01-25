@@ -182,10 +182,12 @@ class TurnDiaForAgent extends BaseComponent {
     this.message.info(res.info);
   }
   renderAgentRow = (row) => {
-    const { masonrySurplus, agentInviteCode } = row;
+    console.log(row);
+    const { masonrySurplus, agentInviteCode, agentName } = row;
     const hasPowerToSave = this.hasPower('agentRange', 0);
     return (<div className={styles.playersItemWrap}>
       <div className={styles.playersItem}>
+        <div className={styles.rowAgentName}>{ agentName }</div>
         <div>{ agentInviteCode }</div>
       </div>
       <div className={styles.playersItem}>{ masonrySurplus }</div>

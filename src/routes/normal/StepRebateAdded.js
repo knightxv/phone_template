@@ -66,7 +66,9 @@ class StepRebateAdded extends BaseComponent {
     const { record, page, addedRebate, stepRebate, addedRebateRate } = this.state;
     const showItemLength = this.showItemLength;
     const limitRecord = record.slice(page * showItemLength, (page + 1) * showItemLength);
+    console.log(addedRebate)
     const addedRebateLabel = this.helps.parseFloatMoney(addedRebate);
+    console.log(addedRebateLabel)
     const stepRebateLabel = this.helps.parseFloatMoney(stepRebate);
     const rebateAllCount = record.reduce((before, current) => {
       return before + current.addedProfit;
