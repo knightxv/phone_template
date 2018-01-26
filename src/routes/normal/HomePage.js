@@ -481,22 +481,27 @@ class HomePage extends BaseComponent {
       {
         (this.hasPower('stepRebate') || this.hasPower('underAgentPercentage')) &&
         <div className={styles.blockContainer}>
-          <div className={styles.itemModule} onClick={() => this.navigate('/stepRebate')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
-              <span>代理阶梯返利</span>
-            </FlexRow>
-            <Icon type="right" />
-          </div>
           {
-            stepRebateAddedRate != 0 &&
-            (<div className={styles.itemModule} onClick={() => this.navigate('/stepRebateAdded')}>
-              <FlexRow className={styles.navigateTitleWrap}>
-                <IconImg className={styles.titleIconImg} src={IconSource.ewfl} />
-                <span>代理阶梯返利额外返点</span>
-              </FlexRow>
-              <Icon type="right" />
-            </div>)
+            this.hasPower('stepRebate') &&
+            <div>
+              <div className={styles.itemModule} onClick={() => this.navigate('/stepRebate')}>
+                <FlexRow className={styles.navigateTitleWrap}>
+                  <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
+                  <span>代理阶梯返利</span>
+                </FlexRow>
+                <Icon type="right" />
+              </div>
+              {
+                stepRebateAddedRate != 0 &&
+                (<div className={styles.itemModule} onClick={() => this.navigate('/stepRebateAdded')}>
+                  <FlexRow className={styles.navigateTitleWrap}>
+                    <IconImg className={styles.titleIconImg} src={IconSource.ewfl} />
+                    <span>代理阶梯返利额外返点</span>
+                  </FlexRow>
+                  <Icon type="right" />
+                </div>)
+              }
+            </div>
           }
           {
             this.hasPower('underAgentPercentage') &&

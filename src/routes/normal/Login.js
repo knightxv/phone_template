@@ -114,18 +114,19 @@ class Login extends BaseComponent {
                   onChange={value => this.setState({ password: value })}
                 />
               </div>
-              <Button
-                className={styles.loginBtn}
-                loading={loginLoading}
-                onClick={this.login}
-                disabled={btnDisabled}
-              >
-                登录
-              </Button>
+              <div className={styles.btnWrap}>
+                <Button
+                  loading={loginLoading}
+                  onClick={this.login}
+                  disabled={btnDisabled}
+                >
+                  登录
+                </Button>
+              </div>
               <div className={styles.forgetPwdWrap}>
-                <span onClick={this.forgetPwd}>忘记密码?</span>
+                <span className={styles.linkLabel} onClick={this.forgetPwd}>忘记密码?</span>
                 <span
-                  className={styles.registerLabel}
+                  className={styles.linkLabel}
                   onClick={this.navigateToRegister}
                 >申请代理</span>
               </div>

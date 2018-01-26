@@ -32,7 +32,7 @@ class StepRebateAdded extends BaseComponent {
     this.setState({
       ...res.data,
     });
-    const recordRes = this.http.webHttp.get('/spreadApi/rebate/addedRebateRecord');
+    const recordRes = await this.http.webHttp.get('/spreadApi/rebate/addedRebateRecord');
     if (recordRes.isSuccess) {
       this.setState({
         record: recordRes.data,

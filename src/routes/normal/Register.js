@@ -143,7 +143,7 @@ class Register extends BaseComponent {
                 placeholder="请输入代理的邀请码(选填)"
               />
             </div>
-            <div className={styles.registerWrap}>
+            <div className={styles.btnWrap}>
               <Button
                 disabled={btnDisabled}
                 style={{ width: '100%' }}

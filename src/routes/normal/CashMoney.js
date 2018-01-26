@@ -19,7 +19,7 @@ class AgencyExtractMoney extends BaseComponent {
   constructor(props) {
     super(props);
     const {
-      wechat_acc, // 提现所用的微信号
+      wechatacc, // 提现所用的微信号
       positionName, // 位置
       cardNumber, // 银行卡号
       bankCardName, // 名字
@@ -66,7 +66,7 @@ class AgencyExtractMoney extends BaseComponent {
       }
     });
     this.state = {
-      wechat_acc: wechat_acc || '', // 提现所用的微信号
+      wechat_acc: wechatacc || '', // 提现所用的微信号
       cardNumber, // 银行卡号
       bankCardName, // 名字
       bankName: [defaultBankName], // 银行
@@ -89,6 +89,10 @@ class AgencyExtractMoney extends BaseComponent {
       wechatNumber: wechat_acc,
       cashCount,
     };
+    if (!cardNumber || !bankCardName) {
+      this.message.info('卡号和姓名不能为空');
+      return;
+    }
     if (!cashCount || isNaN(cashCount) || !/^\d+(\.\d{1,2})?$/.test(cashCount)) {
       this.message.info('输入的提现金额格式错误');
       return false;
@@ -149,7 +153,7 @@ class AgencyExtractMoney extends BaseComponent {
         record: res.data || [],
       });
     } else {
-      this.helps.info(res.info || '请求错误');
+      this.message.info(res.info || '请求错误');
     }
   }
   scrollTop = () => {

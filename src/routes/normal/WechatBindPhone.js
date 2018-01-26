@@ -141,7 +141,7 @@ class WechatBindPhone extends BaseComponent {
                 placeholder="请输入代理的邀请码(已注册账户填写无效)"
               />
             </div>
-            <div className={styles.registerWrap}>
+            <div className={styles.btnWrap}>
               <Button
                 disabled={btnDiabled}
                 onClick={this.register}

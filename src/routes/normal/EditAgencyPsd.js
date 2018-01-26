@@ -78,9 +78,8 @@ class EditPsd extends BaseComponent {
                 placeholder="确认新密码"
               />
             </div>
-            <div className={styles.editBtnWrap}>
+            <div className={styles.btnWrap}>
               <Button
-                className={styles.editBtn}
                 loading={editLoading}
                 onClick={this.editPsd}
               >

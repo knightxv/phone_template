@@ -137,7 +137,7 @@ class ForgetPassword extends BaseComponent {
               placeholder="请确认密码"
             />
           </div>
-          <div className={styles.confimBtnWrap}>
+          <div className={styles.btnWrap}>
             <Button onClick={this.reSetPwd}>确定</Button>
           </div>
         </div>

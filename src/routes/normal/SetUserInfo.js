@@ -65,7 +65,7 @@ class SetUserInfo extends BaseComponent {
                 placeholder="请确认您的登录密码"
               />
             </div>
-            <div className={styles.registerWrap}>
+            <div className={styles.btnWrap}>
               <Button
                 disabled={btnDiasbled}
                 onClick={this.confimToSet}
