@@ -2,8 +2,9 @@
 
 import fetch from 'dva/fetch';
 import { routerRedux } from 'dva/router';
-import socketManage from '../extends/Socket';
+import querystring from 'querystring';
 import { remoteUrl } from '@/config/index';
+import socketManage from '../extends/Socket';
 import wechatSdkManage from '../extends/wechatSdk';
 
 const delay = (time = 1000) => {
@@ -120,20 +121,25 @@ export default {
         // 默认分享登录页
         const origin = window.location.origin;
         const noPortOrigin = origin.replace(/:\d+/, '');
-        const gameListRes = await fetch(`${remoteUrl}/spreadApi/getGameList`, {
-          method: 'GET',
-          mode: 'cors',
-          credentials: 'include',
-        }).then(res => res.json());
-        let gameName = '';
-        if (gameListRes.isSuccess && gameListRes.data[0]) {
-          gameName = gameListRes.data[0].gameName;
-        }
+        // const gameListRes = await fetch(`${remoteUrl}/spreadApi/getGameList`, {
+        //   method: 'GET',
+        //   mode: 'cors',
+        //   credentials: 'include',
+        // }).then(res => res.json());
+        // let gameName = '';
+        // if (gameListRes.isSuccess && gameListRes.data[0]) {
+        //   gameName = gameListRes.data[0].gameName;
+        // }
+        const inviteLink = 'http://hulema.com';
+        const queryLink = {
+          redirect: inviteLink,
+        };
+        const linkQueryStr = querystring.stringify(queryLink);
         const shareInfo = {
-          title: `${gameName}游戏诚招代理`,
-          link: `${noPortOrigin}/generalManage/index.html`,
+          title: '胡了吗游戏中心',
+          link: `${noPortOrigin}/generalManage/redirect.html?${linkQueryStr}`,
           imgUrl: `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
-          desc: '高收入、零成本做代理，年薪百万不是梦',
+          desc: '胡了吗的网址',
         };
         await wechatSdkManage.shareLink(shareInfo);
       },

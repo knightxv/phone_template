@@ -11,6 +11,7 @@ import { StickyContainer, Sticky } from '@/components/lazyComponent/ReactSticky'
 import { InputItem, Button, SelectPicker, NavBar } from '@/components/lazyComponent/antd';
 import { FlexRow, Flex, WhiteSpace, Title } from '@/components/styleComponent';
 import bankData from '@/data/bank';
+import LongPress from '@/components/LongPress';
 
 import styles from './CashMoney.less';
 
@@ -122,6 +123,25 @@ class AgencyExtractMoney extends BaseComponent {
       positionSelect: val,
     });
   }
+  deleteOrder = async (orderId) => {
+    const isComfirm = confirm('确认删除订单');
+    if (isComfirm) {
+      const res = await this.http.webHttp.get('/spreadApi/deleteCashRecord', {
+        orderId,
+      });
+      if (!res.isSuccess) {
+        this.message.info(res.info || '删除订单失败');
+        return;
+      }
+      this.message.info(res.info || '删除订单成功');
+      const newRecord = this.state.record.filter((record) => {
+        return record.id !== orderId;
+      });
+      this.setState({
+        record: newRecord,
+      });
+    }
+  }
   renderRow = (rowData) => {
     const timeLabel = new Date(rowData.createTime).format('yyyy-MM-dd hh:mm');
     const cashCount = this.helps.parseFloatMoney(rowData.cashCount);
@@ -131,7 +151,7 @@ class AgencyExtractMoney extends BaseComponent {
     } else if (rowData.result == 2) {
       statuLabel = '已拒绝';
     }
-    return (<div className={styles.itemWrap}>
+    return (<LongPress className={styles.itemWrap} onLongPress={() => this.deleteOrder(rowData.id)}>
       <div>
         <div>余额-转出银行卡</div>
         <div className={styles.timeLabel}>{ timeLabel }</div>
@@ -142,7 +162,7 @@ class AgencyExtractMoney extends BaseComponent {
         <span>{ statuLabel }</span>
         <span className={styles.fkh}>）</span>
       </div>
-    </div>);
+    </LongPress>);
   }
   async componentWillMount() {
     // const { selectTime, selectType } = this.state;

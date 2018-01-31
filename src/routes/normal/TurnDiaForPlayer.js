@@ -8,6 +8,7 @@ import { ScrollListView } from '@/components/lazyComponent/ScrollListView';
 import { StickyContainer, Sticky } from '@/components/lazyComponent/ReactSticky';
 import { Icon, InputItem, Modal, SearchBar, NavBar, Button } from '@/components/lazyComponent/antd';
 import { WhiteSpace, Title } from '@/components/styleComponent';
+import LongPress from '@/components/LongPress';
 import styles from './TurnDiaForPlayer.less';
 
 
@@ -119,6 +120,25 @@ class TurnDiaForPlayer extends BaseComponent {
     const { serverid } = this.router.getQuery();
     this.router.go('/turnDiaForPlayerOrderDetail', { orderId, serverid });
   }
+  deleteOrder = async (orderId) => {
+    const isComfirm = confirm('确认删除订单');
+    if (isComfirm) {
+      const res = await this.http.webHttp.get('/spreadApi/deleteAgentSellPlayerDia', {
+        orderId,
+      });
+      if (!res.isSuccess) {
+        this.message.info(res.info || '删除订单失败');
+        return;
+      }
+      const newRecord = this.state.record.filter((record) => {
+        return record.orderId !== orderId;
+      });
+      this.setState({
+        record: newRecord,
+      });
+      this.message.info(res.info || '删除订单成功');
+    }
+  }
   renderRow = (row) => {
     const {
       chargeTime,
@@ -127,7 +147,11 @@ class TurnDiaForPlayer extends BaseComponent {
       orderId,
      } = row;
     const chargeTimeLabel = new Date(chargeTime).format('yyyy-MM-dd hh:mm:ss');
-    return (<div className={styles.recordRowItem} onClick={() => this.goOrderDetail(orderId)}>
+    return (<LongPress
+      className={styles.recordRowItem}
+      onShortPress={() => this.goOrderDetail(orderId)}
+      onLongPress={() => this.deleteOrder(orderId)}
+    >
       <div>
         <div> { chargeInfo } </div>
         <div className={styles.recordItemTime}>{ chargeTimeLabel }</div>
@@ -136,7 +160,7 @@ class TurnDiaForPlayer extends BaseComponent {
         <span className={styles.count}>{ chargeCount }个钻石</span>
         <Icon type="right" color="#b8b8b8" />
       </div>
-    </div>);
+    </LongPress>);
   }
   // 获取玩家数据
   getPlayer = async () => {
@@ -293,7 +317,7 @@ class TurnDiaForPlayer extends BaseComponent {
             今日收益:<span className={styles.money}>{ incomeTodayLabel }</span>元
           </div>
         }
-      </div> 
+      </div>
     </div>);
   }
   render() {

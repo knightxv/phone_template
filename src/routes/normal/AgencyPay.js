@@ -5,6 +5,7 @@ import ScrollTop from '@/components/ScrollTop';
 import BaseComponent from '@/core/BaseComponent';
 import classnames from 'classnames';
 import { StickyContainer, Sticky } from 'react-sticky';
+import LongPress from '@/components/LongPress';
 import { Button, Icon, NavBar } from '@/components/lazyComponent/antd';
 import { ScrollListView } from '@/components/lazyComponent/ScrollListView';
 import { Title, WhiteSpace } from '@/components/styleComponent';
@@ -51,10 +52,33 @@ class AgencyPay extends BaseComponent {
       selectShopId,
     });
   }
+  deleteOrder = async (orderId) => {
+    const isComfirm = confirm('确认删除订单');
+    if (isComfirm) {
+      const res = await this.http.webHttp.get('/spreadApi/deleteBuyDiaOrder', {
+        orderId,
+      });
+      if (!res.isSuccess) {
+        this.message.info(res.info || '删除订单失败');
+        return;
+      }
+      const newRecord = this.state.record.filter((record) => {
+        return record.orderId !== orderId;
+      });
+      this.setState({
+        record: newRecord,
+      });
+      this.message.info(res.info || '删除订单成功');
+    }
+  }
   renderRow = (row) => {
     const chargeTime = new Date(row.chargeTime).format('yyyy-MM-dd HH:mm');
     const chargeMoney = this.helps.parseFloatMoney(row.payMoney);
-    return (<div className={styles.rowItem} onClick={() => this.goToDetail(row.orderId)}>
+    return (<LongPress
+      className={styles.rowItem}
+      onShortPress={() => this.goToDetail(row.orderId)}
+      onLongPress={() => this.deleteOrder(row.orderId)}
+    >
       <div>
         <div>{ chargeMoney }元购买了{ row.chargeCount }个钻石</div>
         <div className={styles.chargeTime}>{ chargeTime }</div>
@@ -63,7 +87,7 @@ class AgencyPay extends BaseComponent {
         <div className={styles.chargeCount}>+{ row.chargeCount }个</div>
         <Icon type="right" color="#b8b8b8" />
       </div>
-    </div>);
+    </LongPress>);
   }
   goToBuyGoods = () => {
     const { selectShopId, goods } = this.state;

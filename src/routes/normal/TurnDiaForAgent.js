@@ -8,6 +8,7 @@ import { ScrollListView } from '@/components/lazyComponent/ScrollListView';
 import { StickyContainer, Sticky } from '@/components/lazyComponent/ReactSticky';
 import { Icon, InputItem, Modal, SearchBar, NavBar, Button } from '@/components/lazyComponent/antd';
 import { WhiteSpace, Title } from '@/components/styleComponent';
+import LongPress from '@/components/LongPress';
 import styles from './TurnDiaForAgent.less';
 
 class TurnDiaForAgent extends BaseComponent {
@@ -87,6 +88,25 @@ class TurnDiaForAgent extends BaseComponent {
   goOrderDetail = (orderId) => {
     this.router.go('/turnDiaForAgentOrderDetail', { orderId });
   }
+  deleteOrder = async (orderId) => {
+    const isComfirm = confirm('确认删除订单');
+    if (isComfirm) {
+      const res = await this.http.webHttp.get('/spreadApi/deleteAgentSellDiaRecord', {
+        orderId,
+      });
+      if (!res.isSuccess) {
+        this.message.info(res.info || '删除订单失败');
+        return;
+      }
+      const newRecord = this.state.record.filter((record) => {
+        return record.orderId !== orderId;
+      });
+      this.setState({
+        record: newRecord,
+      });
+      this.message.info(res.info || '删除订单成功');
+    }
+  }
   renderRow = (row) => {
     const {
       chargeTime,
@@ -95,7 +115,11 @@ class TurnDiaForAgent extends BaseComponent {
       orderId,
      } = row;
     const chargeTimeLabel = new Date(chargeTime).format('yyyy-MM-dd hh:mm:ss');
-    return (<div className={styles.recordRowItem} onClick={() => this.goOrderDetail(orderId)}>
+    return (<LongPress
+      className={styles.recordRowItem}
+      onShortPress={() => this.goOrderDetail(orderId)}
+      onLongPress={() => this.deleteOrder(orderId)}
+    >
       <div>
         <div> { chargeInfo } </div>
         <div className={styles.recordItemTime}>{ chargeTimeLabel }</div>
@@ -104,7 +128,7 @@ class TurnDiaForAgent extends BaseComponent {
         <span className={styles.count}>{ chargeCount }个钻石</span>
         <Icon type="right" color="#b8b8b8" />
       </div>
-    </div>);
+    </LongPress>);
   }
   // 获取玩家数据
   getAgents = async () => {
@@ -182,7 +206,6 @@ class TurnDiaForAgent extends BaseComponent {
     this.message.info(res.info);
   }
   renderAgentRow = (row) => {
-    console.log(row);
     const { masonrySurplus, agentInviteCode, agentName } = row;
     const hasPowerToSave = this.hasPower('agentRange', 0);
     return (<div className={styles.playersItemWrap}>
