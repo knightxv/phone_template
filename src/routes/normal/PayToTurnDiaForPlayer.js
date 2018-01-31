@@ -12,7 +12,7 @@ const imgSource = {
   masonry: require('../../assets/zuanshi.png'),
   wx: require('../../assets/wx.png'),
   zfb: require('../../assets/zfb.png'),
-  yezf: require('../../assets/yezf.png'),
+  zjzz: require('../../assets/zjzz.png'),
   androidTip: require('../../assets/android_tip.png'),
   iosTip: require('../../assets/ios_tip.png'),
 };
@@ -41,7 +41,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       },
       balance: {
         label: '直接转钻',
-        imgSourceKey: 'yezf',
+        imgSourceKey: 'zjzz',
         payType: this.Enum.payType.BALANCE,
       },
     };
@@ -152,7 +152,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     //   return;
     // }
     this.goToPay();
-    
+
   }
   goToPay = async () => {
     const { selectPayInfo, isAutoSave } = this.state;

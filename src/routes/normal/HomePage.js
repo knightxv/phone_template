@@ -150,7 +150,15 @@ class HomePage extends BaseComponent {
         />,
         title: '查看二维码',
       },
-      {
+    ];
+    if (this.helps.isWeixinBrowser()) {
+      dataList.push({
+        icon: <img onClick={this.shareAgentLink} className={styles.shareIcon} src={IconSource.share} />,
+        title: '分享链接',
+      });
+    }
+    if (!this.helps.isWeixinBrowser()) {
+      dataList.push({
         icon: <CopyToClipboard
           text={inviteLink}
           onCopy={this.copyResult}
@@ -158,12 +166,6 @@ class HomePage extends BaseComponent {
           <img className={styles.shareIcon} src={IconSource.link} />
         </CopyToClipboard>,
         title: '复制链接',
-      },
-    ];
-    if (this.helps.isWeixinBrowser()) {
-      dataList.push({
-        icon: <img onClick={this.shareAgentLink} className={styles.shareIcon} src={IconSource.share} />,
-        title: '分享链接',
       });
     }
     ActionSheet.showShareActionSheetWithOptions({
@@ -313,7 +315,15 @@ class HomePage extends BaseComponent {
         />,
         title: '查看二维码',
       },
-      {
+    ];
+    if (this.helps.isWeixinBrowser()) {
+      dataList.push({
+        icon: <img onClick={this.sharePlayerLink} className={styles.shareIcon} src={IconSource.share} />,
+        title: '分享链接',
+      });
+    }
+    if (!this.helps.isWeixinBrowser()) {
+      dataList.push({
         icon: <CopyToClipboard
           text={inviteLink}
           onCopy={this.copyResult}
@@ -321,12 +331,6 @@ class HomePage extends BaseComponent {
           <img className={styles.shareIcon} src={IconSource.link} />
         </CopyToClipboard>,
         title: '复制链接',
-      },
-    ];
-    if (this.helps.isWeixinBrowser()) {
-      dataList.push({
-        icon: <img onClick={this.sharePlayerLink} className={styles.shareIcon} src={IconSource.share} />,
-        title: '分享链接',
       });
     }
     ActionSheet.showShareActionSheetWithOptions({
@@ -546,7 +550,7 @@ class HomePage extends BaseComponent {
         visible={shareAgentVisible}
         onClose={this.toggleShareAgentImg}
       >
-        <div onClick={this.toggleShareAgentImg} className={styles.payPicker}>
+        <div onClick={this.toggleShareAgentImg} className={styles.sharePicker}>
           <img className={styles.shareImg} src={IconSource.shareAgent} />
         </div>
       </Modal>

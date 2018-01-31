@@ -41,12 +41,14 @@ export const payType = {
   ALI: 1,
   MANAGE: 4,
   BALANCE: 5,
+  YLZF: 6, // 待确认
 };
 export const payTypeLabel = {
   [payType.WECHAT]: '微信',
   [payType.ALI]: '支付宝',
   [payType.MANAGE]: '和客服购买',
   [payType.BALANCE]: '使用余额购买',
+  [payType.YLZF]: '银联支付',
 };
 
 export const resolveStatus = {

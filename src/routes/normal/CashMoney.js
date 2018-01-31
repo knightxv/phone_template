@@ -125,12 +125,12 @@ class AgencyExtractMoney extends BaseComponent {
   renderRow = (rowData) => {
     const timeLabel = new Date(rowData.createTime).format('yyyy-MM-dd hh:mm');
     const cashCount = this.helps.parseFloatMoney(rowData.cashCount);
-    const resultMap = {
-      0: '待审核',
-      1: '已通过 ',
-      2: '已拒绝',
-    };
-    const statuLabel = resultMap[rowData.result];
+    let statuLabel = '待审核';
+    if (rowData.result == 1) {
+      statuLabel = '已通过';
+    } else if (rowData.result == 2) {
+      statuLabel = '已拒绝';
+    }
     return (<div className={styles.itemWrap}>
       <div>
         <div>余额-转出银行卡</div>
