@@ -134,12 +134,13 @@ class AgencyExtractMoney extends BaseComponent {
         return;
       }
       this.message.info(res.info || '删除订单成功');
-      const newRecord = this.state.record.filter((record) => {
-        return record.id !== orderId;
-      });
-      this.setState({
-        record: newRecord,
-      });
+      // const newRecord = this.state.record.filter((record) => {
+      //   return record.id !== orderId;
+      // });
+      // this.setState({
+      //   record: newRecord,
+      // });
+      this.getRecord();
     }
   }
   renderRow = (rowData) => {
@@ -151,7 +152,7 @@ class AgencyExtractMoney extends BaseComponent {
     } else if (rowData.result == 2) {
       statuLabel = '已拒绝';
     }
-    return (<LongPress className={styles.itemWrap} onLongPress={() => this.deleteOrder(rowData.id)}>
+    return (<LongPress className={styles.itemWrap} onLongPress={() => this.deleteOrder(rowData.orderid)}>
       <div>
         <div>余额-转出银行卡</div>
         <div className={styles.timeLabel}>{ timeLabel }</div>
@@ -167,6 +168,9 @@ class AgencyExtractMoney extends BaseComponent {
   async componentWillMount() {
     // const { selectTime, selectType } = this.state;
     // const type = selectType[0];
+    this.getRecord();
+  }
+  getRecord = async () => {
     const res = await this.http.webHttp.get('/spreadApi/cashRecord');
     if (res.isSuccess) {
       this.setState({

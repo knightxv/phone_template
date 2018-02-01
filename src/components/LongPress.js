@@ -6,19 +6,32 @@ class LongPress extends React.Component {
     super(props);
     // this.state = {};
     this.isLongPress = false;
+    this.isTouchMove = false;
   }
   onTouchStart = () => {
+    this.clearTime();
     this.isLongPress = false;
+    this.isTouchMove = false;
     this.timer = window.setTimeout(() => {
+      if (this.isTouchMove) {
+        return;
+      }
       this.isLongPress = true;
       this.props.onLongPress && this.props.onLongPress();
     }, 500);
   }
   onTouchEnd = () => {
+    if (this.isTouchMove) {
+      return;
+    }
     if (!this.isLongPress) {
       this.clearTime();
       this.props.onShortPress && this.props.onShortPress();
     }
+  }
+  onTouchMove = () => {
+    this.isTouchMove = true;
+    this.clearTime();
   }
   clearTime = () => {
     window.clearTimeout(this.timer);
@@ -28,9 +41,14 @@ class LongPress extends React.Component {
     return (<div
       {...otherProps}
       onTouchStart={this.onTouchStart}
-      onTouchCancel={this.onTouchEnd}
       onMouseDown={this.onTouchStart}
+
+      onTouchCancel={this.onTouchEnd}
+      onTouchEnd={this.onTouchEnd}
       onMouseUp={this.onTouchEnd}
+
+      onTouchMove ={this.onTouchMove}
+      onMouseMove={this.onTouchMove}
       >
       { children }
     </div>);

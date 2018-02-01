@@ -45,6 +45,9 @@ class TurnDiaForPlayer extends BaseComponent {
   }
   async componentWillMount() {
     this.idValChange(this.state.playerId);
+    this.getRecord();
+  }
+  getRecord = async () => {
     const { serverid } = this.router.getQuery();
     const res = await this.http.webHttp.get('/spreadApi/agentSellPlayerDiaRecord', {
       serverid,
@@ -130,12 +133,13 @@ class TurnDiaForPlayer extends BaseComponent {
         this.message.info(res.info || '删除订单失败');
         return;
       }
-      const newRecord = this.state.record.filter((record) => {
-        return record.orderId !== orderId;
-      });
-      this.setState({
-        record: newRecord,
-      });
+      this.getRecord();
+      // const newRecord = this.state.record.filter((record) => {
+      //   return record.orderId !== orderId;
+      // });
+      // this.setState({
+      //   record: newRecord,
+      // });
       this.message.info(res.info || '删除订单成功');
     }
   }

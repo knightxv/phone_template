@@ -24,6 +24,8 @@ export const powerEnum = {
   agentRange: 23, // 0所有 1下级
   underAgentPercentage: 25, // 查看下级代理抽成返钻比例
   stepRebate: 29,
+  ylzfForAgentBuyDia: 34,
+  ylzfForAgentTurnDiaToPlayer: 35,
 };
 
 export const Role = {
@@ -41,7 +43,7 @@ export const payType = {
   ALI: 1,
   MANAGE: 4,
   BALANCE: 5,
-  YLZF: 6, // 待确认
+  YLZF: 2,
 };
 export const payTypeLabel = {
   [payType.WECHAT]: '微信',

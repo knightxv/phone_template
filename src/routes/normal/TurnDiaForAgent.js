@@ -41,6 +41,9 @@ class TurnDiaForAgent extends BaseComponent {
     // this.paySelectArr = [];
   }
   async componentWillMount() {
+    this.getRecord();
+  }
+  getRecord = async () => {
     const res = await this.http.webHttp.get('/spreadApi/agentSellDiaRecord');
     if (res.isSuccess) {
       const record = res.data;
@@ -98,12 +101,13 @@ class TurnDiaForAgent extends BaseComponent {
         this.message.info(res.info || '删除订单失败');
         return;
       }
-      const newRecord = this.state.record.filter((record) => {
-        return record.orderId !== orderId;
-      });
-      this.setState({
-        record: newRecord,
-      });
+      this.getRecord();
+      // const newRecord = this.state.record.filter((record) => {
+      //   return record.orderId !== orderId;
+      // });
+      // this.setState({
+      //   record: newRecord,
+      // });
       this.message.info(res.info || '删除订单成功');
     }
   }

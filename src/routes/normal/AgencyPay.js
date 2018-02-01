@@ -62,12 +62,7 @@ class AgencyPay extends BaseComponent {
         this.message.info(res.info || '删除订单失败');
         return;
       }
-      const newRecord = this.state.record.filter((record) => {
-        return record.orderId !== orderId;
-      });
-      this.setState({
-        record: newRecord,
-      });
+      this.getRecord();
       this.message.info(res.info || '删除订单成功');
     }
   }
