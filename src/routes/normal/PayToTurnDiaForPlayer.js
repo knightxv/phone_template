@@ -219,7 +219,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
                 注：玩家购钻价格统一0.1元/钻
               </div>
               <div className={styles.priceLabel}>
-                价格：<span className={styles.count}>{ payType === this.Enum.payType.BALANCE ? '0.00' : price }</span>元
+                价格：<span className={styles.count}>{ selectPayType === this.Enum.payType.BALANCE ? '0.00' : price }</span>元
               </div>
             </div>
           }
@@ -235,7 +235,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
           </div>
         </div>
         {
-          this.helps.isWechat && payType === ALI &&
+          this.helps.isWechat && selectPayType === ALI &&
           <Modal
             maskClosable
             transparent

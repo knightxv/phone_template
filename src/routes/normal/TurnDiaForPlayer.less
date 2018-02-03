@@ -1,7 +1,7 @@
 @import "../../base/less/base.less";
 
 .playerInputWrap {
-    margin-top: 0.2rem;
+    margin-top: 0.1rem;
     background: #fff;
 }
 .playerName {
@@ -73,16 +73,6 @@
     padding: 0.2rem;
     color: #000;
     background: #fff;
-}
-
-.payBtnWrap {
-    margin: 0.5rem .3rem 0;
-}
-
-.payBtn {
-    width: 100%;
-    margin-top: .2rem;
-    margin-bottom: 2rem;
 }
 
 .rechargeTitle {
@@ -172,4 +162,43 @@
     background: red;
     color: #fff;
     border: 1px solid red;
+}
+
+.goodsWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background: #fff;
+  width: 2.3rem;
+  margin-top: .1rem;
+  padding: .2rem;
+  .textHide();
+}
+.systemGiftSelect {
+  color: @orange!important;
+}
+
+.goodsSelect {
+  color: #fff;
+  background: @baseColor;
+}
+.goodLabel {
+  font-size: .28rem;
+  padding-bottom: .1rem;
+  .textHide();
+}
+.goodPrice {
+  font-size: 0.24rem;
+}
+.payTip {
+  color: #fda523;
+  text-align: center;
+  line-height: .6rem;
+  // height: .6rem;
+  padding: 0.2rem .3rem 0;
+}
+.systemGift {
+  color: @baseColor;
 }

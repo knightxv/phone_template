@@ -6,6 +6,7 @@ import BaseComponent from '@/core/BaseComponent';
 import { ScrollListView } from '@/components/lazyComponent/ScrollListView';
 import { Icon, InputItem, Modal, SearchBar, NavBar, Button } from '@/components/lazyComponent/antd';
 import { Title } from '@/components/styleComponent';
+import Grid from '@/components/Grid';
 import styles from './TurnDiaForPlayer.less';
 
 
@@ -41,8 +42,10 @@ class TurnDiaForPlayer extends BaseComponent {
       serverid,
     });
     if (res.isSuccess) {
+      const goods = res.data;
       this.setState({
-        goods: res.data,
+        goods,
+        selectShopId: goods.length > 0 ? goods[0].shopId : -1,
       });
     }
   }
@@ -225,6 +228,11 @@ class TurnDiaForPlayer extends BaseComponent {
       </div>
     </div>);
   }
+  selectGoods = (shopId) => {
+    this.setState({
+      selectShopId: shopId,
+    });
+  }
   render() {
     const { playerName, errorTip, playerId,
       selectplayerVisible, searchVal, players, goods,
@@ -243,6 +251,10 @@ class TurnDiaForPlayer extends BaseComponent {
     });
     const hasPowerToPay = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer', 'ylzfForAgentTurnDiaToPlayer');
     const title = hasPowerToPay ? '替玩家购钻' : '给玩家转钻';
+    const shopSelectArr = goods.filter((good) => {
+      return good.shopId === selectShopId;
+    });
+    const shopTip = shopSelectArr[0] && shopSelectArr[0].tip;
     return (
       <div>
         <Title>{ title }</Title>
@@ -268,37 +280,51 @@ class TurnDiaForPlayer extends BaseComponent {
               playerName && <div className={styles.playerName}>{playerName}</div>
             }
           </div>
-          <div>
+          <Grid>
             {
               goods.map(({ payMoney, masonryCount, shopId, systemGift, tip }, i) => {
                 const goodsWrapClass = classnames({
                   [styles.goodsWrap]: true,
                   [styles.goodsSelect]: selectShopId === shopId,
                 });
+                const systemGiftClass = classnames({
+                  [styles.systemGift]: true,
+                  [styles.systemGiftSelect]: selectShopId === shopId,
+                });
                 return (
                   <div
                     className={goodsWrapClass}
                     key={i}
-                    style={{ marginRight: (i !== 0 && ((i - 2) % 3) === 0) ? 0 : '5%' }}
                     onClick={() => this.selectGoods(shopId)}
                   >
                     <p className={styles.goodLabel}>
-                      {masonryCount}钻石{ +systemGift !== 0 && <span>+{systemGift}钻</span> }
+                      {masonryCount}钻{ +systemGift !== 0 && <span className={systemGiftClass}>+{systemGift}钻</span> }
                     </p>
                     <p className={styles.goodPrice}>售价:{this.helps.parseIntMoney(payMoney)}元</p>
                   </div>
                 );
               })
             }
-          </div>
-          <div className={styles.payBtnWrap}>
+          </Grid>
+          {
+            <div className={styles.payTip}>{ shopTip || '　' }</div>
+          }
+          <div className={styles.btnWrap}>
             <Button
-              className={styles.payBtn}
               onClick={this.goToNext}
             >
-            下一步
+            立即购买
             </Button>
           </div>
+          <div className={styles.btnWrap}>
+            <Button
+              onClick={this.goToNext}
+              type="green"
+            >
+            购钻记录
+            </Button>
+          </div>
+
         </div>
         {/* 选择玩家picker */}
         <Modal
