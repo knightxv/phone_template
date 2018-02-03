@@ -164,9 +164,9 @@ class PayToTurnDiaForPlayer extends BaseComponent {
   }
   render() {
     const { payPickerVisible, selectPayType, isAutoSave, payTipVisible } = this.state;
-    const { inviteCode, masonry } = this.props;
+    const { inviteCode, masonry, userName } = this.props;
     const payItemArr = this.payItemArr();
-    const { diamond, playerName, playerId } = this.query;
+    const { diamond, playerName, playerId, systemGift } = this.query;
     const price = this.helps.parseFloatMoney(diamond * 10);
     const hasPowerToGive = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer');
     const { ALI } = this.Enum.payType;
@@ -179,29 +179,56 @@ class PayToTurnDiaForPlayer extends BaseComponent {
           onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
-          <div className={styles.headerContainer}>
-            <div className={styles.userInfoItem}>
-              <div>代理ID：{ inviteCode }</div>
-              <div>当前账户钻石数:{ masonry }个</div>
-            </div>
-            <div className={styles.turnInfoWrap}>
-              <div className={styles.turnInfoItem}>
-                <div className={styles.turnInfoItemKey}>收款玩家:</div>
-                <div className={styles.turnInfoItemVal}>
-                  <span className={styles.count}>{ playerName }(玩家ID:{ playerId })</span>
+          <div>
+            <div className={styles.blockContainer}>
+              <div className={styles.headerInfoWrap}>
+                <div className={styles.masonryIconWrap}>
+                  <IconImg className={styles.masonryIcon} src={imgSource.masonry} />
+                </div>
+                <div className={styles.masonryInfo}>
+                  <div className={styles.masonryCountLabel}>{ diamond }钻石{systemGift && `+系统额外赠送${systemGift}钻石` }</div>
+                  <div className={styles.masonryMoenyLabel}>￥{ price }</div>
                 </div>
               </div>
-              <div className={styles.turnInfoItem}>
-                <div className={styles.turnInfoItemKey}>转出钻石数量:</div>
-                <div className={styles.turnInfoItemVal}>
-                  <span className={styles.count}>{ diamond }</span>个
+              <div className={styles.rowItemWrap}>
+                <div className={styles.rowItem}>
+                  <div className={styles.rowItemTitle}>卖家信息</div>
+                </div>
+                {
+                  userName &&
+                  <div className={styles.rowItem}>
+                    <div>代理昵称</div>
+                    <div className={styles.payItem}>
+                      { userName }
+                    </div>
+                  </div>
+                }
+                <div className={styles.rowItem}>
+                  <div>代理邀请码</div>
+                  <div className={styles.payItem}>
+                    { inviteCode }
+                  </div>
                 </div>
               </div>
-            </div>
-            {
-              hasPowerToGive &&
-              <div>
-                <div className={styles.rowItemWrap} onClick={this.togglePayPicker}>
+              <div className={styles.rowItemWrap}>
+                <div className={styles.rowItem}>
+                  <div className={styles.rowItemTitle}>买家信息</div>
+                </div>
+                <div className={styles.rowItem}>
+                  <div>玩家昵称</div>
+                  <div className={styles.payItem}>
+                    { playerName }
+                  </div>
+                </div>
+                <div className={styles.rowItem}>
+                  <div>玩家ID</div>
+                  <div className={styles.payItem}>
+                    { playerId }
+                  </div>
+                </div>
+              </div>
+              <div className={styles.rowItemWrap}>
+                <div className={styles.rowItem} onClick={this.togglePayPicker}>
                   <div>付款方式</div>
                   <div className={styles.payItem}>
                     <PayIcon payType={selectPayType} />
@@ -210,27 +237,16 @@ class PayToTurnDiaForPlayer extends BaseComponent {
                   </div>
                 </div>
               </div>
+            </div>
+            {
+              this.hasPower('playerRange', 0) &&
+              <div className={styles.autoSaveWrap}>
+                <Checkbox checked={isAutoSave} onChange={this.toggleSave} />
+                <span className={styles.saveTip}>转钻提交成功后自动添加为常用收款玩家</span>
+              </div>
             }
           </div>
-          {
-            hasPowerToGive &&
-            <div>
-              <div className={styles.priceTip}>
-                注：玩家购钻价格统一0.1元/钻
-              </div>
-              <div className={styles.priceLabel}>
-                价格：<span className={styles.count}>{ selectPayType === this.Enum.payType.BALANCE ? '0.00' : price }</span>元
-              </div>
-            </div>
-          }
-          {
-            this.hasPower('playerRange', 0) &&
-            <div className={styles.autoSaveWrap}>
-              <Checkbox checked={isAutoSave} onChange={this.toggleSave} />
-              <span className={styles.saveTip}>转钻提交成功后自动添加为常用收款玩家</span>
-            </div>
-          }
-          <div className={styles.buyBtnWrap}>
+          <div className={styles.btnWrap}>
             <Button onClick={this.payToTurn}>确认转钻</Button>
           </div>
         </div>
@@ -268,16 +284,16 @@ class PayToTurnDiaForPlayer extends BaseComponent {
               </div>
               <div>
                 {
-                  payItemArr.map(payInfo => (
+                  payItemArr.map(payType => (
                     <div
                       className={styles.pickePayItem}
-                      key={payInfo.payType}
-                      onClick={() => this.selectPayType(payInfo)}
+                      key={payType}
+                      onClick={() => this.selectPayType(payType)}
                     >
                       <div className={styles.payInfoWrap}>
                         <div className={styles.payItem}>
-                          <IconImg className={styles.payIcon} src={imgSource[payInfo.imgSourceKey]} />
-                          <span>{payInfo.label}</span>
+                          <PayIcon payType={payType} />
+                          <span>{ this.Enum.payTypeLabel[payType] }</span>
                         </div>
                         <div>
                           {/* {
@@ -290,7 +306,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
                       </div>
                       <div className={styles.selectIconWrap}>
                         {
-                          payType === payInfo.payType && <Icon color="#1d9ed7" type="check" />
+                          payType === selectPayType && <Icon color="#1d9ed7" type="check" />
                         }
                       </div>
                     </div>
@@ -312,3 +328,19 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(PayToTurnDiaForPlayer);
+
+
+/*
+
+            {
+              hasPowerToGive &&
+              <div>
+                <div className={styles.priceTip}>
+                  注：玩家购钻价格统一0.1元/钻
+                </div>
+                <div className={styles.priceLabel}>
+                  价格：<span className={styles.count}>{ selectPayType === this.Enum.payType.BALANCE ? '0.00' : price }</span>元
+                </div>
+              </div>
+            }
+*/

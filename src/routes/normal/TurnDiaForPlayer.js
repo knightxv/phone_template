@@ -98,11 +98,11 @@ class TurnDiaForPlayer extends BaseComponent {
       }
     }, 500);
   }
-  // 跳转订单详情
-  goOrderDetail = (orderId) => {
-    const { serverid } = this.router.getQuery();
-    this.router.go('/turnDiaForPlayerOrderDetail', { orderId, serverid });
-  }
+  // // 跳转订单详情
+  // goOrderDetail = (orderId) => {
+  //   const { serverid } = this.router.getQuery();
+  //   this.router.go('/turnDiaForPlayerOrderDetail', { orderId, serverid });
+  // }
   // deleteOrder = async (orderId) => {
   //   const isComfirm = confirm('确认删除订单');
   //   if (isComfirm) {
@@ -146,7 +146,7 @@ class TurnDiaForPlayer extends BaseComponent {
   }
   // 跳转充值页面
   turnDia = () => {
-    const { diamond, playerId, errorTip, playerName } = this.state;
+    const { diamond, playerId, errorTip, playerName, goods, selectShopId } = this.state;
     if (!playerId || playerId.length < 6) {
       return;
     }
@@ -159,11 +159,16 @@ class TurnDiaForPlayer extends BaseComponent {
       return;
     }
     const { serverid } = this.router.getQuery();
+    const shopSelectArr = goods.filter((good) => {
+      return good.shopId === selectShopId;
+    });
+    const systemGift = shopSelectArr[0] ? shopSelectArr[0].systemGift : '';
     this.router.go('/payToTurnDiaForPlayer', {
       playerId,
       playerName,
       serverid,
       diamond,
+      systemGift,
     });
   }
   onSearchInputChange = (searchVal) => {
