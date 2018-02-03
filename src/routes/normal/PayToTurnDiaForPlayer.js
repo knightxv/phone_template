@@ -6,13 +6,11 @@ import { Checkbox } from 'antd-mobile';
 import BaseComponent from '@/core/BaseComponent';
 import { Button, Icon, Modal, NavBar } from '@/components/lazyComponent/antd';
 import { Title, IconImg } from '@/components/styleComponent';
+import PayIcon from '@/components/PayIcon';
 import styles from './PayToTurnDiaForPlayer.less';
 
 const imgSource = {
   masonry: require('../../assets/zuanshi.png'),
-  wx: require('../../assets/wx.png'),
-  zfb: require('../../assets/zfb.png'),
-  zjzz: require('../../assets/zjzz.png'),
   androidTip: require('../../assets/android_tip.png'),
   iosTip: require('../../assets/ios_tip.png'),
 };
@@ -22,42 +20,28 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     this.state = {
       payPickerVisible: false,
       // selectPayType: this.Enum.payType.WECHAT,
-      selectPayInfo: null,
+      // selectPayInfo: null,
+      selectPayType: null, // 选择的支付方式
       isAutoSave: true,
       payTipVisible: false,
     };
     this.query = this.router.getQuery();
-    // const { goodsMoney, masonryCount, shopId } = query;
-    this.payItem = {
-      wechat: {
-        label: '微信支付',
-        imgSourceKey: 'wx',
-        payType: this.Enum.payType.WECHAT,
-      },
-      aliPay: {
-        label: '支付宝支付',
-        imgSourceKey: 'zfb',
-        payType: this.Enum.payType.ALI,
-      },
-      balance: {
-        label: '直接转钻',
-        imgSourceKey: 'zjzz',
-        payType: this.Enum.payType.BALANCE,
-      },
-    };
   }
   // 判断权限得到支付方式
   payItemArr = () => {
-    const payItem = this.payItem;
+    const { WECHAT, ALI, BALANCE, YLZF } = this.Enum.payType;
     const payItemArr = [];
-    if (this.hasPower('AgentTurnDiaToPlayerDirect')) {
-      payItemArr.push(payItem.balance);
+    if (this.hasPower('AgentBuyDiabanlancePay')) {
+      payItemArr.push(BALANCE);
     }
-    if (this.hasPower('wechatPayForAgentTurnDiaToPlayer')) {
-      payItemArr.push(payItem.wechat);
+    if (this.hasPower('AgentBuyDiawechatPay')) {
+      payItemArr.push(WECHAT);
     }
-    if (this.hasPower('AliPayForAgentTurnDiaToPlayer')) {
-      payItemArr.push(payItem.aliPay);
+    if (this.hasPower('AgentBuyDiaAliPay')) {
+      payItemArr.push(ALI);
+    }
+    if (this.hasPower('ylzfForAgentBuyDia')) {
+      payItemArr.push(YLZF);
     }
     return payItemArr;
   }
@@ -68,7 +52,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     }
     const payItemArr = this.payItemArr();
     this.setState({
-      selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : null,
+      selectPayType: payItemArr.length > 0 ? payItemArr[0] : null,
     });
   }
   // 跳出支付picker
@@ -81,9 +65,9 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     }
   }
   // 选择支付方式
-  selectPayType = (payInfo) => {
+  selectPayType = (selectPayType) => {
     this.setState({
-      selectPayInfo: payInfo,
+      selectPayType,
       payPickerVisible: false,
     });
   }
@@ -132,19 +116,13 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     // });
   }
   payToTurn =() => {
-    let { selectPayInfo } = this.state;
-    if (!selectPayInfo) {
-      selectPayInfo = this.payItemArr()[0];
-    }
-    const payTypeSelect = selectPayInfo.payType;
-    const { BALANCE, ALI } = this.Enum.payType;
-    if (payTypeSelect === BALANCE) {
-      this.readyToExcharge();
+    const { selectPayType } = this.state;
+    if (selectPayType === null) {
       return;
     }
-    // 临时
-    if (this.helps.isWechat) {
-      this.message.info('微信浏览器暂不支持此支付方式，请使用其他浏览器进行登录');
+    const { BALANCE } = this.Enum.payType;
+    if (selectPayType === BALANCE) {
+      this.readyToExcharge();
       return;
     }
     // if (this.helps.isWechat && payTypeSelect === ALI) {
@@ -155,12 +133,12 @@ class PayToTurnDiaForPlayer extends BaseComponent {
 
   }
   goToPay = async () => {
-    const { selectPayInfo, isAutoSave } = this.state;
+    const { selectPayType, isAutoSave } = this.state;
     const { inviteCode } = this.props;
-    if (!selectPayInfo) {
+    if (selectPayType === null) {
       return;
     }
-    const type = selectPayInfo.payType;
+    const type = selectPayType;
     const chargeType = this.helps.payType(type);
     const { playerId, diamond, serverid } = this.router.getQuery();
     const params = {
@@ -185,21 +163,14 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     });
   }
   render() {
-    const { payPickerVisible, selectPayInfo, isAutoSave, payTipVisible } = this.state;
+    const { payPickerVisible, selectPayType, isAutoSave, payTipVisible } = this.state;
     const { inviteCode, masonry } = this.props;
     const payItemArr = this.payItemArr();
     const { diamond, playerName, playerId } = this.query;
-    // const goodsMoneyLabel = this.helps.parseFloatMoney(goodsMoney);
-    // const masonryCountLabel = this.helps.transMoenyUnit(masonryCount);
-    const payInfo = selectPayInfo || payItemArr[0] || {};
-    const {
-      label,
-      imgSourceKey,
-      payType,
-    } = payInfo;
     const price = this.helps.parseFloatMoney(diamond * 10);
     const hasPowerToGive = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer');
     const { ALI } = this.Enum.payType;
+    const selectPayTypeLabel = this.Enum.payTypeLabel[selectPayType];
     return (
       <div className={styles.container}>
         <Title>确认订单</Title>
@@ -233,8 +204,8 @@ class PayToTurnDiaForPlayer extends BaseComponent {
                 <div className={styles.rowItemWrap} onClick={this.togglePayPicker}>
                   <div>付款方式</div>
                   <div className={styles.payItem}>
-                    <IconImg className={styles.payIcon} src={imgSource[imgSourceKey]} />
-                    <span>{ label }</span>
+                    <PayIcon payType={selectPayType} />
+                    <span>{ selectPayTypeLabel }</span>
                     { payItemArr.length > 1 && <Icon type="right" /> }
                   </div>
                 </div>
