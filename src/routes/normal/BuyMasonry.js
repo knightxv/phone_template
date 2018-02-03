@@ -23,42 +23,28 @@ class BuyMasonry extends BaseComponent {
       goods: [],
       record: [],
       payPickerVisible: false,
-      selectPayInfo: null,
+      selectPayType: null, // 选择的支付方式
       payTipVisible: false,
     };
     const query = this.router.getQuery();
     // const { goodsMoney, masonryCount, shopId } = query;
     this.query = query;
-    this.payItem = {
-      wechat: {
-        label: '微信支付',
-        imgSourceKey: 'wx',
-        payType: this.Enum.payType.WECHAT,
-      },
-      aliPay: {
-        label: '支付宝支付',
-        imgSourceKey: 'zfb',
-        payType: this.Enum.payType.ALI,
-      },
-      balance: {
-        label: '余额支付',
-        imgSourceKey: 'yezf',
-        payType: this.Enum.payType.BALANCE,
-      },
-    };
   }
   // 判断权限得到支付方式
   payItemArr = () => {
-    const payItem = this.payItem;
+    const { WECHAT, ALI, BALANCE, YLZF } = this.Enum.payType;
     const payItemArr = [];
     if (this.hasPower('AgentBuyDiabanlancePay')) {
-      payItemArr.push(payItem.balance);
+      payItemArr.push(BALANCE);
     }
     if (this.hasPower('AgentBuyDiawechatPay')) {
-      payItemArr.push(payItem.wechat);
+      payItemArr.push(WECHAT);
     }
     if (this.hasPower('AgentBuyDiaAliPay')) {
-      payItemArr.push(payItem.aliPay);
+      payItemArr.push(ALI);
+    }
+    if (this.hasPower('ylzfForAgentBuyDia')) {
+      payItemArr.push(YLZF);
     }
     return payItemArr;
   }
@@ -69,7 +55,7 @@ class BuyMasonry extends BaseComponent {
     }
     const payItemArr = this.payItemArr();
     this.setState({
-      selectPayInfo: payItemArr.length > 0 ? payItemArr[0] : null,
+      selectPayType: payItemArr.length > 0 ? payItemArr[0] : null,
     });
   }
   // 跳出支付picker
@@ -82,9 +68,9 @@ class BuyMasonry extends BaseComponent {
     }
   }
   // 选择支付方式
-  selectPayType = (payInfo) => {
+  selectPayType = (payType) => {
     this.setState({
-      selectPayInfo: payInfo,
+      selectPayType: payType,
       payPickerVisible: false,
     });
   }
@@ -118,20 +104,18 @@ class BuyMasonry extends BaseComponent {
     }
   }
   buyGood = () => {
-    let { selectPayInfo } = this.state;
+    const { selectPayType } = this.state;
     const { shopId } = this.query;
-    if (!selectPayInfo) {
-      selectPayInfo = this.payItemArr()[0];
+    if (!selectPayType) {
+      return;
     }
-
-    const payTypeSelect = selectPayInfo.payType;
     const { WECHAT, ALI, BALANCE } = this.Enum.payType;
     // if (this.helps.isWechat && payTypeSelect === ALI) {
     //   // this.message.info('请用手机浏览器打开');
     //   this.togglePayTipPicker();
     //   return;
     // }
-    if (payTypeSelect === BALANCE) {
+    if (selectPayType === BALANCE) {
       this.readyToExcharge(shopId);
       return;
     }
@@ -139,7 +123,7 @@ class BuyMasonry extends BaseComponent {
       this.message.info('微信浏览器暂不支持此支付方式，请使用其他浏览器进行登录');
       return;
     }
-    this.goToPay(payTypeSelect, shopId);
+    this.goToPay(selectPayType, shopId);
   }
   // 支付宝支付
   togglePayTipPicker = () => {
@@ -149,19 +133,13 @@ class BuyMasonry extends BaseComponent {
     });
   }
   render() {
-    const { payPickerVisible, selectPayInfo, payTipVisible } = this.state;
+    const { payPickerVisible, selectPayType, payTipVisible } = this.state;
     const { inviteCode, canCashCount } = this.props;
     const { goodsMoney, masonryCount } = this.query;
     const payItemArr = this.payItemArr();
-    const payInfo = selectPayInfo || payItemArr[0] || {};
     const goodsMoneyLabel = this.helps.parseFloatMoney(goodsMoney);
     const { ALI } = this.Enum.payType;
     const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
-    const {
-      label,
-      imgSourceKey,
-      payType,
-    } = payInfo;
     return (
       <div className={styles.container}>
         <Title>确认订单</Title>
@@ -188,8 +166,8 @@ class BuyMasonry extends BaseComponent {
               <div className={styles.rowItemWrap} onClick={this.togglePayPicker}>
                 <div>付款方式</div>
                 <div className={styles.payItem}>
-                  <PayIcon payType={payType} />
-                  <span>{ label }</span>
+                  <PayIcon payType={selectPayType} />
+                  <span>{ this.Enum.payTypeLabel[selectPayType] }</span>
                   { payItemArr.length > 1 && <Icon type="right" /> }
                 </div>
               </div>
@@ -200,7 +178,7 @@ class BuyMasonry extends BaseComponent {
           </div>
         </div>
         {
-          this.helps.isWechat && payType === ALI &&
+          this.helps.isWechat && selectPayType === ALI &&
           <Modal
             maskClosable
             transparent
@@ -232,20 +210,20 @@ class BuyMasonry extends BaseComponent {
               </div>
               <div>
                 {
-                  payItemArr.map(payInfo => (
+                  payItemArr.map(payType => (
                     <div
                       className={styles.pickePayItem}
-                      key={payInfo.payType}
-                      onClick={() => this.selectPayType(payInfo)}
+                      key={payType}
+                      onClick={() => this.selectPayType(payType)}
                     >
                       <div className={styles.payInfoWrap}>
                         <div className={styles.payItem}>
-                          <PayIcon payType={payInfo.payType} />
-                          <span>{payInfo.label}</span>
+                          <PayIcon payType={payType} />
+                          <span>{this.Enum.payTypeLabel[payType]}</span>
                         </div>
                         <div>
                           {
-                            payInfo.payType === this.Enum.payType.BALANCE
+                            payType === this.Enum.payType.BALANCE
                             && <div>
                               余额:<span className={styles.count}>{ canCashCountLabel }</span>元
                             </div>
@@ -254,7 +232,7 @@ class BuyMasonry extends BaseComponent {
                       </div>
                       <div className={styles.selectIconWrap}>
                         {
-                          payType === payInfo.payType && <Icon color="#1d9ed7" type="check" />
+                          payType === selectPayType && <Icon color="#1d9ed7" type="check" />
                         }
                       </div>
                     </div>

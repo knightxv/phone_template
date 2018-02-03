@@ -83,31 +83,45 @@ const system = () => {
 };
 const nowSystem = system();
 export const payType = (type) => {
-  let chargeType;
-  if (nowSystem === 'PC') {
-    if (type === payEnum.ALI) {
-      chargeType = browserTypeEnum.ALIPAY_PC_WINDOS;
-    } else {
-      chargeType = browserTypeEnum.WECHAT_PC_WINDOS;
-    }
-  } else if (nowSystem === 'Android') {
+  if (type === payEnum.YLZF) {
     if (isWechat) {
-      chargeType = browserTypeEnum.WECHAT_ANDROID_WECHATWINDOS;
-    } else if (type === payEnum.ALI) {
-      chargeType = browserTypeEnum.ALIPAY_ANDROID_PHONE_WINDOS;
-    } else {
-      chargeType = browserTypeEnum.WECHAT_ANDROID_PHONE_WINDOS;
+      return browserTypeEnum.YLZF_WECHAT;
     }
-  } else if (nowSystem === 'IOS') {
-    if (isWechat) {
-      chargeType = browserTypeEnum.WECHAT_IOS_WECHATWINDOS;
-    } else if (type === payEnum.ALI) {
-      chargeType = browserTypeEnum.ALIPAY_IOS_PHONE_WINDOS;
-    } else {
-      chargeType = browserTypeEnum.WECHAT_IOS_PHONE_WINDOS;
+    if (nowSystem === 'PC') {
+      return browserTypeEnum.YLZF_PC;
+    } else if (nowSystem === 'Android') {
+      return browserTypeEnum.YLZF_ANDROID_PHONE;
+    } else if (nowSystem === 'IOS') {
+      return browserTypeEnum.YLZF_IOS_PHONE;
     }
   }
-  return chargeType;
+  if (type === payEnum.ALI) {
+    if (nowSystem === 'PC') {
+      return browserTypeEnum.ALIPAY_PC;
+    } else if (nowSystem === 'Android') {
+      return browserTypeEnum.ALIPAY_ANDROID_PHONE;
+    } else if (nowSystem === 'IOS') {
+      return browserTypeEnum.ALIPAY_IOS_PHONE;
+    }
+  }
+  if (type === payEnum.WECHAT) {
+    if (nowSystem === 'PC') {
+      return browserTypeEnum.WECHAT_PC;
+    } else if (nowSystem === 'Android') {
+      if (isWechat) {
+        return browserTypeEnum.WECHAT_ANDROID_WECHAT;
+      } else {
+        return browserTypeEnum.WECHAT_ANDROID_PHONE;
+      }
+    } else if (nowSystem === 'IOS') {
+      if (isWechat) {
+        return browserTypeEnum.WECHAT_IOS_WECHAT;
+      } else {
+        return browserTypeEnum.WECHAT_IOS_PHONE;
+      }
+    }
+  }
+  return null;
 };
 
 export default exports;

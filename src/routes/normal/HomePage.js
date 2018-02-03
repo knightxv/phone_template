@@ -49,9 +49,9 @@ class HomePage extends BaseComponent {
   powerManage = () => {
     return {
       havePowerToBanlance: this.hasPowerSome('banlance'),
-      havePowerToRechargeToPlayer: this.hasPowerSome('AgentTurnDiaToPlayerDirect', 'wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer'),
+      havePowerToRechargeToPlayer: this.hasPowerSome('AgentTurnDiaToPlayerDirect', 'wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer', 'ylzfForAgentTurnDiaToPlayer'),
       havePowerToRechargeToAgent: this.hasPower('iAgentTurnDiaToAgent'),
-      havePowerToBuyDia: this.hasPowerSome('AgentBuyDiawechatPay', 'AgentBuyDiaAliPay', 'AgentBuyDiabanlancePay'), // 是否有购买钻石的权限
+      havePowerToBuyDia: this.hasPowerSome('AgentBuyDiawechatPay', 'AgentBuyDiaAliPay', 'AgentBuyDiabanlancePay', 'ylzfForAgentBuyDia'), // 是否有购买钻石的权限
     };
   }
   async componentWillMount() {
@@ -378,7 +378,7 @@ class HomePage extends BaseComponent {
       havePowerToBuyDia,
       havePowerToBanlance,
     } = power;
-    const hasPowerToPay = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer');
+    const hasPowerToPay = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer', 'ylzfForAgentTurnDiaToPlayer');
     const returnDiaForPlayerTip = hasPowerToPay ? '替玩家购钻' : '给玩家转钻';
     return (<div>
       <Title>代理中心</Title>
