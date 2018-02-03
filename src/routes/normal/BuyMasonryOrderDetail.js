@@ -12,7 +12,7 @@ const imgSource = {
   masonry: require('../../assets/zuanshi.png'),
 };
 
-class OrderForAgentBuyDia extends BaseComponent {
+class BuyMasonryOrderDetail extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,6 +63,7 @@ class OrderForAgentBuyDia extends BaseComponent {
         <Title>订单详情</Title>
         <NavBar
           title="订单详情"
+          onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
           <div>
@@ -141,7 +142,7 @@ class OrderForAgentBuyDia extends BaseComponent {
             </div>
           </div>
           <div className={styles.btnWrap}>
-            <Button type="red" onClick={() => this.router.go('/homePage')}>关闭</Button>
+            <Button onClick={this.router.back}>返回</Button>
           </div>
         </div>
       </div>
@@ -149,4 +150,4 @@ class OrderForAgentBuyDia extends BaseComponent {
   }
 }
 
-export default connect()(OrderForAgentBuyDia);
+export default connect()(BuyMasonryOrderDetail);

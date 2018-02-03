@@ -58,7 +58,7 @@ class CashChangeRecord extends BaseComponent {
         <Title>提现记录</Title>
         <NavBar
           title="提现记录"
-          onClick={() => this.props.dispatch(this.helps.routerRedux.goBack())}
+          onClick={this.router.back}
         />
         <ListViewTable
           tableData={tableData}

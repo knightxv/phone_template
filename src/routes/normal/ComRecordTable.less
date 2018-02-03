@@ -1,0 +1,141 @@
+@import "../../base/less/base.less";
+
+.container {
+  background: #fff;
+}
+.resultTitle {
+  padding: .1rem .2rem;
+}
+.countItemWrap {
+  padding: .1rem 0;
+  .flexRow();
+}
+.countRowItem {
+  margin-left: .3rem;
+}
+.countLabel {
+  padding: .2rem .05rem;
+  width: 1.5rem;
+  text-align: center;
+  border-radius: .1rem;
+  background: @grayBg;
+  font-size: .28rem;
+  .textHide();
+
+}
+.countTip {
+  padding-top: .1rem;
+  text-align: center;
+}
+
+.selectTimeItemWrap {
+  .flexRow();
+  font-size: .28rem;
+  padding: .2rem;
+  .borTop();
+  color: @gray;
+}
+.selectTimeItem {
+  .border();
+  font-size: .28rem;
+  color: @gray;
+  border-radius: .1rem;
+  padding: 0.08rem .2rem;
+  margin-left: .1rem;
+  box-shadow: 0px 0px 1px 1px rgba(197, 193, 193, 0.2);
+}
+.selectTimeItemActive {
+  background: @baseColor;
+  color: #fff;
+}
+
+// 选择时间
+.timeSelectItem {
+  margin-right: .5rem;
+  .flexRow();
+}
+.searchInputWrap {
+  flex: 1;
+}
+// 记录
+.recordTitleWrap {
+  .flexRow();
+  background: @baseColor;
+  color: #fff;
+}
+.recordTitleItem {
+  .borRig(#fff);
+  padding: .16rem .1rem;
+  flex: 1;
+  font-size: .28rem;
+  text-align: center;
+}
+.recordTitleItemOption {
+  text-align: center;
+  flex: 1.6;
+}
+.recordContent {
+  height: 7.2rem;
+  overflow: hidden;
+}
+.recordRowItemWrap {
+  .flexRow();
+}
+.recordRowItem {
+  padding: .05rem .1rem;
+  flex: 1;
+  font-size: .28rem;
+  height: .8rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .borBot();
+  overflow-x: auto;
+}
+.recordRowItemOption {
+  .flexRow();
+  .borBot();
+  flex: 1.6;
+  height: .8rem;
+}
+.btn(@color) {
+  .border(@color);
+  color: @color;
+  border-radius: .06rem;
+  font-size: .24rem;
+  padding: 0.05rem 0.1rem;
+
+}
+.deleteBtn {
+  .btn(@red);
+  margin-left: .2rem;
+}
+.lookDetailBtn {
+  .btn(@baseColor);
+  margin-left: .1rem;
+}
+
+.recordTimeDay {
+  color: @gray;
+  font-size: .24rem;
+}
+.recordTimeHour {
+  color: @baseColor;
+}
+
+
+.recordFooter {
+  .flexRow(space-between);
+  background: @baseColor;
+  color: #fff;
+  padding: .16rem .2rem;
+}
+.pageControllerWrap {
+  .flexRow();
+}
+.pageController {
+  .btn(#fff);
+  padding: .1rem .2rem;
+  margin-right: .1rem;
+}

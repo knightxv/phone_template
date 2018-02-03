@@ -96,6 +96,20 @@ function RouterConfig({ history, app }) {
       // ],
     },
     {
+      path: '/buyMasonryOrderDetail',
+      component: () => import('./routes/normal/BuyMasonryOrderDetail'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
+      path: '/buyMasonryRecord',
+      component: () => import('./routes/normal/BuyMasonryRecord'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
       path: '/turnDiaForAgent',
       component: () => import('./routes/normal/TurnDiaForAgent'),
       models: () => [
@@ -124,13 +138,6 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
-      path: '/buyDiaOrderStatu',
-      component: () => import('./routes/normal/BuyDiaOrderStatu'),
-      models: () => [
-        import('./models/agent'),
-      ],
-    },
-    {
       path: '/turnDiaForPlayer',
       component: () => import('./routes/normal/TurnDiaForPlayer'),
       models: () => [
@@ -154,9 +161,6 @@ function RouterConfig({ history, app }) {
     {
       path: '/orderForAgentBuyDia',
       component: () => import('./routes/normal/OrderForAgentBuyDia'),
-      // models: () => [
-      //   import('./models/agent'),
-      // ],
     },
     {
       path: '/bindFail',

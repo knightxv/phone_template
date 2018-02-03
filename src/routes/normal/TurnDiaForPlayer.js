@@ -1,21 +1,17 @@
 import React from 'react';
 import { connect } from 'dva';
-// import classNames from 'classnames';
+import classnames from 'classnames';
 
 import BaseComponent from '@/core/BaseComponent';
-import ScrollTop from '@/components/ScrollTop';
 import { ScrollListView } from '@/components/lazyComponent/ScrollListView';
-import { StickyContainer, Sticky } from '@/components/lazyComponent/ReactSticky';
 import { Icon, InputItem, Modal, SearchBar, NavBar, Button } from '@/components/lazyComponent/antd';
-import { WhiteSpace, Title } from '@/components/styleComponent';
-import LongPress from '@/components/LongPress';
+import { Title } from '@/components/styleComponent';
 import styles from './TurnDiaForPlayer.less';
 
 
 class TurnDiaForPlayer extends BaseComponent {
   constructor(props) {
     super(props);
-    const { playerId, serverid } = this.router.getQuery();
     // const { payEnum } = this.helps;
     // let defaultPayEnum = payEnum.WECHAT;
     // const paySelectArr = this.power();
@@ -24,38 +20,29 @@ class TurnDiaForPlayer extends BaseComponent {
     // }
     this.state = {
       playerName: '', // 用户名
-      playerId,
+      playerId: '',
       errorTip: '', // 错误提示
-      // diamond: selectDiamondArr[defaultSelectIndex], // 钻石
-      // isChooseInput: false, // 是否选择其他数额
-      // selectIndex: defaultSelectIndex,
-      // payTypeSelect: defaultPayEnum,
-      record: [],
       players: [], // 玩家
-      diamond: '',
       selectplayerVisible: false,
       searchVal: '',
+      goods: [], // 商品
+      selectShopId: -1, // 选择商品的id
     };
     this.idTimer = null;
-    this.serverid = serverid; // 游戏的id
-    this.todayTimeStamp = new Date(new Date().format('yyyy/MM/dd')).getTime();
-    this.monthTimeStamp = this.helps.getMonthTimeStamp();
     this.loadPlayers = false;
     // this.paySelectArr = [];
   }
   async componentWillMount() {
-    this.idValChange(this.state.playerId);
-    this.getRecord();
+    this.getGoods();
   }
-  getRecord = async () => {
+  getGoods = async () => {
     const { serverid } = this.router.getQuery();
-    const res = await this.http.webHttp.get('/spreadApi/agentSellPlayerDiaRecord', {
+    const res = await this.http.webHttp.get('/spreadApi/goodsForAgentTurnDiaForPlayer', {
       serverid,
     });
     if (res.isSuccess) {
-      const record = res.data;
       this.setState({
-        record,
+        goods: res.data,
       });
     }
   }
@@ -112,60 +99,25 @@ class TurnDiaForPlayer extends BaseComponent {
       }
     }, 500);
   }
-  // 钻石数量
-  diamondChange = (diamond) => {
-    this.setState({
-      diamond,
-    });
-  }
   // 跳转订单详情
   goOrderDetail = (orderId) => {
     const { serverid } = this.router.getQuery();
     this.router.go('/turnDiaForPlayerOrderDetail', { orderId, serverid });
   }
-  deleteOrder = async (orderId) => {
-    const isComfirm = confirm('确认删除订单');
-    if (isComfirm) {
-      const res = await this.http.webHttp.get('/spreadApi/deleteAgentSellPlayerDia', {
-        orderId,
-      });
-      if (!res.isSuccess) {
-        this.message.info(res.info || '删除订单失败');
-        return;
-      }
-      this.getRecord();
-      // const newRecord = this.state.record.filter((record) => {
-      //   return record.orderId !== orderId;
-      // });
-      // this.setState({
-      //   record: newRecord,
-      // });
-      this.message.info(res.info || '删除订单成功');
-    }
-  }
-  renderRow = (row) => {
-    const {
-      chargeTime,
-      chargeCount,
-      chargeInfo,
-      orderId,
-     } = row;
-    const chargeTimeLabel = new Date(chargeTime).format('yyyy-MM-dd hh:mm:ss');
-    return (<LongPress
-      className={styles.recordRowItem}
-      onShortPress={() => this.goOrderDetail(orderId)}
-      onLongPress={() => this.deleteOrder(orderId)}
-    >
-      <div>
-        <div> { chargeInfo } </div>
-        <div className={styles.recordItemTime}>{ chargeTimeLabel }</div>
-      </div>
-      <div className={styles.recordItemCountLabel}>
-        <span className={styles.count}>{ chargeCount }个钻石</span>
-        <Icon type="right" color="#b8b8b8" />
-      </div>
-    </LongPress>);
-  }
+  // deleteOrder = async (orderId) => {
+  //   const isComfirm = confirm('确认删除订单');
+  //   if (isComfirm) {
+  //     const res = await this.http.webHttp.get('/spreadApi/deleteAgentSellPlayerDia', {
+  //       orderId,
+  //     });
+  //     if (!res.isSuccess) {
+  //       this.message.info(res.info || '删除订单失败');
+  //       return;
+  //     }
+  //     this.getRecord();
+  //     this.message.info(res.info || '删除订单成功');
+  //   }
+  // }
   // 获取玩家数据
   getPlayer = async () => {
     const { serverid } = this.router.getQuery();
@@ -195,25 +147,25 @@ class TurnDiaForPlayer extends BaseComponent {
   }
   // 跳转充值页面
   goToNext = () => {
-    const { diamond, playerId, errorTip, playerName } = this.state;
-    if (!playerId || playerId.length < 6) {
-      return;
-    }
-    if (errorTip) {
-      this.message.info(errorTip);
-      return;
-    }
-    if (!diamond || diamond == 0) {
-      this.message.info('请选择钻石个数');
-      return;
-    }
-    const { serverid } = this.router.getQuery();
-    this.router.go('/payToTurnDiaForPlayer', {
-      playerId,
-      playerName,
-      serverid,
-      diamond,
-    });
+    // const { diamond, playerId, errorTip, playerName } = this.state;
+    // if (!playerId || playerId.length < 6) {
+    //   return;
+    // }
+    // if (errorTip) {
+    //   this.message.info(errorTip);
+    //   return;
+    // }
+    // if (!diamond || diamond == 0) {
+    //   this.message.info('请选择钻石个数');
+    //   return;
+    // }
+    // const { serverid } = this.router.getQuery();
+    // this.router.go('/payToTurnDiaForPlayer', {
+    //   playerId,
+    //   playerName,
+    //   serverid,
+    //   diamond,
+    // });
   }
   onSearchInputChange = (searchVal) => {
     this.setState({
@@ -273,67 +225,15 @@ class TurnDiaForPlayer extends BaseComponent {
       </div>
     </div>);
   }
-  scrollTop = () => {
-    const scrollNode = this.scroll;
-    if (scrollNode) {
-      scrollNode.scrollTo && scrollNode.scrollTo(0, 0);
-    }
-  }
-  renderRecordHeader = () => {
-    const { record } = this.state;
-    let allCount = 0;
-    let monthCount = 0;
-    let incomeToday = 0;
-    let incomeMonth = 0;
-    record.forEach((data) => {
-      if (data.chargeTime >= this.todayTimeStamp) {
-        incomeToday += data.chargeMoney;
-      }
-      if (data.chargeTime >= this.monthTimeStamp) {
-        incomeMonth += data.chargeMoney;
-      }
-      if (data.chargeTime >= this.monthTimeStamp) {
-        monthCount += data.chargeCount;
-      }
-      allCount += data.chargeCount;
-    });
-    const incomeTodayLabel = this.helps.parseFloatMoney(incomeToday);
-    const incomeMonthLabel = this.helps.parseFloatMoney(incomeMonth);
-    return (<div className={styles.recordHeader}>
-      <div>
-        <div>
-          本月充钻数量:<span className={styles.count}>{ monthCount }</span>个
-        </div>
-        <div>
-        充钻总数量:<span className={styles.count}>{ allCount }</span>个
-        </div>
-      </div>
-      <div>
-        {
-          this.hasPowerSome('banlance') &&
-          <div>
-            本月收益:<span className={styles.money}>{ incomeMonthLabel }</span>元
-          </div>
-        }
-        {
-          this.hasPowerSome('banlance') &&
-          <div>
-            今日收益:<span className={styles.money}>{ incomeTodayLabel }</span>元
-          </div>
-        }
-      </div>
-    </div>);
-  }
   render() {
-    const { playerName, diamond, errorTip, playerId,
-      record, selectplayerVisible, searchVal, players,
+    const { playerName, errorTip, playerId,
+      selectplayerVisible, searchVal, players, goods,
+      selectShopId,
       // isChooseInput, selectIndex, payTypeSelect,
     } = this.state;
     // const { payEnum } = this.helps;
-    const money = !isNaN(diamond) ? diamond * 10 : 0;
-    const moneyFloat = this.helps.parseFloatMoney(money);
-    const { masonry } = this.props;
-    // const paySelectArr = this.power(); //  为了处理双击刷新问题
+    // const money = !isNaN(diamond) ? diamond * 10 : 0;
+    // const moneyFloat = this.helps.parseFloatMoney(money);
     const filterPlayersData = players.filter((player) => {
       if (!searchVal) {
         return true;
@@ -341,12 +241,13 @@ class TurnDiaForPlayer extends BaseComponent {
       return player.playerId.toString().indexOf(searchVal)
       !== -1 || player.playerName.toString().indexOf(searchVal) !== -1;
     });
-    const hasPowerToGive = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer');
+    const hasPowerToPay = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer', 'ylzfForAgentTurnDiaToPlayer');
+    const title = hasPowerToPay ? '替玩家购钻' : '给玩家转钻';
     return (
       <div>
-        <Title>给玩家充钻</Title>
+        <Title>{ title }</Title>
         <NavBar
-          title="给玩家充钻"
+          title={title}
           onClick={this.router.back}
         />
         <div className={styles.payWrap}>
@@ -367,26 +268,29 @@ class TurnDiaForPlayer extends BaseComponent {
               playerName && <div className={styles.playerName}>{playerName}</div>
             }
           </div>
-          <WhiteSpace />
-          <div className={styles.playerInputWrap}>
-            <InputItem
-              onChange={this.diamondChange}
-              value={diamond}
-              type="number"
-              clear
-              maxLength={8}
-              placeholder={`本次最多转出${masonry}个钻`}
-            >钻石数量</InputItem>
+          <div>
+            {
+              goods.map(({ payMoney, masonryCount, shopId, systemGift, tip }, i) => {
+                const goodsWrapClass = classnames({
+                  [styles.goodsWrap]: true,
+                  [styles.goodsSelect]: selectShopId === shopId,
+                });
+                return (
+                  <div
+                    className={goodsWrapClass}
+                    key={i}
+                    style={{ marginRight: (i !== 0 && ((i - 2) % 3) === 0) ? 0 : '5%' }}
+                    onClick={() => this.selectGoods(shopId)}
+                  >
+                    <p className={styles.goodLabel}>
+                      {masonryCount}钻石{ +systemGift !== 0 && <span>+{systemGift}钻</span> }
+                    </p>
+                    <p className={styles.goodPrice}>售价:{this.helps.parseIntMoney(payMoney)}元</p>
+                  </div>
+                );
+              })
+            }
           </div>
-          {
-            hasPowerToGive &&
-            <div>
-              <div className={styles.priceTip}>注:玩家购钻价格统一0.1元/钻</div>
-              <div className={styles.priceWrap}>
-                价格:<span className={styles.money}>{ moneyFloat}</span>元
-              </div>
-            </div>
-          }
           <div className={styles.payBtnWrap}>
             <Button
               className={styles.payBtn}
@@ -396,36 +300,6 @@ class TurnDiaForPlayer extends BaseComponent {
             </Button>
           </div>
         </div>
-        <StickyContainer>
-          <Sticky>
-            {
-              ({
-              style,
-                // the following are also available but unused in this example
-                isSticky,
-                wasSticky,
-                distanceFromTop,
-                distanceFromBottom,
-                calculatedHeight,
-              }) => {
-                return (
-                  <div className={styles.listWrap} style={style}>
-                    <div style={{ height: '1rem' }} />
-                    { this.renderRecordHeader() }
-                    <ScrollListView
-                      data={record}
-                      renderRow={this.renderRow}
-                      getNode={(node) => { this.scroll = node; }}
-                    />
-                    {
-                      wasSticky && <ScrollTop onClick={this.scrollTop} />
-                    }
-                  </div>
-                );
-              }
-            }
-          </Sticky>
-        </StickyContainer>
         {/* 选择玩家picker */}
         <Modal
           transparent

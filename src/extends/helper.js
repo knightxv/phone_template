@@ -57,6 +57,11 @@ const browserTypeEnum = {
   ALIPAY_ANDROID_PHONE_WINDOS: 5, // 安卓手机浏览器---
   ALIPAY_IOS_PHONE_WINDOS: 6, // 5 IOS手机浏览器---
   ALIPAY_PC_WINDOS: 7, // 支付宝pc---
+  // 银联支付
+  YLZF_ANDROID: 8,
+  YLZF_IOS: 9,
+  YLZF_PC: 10,
+  YLZF_WECHAT: 11,
 };
 
 // 支付配置

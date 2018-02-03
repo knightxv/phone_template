@@ -5,13 +5,14 @@ import { window } from 'global';
 import BaseComponent from '@/core/BaseComponent';
 import { Button, Icon, Modal, NavBar } from '@/components/lazyComponent/antd';
 import { Title, IconImg } from '@/components/styleComponent';
+import PayIcon from '@/components/PayIcon';
 import styles from './BuyMasonry.less';
 
 const imgSource = {
   masonry: require('../../assets/zuanshi.png'),
-  wx: require('../../assets/wx.png'),
-  zfb: require('../../assets/zfb.png'),
-  yezf: require('../../assets/yezf.png'),
+  // wx: require('../../assets/wx.png'),
+  // zfb: require('../../assets/zfb.png'),
+  // yezf: require('../../assets/yezf.png'),
   androidTip: require('../../assets/android_tip.png'),
   iosTip: require('../../assets/ios_tip.png'),
 };
@@ -109,7 +110,7 @@ class BuyMasonry extends BaseComponent {
       // this.message.info(res.info || '充值成功');
       // const userInfoRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
       // this.props.dispatch({ type: 'agent/updateAppInfo', payload: userInfoRes.data });
-      this.router.go('/buyDiaOrderStatu', {
+      this.router.go('/orderForAgentBuyDia', {
         orderId,
       });
     } else {
@@ -122,7 +123,7 @@ class BuyMasonry extends BaseComponent {
     if (!selectPayInfo) {
       selectPayInfo = this.payItemArr()[0];
     }
-    
+
     const payTypeSelect = selectPayInfo.payType;
     const { WECHAT, ALI, BALANCE } = this.Enum.payType;
     // if (this.helps.isWechat && payTypeSelect === ALI) {
@@ -169,9 +170,11 @@ class BuyMasonry extends BaseComponent {
           onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
-          <div className={styles.headerContainer}>
+          <div className={styles.blockContainer}>
             <div className={styles.headerInfoWrap}>
-              <IconImg className={styles.masonryIcon} src={imgSource.masonry} />
+              <div className={styles.masonryIconWrap}>
+                <IconImg className={styles.masonryIcon} src={imgSource.masonry} />
+              </div>
               <div className={styles.masonryInfo}>
                 <div className={styles.masonryCountLabel}>{ masonryCount }钻石</div>
                 <div className={styles.masonryMoenyLabel}>￥{ goodsMoneyLabel }</div>
@@ -185,14 +188,14 @@ class BuyMasonry extends BaseComponent {
               <div className={styles.rowItemWrap} onClick={this.togglePayPicker}>
                 <div>付款方式</div>
                 <div className={styles.payItem}>
-                  <IconImg className={styles.payIcon} src={imgSource[imgSourceKey]} />
+                  <PayIcon payType={payType} />
                   <span>{ label }</span>
                   { payItemArr.length > 1 && <Icon type="right" /> }
                 </div>
               </div>
             </div>
           </div>
-          <div className={styles.buyBtnWrap}>
+          <div className={styles.btnWrap}>
             <Button onClick={this.buyGood}>确认支付</Button>
           </div>
         </div>
@@ -237,7 +240,7 @@ class BuyMasonry extends BaseComponent {
                     >
                       <div className={styles.payInfoWrap}>
                         <div className={styles.payItem}>
-                          <IconImg className={styles.payIcon} src={imgSource[payInfo.imgSourceKey]} />
+                          <PayIcon payType={payInfo.payType} />
                           <span>{payInfo.label}</span>
                         </div>
                         <div>

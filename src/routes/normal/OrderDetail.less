@@ -1,0 +1,67 @@
+@import "../../base/less/base.less";
+
+.orderInfoRowItem {
+  .flexRow();
+}
+
+
+.blockContainer {
+  padding: .1rem;
+}
+.orderInfoRowItem {
+  .flexRow(space-between);
+  padding: .2rem .1rem;
+  .borBot();
+}
+.orderRowItem {
+  .flexRow(space-between);
+  padding: .2rem .1rem;
+}
+.payTypeItemWrap {
+  .flexRow();
+}
+.orderRowItemWrap {
+  .borBot();
+}
+.masonryInfoWrap {
+  .flexRow();
+  padding: .2rem .1rem;
+  align-items: stretch;
+  .borBot();
+}
+.masonryInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.orderIdLabel {
+  font-size: .28rem;
+}
+
+.masonryIconWrap {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  margin-right: .2rem;
+}
+.masonryIcon {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.masonryCountLabel {
+  color: #000;
+  font-size: .38rem;
+}
+.masonryMoenyLabel {
+  color: @moneyColor;
+}
+
+
+.copyBtn {
+  .border(@baseColor);
+  color: @baseColor;
+  font-size: .24rem;
+  padding: .1rem;
+  border-radius: .1rem;
+}

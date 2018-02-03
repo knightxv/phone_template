@@ -32,40 +32,31 @@ class AgencyPay extends BaseComponent {
         selectShopId,
       });
     }
-    this.getRecord();
   }
-  getRecord = async () => {
-    const res = await this.http.webHttp.get('/spreadApi/agentBuyDiaOrderList');
-    if (res.isSuccess) {
-      this.setState({
-        record: res.data,
-      });
-    }
-  }
-  // 跳转购钻详情页面
-  goToDetail = (orderId) => {
-    this.router.go('/buyDiaOrderDetail', { orderId });
-  }
+  // // 跳转购钻详情页面
+  // goToDetail = (orderId) => {
+  //   this.router.go('/buyDiaOrderDetail', { orderId });
+  // }
   // 选择商品
   selectGoods = (selectShopId) => {
     this.setState({
       selectShopId,
     });
   }
-  deleteOrder = async (orderId) => {
-    const isComfirm = confirm('确认删除订单');
-    if (isComfirm) {
-      const res = await this.http.webHttp.get('/spreadApi/deleteBuyDiaOrder', {
-        orderId,
-      });
-      if (!res.isSuccess) {
-        this.message.info(res.info || '删除订单失败');
-        return;
-      }
-      this.getRecord();
-      this.message.info(res.info || '删除订单成功');
-    }
-  }
+  // deleteOrder = async (orderId) => {
+  //   const isComfirm = confirm('确认删除订单');
+  //   if (isComfirm) {
+  //     const res = await this.http.webHttp.get('/spreadApi/deleteBuyDiaOrder', {
+  //       orderId,
+  //     });
+  //     if (!res.isSuccess) {
+  //       this.message.info(res.info || '删除订单失败');
+  //       return;
+  //     }
+  //     this.getRecord();
+  //     this.message.info(res.info || '删除订单成功');
+  //   }
+  // }
   renderRow = (row) => {
     const chargeTime = new Date(row.chargeTime).format('yyyy-MM-dd HH:mm');
     const chargeMoney = this.helps.parseFloatMoney(row.payMoney);
@@ -102,35 +93,23 @@ class AgencyPay extends BaseComponent {
       });
     }
   }
-  goToOrderDetail = () => {
-    this.router.go('/buyDiaOrderDetail');
-  }
-  scrollTop = () => {
-    const scrollNode = this.scroll;
-    if (scrollNode) {
-      scrollNode.scrollTo && scrollNode.scrollTo(0, 0);
-    }
-  }
+  // goToOrderDetail = () => {
+  //   this.router.go('/buyDiaOrderDetail');
+  // }
   render() {
-    const { goods, record, selectShopId } = this.state;
+    const { goods, selectShopId } = this.state;
     const shopSelectArr = goods.filter((good) => {
       return good.shopId === selectShopId;
     });
     const shopTip = shopSelectArr[0] && shopSelectArr[0].tip;
-    const monthRecord = []; // 本月购钻记录
-    record.some((data) => {
-      if (data.chargeTime >= this.helps.getMonthTimeStamp()) {
-        monthRecord.push(data);
-        return false;
-      }
-      return true;
-    });
-    const monthCount = monthRecord.reduce((bef, cur) => {
-      return bef + cur.chargeCount;
-    }, 0); // 本月购钻数
-    const allCount = record.reduce((bef, cur) => {
-      return bef + cur.chargeCount;
-    }, 0); // 总购钻数
+    // const monthRecord = []; // 本月购钻记录
+    // record.some((data) => {
+    //   if (data.chargeTime >= this.helps.getMonthTimeStamp()) {
+    //     monthRecord.push(data);
+    //     return false;
+    //   }
+    //   return true;
+    // });
     return (
       <div className={styles.container}>
         <Title>购买钻石</Title>
@@ -138,77 +117,39 @@ class AgencyPay extends BaseComponent {
           title="购买钻石"
           onClick={this.router.back}
         />
-        <WhiteSpace />
-        <div className={styles.payWrap}>
-          <div className={styles.goodsContainer}>
+        <div className={styles.contentContainer}>
+          <div>
+            <div className={styles.goodsContainer}>
+              {
+                goods.map(({ goodsMoney, masonryCount, shopId, statu, tip }, i) => {
+                  const goodsWrapClass = classnames({
+                    [styles.goodsWrap]: true,
+                    [styles.goodsCheap]: +statu === 1,
+                    [styles.goodsSelect]: selectShopId === shopId,
+                  });
+                  return (
+                    <div
+                      className={goodsWrapClass}
+                      key={i}
+                      style={{ marginRight: (i !== 0 && ((i - 2) % 3) === 0) ? 0 : '5%' }}
+                      onClick={() => this.selectGoods(shopId)}
+                    >
+                      <p className={styles.goodLabel}>{masonryCount}钻石</p>
+                      <p className={styles.goodPrice}>售价:{this.helps.parseIntMoney(goodsMoney)}元</p>
+                    </div>
+                  );
+                })
+              }
+            </div>
             {
-              goods.map(({ goodsMoney, masonryCount, shopId, statu, tip }, i) => {
-                const goodsWrapClass = classnames({
-                  [styles.goodsWrap]: true,
-                  [styles.goodsCheap]: +statu === 1,
-                  [styles.goodsSelect]: selectShopId === shopId,
-                });
-                return (
-                  <div
-                    className={goodsWrapClass}
-                    key={i}
-                    style={{ marginRight: (i !== 0 && ((i - 2) % 3) === 0) ? 0 : '5%' }}
-                    onClick={() => this.selectGoods(shopId)}
-                  >
-                    <p className={styles.goodLabel}>{masonryCount}钻石</p>
-                    <p className={styles.goodPrice}>售价:{this.helps.parseIntMoney(goodsMoney)}元</p>
-                  </div>
-                );
-              })
+              <div className={styles.payTip}>{ shopTip || '　' }</div>
             }
-          </div>
-          {
-            <div className={styles.payTip}>{ shopTip && `${shopTip}` }</div>
-          }
-          <div className={styles.btnWrap}>
-            <Button onClick={this.goToBuyGoods} className={styles.payBtn}>立即购买</Button>
+            <div className={styles.btnWrap}>
+              <Button onClick={this.goToBuyGoods} className={styles.payBtn}>立即购买</Button>
+              <Button type="green" onClick={() => this.router.go('/buyMasonryRecord')} className={styles.payBtn}>购钻记录</Button>
+            </div>
           </div>
         </div>
-        <StickyContainer>
-          <Sticky>
-            {
-              ({
-              style,
-                // the following are also available but unused in this example
-                isSticky,
-                wasSticky,
-                distanceFromTop,
-                distanceFromBottom,
-                calculatedHeight,
-              }) => {
-                // console.log(wasSticky)
-                return (
-                  <div className={styles.listWrap} style={style}>
-                    <div style={{ height: '1rem' }} />
-                    <div className={styles.recordHeader}>
-                      <div>
-                        本月购钻数量:<span className={styles.countLabel}>{ monthCount }</span>个
-                      </div>
-                      <div>
-                        总购钻数量:<span className={styles.countLabel}>{ allCount }</span>个
-                      </div>
-                    </div>
-                    <ScrollListView
-                      data={record}
-                      renderRow={this.renderRow}
-                      ref={(node) => { this.scrollView = node; }}
-                      ListEmptyComponent={<div className={styles.noDataTip}>没有数据哦</div>}
-                      getNode={(node) => { this.scroll = node; }}
-                    />
-                    {
-                      wasSticky && <ScrollTop onClick={this.scrollTop} />
-                    }
-                  </div>
-                );
-              }
-            }
-          </Sticky>
-        </StickyContainer>
       </div>
     );
   }

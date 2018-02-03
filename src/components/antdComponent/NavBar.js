@@ -38,7 +38,7 @@ z-index: -1;
 
 const DefaultNavbar = ({ title, onClick, right, className }) => {
   return (
-    <div>
+    <div style={{ height: '1rem' }}>
       <NavBarWrap className={className}>
         <NavBarSideWrap>
           {
@@ -56,7 +56,6 @@ const DefaultNavbar = ({ title, onClick, right, className }) => {
           { right }
         </NavBarSideWrap>
       </NavBarWrap>
-      <div style={{ height: '1rem' }} />
     </div>
   );
 };

@@ -53,9 +53,7 @@
 :global(.am-list-item .am-input-control input) {
     font-size: 0.32rem;
 }
-:global(.am-modal-content) {
-    background: none;
-}
+
 :global(.am-button-warning) {
     background: #f86e21;
     color: #fff;
@@ -75,17 +73,21 @@
     height: .6rem;
     line-height: .6rem;
 }
-:global(.am-modal.am-modal-transparent .am-modal-content .am-modal-body) {
+
+/* :global(.am-modal.am-modal-transparent .am-modal-content .am-modal-body) {
     height: 100vh;
     width: 100vw;
     padding: 0;
+}
+:global(.am-modal-content) {
+    background: none;
 }
 :global(.am-modal.am-modal-transparent .am-modal-content) {
     padding-top: 0;
 }
 :global(.am-modal-transparent) {
     width: 100vw!important;
-}
+} */
 :global(.am-action-sheet-share-list-item) {
     display: flex;
     flex-direction: column;

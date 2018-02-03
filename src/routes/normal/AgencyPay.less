@@ -1,7 +1,6 @@
 @import "../../base/less/base.less";
-.container {
-    display: flex;
-    flex-direction: column;
+.payWrap {
+  padding-top: .1rem;
 }
 .payTitle {
     color: #999;
@@ -13,7 +12,6 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    padding: 0 0.2rem;
 }
 .goodsWrap {
     margin-bottom: .2rem;
@@ -33,12 +31,12 @@
 .goodsCheap::after {
     content: '';
     position: absolute;
-    width: .93rem;
-    height: .4rem;
+    width: .44rem;
+    height: .44rem;
     background: url("../../assets/xsyh.png") no-repeat;
-    background-size: .93rem .4rem;
-    top: -.1rem;
-    right: -.05rem;
+    background-size: .44rem .44rem;
+    top: 0rem;
+    right: 0rem;
 }
 .goodsSelect {
     color: #fff;
@@ -48,19 +46,16 @@
 .goodPrice {
     font-size: 0.24rem;
 }
-
-.payWrap {
-}
 .payTip {
     color: #fda523;
     text-align: center;
     line-height: .6rem;
     // height: .6rem;
-    padding: 0rem .3rem;
+    padding: 0.2rem .3rem 0;
 }
 
-.btnWrap {
-    padding: 0 .2rem;
+.payBtn {
+  margin-top: .15rem;
 }
 
 
@@ -74,31 +69,5 @@
     padding: .1rem 0 .1rem 0.2rem;
     .flexRow(space-between);
     .borBot();
-}
-
-
-.recordHeader {
-    background: #fff;
-    padding: .1rem .2rem;
-    .borBot();
-}
-.chargeTime {
-    color: @gray;
-    font-size: .26rem;
-    padding-top: .1rem;
-}
-.chargeCount {
-    color: @countAdd;
-}
-
-.noDataTip {
-    padding: 0.2rem 0;
-}
-.countLabel {
-    color: @countAdd;
-}
-
-.recordItemRightWrap {
-    .flexRow();
 }
 
