@@ -378,8 +378,8 @@ class HomePage extends BaseComponent {
       havePowerToBuyDia,
       havePowerToBanlance,
     } = power;
-    const hasPowerToPay = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer', 'ylzfForAgentTurnDiaToPlayer');
-    const returnDiaForPlayerTip = hasPowerToPay ? '替玩家购钻' : '给玩家转钻';
+    const hasPowerTurnDiaForMoney = this.hasPowerTurnDiaForMoney();
+    const returnDiaForPlayerTip = hasPowerTurnDiaForMoney ? '替玩家购钻' : '给玩家转钻';
     return (<div>
       <Title>代理中心</Title>
       <NavBar

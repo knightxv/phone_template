@@ -13,17 +13,12 @@ import styles from './TurnDiaForPlayer.less';
 class TurnDiaForPlayer extends BaseComponent {
   constructor(props) {
     super(props);
-    // const { payEnum } = this.helps;
-    // let defaultPayEnum = payEnum.WECHAT;
-    // const paySelectArr = this.power();
-    // if (paySelectArr.length > 0) {
-    //   defaultPayEnum = paySelectArr[0].payType;
-    // }
     this.state = {
       playerName: '', // 用户名
       playerId: '',
       errorTip: '', // 错误提示
       players: [], // 玩家
+      diamond: '', // 钻石(没有支付方式)
       selectplayerVisible: false,
       searchVal: '',
       goods: [], // 商品
@@ -64,7 +59,8 @@ class TurnDiaForPlayer extends BaseComponent {
         return false;
       }
       // 获取头像和名称
-      const res = await this.http.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val, serverid: this.serverid });
+      const { serverid } = this.router.getQuery();
+      const res = await this.http.webHttp.get('/spreadApi/getPlayerInfoById', { heroID: val, serverid });
       if (res.isSuccess) {
         if (this.hasPower('playerRange', 1)) {
           let palyers = this.state.players;
@@ -149,26 +145,26 @@ class TurnDiaForPlayer extends BaseComponent {
     });
   }
   // 跳转充值页面
-  goToNext = () => {
-    // const { diamond, playerId, errorTip, playerName } = this.state;
-    // if (!playerId || playerId.length < 6) {
-    //   return;
-    // }
-    // if (errorTip) {
-    //   this.message.info(errorTip);
-    //   return;
-    // }
-    // if (!diamond || diamond == 0) {
-    //   this.message.info('请选择钻石个数');
-    //   return;
-    // }
-    // const { serverid } = this.router.getQuery();
-    // this.router.go('/payToTurnDiaForPlayer', {
-    //   playerId,
-    //   playerName,
-    //   serverid,
-    //   diamond,
-    // });
+  turnDia = () => {
+    const { diamond, playerId, errorTip, playerName } = this.state;
+    if (!playerId || playerId.length < 6) {
+      return;
+    }
+    if (errorTip) {
+      this.message.info(errorTip);
+      return;
+    }
+    if (!diamond || diamond == 0) {
+      this.message.info('请选择钻石个数');
+      return;
+    }
+    const { serverid } = this.router.getQuery();
+    this.router.go('/payToTurnDiaForPlayer', {
+      playerId,
+      playerName,
+      serverid,
+      diamond,
+    });
   }
   onSearchInputChange = (searchVal) => {
     this.setState({
@@ -234,11 +230,12 @@ class TurnDiaForPlayer extends BaseComponent {
     });
   }
   render() {
-    const { playerName, errorTip, playerId,
+    const { playerName, errorTip, playerId, diamond,
       selectplayerVisible, searchVal, players, goods,
       selectShopId,
       // isChooseInput, selectIndex, payTypeSelect,
     } = this.state;
+    const { masonry } = this.props;
     // const { payEnum } = this.helps;
     // const money = !isNaN(diamond) ? diamond * 10 : 0;
     // const moneyFloat = this.helps.parseFloatMoney(money);
@@ -249,8 +246,8 @@ class TurnDiaForPlayer extends BaseComponent {
       return player.playerId.toString().indexOf(searchVal)
       !== -1 || player.playerName.toString().indexOf(searchVal) !== -1;
     });
-    const hasPowerToPay = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer', 'ylzfForAgentTurnDiaToPlayer');
-    const title = hasPowerToPay ? '替玩家购钻' : '给玩家转钻';
+    const hasPowerTurnDiaForMoney = !this.hasPowerTurnDiaForMoney(); // 是否有权限用钱支付（是否只开了直接转钻）
+    const title = hasPowerTurnDiaForMoney ? '替玩家购钻' : '给玩家转钻';
     const shopSelectArr = goods.filter((good) => {
       return good.shopId === selectShopId;
     });
@@ -263,7 +260,7 @@ class TurnDiaForPlayer extends BaseComponent {
           onClick={this.router.back}
         />
         <div className={styles.payWrap}>
-          <div className={styles.playerInputWrap}>
+          <div className={styles.inputWrapItem}>
             <InputItem
               onChange={this.idValChange}
               value={playerId}
@@ -280,38 +277,59 @@ class TurnDiaForPlayer extends BaseComponent {
               playerName && <div className={styles.playerName}>{playerName}</div>
             }
           </div>
-          <Grid>
-            {
-              goods.map(({ payMoney, masonryCount, shopId, systemGift, tip }, i) => {
-                const goodsWrapClass = classnames({
-                  [styles.goodsWrap]: true,
-                  [styles.goodsSelect]: selectShopId === shopId,
-                });
-                const systemGiftClass = classnames({
-                  [styles.systemGift]: true,
-                  [styles.systemGiftSelect]: selectShopId === shopId,
-                });
-                return (
-                  <div
-                    className={goodsWrapClass}
-                    key={i}
-                    onClick={() => this.selectGoods(shopId)}
-                  >
-                    <p className={styles.goodLabel}>
-                      {masonryCount}钻{ +systemGift !== 0 && <span className={systemGiftClass}>+{systemGift}钻</span> }
-                    </p>
-                    <p className={styles.goodPrice}>售价:{this.helps.parseIntMoney(payMoney)}元</p>
-                  </div>
-                );
-              })
-            }
-          </Grid>
           {
-            <div className={styles.payTip}>{ shopTip || '　' }</div>
+            hasPowerTurnDiaForMoney &&
+            <div>
+              <Grid>
+                {
+                  goods.map(({ payMoney, masonryCount, shopId, systemGift, tip }, i) => {
+                    const goodsWrapClass = classnames({
+                      [styles.goodsWrap]: true,
+                      [styles.goodsSelect]: selectShopId === shopId,
+                    });
+                    const systemGiftClass = classnames({
+                      [styles.systemGift]: true,
+                      [styles.systemGiftSelect]: selectShopId === shopId,
+                    });
+                    return (
+                      <div
+                        className={goodsWrapClass}
+                        key={i}
+                        onClick={() => this.selectGoods(shopId)}
+                      >
+                        <p className={styles.goodLabel}>
+                          {masonryCount}钻{ +systemGift !== 0 && <span className={systemGiftClass}>+{systemGift}钻</span> }
+                        </p>
+                        <p className={styles.goodPrice}>售价:{this.helps.parseIntMoney(payMoney)}元</p>
+                      </div>
+                    );
+                  })
+                }
+              </Grid>
+              {
+                <div className={styles.payTip}>{ shopTip || '　' }</div>
+              }
+            </div>
+          }
+          {
+            !hasPowerTurnDiaForMoney &&
+            <div className={classnames(styles.inputWrapItem, styles.inputWrapItemDiamond)}>
+              <InputItem
+                onChange={val => this.setState({ diamond: val })}
+                value={diamond}
+                type="number"
+                maxLength={8}
+                clear
+                placeholder="请输入转出数量"
+              >转钻数量</InputItem>
+              <div className={styles.masonryCountLabel}>
+                账户钻书数量:<span className={styles.masonryCount}>{ masonry }</span>个
+              </div>
+            </div>
           }
           <div className={styles.btnWrap}>
             <Button
-              onClick={this.goToNext}
+              onClick={this.turnDia}
             >
             立即购买
             </Button>
@@ -338,9 +356,9 @@ class TurnDiaForPlayer extends BaseComponent {
             <div className={styles.pickerHideMask} onClick={this.toggleSelectplayerVisible} />
             <div className={styles.payPickerBody}>
               <div className={styles.pickerHeader}>
-                <Icon type="cross" size="lg" onClick={this.toggleSelectplayerVisible} />
-                <div className={styles.pickerTitle}>选择玩家</div>
                 <div className={styles.iconRight} />
+                <div className={styles.pickerTitle}>选择玩家</div>
+                <Icon type="cross" size="lg" onClick={this.toggleSelectplayerVisible} />
               </div>
               <div className={styles.playerPickerContainer}>
                 <SearchBar

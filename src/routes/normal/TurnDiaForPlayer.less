@@ -1,8 +1,9 @@
 @import "../../base/less/base.less";
 
-.playerInputWrap {
+.inputWrapItem {
     margin-top: 0.1rem;
     background: #fff;
+    .borBot();
 }
 .playerName {
     padding: .15rem 0rem .15rem 1.8rem;
@@ -16,7 +17,15 @@
     color: red;
     .borTop();
 }
-
+.masonryCountLabel {
+  padding: .1rem .3rem .2rem;
+}
+.inputWrapItemDiamond {
+  margin-bottom: 1rem;
+}
+.masonryCount {
+  color: @orange;
+}
 .masonrySelect {
     width: 1.5rem;
     height: 0.6rem;
@@ -118,10 +127,11 @@
 .pickerHeader {
     .flexRow(space-between);
     .borBot();
+    background: @baseColor;
+    color: #fff;
     padding: .1rem 0;
 }
 .pickerTitle {
-    font-weight: 600;
     font-size: .36rem;
 }
 .iconRight {
@@ -140,7 +150,7 @@
 .playersItemWrap {
     .flexRow();
     background: #fff;
-    padding: .2rem 0;
+    padding: .05rem 0;
     .borBot();
 }
 .playersItem {
@@ -163,7 +173,6 @@
     color: #fff;
     border: 1px solid red;
 }
-
 .goodsWrap {
   display: flex;
   flex-direction: column;
@@ -171,8 +180,7 @@
   box-sizing: border-box;
   border-radius: 5px;
   background: #fff;
-  width: 2.3rem;
-  margin-top: .1rem;
+  margin-right: .1rem;
   padding: .2rem;
   .textHide();
 }
@@ -186,14 +194,14 @@
 }
 .goodLabel {
   font-size: .28rem;
-  padding-bottom: .1rem;
+  padding-bottom: .2rem;
   .textHide();
 }
 .goodPrice {
   font-size: 0.24rem;
 }
 .payTip {
-  color: #fda523;
+  color: @orange;
   text-align: center;
   line-height: .6rem;
   // height: .6rem;
