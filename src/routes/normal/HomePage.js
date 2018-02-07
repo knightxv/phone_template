@@ -9,8 +9,9 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import NoticeBar from '@/components/antdComponent/NoticeBar';
 import { Button, Icon, Modal, NavBar } from '@/components/lazyComponent/antd';
 // import {} from ''
+import CloseModal from '@/components/Modal/CloseModal';
 import Avatar from '@/components/Avatar';
-import { Title, FlexRowBetweenWingSpace, FlexRow, IconImg } from '@/components/styleComponent';
+import { Title, FlexRow, IconImg } from '@/components/styleComponent';
 import styles from './HomePage.less';
 import wechatSdkManage from '../../extends/wechatSdk';
 
@@ -148,13 +149,13 @@ class HomePage extends BaseComponent {
           onClick={() => this.navigate('/inviteToAgent')}
           src={IconSource.sys}
         />,
-        title: '查看二维码',
+        title: '二维码',
       },
     ];
     if (this.helps.isWeixinBrowser()) {
       dataList.push({
         icon: <img onClick={this.shareAgentLink} className={styles.shareIcon} src={IconSource.share} />,
-        title: '分享链接',
+        title: '分享给朋友',
       });
     }
     if (!this.helps.isWeixinBrowser()) {
@@ -165,7 +166,7 @@ class HomePage extends BaseComponent {
         >
           <img className={styles.shareIcon} src={IconSource.link} />
         </CopyToClipboard>,
-        title: '复制链接',
+        title: '复制邀请链接',
       });
     }
     ActionSheet.showShareActionSheetWithOptions({
@@ -313,7 +314,7 @@ class HomePage extends BaseComponent {
           onClick={() => this.navigate('/inviteToPlayer')}
           src={IconSource.sys}
         />,
-        title: '查看二维码',
+        title: '二维码',
       },
     ];
     if (this.helps.isWeixinBrowser()) {
@@ -330,7 +331,7 @@ class HomePage extends BaseComponent {
         >
           <img className={styles.shareIcon} src={IconSource.link} />
         </CopyToClipboard>,
-        title: '复制链接',
+        title: '复制邀请链接',
       });
     }
     ActionSheet.showShareActionSheetWithOptions({
@@ -564,24 +565,13 @@ class HomePage extends BaseComponent {
         </div>
       </Modal>
       {/* 公告 */}
-      <Modal
-        transparent
-        maskClosable
+      <CloseModal
         className={styles.payModal}
         visible={isShowNotice}
         onClose={this.toggleShowNotice}
       >
-        <div className={styles.sharePicker}>
-          <div className={styles.noticeContainer}>
-            <div className={styles.noticeWrap}>
-              <div dangerouslySetInnerHTML={notiveInfoHtml} />
-            </div>
-            <Button type="danger" className={styles.optionQuitBtn} onClick={this.toggleShowNotice}>
-              关闭
-            </Button>
-          </div>
-        </div>
-      </Modal>
+        <div className={styles.noticeWrap} dangerouslySetInnerHTML={notiveInfoHtml} />
+      </CloseModal>
     </div>);
   }
 }

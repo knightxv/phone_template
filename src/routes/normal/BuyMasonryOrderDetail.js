@@ -69,8 +69,10 @@ class BuyMasonryOrderDetail extends BaseComponent {
           <div>
             <div className={styles.blockContainer}>
               <div className={styles.orderInfoRowItem}>
-                <div className={styles.payInfoTitle}>订单号</div>
-                <span className={styles.orderIdLabel}>{ orderId }</span>
+                <div className={styles.payInfoWrap}>
+                  <div className={styles.payInfoTitle}>订单号</div>
+                  <span className={styles.orderIdLabel}>{ orderId }</span>
+                </div>
                 <CopyToClipboard
                   text={orderId}
                   onCopy={this.copyOrderId}

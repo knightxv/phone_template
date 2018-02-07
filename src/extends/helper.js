@@ -48,18 +48,18 @@ export const isWechat = isWeixinBrowser();
 
 const browserTypeEnum = {
   // 微信支付
-  WECHAT_ANDROID_PHONE_WINDOS: 0, // 0 安卓手机浏览器---
-  WECHAT_IOS_PHONE_WINDOS: 1, // 1 IOS手机浏览器---
+  WECHAT_ANDROID_PHONE: 0, // 0 安卓手机浏览器---
+  WECHAT_IOS_PHONE: 1, // 1 IOS手机浏览器---
   WECHAT_PC_WINDOS: 2, // 微信PC----
-  WECHAT_IOS_WECHATWINDOS: 3, // 3 IOSWeChat浏览器---
-  WECHAT_ANDROID_WECHATWINDOS: 4, // 4 安卓WeChat浏览器---
+  WECHAT_IOS_WECHAT: 3, // 3 IOSWeChat浏览器---
+  WECHAT_ANDROID_WECHAT: 4, // 4 安卓WeChat浏览器---
 	// 支付宝支付
-  ALIPAY_ANDROID_PHONE_WINDOS: 5, // 安卓手机浏览器---
-  ALIPAY_IOS_PHONE_WINDOS: 6, // 5 IOS手机浏览器---
-  ALIPAY_PC_WINDOS: 7, // 支付宝pc---
+  ALIPAY_ANDROID_PHONE: 5, // 安卓手机浏览器---
+  ALIPAY_IOS_PHONE: 6, // 5 IOS手机浏览器---
+  ALIPAY_PC: 7, // 支付宝pc---
   // 银联支付
-  YLZF_ANDROID: 8,
-  YLZF_IOS: 9,
+  YLZF_ANDROID_PHONE: 8,
+  YLZF_IOS_PHONE: 9,
   YLZF_PC: 10,
   YLZF_WECHAT: 11,
 };

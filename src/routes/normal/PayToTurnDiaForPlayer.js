@@ -4,6 +4,7 @@ import { window } from 'global';
 import { Checkbox } from 'antd-mobile';
 
 import BaseComponent from '@/core/BaseComponent';
+import SlideUpModal from '@/components/Modal/SlideUpModal';
 import { Button, Icon, Modal, NavBar } from '@/components/lazyComponent/antd';
 import { Title, IconImg } from '@/components/styleComponent';
 import PayIcon from '@/components/PayIcon';
@@ -25,36 +26,33 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       isAutoSave: true,
       payTipVisible: false,
     };
-    this.query = this.router.getQuery();
   }
   // 判断权限得到支付方式
   payItemArr = () => {
-    const { WECHAT, ALI, BALANCE, YLZF } = this.Enum.payType;
+    const { WECHAT, ALI, returnDirection, YLZF } = this.Enum.payType;
     const payItemArr = [];
-    if (this.hasPower('AgentBuyDiabanlancePay')) {
-      payItemArr.push(BALANCE);
+    if (this.hasPower('AgentTurnDiaToPlayerDirect')) {
+      payItemArr.push(returnDirection);
     }
-    if (this.hasPower('AgentBuyDiawechatPay')) {
+    if (this.hasPower('wechatPayForAgentTurnDiaToPlayer')) {
       payItemArr.push(WECHAT);
     }
-    if (this.hasPower('AgentBuyDiaAliPay')) {
-      payItemArr.push(ALI);
-    }
-    if (this.hasPower('ylzfForAgentBuyDia')) {
+    if (this.hasPower('ylzfForAgentTurnDiaToPlayer')) {
       payItemArr.push(YLZF);
+    }
+    if (this.hasPower('AliPayForAgentTurnDiaToPlayer')) {
+      payItemArr.push(ALI);
     }
     return payItemArr;
   }
   async componentWillMount() {
     if (this.props.history.length < 1) {
       this.router.go('/homePage');
-      return;
     }
-    const payItemArr = this.payItemArr();
-    this.setState({
-      selectPayType: payItemArr.length > 0 ? payItemArr[0] : null,
-    });
   }
+  // componentWillReceiveProps(oldProps, newProps) {
+  //   console.log(oldProps, newProps)
+  // }
   // 跳出支付picker
   togglePayPicker = () => {
     const payItemArr = this.payItemArr();
@@ -85,8 +83,8 @@ class PayToTurnDiaForPlayer extends BaseComponent {
   // 余额充值
   readyToExcharge = async () => {
     const { isAutoSave } = this.state;
-    const { playerId, diamond, serverid } = this.router.getQuery();
-    const { inviteCode } = this.props;
+    const { diamond, playerName, playerId, systemGift, serverid } = this.router.getQuery();
+    const { inviteCode, masonry } = this.props;
     const params = {
       serverid,
       pid: inviteCode,
@@ -95,16 +93,23 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       isSaveCommon: isAutoSave,
     };
     const res = await this.http.webHttp.get('/spreadApi/giveDiamond', params);
-    this.message.info(res.info || '赠送成功,请耐心等待');
     if (res.isSuccess) {
-      this.router.back();
-    }
-    const updateRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
-    if (updateRes.isSuccess) {
-      this.props.dispatch({ type: 'agent/updateAppInfo',
-        payload: {
-          ...updateRes.data,
-        } });
+      const { orderId } = res.data;
+      this.router.go('/orderForAgentTurnDiaForPlayer', {
+        orderId,
+        serverid,
+        orderAgentId: inviteCode,
+        orderPlayerId: playerId,
+        orderPlayerName: playerName,
+        masonry, // 账户钻石数
+        diamond, // 购买的钻石数
+        systemGift,
+        banlancePay: 1, // 是否是余额支付
+        createTime: new Date().getTime(),
+        payType: this.Enum.payType.returnDirection,
+      });
+    } else {
+      this.message.info(res.info || '赠送失败');
     }
   }
   // 支付宝支付
@@ -116,12 +121,15 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     // });
   }
   payToTurn =() => {
-    const { selectPayType } = this.state;
-    if (selectPayType === null) {
+    let { selectPayType } = this.state;
+    if (typeof selectPayType !== 'number') {
+      selectPayType = this.payItemArr()[0];
+    }
+    if (typeof selectPayType === 'undefined') {
       return;
     }
-    const { BALANCE } = this.Enum.payType;
-    if (selectPayType === BALANCE) {
+    const { returnDirection } = this.Enum.payType;
+    if (selectPayType === returnDirection) {
       this.readyToExcharge();
       return;
     }
@@ -129,23 +137,18 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     //   this.togglePayTipPicker();
     //   return;
     // }
-    this.goToPay();
-
+    this.goToPay(selectPayType);
   }
-  goToPay = async () => {
-    const { selectPayType, isAutoSave } = this.state;
+  goToPay = async (selectPayType) => {
+    const { isAutoSave } = this.state;
     const { inviteCode } = this.props;
-    if (selectPayType === null) {
-      return;
-    }
-    const type = selectPayType;
-    const chargeType = this.helps.payType(type);
-    const { playerId, diamond, serverid } = this.router.getQuery();
+    const chargeType = this.helps.payType(selectPayType);
+    const { playerId, shopId, serverid } = this.router.getQuery();
     const params = {
       pid: inviteCode,
       HeroID: playerId,
       serverid,
-      money: this.helps.parseFloatMoney(diamond * 10),
+      shopId,
       chargeType,
       isSaveCommon: isAutoSave,
     };
@@ -163,14 +166,15 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     });
   }
   render() {
-    const { payPickerVisible, selectPayType, isAutoSave, payTipVisible } = this.state;
+    const { payPickerVisible, selectPayType: sPayType, isAutoSave, payTipVisible } = this.state;
     const { inviteCode, masonry, userName } = this.props;
     const payItemArr = this.payItemArr();
-    const { diamond, playerName, playerId, systemGift } = this.query;
+    const { diamond, playerName, playerId, systemGift } = this.router.getQuery();
     const price = this.helps.parseFloatMoney(diamond * 10);
-    const hasPowerToGive = this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer');
     const { ALI } = this.Enum.payType;
+    const selectPayType = typeof sPayType !== 'number' ? payItemArr[0] : sPayType;
     const selectPayTypeLabel = this.Enum.payTypeLabel[selectPayType];
+    // const canCashCountLabel = '';
     return (
       <div className={styles.container}>
         <Title>确认订单</Title>
@@ -185,10 +189,16 @@ class PayToTurnDiaForPlayer extends BaseComponent {
                 <div className={styles.masonryIconWrap}>
                   <IconImg className={styles.masonryIcon} src={imgSource.masonry} />
                 </div>
-                <div className={styles.masonryInfo}>
+                {
+                  selectPayType === this.Enum.payType.returnDirection
+                  ? <div className={styles.masonryInfo}>
+                    <div className={styles.masonryCountLabel}>转出{ diamond }钻石</div>
+                  </div>
+                : <div className={styles.masonryInfo}>
                   <div className={styles.masonryCountLabel}>{ diamond }钻石{systemGift && `+系统额外赠送${systemGift}钻石` }</div>
                   <div className={styles.masonryMoenyLabel}>￥{ price }</div>
                 </div>
+                }
               </div>
               <div className={styles.rowItemWrap}>
                 <div className={styles.rowItem}>
@@ -247,75 +257,67 @@ class PayToTurnDiaForPlayer extends BaseComponent {
             }
           </div>
           <div className={styles.btnWrap}>
-            <Button onClick={this.payToTurn}>确认转钻</Button>
+            <Button onClick={this.payToTurn}>确定</Button>
           </div>
         </div>
         {
           this.helps.isWechat && selectPayType === ALI &&
-          <Modal
-            maskClosable
-            transparent
-            animationType="fade"
+          <SlideUpModal
             visible={payTipVisible}
+            onClose={this.togglePayTipPicker}
           >
-          <div onClick={this.togglePayTipPicker}>
-            {
-              this.helps.system === 'IOS' ?
-              <IconImg className={styles.payWechatTipImg} src={imgSource.iosTip} />
-              : <IconImg className={styles.payWechatTipImg} src={imgSource.androidTip} />
-            }
-          </div>
-          </Modal>
+            <div>
+              {
+                this.helps.system === 'IOS'
+                ? <IconImg className={styles.payWechatTipImg} src={imgSource.iosTip} />
+                : <IconImg className={styles.payWechatTipImg} src={imgSource.androidTip} />
+              }
+            </div>
+          </SlideUpModal>
         }
-        <Modal
-          maskClosable
-          transparent
-          className={styles.payModal}
+        <SlideUpModal
           visible={payPickerVisible}
           onClose={this.togglePayPicker}
         >
-          <div className={styles.payPicker}>
-            <div className={styles.pickerHideMask} onClick={this.togglePayPicker} />
-            <div className={styles.payPickerBody}>
-              <div className={styles.pickerHeader}>
-                <Icon type="cross" size="lg" onClick={this.togglePayPicker} />
-                <div className={styles.pickerTitle}>选择付款方式</div>
-                <div className={styles.iconRight} />
-              </div>
-              <div>
-                {
-                  payItemArr.map(payType => (
-                    <div
-                      className={styles.pickePayItem}
-                      key={payType}
-                      onClick={() => this.selectPayType(payType)}
-                    >
-                      <div className={styles.payInfoWrap}>
-                        <div className={styles.payItem}>
-                          <PayIcon payType={payType} />
-                          <span>{ this.Enum.payTypeLabel[payType] }</span>
-                        </div>
-                        <div>
-                          {/* {
-                            payInfo.payType === this.Enum.payType.BALANCE
-                            && <div>
-                              余额:<span className={styles.count}>{ canCashCountLabel }</span>元
-                            </div>
-                          } */}
-                        </div>
+          <div className={styles.payPickerBody}>
+            <div className={styles.pickerHeader}>
+              <Icon type="cross" size="lg" onClick={this.togglePayPicker} />
+              <div className={styles.pickerTitle}>选择付款方式</div>
+              <div className={styles.iconRight} />
+            </div>
+            <div>
+              {
+                payItemArr.map(payType => (
+                  <div
+                    className={styles.pickePayItem}
+                    key={payType}
+                    onClick={() => this.selectPayType(payType)}
+                  >
+                    <div className={styles.payInfoWrap}>
+                      <div className={styles.payItem}>
+                        <PayIcon payType={payType} />
+                        <span>{ this.Enum.payTypeLabel[payType] }</span>
                       </div>
-                      <div className={styles.selectIconWrap}>
-                        {
-                          payType === selectPayType && <Icon color="#1d9ed7" type="check" />
-                        }
+                      <div>
+                        {/* {
+                          selectPayType === this.Enum.payType.BALANCE
+                          && <div>
+                            余额:<span className={styles.count}>{ canCashCountLabel }</span>元
+                          </div>
+                        } */}
                       </div>
                     </div>
-                  ))
-                }
-              </div>
+                    <div className={styles.selectIconWrap}>
+                      {
+                        payType === selectPayType && <Icon color="#1d9ed7" type="check" />
+                      }
+                    </div>
+                  </div>
+                ))
+              }
             </div>
           </div>
-        </Modal>
+        </SlideUpModal>
       </div>
     );
   }

@@ -1,46 +1,43 @@
+// import React from 'react';
+// import { connect } from 'dva';
 import React from 'react';
 import { connect } from 'dva';
-// import { window } from 'global';
+import { window } from 'global';
 import { Checkbox } from 'antd-mobile';
 
 import BaseComponent from '@/core/BaseComponent';
 import { Button, NavBar } from '@/components/lazyComponent/antd';
-import { Title } from '@/components/styleComponent';
-import styles from './PayToTurnDiaForPlayer.less';
+import { Title, IconImg } from '@/components/styleComponent';
+import styles from './PayToTurnDiaForAgent.less';
 
+const imgSource = {
+  masonry: require('../../assets/zuanshi.png'),
+};
 class PayToTurnDiaForAgent extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
       isAutoSave: true,
     };
-    this.query = this.router.getQuery();
-
   }
-  // 跳出支付picker
-  togglePayPicker = () => {
-    this.setState({
-      payPickerVisible: !this.state.payPickerVisible,
-    });
+  async componentWillMount() {
+    if (this.props.history.length < 1) {
+      this.router.go('/homePage');
+    }
   }
-  goToPay = async () => {
-    const { diamond, agentId } = this.query;
+  payToTurn = async () => {
+    const { diamond, agentId } = this.router.getQuery();
     const { isAutoSave } = this.state;
     const res = await this.http.webHttp.get('/spreadApi/iAgentGiveForAgent', {
       agentId,
       diamond,
       isSaveCommon: isAutoSave,
     });
-    const userInfoRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
-    if (userInfoRes.isSuccess) {
-      this.props.dispatch({ type: 'agent/updateAppInfo',
-        payload: {
-          ...userInfoRes.data,
-        } });
-    }
     if (res.isSuccess) {
-      this.router.back();
-      this.message.info(res.info || '赠送成功');
+      const { orderId } = res.data;
+      this.router.go('/orderForAgentTurnDiaForAgent', {
+        orderId,
+      });
     } else {
       this.message.info(res.info || '赠送失败');
     }
@@ -53,8 +50,8 @@ class PayToTurnDiaForAgent extends BaseComponent {
   render() {
     const { isAutoSave } = this.state;
     const { inviteCode, masonry } = this.props;
-    const { diamond, agentName, agentId } = this.query;
-    // const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
+    const { diamond, agentName, agentId } = this.router.getQuery();
+    const countAfter = masonry - diamond;
     return (
       <div className={styles.container}>
         <Title>确认订单</Title>
@@ -63,35 +60,70 @@ class PayToTurnDiaForAgent extends BaseComponent {
           onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
-          <div className={styles.headerContainer}>
-            <div className={styles.userInfoItem}>
-              <div>代理ID：{ inviteCode }</div>
-              <div>当前账户钻石数:{ masonry }个</div>
-            </div>
-            <div className={styles.turnInfoWrap}>
-              <div className={styles.turnInfoItem}>
-                <div className={styles.turnInfoItemKey}>收款代理ID:</div>
-                <div className={styles.turnInfoItemVal}>
-                  <span className={styles.count}>{ agentId }</span>
+          <div>
+            <div className={styles.blockContainer}>
+              <div className={styles.headerInfoWrap}>
+                <div className={styles.masonryIconWrap}>
+                  <IconImg className={styles.masonryIcon} src={imgSource.masonry} />
+                </div>
+                <div className={styles.masonryInfo}>
+                  <div className={styles.masonryCountLabel}>转出{ diamond }钻石</div>
                 </div>
               </div>
-              <div className={styles.turnInfoItem}>
-                <div className={styles.turnInfoItemKey}>转出钻石数量:</div>
-                <div className={styles.turnInfoItemVal}>
-                  <span className={styles.count}>{ diamond }</span>个
+              <div className={styles.rowItemWrap}>
+                <div className={styles.rowItem}>
+                  <div className={styles.rowItemTitle}>我的账户信息</div>
+                </div>
+                <div className={styles.rowItem}>
+                  <div>代理邀请码</div>
+                  <div className={styles.payItem}>
+                    { inviteCode }
+                  </div>
+                </div>
+                <div className={styles.rowItem}>
+                  <div>交易前钻石数</div>
+                  <div className={styles.payItem}>
+                    { masonry }
+                  </div>
+                </div>
+                <div className={styles.rowItem}>
+                  <div>交易后钻石数</div>
+                  <div className={styles.payItem}>
+                    { countAfter }
+                  </div>
                 </div>
               </div>
+              <div className={styles.rowItemWrap}>
+                <div className={styles.rowItem}>
+                  <div className={styles.rowItemTitle}>转出对象</div>
+                </div>
+                <div className={styles.rowItem}>
+                  <div>代理ID</div>
+                  <div className={styles.payItem}>
+                    { agentId }
+                  </div>
+                </div>
+                {
+                  agentName &&
+                  <div className={styles.rowItem}>
+                    <div>代理昵称</div>
+                    <div className={styles.payItem}>
+                      { agentName }
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
+            {
+              this.hasPower('agentRange', 0) &&
+              <div className={styles.autoSaveWrap}>
+                <Checkbox checked={isAutoSave} onChange={this.toggleSave} />
+                <span className={styles.saveTip}>转钻提交成功后自动添加为常用收款代理</span>
+              </div>
+            }
           </div>
-          {
-            this.hasPower('agentRange', 0) &&
-            <div className={styles.autoSaveWrap}>
-              <Checkbox checked={isAutoSave} onChange={this.toggleSave} />
-              <span className={styles.saveTip}>转钻提交成功后自动添加为常用收款代理</span>
-            </div>
-          }
-          <div className={styles.buyBtnWrap}>
-            <Button onClick={this.goToPay}>确认转钻</Button>
+          <div className={styles.btnWrap}>
+            <Button onClick={this.payToTurn}>确认转钻</Button>
           </div>
         </div>
       </div>

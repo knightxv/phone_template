@@ -3,7 +3,8 @@ import { connect } from 'dva';
 import { window } from 'global';
 
 import BaseComponent from '@/core/BaseComponent';
-import { Button, Icon, Modal, NavBar } from '@/components/lazyComponent/antd';
+import SlideUpModal from '@/components/Modal/SlideUpModal';
+import { Button, Icon, NavBar, Modal } from '@/components/lazyComponent/antd';
 import { Title, IconImg } from '@/components/styleComponent';
 import PayIcon from '@/components/PayIcon';
 import styles from './BuyMasonry.less';
@@ -104,9 +105,12 @@ class BuyMasonry extends BaseComponent {
     }
   }
   buyGood = () => {
-    const { selectPayType } = this.state;
+    let { selectPayType } = this.state;
     const { shopId } = this.query;
-    if (!selectPayType) {
+    if (typeof selectPayType !== 'number') {
+      selectPayType = this.payItemArr()[0];
+    }
+    if (typeof selectPayType === 'undefined') {
       return;
     }
     const { WECHAT, ALI, BALANCE } = this.Enum.payType;
@@ -133,10 +137,11 @@ class BuyMasonry extends BaseComponent {
     });
   }
   render() {
-    const { payPickerVisible, selectPayType, payTipVisible } = this.state;
+    const { payPickerVisible, selectPayType: sPayType, payTipVisible } = this.state;
     const { inviteCode, canCashCount } = this.props;
     const { goodsMoney, masonryCount } = this.query;
     const payItemArr = this.payItemArr();
+    const selectPayType = typeof sPayType !== 'number' ? payItemArr[0] : sPayType;
     const goodsMoneyLabel = this.helps.parseFloatMoney(goodsMoney);
     const { ALI } = this.Enum.payType;
     const canCashCountLabel = this.helps.parseFloatMoney(canCashCount);
@@ -179,69 +184,62 @@ class BuyMasonry extends BaseComponent {
         </div>
         {
           this.helps.isWechat && selectPayType === ALI &&
-          <Modal
-            maskClosable
-            transparent
-            animationType="fade"
+          <SlideUpModal
             visible={payTipVisible}
+            onClose={this.togglePayTipPicker}
           >
-          <div onClick={this.togglePayTipPicker}>
+          <div>
             {
               this.helps.system === 'IOS' ?
               <IconImg className={styles.payWechatTipImg} src={imgSource.iosTip} />
               : <IconImg className={styles.payWechatTipImg} src={imgSource.androidTip} />
             }
           </div>
-          </Modal>
+          </SlideUpModal>
         }
-        <Modal
-          transparent
-          className={styles.payModal}
+        <SlideUpModal
           visible={payPickerVisible}
           onClose={this.togglePayPicker}
         >
-          <div className={styles.payPicker}>
-            <div className={styles.pickerHideMask} onClick={this.togglePayPicker} />
-            <div className={styles.payPickerBody}>
-              <div className={styles.pickerHeader}>
-                <Icon type="cross" size="lg" onClick={this.togglePayPicker} />
-                <div className={styles.pickerTitle}>选择付款方式</div>
-                <div className={styles.iconRight} />
-              </div>
-              <div>
-                {
-                  payItemArr.map(payType => (
-                    <div
-                      className={styles.pickePayItem}
-                      key={payType}
-                      onClick={() => this.selectPayType(payType)}
-                    >
-                      <div className={styles.payInfoWrap}>
-                        <div className={styles.payItem}>
-                          <PayIcon payType={payType} />
-                          <span>{this.Enum.payTypeLabel[payType]}</span>
-                        </div>
-                        <div>
-                          {
-                            payType === this.Enum.payType.BALANCE
-                            && <div>
-                              余额:<span className={styles.count}>{ canCashCountLabel }</span>元
-                            </div>
-                          }
-                        </div>
+          <div className={styles.payPickerBody}>
+            <div className={styles.pickerHeader}>
+              <Icon type="cross" size="lg" onClick={this.togglePayPicker} />
+              <div className={styles.pickerTitle}>选择付款方式</div>
+              <div className={styles.iconRight} />
+            </div>
+            <div>
+              {
+                payItemArr.map(payType => (
+                  <div
+                    className={styles.pickePayItem}
+                    key={payType}
+                    onClick={() => this.selectPayType(payType)}
+                  >
+                    <div className={styles.payInfoWrap}>
+                      <div className={styles.payItem}>
+                        <PayIcon payType={payType} />
+                        <span>{this.Enum.payTypeLabel[payType]}</span>
                       </div>
-                      <div className={styles.selectIconWrap}>
+                      <div>
                         {
-                          payType === selectPayType && <Icon color="#1d9ed7" type="check" />
+                          payType === this.Enum.payType.BALANCE
+                          && <div>
+                            余额:<span className={styles.count}>{ canCashCountLabel }</span>元
+                          </div>
                         }
                       </div>
                     </div>
-                  ))
-                }
-              </div>
+                    <div className={styles.selectIconWrap}>
+                      {
+                        payType === selectPayType && <Icon color="#1d9ed7" type="check" />
+                      }
+                    </div>
+                  </div>
+                ))
+              }
             </div>
           </div>
-        </Modal>
+        </SlideUpModal>
       </div>
     );
   }

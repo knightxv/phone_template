@@ -60,6 +60,27 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
+      path: '/cashInfo',
+      component: () => import('./routes/normal/CashInfo'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
+      path: '/cashOrderDetail',
+      component: () => import('./routes/normal/CashOrderDetail'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
+      path: '/cashRecord',
+      component: () => import('./routes/normal/CashRecord'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
       path: '/agencyPay',
       component: () => import('./routes/normal/AgencyPay'),
       models: () => [
@@ -117,6 +138,10 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
+      path: '/orderForAgentTurnDiaForAgent',
+      component: () => import('./routes/normal/OrderForAgentTurnDiaForAgent'),
+    },
+    {
       path: '/payToTurnDiaForAgent',
       component: () => import('./routes/normal/PayToTurnDiaForAgent'),
       models: () => [
@@ -145,6 +170,13 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
+      path: '/turnDiaForPlayerRecord',
+      component: () => import('./routes/normal/TurnDiaForPlayerRecord'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
       path: '/turnDiaForPlayerOrderDetail',
       component: () => import('./routes/normal/TurnDiaForPlayerOrderDetail'),
       models: () => [
@@ -154,6 +186,13 @@ function RouterConfig({ history, app }) {
     {
       path: '/turnDiaForAgentOrderDetail',
       component: () => import('./routes/normal/TurnDiaForAgentOrderDetail'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
+      path: '/turnDiaForAgentRecord',
+      component: () => import('./routes/normal/TurnDiaForAgentRecord'),
       models: () => [
         import('./models/agent'),
       ],

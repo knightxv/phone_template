@@ -4,24 +4,35 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 
 import BaseComponent from '@/core/BaseComponent';
 import { Button, NavBar } from '@/components/lazyComponent/antd';
-import { Title, WhiteSpace } from '@/components/styleComponent';
-import styles from './TurnDiaForAgentOrderDetail.less';
+import { Title, IconImg } from '@/components/styleComponent';
+import styles from './OrderDetail.less';
+
+const imgSource = {
+  masonry: require('../../assets/zuanshi.png'),
+};
 
 class TurnDiaForAgentOrderDetail extends BaseComponent {
   constructor(props) {
     super(props);
+    const {
+      orderId,
+    } = this.router.getQuery();
     this.state = {
-      orderId: '',
-      payzDiaCountBefore: '',
-      payzDiaCountAfter: '',
-      userBalance: '',
-      turnOutCount: '',
-      orderinfo: '',
-      createTime: '',
+      orderId,
+      MyAgentId: '',
+      MyPayzDiaCountAfter: 0,
+      MyPayzDiaCountBefore: 0,
+      agentId: '',
+      agentPayzDiaCountAfter: 0,
+      agentPayzDiaCountBefore: 0,
+      createTime: 0,
+      turnOutCount: 0,
     };
   }
   async componentWillMount() {
-    const { orderId } = this.router.getQuery();
+    const {
+      orderId,
+    } = this.router.getQuery();
     const res = await this.http.webHttp.get('/spreadApi/sellAgentDiaOrderInfo', {
       orderId,
     });
@@ -41,61 +52,129 @@ class TurnDiaForAgentOrderDetail extends BaseComponent {
   render() {
     const {
       orderId,
-      payzDiaCountBefore,
-      payzDiaCountAfter,
-      turnOutCount,
-      orderinfo,
+      MyAgentId,
+      MyPayzDiaCountAfter,
+      MyPayzDiaCountBefore,
+      agentId,
+      agentPayzDiaCountAfter,
+      agentPayzDiaCountBefore,
       createTime,
+      turnOutCount,
     } = this.state;
     const payDateTime = new Date(createTime).format('yyyy-MM-dd hh:mm:ss');
-    // const orderCountLabel = this.helps.transCountUnit(orderCount);
-    // const payTypeLabel = this.Enum.payTypeLabel[payType];
     return (
       <div className={styles.container}>
         <Title>订单详情</Title>
         <NavBar
           title="订单详情"
+          onClick={this.router.back}
         />
-        <WhiteSpace />
-        <div className={styles.payInfoWrap}>
-          <div className={styles.orderInfoRowItem}>
-            <div>
-              <div className={styles.payInfoTitle}>订单号</div>
-              <span className={styles.orderIdLabel}>{ orderId }</span>
+        <div className={styles.contentContainer}>
+          <div>
+            <div className={styles.blockContainer}>
+              <div className={styles.orderInfoRowItem}>
+                <div className={styles.payInfoWrap}>
+                  <div className={styles.payInfoTitle}>订单号</div>
+                  <span className={styles.orderIdLabel}>{ orderId }</span>
+                </div>
+                <CopyToClipboard
+                  text={orderId}
+                  onCopy={this.copyOrderId}
+                >
+                  <div className={styles.copyBtn}>复制订单号</div>
+                </CopyToClipboard>
+              </div>
+              <div className={styles.masonryInfoWrap}>
+                <div className={styles.masonryIconWrap}>
+                  <IconImg className={styles.masonryIcon} src={imgSource.masonry} />
+                </div>
+                <div className={styles.masonryInfo}>
+                  <div className={styles.masonryCountLabel}>
+                    转出{turnOutCount}钻石
+                  </div>
+                </div>
+              </div>
+              <div className={styles.orderRowItemWrap}>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    订单状态
+                  </div>
+                  <div className={styles.colorGreen}>
+                    交易完成
+                  </div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    交易完成时间
+                  </div>
+                  <div>
+                    { payDateTime }
+                  </div>
+                </div>
+              </div>
+              <div className={styles.orderRowItemWrap} style={{ border: 'none' }}>
+                <div className={styles.orderRowItem}>
+                  <div className={styles.rowItemTitle}>我的账户信息</div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    代理邀请码
+                  </div>
+                  <div className={styles.colorOrange}>
+                    { MyAgentId }
+                  </div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    交易前钻石数
+                  </div>
+                  <div className={styles.colorOrange}>
+                    { MyPayzDiaCountBefore }
+                  </div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    交易后钻石数
+                  </div>
+                  <div className={styles.colorOrange}>
+                    { MyPayzDiaCountAfter }
+                  </div>
+                </div>
+              </div>
+              <div className={styles.orderRowItemWrap} style={{ border: 'none' }}>
+                <div className={styles.orderRowItem}>
+                  <div className={styles.rowItemTitle}>转出对象</div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    代理ID
+                  </div>
+                  <div className={styles.colorOrange}>
+                    { agentId }
+                  </div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    交易前钻石数
+                  </div>
+                  <div className={styles.colorOrange}>
+                    { agentPayzDiaCountBefore }
+                  </div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    交易后钻石数
+                  </div>
+                  <div className={styles.colorOrange}>
+                    { agentPayzDiaCountAfter }
+                  </div>
+                </div>
+              </div>
             </div>
-            <CopyToClipboard
-              text={orderId}
-              onCopy={this.copyOrderId}
-            >
-              <Button size="small">复制订单号</Button>
-            </CopyToClipboard>
           </div>
-          <div className={styles.orderInfoRowItem}>
-            <div>
-              <div className={styles.payInfoTitle}>转钻数</div>
-              <span className={styles.orderIdLabel}>{ turnOutCount }</span>
-            </div>
-            <div>
-              <div>购买前:<span className={styles.count}>{ payzDiaCountBefore }</span>个</div>
-              <div>购买后:<span className={styles.count}>{ payzDiaCountAfter }</span>个</div>
-            </div>
+          <div className={styles.btnWrap}>
+            <Button onClick={this.router.back}>返回</Button>
           </div>
-          <div className={styles.orderInfoItem}>
-            <div className={styles.payInfoTitle}>订单信息</div>
-            <div className={styles.orderIdLabel}>
-              { orderinfo }
-            </div>
-          </div>
-
-          <div className={styles.orderTimeItem}>
-            <div className={styles.payInfoTitle}>订单提交时间</div>
-            <div className={styles.orderIdLabel}>
-              { payDateTime }
-            </div>
-          </div>
-        </div>
-        <div className={styles.backBtnWrap}>
-          <Button onClick={this.router.back}>返回</Button>
         </div>
       </div>
     );

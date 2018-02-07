@@ -61,7 +61,7 @@ class BuyMasonryRecord extends BaseComponent {
     this.getRecord();
   }
   getRecord = async () => {
-    const res = await this.http.webHttp.get('/spreadApi/agentBuyDiaOrderList');
+    const res = await this.http.webHttp.get('/spreadApi/cashRecord');
     if (res.isSuccess) {
       this.setState({
         record: res.data,
@@ -92,7 +92,7 @@ class BuyMasonryRecord extends BaseComponent {
     });
   }
   deleteOrder = async (orderId) => {
-    const res = await this.http.webHttp.get('/spreadApi/deleteBuyDiaOrder', {
+    const res = await this.http.webHttp.get('/spreadApi/deleteCashRecord', {
       orderId,
     });
     if (res.isSuccess) {
@@ -111,9 +111,17 @@ class BuyMasonryRecord extends BaseComponent {
       },
     ]);
   }
-  orderDetail = (orderId) => {
-    this.router.go('/buyMasonryOrderDetail', {
-      orderId,
+  orderDetail = (orderInfo) => {
+    const { createTime, orderid, resultTime, result, cardNumber, cardname, cashCount } = orderInfo;
+    console.log(orderInfo)
+    this.router.go('/cashOrderDetail', {
+      orderid,
+      createTime,
+      resultTime,
+      result,
+      cardNumber,
+      cardname,
+      cashCount,
     });
   }
   beforePage = () => {
@@ -146,7 +154,7 @@ class BuyMasonryRecord extends BaseComponent {
         if (!startTimeStamp && !endTimeStamp) {
           return true;
         }
-        return data.chargeTime >= startTimeStamp && data.chargeTime <= endTimeStamp;
+        return data.createTime >= startTimeStamp && data.createTime <= endTimeStamp;
       });
     } else if (selectTimeMode === 'custom') {
       if (!startTime || !endTime) {
@@ -158,55 +166,64 @@ class BuyMasonryRecord extends BaseComponent {
           if (!startTimeStamp && !endTimeStamp) {
             return true;
           }
-          return data.chargeTime >= startTimeStamp && data.chargeTime <= endTimeStamp;
+          return data.createTime >= startTimeStamp && data.createTime <= endTimeStamp;
         });
       }
     }
-    // 购钻总量
-    const masonryCount = resultRecord.reduce((before, current) => {
-      return before + current.chargeCount;
+    // 申请金额
+    const allCashCount = resultRecord.reduce((before, current) => {
+      return before + current.cashCount;
     }, 0);
-    // 总支出
-    const payMoneyCount = resultRecord.reduce((before, current) => {
-      return before + current.payMoney;
-    }, 0);
-    const payMoneyCountLabel = this.helps.parseFloatMoney(payMoneyCount);
-    // 余额支付
-    const banlancePayMoneyCount = resultRecord.reduce((before, current) => {
-      if (current.pay_type == this.Enum.payType.BALANCE) {
-        return before + current.payMoney;
+    const allCashCountLabel = this.helps.parseFloatMoney(allCashCount);
+    // 未处理
+    const noResolveCount = resultRecord.reduce((before, current) => {
+      if (current.result == this.Enum.resolveStatus.waiting) {
+        return before + current.cashCount;
       }
       return before;
     }, 0);
-    const banlancePayMoneyCountLabel = this.helps.parseFloatMoney(banlancePayMoneyCount);
-    // 其他支出
-    const otherPayCount = payMoneyCount - banlancePayMoneyCount;
-    const otherPayCountLabel = this.helps.parseFloatMoney(otherPayCount);
+    const noResolveCountLabel = this.helps.parseFloatMoney(noResolveCount);
+    // 已提现
+    const passResolveCount = resultRecord.reduce((before, current) => {
+      if (current.result == this.Enum.resolveStatus.pass) {
+        return before + current.cashCount;
+      }
+      return before;
+    }, 0);
+    const passResolveCountLabel = this.helps.parseFloatMoney(passResolveCount);
+    // 已驳回
+    const failResolveCount = resultRecord.reduce((before, current) => {
+      if (current.result == this.Enum.resolveStatus.fail) {
+        return before + current.cashCount;
+      }
+      return before;
+    }, 0);
+    const failResolveCountLabel = this.helps.parseFloatMoney(failResolveCount);
     // 分页显示
     const showRecord = resultRecord.slice(page * size, (page + 1) * size);
     return (<div className={styles.container}>
-      <Title>购钻记录</Title>
+      <Title>提现记录</Title>
       <NavBar
-        title="购钻记录"
+        title="提现记录"
         onClick={this.router.back}
       />
       <div className={styles.resultTitle}>统计结果</div>
       <div className={styles.countItemWrap}>
         <div className={styles.countRowItem}>
-          <div className={styles.countLabel}>{ masonryCount }</div>
-          <div className={styles.countTip}>购钻数量</div>
+          <div className={styles.countLabel}>￥{ allCashCountLabel }</div>
+          <div className={styles.countTip}>申请金额</div>
         </div>
         <div className={styles.countRowItem}>
-          <div className={styles.countLabel}>￥{ payMoneyCountLabel }</div>
-          <div className={styles.countTip}>总支出</div>
+          <div className={styles.countLabel}>￥{ noResolveCountLabel }</div>
+          <div className={styles.countTip}>未处理</div>
         </div>
         <div className={styles.countRowItem}>
-          <div className={styles.countLabel}>￥{ banlancePayMoneyCountLabel }</div>
-          <div className={styles.countTip}>余额支出</div>
+          <div className={styles.countLabel}>￥{ passResolveCountLabel }</div>
+          <div className={styles.countTip}>已提现</div>
         </div>
         <div className={styles.countRowItem}>
-          <div className={styles.countLabel}>￥{ otherPayCountLabel }</div>
-          <div className={styles.countTip}>其他支出</div>
+          <div className={styles.countLabel}>￥{ failResolveCountLabel }</div>
+          <div className={styles.countTip}>已驳回</div>
         </div>
       </div>
       <div className={styles.selectTimeItemWrap}>
@@ -251,33 +268,42 @@ class BuyMasonryRecord extends BaseComponent {
       </div>
       <div>
         <div className={styles.recordTitleWrap}>
-          <div className={styles.recordTitleItem}>订单时间</div>
-          <div className={styles.recordTitleItem}>购买钻石数</div>
-          <div className={styles.recordTitleItem}>购买后余额</div>
+          <div className={styles.recordTitleItem}>申请时间</div>
+          <div className={styles.recordTitleItem}>提现金额</div>
+          <div className={styles.recordTitleItem}>状态</div>
           <div className={styles.recordTitleItemOption}>操作</div>
         </div>
         <div className={styles.recordContent}>
           {
             showRecord.map((data) => {
-              const { orderId, payMoney, chargeCount, chargeTime } = data;
-              const payMoneyLable = this.helps.parseFloatMoney(payMoney);
-              const dateDayLabel = new Date(chargeTime).format('yyyy-MM-dd');
-              const dateHourLabel = new Date(chargeTime).format('hh:mm:ss');
+              const { orderid, cashCount, createTime, result } = data;
+              const dateDayLabel = new Date(createTime).format('yyyy-MM-dd');
+              const dateHourLabel = new Date(createTime).format('hh:mm:ss');
+              const cashCountLabel = this.helps.parseFloatMoney(cashCount);
+              const resultLabel = this.Enum.resolveStatusLabel[result];
               return (
-                <div key={orderId} className={styles.recordRowItemWrap}>
+                <div key={orderid} className={styles.recordRowItemWrap}>
                   <div className={styles.recordRowItem}>
                     <div className={styles.recordTimeDay}>{ dateDayLabel }</div>
                     <div className={styles.recordTimeHour}>{ dateHourLabel }</div>
                   </div>
-                  <div className={classnames(styles.recordRowItem, styles.colorBase)}>
-                    { chargeCount }
+                  <div className={classnames(styles.recordRowItem, styles.colorMoney)}>
+                    { cashCountLabel }
                   </div>
                   <div className={classnames(styles.recordRowItem, styles.colorGray)}>
-                    { payMoneyLable }
+                    <div
+                      className={classnames({
+                        [styles.colorGreen]: result == this.Enum.resolveStatus.pass,
+                        [styles.colorFail]: result == this.Enum.resolveStatus.fail,
+                        [styles.colorWait]: result == this.Enum.resolveStatus.waiting,
+                      })}
+                    >
+                      { resultLabel }
+                    </div>
                   </div>
                   <div className={styles.recordRowItemOption}>
-                    <div className={styles.deleteBtn} onClick={() => this.showdeleteOrderPicker(orderId)}>删除</div>
-                    <div className={styles.lookDetailBtn} onClick={() => this.orderDetail(orderId)}>查看详情</div>
+                    <div className={styles.deleteBtn} onClick={() => this.showdeleteOrderPicker(orderid)}>删除</div>
+                    <div className={styles.lookDetailBtn} onClick={() => this.orderDetail(data)}>查看详情</div>
                   </div>
                 </div>
               );

@@ -1,56 +1,28 @@
 import React from 'react';
 import { connect } from 'dva';
 // import classNames from 'classnames';
-import ScrollTop from '@/components/ScrollTop';
-
+import classnames from 'classnames';
 import BaseComponent from '@/core/BaseComponent';
+import SearchInput from '@/components/SearchInput';
+import SlideUpModal from '@/components/Modal/SlideUpModal';
 import { ScrollListView } from '@/components/lazyComponent/ScrollListView';
-import { StickyContainer, Sticky } from '@/components/lazyComponent/ReactSticky';
-import { Icon, InputItem, Modal, SearchBar, NavBar, Button } from '@/components/lazyComponent/antd';
-import { WhiteSpace, Title } from '@/components/styleComponent';
-import LongPress from '@/components/LongPress';
+import { Icon, InputItem, NavBar, Button } from '@/components/lazyComponent/antd';
+import { Title } from '@/components/styleComponent';
 import styles from './TurnDiaForAgent.less';
 
 class TurnDiaForAgent extends BaseComponent {
   constructor(props) {
     super(props);
-    // const { payEnum } = this.helps;
-    // let defaultPayEnum = payEnum.WECHAT;
-    // const paySelectArr = this.power();
-    // if (paySelectArr.length > 0) {
-    //   defaultPayEnum = paySelectArr[0].payType;
-    // }
     this.state = {
       agentName: '', // 用户名
       agentId: '',
-      agentNotFind: false, // 玩家是否未找到
-      // diamond: selectDiamondArr[defaultSelectIndex], // 钻石
-      // isChooseInput: false, // 是否选择其他数额
-      // selectIndex: defaultSelectIndex,
-      // payTypeSelect: defaultPayEnum,
-      record: [],
-      agents: [
-      ], // 玩家
+      agentNotFind: false, // 代理是否未找到
+      agents: [], // 可选代理
       diamond: '',
       selectplayerVisible: false,
       searchVal: '',
     };
     this.idTimer = null;
-    this.todayTimeStamp = new Date(new Date().format('yyyy/MM/dd')).getTime();
-    this.monthTimeStamp = this.helps.getMonthTimeStamp();
-    // this.paySelectArr = [];
-  }
-  async componentWillMount() {
-    this.getRecord();
-  }
-  getRecord = async () => {
-    const res = await this.http.webHttp.get('/spreadApi/agentSellDiaRecord');
-    if (res.isSuccess) {
-      const record = res.data;
-      this.setState({
-        record,
-      });
-    }
   }
   // id发生改变
   idValChange = (val) => {
@@ -70,8 +42,8 @@ class TurnDiaForAgent extends BaseComponent {
       if (res.isSuccess) {
         const { agentName } = res.data;
         this.setState({
-          agentName,
-          agentNotFind: !agentName,
+          agentName: agentName || '昵称',
+          agentNotFind: false,
         });
       } else {
         this.setState({
@@ -86,53 +58,6 @@ class TurnDiaForAgent extends BaseComponent {
     this.setState({
       diamond,
     });
-  }
-  // 跳转订单详情
-  goOrderDetail = (orderId) => {
-    this.router.go('/turnDiaForAgentOrderDetail', { orderId });
-  }
-  deleteOrder = async (orderId) => {
-    const isComfirm = confirm('确认删除订单');
-    if (isComfirm) {
-      const res = await this.http.webHttp.get('/spreadApi/deleteAgentSellDiaRecord', {
-        orderId,
-      });
-      if (!res.isSuccess) {
-        this.message.info(res.info || '删除订单失败');
-        return;
-      }
-      this.getRecord();
-      // const newRecord = this.state.record.filter((record) => {
-      //   return record.orderId !== orderId;
-      // });
-      // this.setState({
-      //   record: newRecord,
-      // });
-      this.message.info(res.info || '删除订单成功');
-    }
-  }
-  renderRow = (row) => {
-    const {
-      chargeTime,
-      chargeCount,
-      chargeInfo,
-      orderId,
-     } = row;
-    const chargeTimeLabel = new Date(chargeTime).format('yyyy-MM-dd hh:mm:ss');
-    return (<LongPress
-      className={styles.recordRowItem}
-      onShortPress={() => this.goOrderDetail(orderId)}
-      onLongPress={() => this.deleteOrder(orderId)}
-    >
-      <div>
-        <div> { chargeInfo } </div>
-        <div className={styles.recordItemTime}>{ chargeTimeLabel }</div>
-      </div>
-      <div className={styles.recordItemCountLabel}>
-        <span className={styles.count}>{ chargeCount }个钻石</span>
-        <Icon type="right" color="#b8b8b8" />
-      </div>
-    </LongPress>);
   }
   // 获取玩家数据
   getAgents = async () => {
@@ -159,12 +84,17 @@ class TurnDiaForAgent extends BaseComponent {
   // 跳转充值页面
   goToNext = () => {
     const { diamond, agentId, agentNotFind, agentName } = this.state;
+    const { masonry } = this.props;
     if (!agentId || agentId.length < 6 || agentNotFind) {
       this.message.info('代理不存在');
       return;
     }
-    if (!diamond) {
+    if (!diamond || diamond <= 0) {
       this.message.info('请选择钻石个数');
+      return;
+    }
+    if (diamond > masonry) {
+      this.message.info('转出的钻石不能超过账户余额');
       return;
     }
     this.router.go('/payToTurnDiaForAgent', {
@@ -229,44 +159,17 @@ class TurnDiaForAgent extends BaseComponent {
       </div>
     </div>);
   }
-  renderRecordHeader = () => {
-    const { record } = this.state;
-    let allCount = 0;
-    let monthCount = 0;
-    record.forEach((data) => {
-      if (data.chargeTime >= this.monthTimeStamp) {
-        monthCount += data.chargeCount;
-      }
-      allCount += data.chargeCount;
-    });
-    return (<div className={styles.recordHeader}>
-      <div>
-        <div>
-          本月购钻数量:<span className={styles.count}>{ monthCount }</span>个
-        </div>
-        <div>
-          总购钻数量:<span className={styles.count}>{ allCount }</span>个
-        </div>
-      </div>
-    </div>);
-  }
-  scrollTop = () => {
-    const scrollNode = this.scroll;
-    if (scrollNode) {
-      scrollNode.scrollTo && scrollNode.scrollTo(0, 0);
-    }
-  }
   render() {
     const { agentName, diamond, agentNotFind, agentId,
-      record, selectplayerVisible, searchVal, agents,
+      selectplayerVisible, searchVal, agents,
     } = this.state;
     const { masonry } = this.props;
     const filterAgentsData = agents.filter((agent) => {
       if (!searchVal) {
         return true;
       }
-      return agent.agentInviteCode.toString().indexOf(searchVal)
-      !== -1 || agent.agentName.toString().indexOf(searchVal) !== -1;
+      return String(agent.agentInviteCode).indexOf(searchVal)
+      !== -1 || String(agent.agentName).indexOf(searchVal) !== -1;
     });
 
     return (
@@ -276,105 +179,82 @@ class TurnDiaForAgent extends BaseComponent {
           title="给代理充钻"
           onClick={this.router.back}
         />
-        <div>
-          <div className={styles.playerInputWrap}>
-            <InputItem
-              onChange={this.idValChange}
-              value={agentId}
-              type="number"
-              maxLength={8}
-              clear
-              placeholder="请输入代理ID"
-              extra={<Button size="small" onClick={this.showChoosePlayerPicker}>选择代理</Button>}
-            >代理ID</InputItem>
-            {
-              agentNotFind && <div className={styles.playerNotFind}>代理不存在</div>
-            }
-            {
-              agentName && <div className={styles.playerName}>{agentName}</div>
-            }
+        <div className={styles.contentContainer}>
+          <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
+            <div className={styles.inputWrap}>
+              <InputItem
+                onChange={this.idValChange}
+                value={agentId}
+                type="number"
+                clear
+                placeholder="请输入代理ID"
+                extra={<Button size="small" onClick={this.showChoosePlayerPicker}>选择代理</Button>}
+              />
+              {
+                agentNotFind && <div className={styles.playerNotFind}>代理不存在</div>
+              }
+              {
+                agentName && <div className={styles.playerName}>{agentName}</div>
+              }
+            </div>
+            <div className={styles.inputWrap}>
+              <InputItem
+                onChange={this.diamondChange}
+                value={diamond}
+                type="number"
+                clear
+                maxLength={8}
+                placeholder="请输入转出钻石数量"
+              />
+            </div>
+            <div className={styles.masonryTip}>
+              账户钻石数量：<span className={styles.count}>{masonry}</span>个
+            </div>
           </div>
-          <WhiteSpace />
-          <div className={styles.playerInputWrap}>
-            <InputItem
-              onChange={this.diamondChange}
-              value={diamond}
-              type="number"
-              clear
-              maxLength={8}
-              placeholder={`本次最多转出${masonry}个钻`}
-            >钻石数量</InputItem>
-          </div>
-          <div className={styles.payBtnWrap}>
-            <Button
-              className={styles.payBtn}
-              onClick={this.goToNext}
-            >
-            下一步
-            </Button>
+          <div className={styles.inputContainer}>
+            <div className={styles.btnWrap}>
+              <Button
+                onClick={this.goToNext}
+              >
+              下一步
+              </Button>
+            </div>
+            <div className={styles.btnWrap}>
+              <Button
+                onClick={() => this.router.go('/turnDiaForAgentRecord')}
+                type="green"
+              >
+              购钻记录
+              </Button>
+            </div>
           </div>
         </div>
-        <StickyContainer>
-          <Sticky>
-            {
-              ({
-              style,
-                // the following are also available but unused in this example
-                isSticky,
-                wasSticky,
-                distanceFromTop,
-                distanceFromBottom,
-                calculatedHeight,
-              }) => {
-                return (
-                  <div className={styles.listWrap} style={style}>
-                    <div style={{ height: '1rem' }} />
-                    { this.renderRecordHeader() }
-                    <ScrollListView
-                      data={record}
-                      renderRow={this.renderRow}
-                      getNode={(node) => { this.scroll = node; }}
-                    />
-                    {
-                      wasSticky && <ScrollTop onClick={this.scrollTop} />
-                    }
-                  </div>
-                );
-              }
-            }
-          </Sticky>
-        </StickyContainer>
-        {/* 选择代理picker */}
-        <Modal
-          transparent
-          maskClosable
-          className={styles.payModal}
+        <SlideUpModal
           visible={selectplayerVisible}
           onClose={this.toggleSelectplayerVisible}
         >
-          <div className={styles.payPicker}>
-            <div className={styles.pickerHideMask} onClick={this.toggleSelectplayerVisible} />
-            <div className={styles.payPickerBody}>
-              <div className={styles.pickerHeader}>
-                <Icon type="cross" size="lg" onClick={this.toggleSelectplayerVisible} />
-                <div className={styles.pickerTitle}>选择代理</div>
-                <div className={styles.iconRight} />
-              </div>
-              <div className={styles.playerPickerContainer}>
-                <SearchBar
+          <div className={styles.payPickerBody}>
+            <div className={styles.pickerHeader}>
+              <div className={styles.iconRight} />
+              <div className={styles.pickerTitle}>选择代理</div>
+              <Icon type="cross" size="lg" onClick={this.toggleSelectplayerVisible} />
+            </div>
+            <div className={styles.playerPickerContainer}>
+              <div className={styles.searchInputWrap}>
+                <SearchInput
                   placeholder="输入代理的ID/名称"
                   onChange={this.onSearchInputChange}
                   value={searchVal}
                 />
-                <ScrollListView
-                  data={filterAgentsData}
-                  renderHeader={this.renderHeader}
-                  renderRow={this.renderAgentRow}
-                />
               </div>
+              <ScrollListView
+                data={filterAgentsData}
+                renderHeader={this.renderHeader}
+                renderRow={this.renderAgentRow}
+              />
             </div>
           </div>
-        </Modal>
+        </SlideUpModal>
       </div>
     );
   }

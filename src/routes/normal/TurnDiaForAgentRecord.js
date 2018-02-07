@@ -3,12 +3,11 @@ import { connect } from 'dva';
 // import { window } from 'global';
 import classnames from 'classnames';
 import styles from './ComRecordTable.less';
-
+import SearchInput from '@/components/SearchInput';
 import BaseComponent from '@/core/BaseComponent';
 import Modal from '@/components/antdComponent/Modal';
 import { Icon, NavBar, DatePicker } from '@/components/lazyComponent/antd';
 import { Title } from '@/components/styleComponent';
-// import styles from './BuyMasonryRecord.less';
 
 // const imgSource = {
 //   masonry: require('../../assets/zuanshi.png'),
@@ -20,7 +19,7 @@ import { Title } from '@/components/styleComponent';
 // };
 
 const size = 9;
-class BuyMasonryRecord extends BaseComponent {
+class TurnDiaForAgentRecord extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,6 +30,7 @@ class BuyMasonryRecord extends BaseComponent {
       customSelect: 'start', // end
       record: [],
       page: 0,
+      searchVal: '',
     };
     const toDayFirstStamp = this.helps.getDayTimeStamp();
     const yestodayStartStamp = toDayFirstStamp - 86400000;
@@ -61,7 +61,7 @@ class BuyMasonryRecord extends BaseComponent {
     this.getRecord();
   }
   getRecord = async () => {
-    const res = await this.http.webHttp.get('/spreadApi/agentBuyDiaOrderList');
+    const res = await this.http.webHttp.get('/spreadApi/agentSellDiaRecord');
     if (res.isSuccess) {
       this.setState({
         record: res.data,
@@ -92,7 +92,7 @@ class BuyMasonryRecord extends BaseComponent {
     });
   }
   deleteOrder = async (orderId) => {
-    const res = await this.http.webHttp.get('/spreadApi/deleteBuyDiaOrder', {
+    const res = await this.http.webHttp.get('/spreadApi/deleteAgentSellDiaRecord', {
       orderId,
     });
     if (res.isSuccess) {
@@ -112,7 +112,7 @@ class BuyMasonryRecord extends BaseComponent {
     ]);
   }
   orderDetail = (orderId) => {
-    this.router.go('/buyMasonryOrderDetail', {
+    this.router.go('/turnDiaForAgentOrderDetail', {
       orderId,
     });
   }
@@ -137,7 +137,7 @@ class BuyMasonryRecord extends BaseComponent {
     });
   }
   render() {
-    const { selectTimeMode, fastIndex, startTime, endTime, record, page } = this.state;
+    const { selectTimeMode, fastIndex, startTime, endTime, record, page, searchVal } = this.state;
     // 时间选择过滤
     let resultRecord = [];
     if (selectTimeMode === 'fast') {
@@ -162,26 +162,17 @@ class BuyMasonryRecord extends BaseComponent {
         });
       }
     }
+    // 玩家id筛选
+    resultRecord = resultRecord.filter((data) => {
+      if (!searchVal) {
+        return true;
+      }
+      return String(data.agentId).indexOf(searchVal) > -1;
+    });
     // 购钻总量
     const masonryCount = resultRecord.reduce((before, current) => {
       return before + current.chargeCount;
     }, 0);
-    // 总支出
-    const payMoneyCount = resultRecord.reduce((before, current) => {
-      return before + current.payMoney;
-    }, 0);
-    const payMoneyCountLabel = this.helps.parseFloatMoney(payMoneyCount);
-    // 余额支付
-    const banlancePayMoneyCount = resultRecord.reduce((before, current) => {
-      if (current.pay_type == this.Enum.payType.BALANCE) {
-        return before + current.payMoney;
-      }
-      return before;
-    }, 0);
-    const banlancePayMoneyCountLabel = this.helps.parseFloatMoney(banlancePayMoneyCount);
-    // 其他支出
-    const otherPayCount = payMoneyCount - banlancePayMoneyCount;
-    const otherPayCountLabel = this.helps.parseFloatMoney(otherPayCount);
     // 分页显示
     const showRecord = resultRecord.slice(page * size, (page + 1) * size);
     return (<div className={styles.container}>
@@ -195,18 +186,6 @@ class BuyMasonryRecord extends BaseComponent {
         <div className={styles.countRowItem}>
           <div className={styles.countLabel}>{ masonryCount }</div>
           <div className={styles.countTip}>购钻数量</div>
-        </div>
-        <div className={styles.countRowItem}>
-          <div className={styles.countLabel}>￥{ payMoneyCountLabel }</div>
-          <div className={styles.countTip}>总支出</div>
-        </div>
-        <div className={styles.countRowItem}>
-          <div className={styles.countLabel}>￥{ banlancePayMoneyCountLabel }</div>
-          <div className={styles.countTip}>余额支出</div>
-        </div>
-        <div className={styles.countRowItem}>
-          <div className={styles.countLabel}>￥{ otherPayCountLabel }</div>
-          <div className={styles.countTip}>其他支出</div>
         </div>
       </div>
       <div className={styles.selectTimeItemWrap}>
@@ -248,19 +227,34 @@ class BuyMasonryRecord extends BaseComponent {
             <Icon type="down" />
           </WrapDiv>
         </DatePicker>
+        <div className={styles.searchInputWrap}>
+          <SearchInput
+            onChange={val => this.setState({ searchVal: val })}
+            value={searchVal}
+            type="number"
+            placeholder="代理ID"
+          />
+        </div>
       </div>
       <div>
         <div className={styles.recordTitleWrap}>
-          <div className={styles.recordTitleItem}>订单时间</div>
-          <div className={styles.recordTitleItem}>购买钻石数</div>
-          <div className={styles.recordTitleItem}>购买后余额</div>
-          <div className={styles.recordTitleItemOption}>操作</div>
+          <div className={styles.recordTitleItem}>
+            <span>订单时间</span>
+          </div>
+          <div className={styles.recordTitleItem}>
+            <span>转出对象(代理ID)</span>
+          </div>
+          <div className={styles.recordTitleItem}>
+            <span>钻石数量</span>
+          </div>
+          <div className={styles.recordTitleItemOption}>
+            <span>操作</span>
+          </div>
         </div>
         <div className={styles.recordContent}>
           {
             showRecord.map((data) => {
-              const { orderId, payMoney, chargeCount, chargeTime } = data;
-              const payMoneyLable = this.helps.parseFloatMoney(payMoney);
+              const { orderId, agentId, chargeCount, chargeTime } = data;
               const dateDayLabel = new Date(chargeTime).format('yyyy-MM-dd');
               const dateHourLabel = new Date(chargeTime).format('hh:mm:ss');
               return (
@@ -270,10 +264,10 @@ class BuyMasonryRecord extends BaseComponent {
                     <div className={styles.recordTimeHour}>{ dateHourLabel }</div>
                   </div>
                   <div className={classnames(styles.recordRowItem, styles.colorBase)}>
-                    { chargeCount }
+                    { agentId }
                   </div>
-                  <div className={classnames(styles.recordRowItem, styles.colorGray)}>
-                    { payMoneyLable }
+                  <div className={classnames(styles.recordRowItem, styles.colorBase)}>
+                    { chargeCount }
                   </div>
                   <div className={styles.recordRowItemOption}>
                     <div className={styles.deleteBtn} onClick={() => this.showdeleteOrderPicker(orderId)}>删除</div>
@@ -314,4 +308,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(BuyMasonryRecord);
+export default connect(mapStateToProps)(TurnDiaForAgentRecord);

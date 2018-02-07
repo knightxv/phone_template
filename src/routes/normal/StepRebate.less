@@ -1,36 +1,41 @@
 @import "../../base/less/base.less";
-
+.container {
+  padding-bottom: 1rem;
+}
 .headerWrap {
   display: flex;
   flex-direction: column;
   text-align: center;
   background: #fff;
-  padding: .15rem .2rem;
+  margin: .1rem;
   border-radius: 3px;
 }
 
 .monthRebateTip {
   font-size: .3rem;
-  padding-bottom: .2rem;
-  color: @greenTip;
+  padding: .1rem 0;
+  color: @baseColor;
 }
 
 .rebateLabel {
-  color: @moneyColor;
-  font-size: .42rem;
-  line-height: .8rem;
+  color: @orange;
+  font-size: .52rem;
 }
 .rebateTipAss {
   color: @gray;
   font-size: .28rem;
 }
 .rebateTip {
-  color: @greenTip;
+  color: @baseColor;
+  padding-top: .1rem;
   font-size: .3rem;
 }
-
-.headerRightWrap {
-
+.underAgentRebateListTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: .2rem;
 }
 .monthTip {
   line-height: .7rem;
@@ -44,28 +49,28 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  .borTop();
-
+  margin-top: .2rem;
 }
 .rebateInfoItem {
-  width: 50%;
-  .borRig();
-  .borBot();
-  padding: .2rem;
+  width: 46%;
+  background: @bgColor;
+  margin-left: .2rem;
+  margin-bottom: .2rem;
+  padding: .2rem .1rem;
   text-align: center;
+  border-radius: .1rem;
 }
 .rebateMoneyTip {
-  color: @moneyColor;
+  font-size: .52rem;
+  color: @orange;
 }
 .rebateTitleTip {
-  font-size: .28rem;
-  padding-top: .2rem;
-  color: @greenTip;
+  color: #000;
+  padding: .08rem;
 }
 .rebateTip2 {
-  color: @gray;
-  font-size: .28rem;
-  padding-top: .2rem;
+  color: @baseColor;
+  font-size: .24rem;
 }
 .rowItem {
   .flexRow();
@@ -73,7 +78,12 @@
 .rowAgentName {
   .textHide();
 }
-
+.underAgentTitleWrap {
+  background: @baseColor;
+  .flexRow();
+  padding: .1rem .2rem;
+  color: #fff;
+}
 .colItem {
   flex: 1;
   font-size: .3rem;
@@ -92,33 +102,50 @@
 }
 
 .colcountItem {
-  color: @moneyColor;
+  color: @orange;
   // padding: .2rem 0;
 }
 .rowBodyItem {
-  overflow: hidden;
+  overflow: auto;
 }
-.rebateListTitle {
-  padding: .2rem .2rem;
-  background: #fff;
-  // font-size: .28rem;
-  .borBot();
-  color: @greenTip;
+.rebateList {
+  color: #8593a7;
 }
 
 .count {
-  color: @moneyColor;
+  color: @orange;
 }
 
-.rebateList {
-  background: #fff;
+.rebateListTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.rebateListCount {
+  font-size: .52rem;
+  color: #000;
+  padding-bottom: .1rem;
+}
+.rebateListTip {
+  font-size: .28rem;
+  color: @gray;
 }
 .rebateListRowItem {
   .borBot();
   padding: .1rem 0;
+  background: #fff;
 }
 .rebateListRowList {
-  .borBot();
+  background: #fff;
+  align-items: stretch;
+  margin-bottom: .1rem;
+}
+.rebateListHeaderColItem {
+  .border();
+  width: 16.66%;
+  padding: .2rem .2rem;
+  text-align: center;
 }
 
 .rebatePageWrap {
@@ -158,7 +185,7 @@
 }
 
 .tableWrap {
-  margin: 0 .2rem .2rem;
+  margin: 0.5rem .4rem 0;
   background: #fff;
   .borTop();
   .borLef();
@@ -175,7 +202,7 @@
 }
 .titleItem {
   .flexRow();
-  padding: .3rem .2rem .15rem;
+  padding: .1rem .2rem;
 }
 .titleIcon {
   width: .35rem;
@@ -184,8 +211,15 @@
 }
 
 .count {
-  color: @moneyColor;
+  color: @orange;
 }
 .rabatePageCount {
   color: @gray;
+}
+
+.ruleBtnWrap {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }

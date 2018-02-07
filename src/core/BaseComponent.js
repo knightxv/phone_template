@@ -59,6 +59,10 @@ export default class BaseComponent extends BaseClass {
   //     }) > -1;
   //   });
   // }
+  // 是否有权限用钱支付（是否只开了直接转钻）(购买钻石)
+  hasPowerBuyDiaForMoney() {
+    return this.hasPowerSome('AgentBuyDiawechatPay', 'AgentBuyDiaAliPay', 'ylzfForAgentBuyDia');
+  }
   // 是否有权限用钱支付（是否只开了直接转钻）(给玩家转钻)
   hasPowerTurnDiaForMoney() {
     return this.hasPowerSome('wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer', 'ylzfForAgentTurnDiaToPlayer');

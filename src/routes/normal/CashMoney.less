@@ -1,97 +1,32 @@
 @import "../../base/less/base.less";
 
-.cashBtn {
-    width: 100%;
-    flex: 1;
-    display: block;
-    margin: 15px 15px;
+.inputWrap {
+  .flexRow();
 }
 
-.countTip {
-    text-align: center;
-    padding-right: 0.1rem;
-    color: #ababab;
-    font-size: 0.26rem;
+.bankInfoWrap {
+  .flexRow();
+  .borBot();
+  padding: .3rem 0;
 }
-
-.inputRowItem {
-    background: #fff;
-    border-bottom: 1px solid #eee;
+.cashInfoLabel {
+  color: @baseColor;
+  padding-left: .2rem;
 }
-
-.itemWrap {
-    background: #fff;
-    padding-left: 0.3rem;
-    padding-right: 0.3rem;
-    min-height: 0.8rem;
+.cashInput {
+  :global(input) {
+    font-size: .38rem!important;
+  }
 }
-
-.selectTitle {
-    width: 1.5rem;
+.cashTip {
+  color: @gray;
+  padding: .1rem;
 }
-
-.selectLabel {
-    padding-right: 0.3rem;
+.banlance {
+  font-size: .28rem;
+  padding: .15rem 0;
+  color: @gray;
 }
-
-.itemCashWrap {
-    background: #fff;
-    padding: 0.3rem;
-}
-
-.tip {
-    color: #999;
-}
-
-.moenyPreLabel {
-    color: #000;
-    font-size: 0.32rem;
-}
-
-.moneyCount {
-    padding: 0 0.1rem;
-    color: #ff9500;
-}
-
-.listWrap {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
-
-.recordHeader {
-    background: #fff;
-    padding: .2rem;
-    .borBot();
-}
-
-.itemWrap {
-    .flexRow(space-between);
-    .borBot();
-    padding: 0.1rem .2rem;
-    background: #fff;
-}
-
-.timeLabel {
-    font-size: .26rem;
-    color: @gray;
-    padding-top: .1rem;
-}
-.orderStatuWrap {
-    
-}
-.success {
-    color: rgb(7, 131, 7);
-}
-.fail {
-    color: rgb(254, 13, 13);
-}
-
-.fkh {
-    color: #333;
-}
-
-.tableContainer {
-    .borTop();
+.banlanceCount {
+  color: @orange;
 }

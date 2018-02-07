@@ -3,7 +3,6 @@ import { connect } from 'dva';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import BaseComponent from '@/core/BaseComponent';
-import PayIcon from '@/components/PayIcon';
 import { Button, NavBar } from '@/components/lazyComponent/antd';
 import { Title, IconImg } from '@/components/styleComponent';
 import styles from './OrderDetail.less';
@@ -12,32 +11,30 @@ const imgSource = {
   masonry: require('../../assets/zuanshi.png'),
 };
 
-class TurnDiaForPlayerOrderDetail extends BaseComponent {
+class OrderForAgentTurnDiaForAgent extends BaseComponent {
   constructor(props) {
     super(props);
+    const {
+      orderId,
+    } = this.router.getQuery();
     this.state = {
-      orderId: '',
-      orderAgentId: '',
-      orderPlayerId: '',
-      orderPlayerName: '',
-      systemGift: '',
-      payzDiaCountBefore: '',
-      payzDiaCountAfter: '',
-      payType: '',
-      payMoney: '',
-      createTime: '',
-      turnOutCount: '',
-      orderStatu: '购买成功', // 订单购买状态
+      orderId,
+      MyAgentId: '',
+      MyPayzDiaCountAfter: 0,
+      MyPayzDiaCountBefore: 0,
+      agentId: '',
+      agentPayzDiaCountAfter: 0,
+      agentPayzDiaCountBefore: 0,
+      createTime: 0,
+      turnOutCount: 0,
     };
   }
   async componentWillMount() {
     const {
       orderId,
-      serverid,
     } = this.router.getQuery();
-    const res = await this.http.webHttp.get('/spreadApi/agentToplayerDiaOrderInfo', {
+    const res = await this.http.webHttp.get('/spreadApi/sellAgentDiaOrderInfo', {
       orderId,
-      serverid,
     });
     if (res.isSuccess) {
       this.setState({
@@ -55,21 +52,16 @@ class TurnDiaForPlayerOrderDetail extends BaseComponent {
   render() {
     const {
       orderId,
-      orderAgentId,
-      orderPlayerId,
-      orderPlayerName,
-      systemGift,
-      payzDiaCountBefore,
-      payzDiaCountAfter,
-      payType,
-      payMoney,
+      MyAgentId,
+      MyPayzDiaCountAfter,
+      MyPayzDiaCountBefore,
+      agentId,
+      agentPayzDiaCountAfter,
+      agentPayzDiaCountBefore,
       createTime,
       turnOutCount,
-      orderStatu,
     } = this.state;
     const payDateTime = new Date(createTime).format('yyyy-MM-dd hh:mm:ss');
-    const orderPayMoneyLabel = this.helps.parseFloatMoney(payMoney);
-    const payTypeLabel = this.Enum.payTypeLabel[payType];
     return (
       <div className={styles.container}>
         <Title>订单详情</Title>
@@ -96,19 +88,11 @@ class TurnDiaForPlayerOrderDetail extends BaseComponent {
                 <div className={styles.masonryIconWrap}>
                   <IconImg className={styles.masonryIcon} src={imgSource.masonry} />
                 </div>
-                { (payType == this.Enum.payType.returnDirection || payType == this.Enum.payType.MANAGE)
-                  ? <div className={styles.masonryInfo}>
-                    <div className={styles.masonryCountLabel}>
-                      转出{turnOutCount}钻石
-                    </div>
-                  </div>
-                : <div className={styles.masonryInfo}>
+                <div className={styles.masonryInfo}>
                   <div className={styles.masonryCountLabel}>
-                    {turnOutCount}钻石{systemGift && `+系统额外赠送${systemGift}钻石` }
+                    转出{turnOutCount}钻石
                   </div>
-                  <div className={styles.masonryMoenyLabel}>￥{ orderPayMoneyLabel }</div>
                 </div>
-                }
               </div>
               <div className={styles.orderRowItemWrap}>
                 <div className={styles.orderRowItem}>
@@ -116,20 +100,12 @@ class TurnDiaForPlayerOrderDetail extends BaseComponent {
                     订单状态
                   </div>
                   <div className={styles.colorGreen}>
-                    { orderStatu }
+                    交易完成
                   </div>
                 </div>
                 <div className={styles.orderRowItem}>
                   <div>
-                    付款方式
-                  </div>
-                  <div className={styles.payTypeItemWrap}>
-                    <PayIcon payType={payType} />{ payTypeLabel }
-                  </div>
-                </div>
-                <div className={styles.orderRowItem}>
-                  <div>
-                    购钻时间
+                    交易完成时间
                   </div>
                   <div>
                     { payDateTime }
@@ -138,14 +114,14 @@ class TurnDiaForPlayerOrderDetail extends BaseComponent {
               </div>
               <div className={styles.orderRowItemWrap} style={{ border: 'none' }}>
                 <div className={styles.orderRowItem}>
-                  <div className={styles.rowItemTitle}>卖家信息</div>
+                  <div className={styles.rowItemTitle}>我的账户信息</div>
                 </div>
                 <div className={styles.orderRowItem}>
                   <div>
                     代理邀请码
                   </div>
                   <div className={styles.colorOrange}>
-                    { orderAgentId }
+                    { MyAgentId }
                   </div>
                 </div>
                 <div className={styles.orderRowItem}>
@@ -153,7 +129,7 @@ class TurnDiaForPlayerOrderDetail extends BaseComponent {
                     交易前钻石数
                   </div>
                   <div className={styles.colorOrange}>
-                    { payzDiaCountBefore }
+                    { MyPayzDiaCountBefore }
                   </div>
                 </div>
                 <div className={styles.orderRowItem}>
@@ -161,38 +137,43 @@ class TurnDiaForPlayerOrderDetail extends BaseComponent {
                     交易后钻石数
                   </div>
                   <div className={styles.colorOrange}>
-                    { payzDiaCountAfter }
+                    { MyPayzDiaCountAfter }
                   </div>
                 </div>
               </div>
               <div className={styles.orderRowItemWrap} style={{ border: 'none' }}>
                 <div className={styles.orderRowItem}>
-                  <div className={styles.rowItemTitle}>买家信息</div>
+                  <div className={styles.rowItemTitle}>转出对象</div>
                 </div>
                 <div className={styles.orderRowItem}>
                   <div>
-                    玩家ID
+                    代理ID
                   </div>
                   <div className={styles.colorOrange}>
-                    { orderPlayerId }
+                    { agentId }
                   </div>
                 </div>
-                {
-                  orderPlayerName &&
-                  <div className={styles.orderRowItem}>
-                    <div>
-                      玩家昵称
-                    </div>
-                    <div className={styles.colorOrange}>
-                      { orderPlayerName }
-                    </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    交易前钻石数
                   </div>
-                }
+                  <div className={styles.colorOrange}>
+                    { agentPayzDiaCountBefore }
+                  </div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    交易后钻石数
+                  </div>
+                  <div className={styles.colorOrange}>
+                    { agentPayzDiaCountAfter }
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div className={styles.btnWrap}>
-            <Button type="red" onClick={this.router.back}>关闭</Button>
+            <Button onClick={() => this.router.go('/homePage')}>完成</Button>
           </div>
         </div>
       </div>
@@ -200,4 +181,4 @@ class TurnDiaForPlayerOrderDetail extends BaseComponent {
   }
 }
 
-export default connect()(TurnDiaForPlayerOrderDetail);
+export default connect()(OrderForAgentTurnDiaForAgent);

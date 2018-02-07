@@ -30,8 +30,9 @@
 
 .selectTimeItemWrap {
   .flexRow();
+  height: .8rem;
   font-size: .28rem;
-  padding: .2rem;
+  padding: 0 .2rem;
   .borTop();
   color: @gray;
 }
@@ -48,31 +49,43 @@
   background: @baseColor;
   color: #fff;
 }
+.searchInputWrap {
+  display: flex;
+
+}
 
 // 选择时间
 .timeSelectItem {
-  margin-right: .5rem;
+  width: 2rem;
   .flexRow();
 }
 .searchInputWrap {
-  flex: 1;
+  width: 3rem;
 }
 // 记录
 .recordTitleWrap {
   .flexRow();
+  align-items: stretch;
   background: @baseColor;
   color: #fff;
+  height: .8rem;
 }
 .recordTitleItem {
   .borRig(#fff);
-  padding: .16rem .1rem;
-  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .1rem 0;
+  width: 1.5rem;
   font-size: .28rem;
   text-align: center;
 }
 .recordTitleItemOption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  flex: 1.6;
+  flex: 1;
 }
 .recordContent {
   height: 7.2rem;
@@ -83,9 +96,9 @@
 }
 .recordRowItem {
   padding: .05rem .1rem;
-  flex: 1;
   font-size: .28rem;
   height: .8rem;
+  width: 1.5rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -94,7 +107,7 @@
   overflow-x: auto;
 }
 .recordRowItemOption {
-  .flexRow();
+  .flexRow(center);
   .borBot();
   flex: 1.6;
   height: .8rem;
@@ -118,6 +131,7 @@
 
 .recordTimeDay {
   color: @gray;
+  white-space: nowrap;
   font-size: .24rem;
 }
 .recordTimeHour {
@@ -138,4 +152,22 @@
   .btn(#fff);
   padding: .1rem .2rem;
   margin-right: .1rem;
+}
+
+.notDataWrap {
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.colorMoney {
+  color: @orange;
+}
+.colorGreen {
+  color: @greenTip;
+}
+.colorFail {
+  color: @red;
+}
+.colorWait {
+  color: @orange;
 }
