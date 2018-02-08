@@ -160,12 +160,14 @@ class TurnDiaForPlayer extends BaseComponent {
       const systemGift = shopSelectArr[0] ? shopSelectArr[0].systemGift : '';
       const shopId = shopSelectArr[0] ? shopSelectArr[0].shopId : '';
       const masonryCount = shopSelectArr[0] ? shopSelectArr[0].masonryCount : '';
+      const payMoney = shopSelectArr[0] ? shopSelectArr[0].payMoney : '';
       this.router.go('/payToTurnDiaForPlayer', {
         playerId,
         playerName,
         serverid,
         systemGift,
         shopId,
+        payMoney,
         diamond: masonryCount,
       });
     } else {
@@ -178,6 +180,7 @@ class TurnDiaForPlayer extends BaseComponent {
         playerName,
         serverid,
         diamond,
+
       });
     }
   }
@@ -279,7 +282,7 @@ class TurnDiaForPlayer extends BaseComponent {
         <Title>{ title }</Title>
         <NavBar
           title={title}
-          onClick={this.router.back}
+          onClick={() => this.router.go('/homePage')}
         />
         <div className={styles.contentContainer}>
           <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
@@ -291,7 +294,11 @@ class TurnDiaForPlayer extends BaseComponent {
                 maxLength={8}
                 clear
                 placeholder="请输入玩家ID"
-                extra={<Button size="small" onClick={this.showChoosePlayerPicker}>选择玩家</Button>}
+                extra={<div
+                  size="small"
+                  className={styles.borderBtn}
+                  onClick={this.showChoosePlayerPicker}
+                >选择玩家</div>}
               />
               {
                 errorTip && <div className={styles.playerNotFind}>{ errorTip }</div>
@@ -336,15 +343,17 @@ class TurnDiaForPlayer extends BaseComponent {
             }
             {
               !hasPowerTurnDiaForMoney &&
-              <div className={classnames(styles.inputWrapItem, styles.inputWrapItemDiamond)}>
-                <InputItem
-                  onChange={val => this.setState({ diamond: val })}
-                  value={diamond}
-                  type="number"
-                  maxLength={8}
-                  clear
-                  placeholder="请输入转出数量"
-                />
+              <div className={classnames(styles.inputWrapItemDiamond)}>
+                <div className={styles.inputWrapItem}>
+                  <InputItem
+                    onChange={val => this.setState({ diamond: val })}
+                    value={diamond}
+                    type="number"
+                    maxLength={8}
+                    clear
+                    placeholder="请输入转出数量"
+                  />
+                </div>
                 <div className={styles.masonryCountLabel}>
                   账户钻石数量:<span className={styles.masonryCount}>{ masonry }</span>个
                 </div>
@@ -363,7 +372,7 @@ class TurnDiaForPlayer extends BaseComponent {
                 onClick={this.navigateRecord}
                 type="green"
               >
-              购钻记录
+              销钻记录
               </Button>
             </div>
           </div>

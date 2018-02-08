@@ -49,6 +49,14 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     if (this.props.history.length < 1) {
       this.router.go('/homePage');
     }
+    // 解决浏览器支付返回缓存ajax问题 Provisional headers are shown
+    const res = await this.http.webHttp.get('/spreadApi/getUserInfo');
+    if (res.isSuccess) {
+      this.props.dispatch({ type: 'agent/updateAppInfo',
+        payload: {
+          ...res.data,
+        } });
+    }
   }
   // componentWillReceiveProps(oldProps, newProps) {
   //   console.log(oldProps, newProps)
@@ -112,13 +120,12 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       this.message.info(res.info || '赠送失败');
     }
   }
-  // 支付宝支付
+  // 微信不支持支付提示
   togglePayTipPicker = () => {
-    this.message.info('微信浏览器暂不支持此支付方式');
     // 弹出picker
-    // this.setState({
-    //   payTipVisible: !this.state.payTipVisible,
-    // });
+    this.setState({
+      payTipVisible: !this.state.payTipVisible,
+    });
   }
   payToTurn =() => {
     let { selectPayType } = this.state;
@@ -133,10 +140,11 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       this.readyToExcharge();
       return;
     }
-    // if (this.helps.isWechat && payTypeSelect === ALI) {
-    //   this.togglePayTipPicker();
-    //   return;
-    // }
+    const { YLZF } = this.Enum.payType;
+    if (selectPayType !== YLZF && this.helps.isWechat) {
+      this.togglePayTipPicker();
+      return;
+    }
     this.goToPay(selectPayType);
   }
   goToPay = async (selectPayType) => {
@@ -169,8 +177,8 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     const { payPickerVisible, selectPayType: sPayType, isAutoSave, payTipVisible } = this.state;
     const { inviteCode, masonry, userName } = this.props;
     const payItemArr = this.payItemArr();
-    const { diamond, playerName, playerId, systemGift } = this.router.getQuery();
-    const price = this.helps.parseFloatMoney(diamond * 10);
+    const { diamond, playerName, playerId, systemGift, payMoney } = this.router.getQuery();
+    const price = this.helps.parseFloatMoney(payMoney);
     const { ALI } = this.Enum.payType;
     const selectPayType = typeof sPayType !== 'number' ? payItemArr[0] : sPayType;
     const selectPayTypeLabel = this.Enum.payTypeLabel[selectPayType];
@@ -261,12 +269,11 @@ class PayToTurnDiaForPlayer extends BaseComponent {
           </div>
         </div>
         {
-          this.helps.isWechat && selectPayType === ALI &&
           <SlideUpModal
             visible={payTipVisible}
             onClose={this.togglePayTipPicker}
           >
-            <div>
+            <div onClick={this.togglePayTipPicker}>
               {
                 this.helps.system === 'IOS'
                 ? <IconImg className={styles.payWechatTipImg} src={imgSource.iosTip} />
@@ -296,7 +303,14 @@ class PayToTurnDiaForPlayer extends BaseComponent {
                     <div className={styles.payInfoWrap}>
                       <div className={styles.payItem}>
                         <PayIcon payType={payType} />
-                        <span>{ this.Enum.payTypeLabel[payType] }</span>
+                        <span>
+                          { this.Enum.payTypeLabel[payType] }
+                          {
+                            this.helps.isWechat
+                            && (payType === this.Enum.payType.WECHAT || payType === this.Enum.payType.ALI)
+                            && (<span className={styles.colorGray}>(微信浏览器暂不支持)</span>)
+                          }
+                        </span>
                       </div>
                       <div>
                         {/* {

@@ -109,7 +109,13 @@
     color: red;
 }
 :global(.am-action-sheet-share-list-item) {
-    width: 2.2rem;
+    width: 2.5rem;
+    margin-right: 0;
+}
+:global(.am-action-sheet-share-list-item-icon) {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: .3rem;
 }
 :global(.am-action-sheet-message) {
     margin: 0;
@@ -119,9 +125,21 @@
     font-size: .34rem;
 }
 :global(.am-action-sheet-share-list) {
-    padding-left: .15rem;
+    padding-left: 0rem;
 }
 :global(.am-button-primary.am-button-disabled) {
     color: #fefefe;
     background-color: #d3d6db;
+}
+
+/* action sheet message */
+:global(.am-action-sheet-message) {
+    color: #fff;
+    background-color: #4889db;
+}
+:global(.am-action-sheet-share-cancel-button) {
+    display: none;
+}
+:global(.am-modal-body) {
+    color: #000;
 }

@@ -6,18 +6,17 @@
     .borBot();
 }
 .playerName {
-    padding: .15rem 0rem .15rem 1.8rem;
-    font-size: .26rem;
+    padding: .2rem 0.3rem;
     .borTop();
 }
 
 .playerNotFind {
-    padding: .15rem 0rem .15rem 1.8rem;
-    font-size: .26rem;
-    color: red;
-    .borTop();
+  padding: .2rem 0.3rem;
+  color: red;
+  .borTop();
 }
 .masonryCountLabel {
+  color: @gray;
   padding: .1rem .3rem .2rem;
 }
 .inputWrapItemDiamond {
@@ -179,7 +178,7 @@
   align-items: center;
   box-sizing: border-box;
   border-radius: 5px;
-  background: #fff;
+  background: @bgColor;
   margin-right: .1rem;
   padding: .2rem;
   .textHide();
@@ -209,4 +208,12 @@
 }
 .systemGift {
   color: @baseColor;
+}
+
+.borderBtn {
+  .border(@baseColor);
+  color: @baseColor;
+  font-size: .24rem;
+  padding: .15rem;
+  border-radius: .1rem;
 }

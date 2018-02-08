@@ -79,6 +79,14 @@ class OrderForAgentTurnDiaForPlayer extends BaseComponent {
       this.message.info('订单号复制失败，当前浏览器不支持复制');
     }
   }
+  goBack = () => {
+    const {
+      serverid,
+    } = this.router.getQuery();
+    this.router.go('/turnDiaForPlayer', {
+      serverid,
+    });
+  }
   render() {
     const {
       orderId,
@@ -216,7 +224,7 @@ class OrderForAgentTurnDiaForPlayer extends BaseComponent {
             </div>
           </div>
           <div className={styles.btnWrap}>
-            <Button onClick={() => this.router.go('/homePage')}>完成</Button>
+            <Button type="red" onClick={this.goBack}>关闭</Button>
           </div>
         </div>
       </div>

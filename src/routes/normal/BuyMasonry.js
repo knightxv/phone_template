@@ -4,7 +4,7 @@ import { window } from 'global';
 
 import BaseComponent from '@/core/BaseComponent';
 import SlideUpModal from '@/components/Modal/SlideUpModal';
-import { Button, Icon, NavBar, Modal } from '@/components/lazyComponent/antd';
+import { Button, Icon, NavBar } from '@/components/lazyComponent/antd';
 import { Title, IconImg } from '@/components/styleComponent';
 import PayIcon from '@/components/PayIcon';
 import styles from './BuyMasonry.less';
@@ -53,6 +53,14 @@ class BuyMasonry extends BaseComponent {
     if (this.props.history.length < 1) {
       this.router.go('/homePage');
       return;
+    }
+    // 解决浏览器支付返回缓存ajax问题 Provisional headers are shown
+    const res = await this.http.webHttp.get('/spreadApi/getUserInfo');
+    if (res.isSuccess) {
+      this.props.dispatch({ type: 'agent/updateAppInfo',
+        payload: {
+          ...res.data,
+        } });
     }
     const payItemArr = this.payItemArr();
     this.setState({
@@ -113,23 +121,18 @@ class BuyMasonry extends BaseComponent {
     if (typeof selectPayType === 'undefined') {
       return;
     }
-    const { WECHAT, ALI, BALANCE } = this.Enum.payType;
-    // if (this.helps.isWechat && payTypeSelect === ALI) {
-    //   // this.message.info('请用手机浏览器打开');
-    //   this.togglePayTipPicker();
-    //   return;
-    // }
+    const { WECHAT, ALI, BALANCE, YLZF } = this.Enum.payType;
     if (selectPayType === BALANCE) {
       this.readyToExcharge(shopId);
       return;
     }
-    if (this.helps.isWechat) {
-      this.message.info('微信浏览器暂不支持此支付方式，请使用其他浏览器进行登录');
+    if (selectPayType !== YLZF && this.helps.isWechat) {
+      this.togglePayTipPicker();
       return;
     }
     this.goToPay(selectPayType, shopId);
   }
-  // 支付宝支付
+  // 微信不支持支付提示
   togglePayTipPicker = () => {
     // 弹出picker
     this.setState({
@@ -183,18 +186,17 @@ class BuyMasonry extends BaseComponent {
           </div>
         </div>
         {
-          this.helps.isWechat && selectPayType === ALI &&
           <SlideUpModal
             visible={payTipVisible}
             onClose={this.togglePayTipPicker}
           >
-          <div>
-            {
-              this.helps.system === 'IOS' ?
-              <IconImg className={styles.payWechatTipImg} src={imgSource.iosTip} />
-              : <IconImg className={styles.payWechatTipImg} src={imgSource.androidTip} />
-            }
-          </div>
+            <div onClick={this.togglePayTipPicker}>
+              {
+                this.helps.system === 'IOS' ?
+                <IconImg className={styles.payWechatTipImg} src={imgSource.iosTip} />
+                : <IconImg className={styles.payWechatTipImg} src={imgSource.androidTip} />
+              }
+            </div>
           </SlideUpModal>
         }
         <SlideUpModal
@@ -218,7 +220,16 @@ class BuyMasonry extends BaseComponent {
                     <div className={styles.payInfoWrap}>
                       <div className={styles.payItem}>
                         <PayIcon payType={payType} />
-                        <span>{this.Enum.payTypeLabel[payType]}</span>
+                        <span>
+                          {
+                            this.Enum.payTypeLabel[payType]
+                          }
+                          {
+                            this.helps.isWechat
+                            && (payType === this.Enum.payType.WECHAT || payType === this.Enum.payType.ALI)
+                            && (<span className={styles.colorGray}>(微信浏览器暂不支持)</span>)
+                          }
+                        </span>
                       </div>
                       <div>
                         {

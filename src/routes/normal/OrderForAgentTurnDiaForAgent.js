@@ -173,7 +173,7 @@ class OrderForAgentTurnDiaForAgent extends BaseComponent {
             </div>
           </div>
           <div className={styles.btnWrap}>
-            <Button onClick={() => this.router.go('/homePage')}>完成</Button>
+            <Button onClick={() => this.router.go('/turnDiaForAgent')}>完成</Button>
           </div>
         </div>
       </div>

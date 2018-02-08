@@ -141,7 +141,7 @@ class OrderForAgentBuyDia extends BaseComponent {
             </div>
           </div>
           <div className={styles.btnWrap}>
-            <Button type="red" onClick={() => this.router.go('/homePage')}>关闭</Button>
+            <Button type="red" onClick={() => this.router.go('/agencyPay')}>关闭</Button>
           </div>
         </div>
       </div>

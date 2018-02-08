@@ -7,9 +7,10 @@ import querystring from 'querystring';
 // import PropTypes from 'prop-types';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import NoticeBar from '@/components/antdComponent/NoticeBar';
-import { Button, Icon, Modal, NavBar } from '@/components/lazyComponent/antd';
+import { Button, Icon, NavBar } from '@/components/lazyComponent/antd';
 // import {} from ''
 import CloseModal from '@/components/Modal/CloseModal';
+import SlideUpModal from '@/components/Modal/SlideUpModal';
 import Avatar from '@/components/Avatar';
 import { Title, FlexRow, IconImg } from '@/components/styleComponent';
 import styles from './HomePage.less';
@@ -448,13 +449,13 @@ class HomePage extends BaseComponent {
               <Icon type="right" />
             </div>
           }
-          {/* 给代理充钻 */}
+          {/* 给代理转钻 */}
           {
             havePowerToRechargeToAgent &&
             <div className={styles.itemModule} onClick={() => this.navigate('/turnDiaForAgent')}>
               <FlexRow className={styles.navigateTitleWrap}>
                 <IconImg className={styles.titleIconImg} src={IconSource.turnDia_agent} />
-                <span>给代理充钻</span>
+                <span>给代理转钻</span>
               </FlexRow>
               <Icon type="right" />
             </div>
@@ -536,34 +537,28 @@ class HomePage extends BaseComponent {
             <Button className={styles.optionEditBtn} onClick={this.editPas}>修改密码</Button>
           </div>
           <div className={styles.btnWrap}>
-            <Button type="danger" className={styles.optionQuitBtn} onClick={this.logout}>安全退出</Button>
+            <Button type="red" className={styles.optionQuitBtn} onClick={this.logout}>安全退出</Button>
           </div>
         </div>
       </div>
       {/* 分享代理 */}
-      <Modal
-        transparent
-        maskClosable
-        className={styles.payModal}
+      <SlideUpModal
         visible={shareAgentVisible}
         onClose={this.toggleShareAgentImg}
       >
-        <div onClick={this.toggleShareAgentImg} className={styles.sharePicker}>
+        <div className={styles.sharePicker} onClick={this.toggleShareAgentImg}>
           <img className={styles.shareImg} src={IconSource.shareAgent} />
         </div>
-      </Modal>
+      </SlideUpModal>
       {/* 分享玩家 */}
-      <Modal
-        transparent
-        maskClosable
-        className={styles.payModal}
+      <SlideUpModal
         visible={sharePlayerVisible}
         onClose={this.toggleSharePlayertImg}
       >
-        <div onClick={this.toggleSharePlayertImg} className={styles.sharePicker}>
+        <div className={styles.sharePicker} onClick={this.toggleShareAgentImg}>
           <img className={styles.shareImg} src={IconSource.sharePlayer} />
         </div>
-      </Modal>
+      </SlideUpModal>
       {/* 公告 */}
       <CloseModal
         className={styles.payModal}

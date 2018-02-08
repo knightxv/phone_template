@@ -54,7 +54,7 @@ export const payTypeLabel = {
   [payType.IOS_PAY]: '苹果支付',
   [payType.MANAGE]: '和客服购买',
   [payType.BALANCE]: '余额购买',
-  [payType.returnDirection]: '直接转卡',
+  [payType.returnDirection]: '直接转钻',
 };
 
 export const resolveStatus = {

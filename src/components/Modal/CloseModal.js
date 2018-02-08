@@ -10,6 +10,7 @@ const ContentContainer = styled.div`
   background: #f5f5f5;
   position: relative;
   overflow: hidden;
+  border-radius: .05rem;
 `;
 const ContentWrap = styled.div`
   flex: 1;

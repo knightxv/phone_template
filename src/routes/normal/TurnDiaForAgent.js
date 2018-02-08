@@ -174,10 +174,10 @@ class TurnDiaForAgent extends BaseComponent {
 
     return (
       <div>
-        <Title>给代理充钻</Title>
+        <Title>给代理转钻</Title>
         <NavBar
-          title="给代理充钻"
-          onClick={this.router.back}
+          title="给代理转钻"
+          onClick={() => this.router.go('/homePage')}
         />
         <div className={styles.contentContainer}>
           <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
@@ -188,7 +188,11 @@ class TurnDiaForAgent extends BaseComponent {
                 type="number"
                 clear
                 placeholder="请输入代理ID"
-                extra={<Button size="small" onClick={this.showChoosePlayerPicker}>选择代理</Button>}
+                extra={<div
+                  className={styles.borderBtn}
+                  size="small"
+                  onClick={this.showChoosePlayerPicker}
+                >选择代理</div>}
               />
               {
                 agentNotFind && <div className={styles.playerNotFind}>代理不存在</div>
@@ -224,7 +228,7 @@ class TurnDiaForAgent extends BaseComponent {
                 onClick={() => this.router.go('/turnDiaForAgentRecord')}
                 type="green"
               >
-              购钻记录
+              销钻记录
               </Button>
             </div>
           </div>

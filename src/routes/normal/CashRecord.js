@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 // import { window } from 'global';
+import moment from 'moment';
 import classnames from 'classnames';
 import styles from './ComRecordTable.less';
 
@@ -103,7 +104,7 @@ class BuyMasonryRecord extends BaseComponent {
     }
   }
   showdeleteOrderPicker = (orderId) => {
-    Modal.alert('购钻记录', '是否删除订单', [
+    Modal.alert('', '删除之后无法恢复这笔订单，您确定要删除这条订单吗？', [
       { text: '取消' },
       {
         text: '确定',
@@ -113,7 +114,6 @@ class BuyMasonryRecord extends BaseComponent {
   }
   orderDetail = (orderInfo) => {
     const { createTime, orderid, resultTime, result, cardNumber, cardname, cashCount } = orderInfo;
-    console.log(orderInfo)
     this.router.go('/cashOrderDetail', {
       orderid,
       createTime,
@@ -157,9 +157,17 @@ class BuyMasonryRecord extends BaseComponent {
         return data.createTime >= startTimeStamp && data.createTime <= endTimeStamp;
       });
     } else if (selectTimeMode === 'custom') {
-      if (!startTime || !endTime) {
-        resultRecord = record;
-      } else {
+      if (startTime && !endTime) {
+        const startTimeStamp = this.helps.getDayTimeStamp(startTime.valueOf());
+        resultRecord = record.filter((data) => {
+          return data.createTime >= startTimeStamp;
+        });
+      } else if (endTime && !startTime) {
+        const endTimeStamp = this.helps.getDayTimeStamp(endTime.valueOf()) + 86400000;
+        resultRecord = record.filter((data) => {
+          return data.createTime <= endTimeStamp;
+        });
+      } else if (startTime && endTime) {
         const startTimeStamp = this.helps.getDayTimeStamp(startTime.valueOf());
         const endTimeStamp = this.helps.getDayTimeStamp(endTime.valueOf()) + 86400000;
         resultRecord = record.filter((data) => {
@@ -168,6 +176,8 @@ class BuyMasonryRecord extends BaseComponent {
           }
           return data.createTime >= startTimeStamp && data.createTime <= endTimeStamp;
         });
+      } else {
+        resultRecord = record;
       }
     }
     // 申请金额
@@ -245,7 +255,8 @@ class BuyMasonryRecord extends BaseComponent {
         <DatePicker
           mode="date"
           title="选择开始日期"
-          value={startTime}
+          value={startTime || endTime || moment()}
+          maxDate={endTime || moment()}
           onChange={this.selectStartTime}
         >
           <WrapDiv className={styles.timeSelectItem}>
@@ -256,8 +267,9 @@ class BuyMasonryRecord extends BaseComponent {
         <DatePicker
           mode="date"
           title="选择结束日期"
-          value={endTime}
+          value={endTime || moment()}
           minDate={startTime}
+          maxDate={moment()}
           onChange={this.selectEndTime}
         >
           <WrapDiv className={styles.timeSelectItem}>
@@ -319,8 +331,14 @@ class BuyMasonryRecord extends BaseComponent {
         <div className={styles.recordFooter}>
           <div>共{ resultRecord.length }条记录</div>
           <div className={styles.pageControllerWrap}>
-            <div className={styles.pageController} onClick={this.beforePage}>上一页</div>
-            <div className={styles.pageController} onClick={() => this.nextPage(resultRecord.length)}>下一页</div>
+            {
+              page > 0 &&
+              <div className={styles.pageController} onClick={this.beforePage}>上一页</div>
+            }
+            {
+              resultRecord.length > (page * size + size) &&
+              <div className={styles.pageController} onClick={() => this.nextPage(resultRecord.length)}>下一页</div>
+            }
           </div>
         </div>
       </div>

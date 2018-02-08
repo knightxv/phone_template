@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 
+import moment from 'moment';
 import BaseComponent from '@/core/BaseComponent';
 import CloseModal from '@/components/Modal/CloseModal';
 import { Button, DatePicker, Icon, NavBar } from '@/components/lazyComponent/antd';
@@ -22,7 +23,7 @@ class StepRebate extends BaseComponent {
       rebateInfo: 0, // 返利信息
       underAgentPurchase: 0, // 旗下代理总购卡
       underAgentRebate: [], // 下级代理返利信息
-      queryTime: null,
+      queryTime: moment(),
       page: 0,
       rebateStatuMap: [],
       rulePickerVisible: false,
@@ -129,6 +130,7 @@ class StepRebate extends BaseComponent {
               mode="month"
               title="选择日期"
               value={queryTime}
+              maxDate={moment()}
               onChange={this.selectDateTime}
             >
               <WrapDiv>
@@ -165,7 +167,7 @@ class StepRebate extends BaseComponent {
               }
             </div>
             <div className={styles.rebateInfoItem}>
-              <div className={styles.rebateMoneyTip}>{ myPurchaseLabel }</div>
+              <div className={styles.rebateMoneyTip}>￥{ myPurchaseLabel }</div>
               <div className={styles.rebateTitleTip}>个人购卡</div>
             </div>
             <div className={styles.rebateInfoItem}>
@@ -218,8 +220,14 @@ class StepRebate extends BaseComponent {
             <div className={styles.rebatePageWrap}>
               <div className={styles.rabatePageCount}>共{ underAgentRebate.length }条</div>
               <div className={styles.pageBtnWrap}>
-                <Button className={styles.pageBtn} size="small" onClick={this.beforePage}>上一页</Button>
-                <Button className={styles.pageBtn} size="small" onClick={this.nextPage}>下一页</Button>
+                {
+                  this.state.page > 0 &&
+                  <Button className={styles.pageBtn} size="small" onClick={this.beforePage}>上一页</Button>
+                }
+                {
+                  (underAgentRebate.length > page * size + size) &&
+                  <Button className={styles.pageBtn} size="small" onClick={this.nextPage}>下一页</Button>
+                }
               </div>
             </div>
           </div>
@@ -260,9 +268,9 @@ class StepRebate extends BaseComponent {
             <div className={classnames(styles.rebateStatu, styles.rebateImporLabel)}>
             ▶ 所有数据每10分钟刷新一次，每月月底统计最终返利数值，并将返利金额添加到个人账号，可从返利提现中进行提取
             </div>
-            <div className={styles.rebateStatu}>
+            {/* <div className={styles.rebateStatu}>
             ▶ 若有任何不明白，请咨询官方客服，或关注微信公众号【阿当游戏】
-            </div>
+            </div> */}
           </div>
         </CloseModal>
       </div>

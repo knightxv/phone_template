@@ -50,7 +50,7 @@ const browserTypeEnum = {
   // 微信支付
   WECHAT_ANDROID_PHONE: 0, // 0 安卓手机浏览器---
   WECHAT_IOS_PHONE: 1, // 1 IOS手机浏览器---
-  WECHAT_PC_WINDOS: 2, // 微信PC----
+  WECHAT_PC: 2, // 微信PC----
   WECHAT_IOS_WECHAT: 3, // 3 IOSWeChat浏览器---
   WECHAT_ANDROID_WECHAT: 4, // 4 安卓WeChat浏览器---
 	// 支付宝支付

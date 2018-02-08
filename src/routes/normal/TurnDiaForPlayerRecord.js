@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 // import { window } from 'global';
 import classnames from 'classnames';
-
+import moment from 'moment';
 import BaseComponent from '@/core/BaseComponent';
 import Modal from '@/components/antdComponent/Modal';
 import SearchInput from '@/components/SearchInput';
@@ -100,7 +100,7 @@ class TurnDiaForPlayerRecord extends BaseComponent {
     }
   }
   showdeleteOrderPicker = (orderId) => {
-    Modal.alert('购钻记录', '是否删除订单', [
+    Modal.alert('', '删除之后无法恢复这笔订单，您确定要删除这条订单吗？', [
       { text: '取消' },
       {
         text: '确定',
@@ -148,9 +148,17 @@ class TurnDiaForPlayerRecord extends BaseComponent {
         return data.chargeTime >= startTimeStamp && data.chargeTime <= endTimeStamp;
       });
     } else if (selectTimeMode === 'custom') {
-      if (!startTime || !endTime) {
-        resultRecord = record;
-      } else {
+      if (startTime && !endTime) {
+        const startTimeStamp = this.helps.getDayTimeStamp(startTime.valueOf());
+        resultRecord = record.filter((data) => {
+          return data.chargeTime >= startTimeStamp;
+        });
+      } else if (endTime && !startTime) {
+        const endTimeStamp = this.helps.getDayTimeStamp(endTime.valueOf()) + 86400000;
+        resultRecord = record.filter((data) => {
+          return data.chargeTime <= endTimeStamp;
+        });
+      } else if (startTime && endTime) {
         const startTimeStamp = this.helps.getDayTimeStamp(startTime.valueOf());
         const endTimeStamp = this.helps.getDayTimeStamp(endTime.valueOf()) + 86400000;
         resultRecord = record.filter((data) => {
@@ -159,6 +167,8 @@ class TurnDiaForPlayerRecord extends BaseComponent {
           }
           return data.chargeTime >= startTimeStamp && data.chargeTime <= endTimeStamp;
         });
+      } else {
+        resultRecord = record;
       }
     }
     // 玩家id筛选
@@ -191,9 +201,9 @@ class TurnDiaForPlayerRecord extends BaseComponent {
     // 分页显示
     const showRecord = resultRecord.slice(page * size, (page + 1) * size);
     return (<div className={styles.container}>
-      <Title>玩家购钻记录</Title>
+      <Title>给玩家充钻记录</Title>
       <NavBar
-        title="玩家购钻记录"
+        title="给玩家充钻记录"
         onClick={this.router.back}
       />
       <div className={styles.resultTitle}>统计结果</div>
@@ -229,7 +239,8 @@ class TurnDiaForPlayerRecord extends BaseComponent {
         <DatePicker
           mode="date"
           title="选择开始日期"
-          value={startTime}
+          value={startTime || endTime || moment()}
+          maxDate={endTime || moment()}
           onChange={this.selectStartTime}
         >
           <WrapDiv className={styles.timeSelectItem}>
@@ -240,8 +251,9 @@ class TurnDiaForPlayerRecord extends BaseComponent {
         <DatePicker
           mode="date"
           title="选择结束日期"
-          value={endTime}
+          value={endTime || moment()}
           minDate={startTime}
+          maxDate={moment()}
           onChange={this.selectEndTime}
         >
           <WrapDiv className={styles.timeSelectItem}>
@@ -278,10 +290,10 @@ class TurnDiaForPlayerRecord extends BaseComponent {
                     <div className={styles.recordTimeHour}>{ dateHourLabel }</div>
                   </div>
                   <div className={classnames(styles.recordRowItem)}>
-                    { playerId }
+                    <span className={styles.colorBase}>{ playerId }</span>
                   </div>
                   <div className={classnames(styles.recordRowItem)}>
-                    { chargeCount }
+                    <span className={styles.colorGray}>{ chargeCount }</span>
                   </div>
                   <div className={styles.recordRowItemOption}>
                     <div className={styles.deleteBtn} onClick={() => this.showdeleteOrderPicker(orderId)}>删除</div>
@@ -301,8 +313,14 @@ class TurnDiaForPlayerRecord extends BaseComponent {
         <div className={styles.recordFooter}>
           <div>共{ resultRecord.length }条记录</div>
           <div className={styles.pageControllerWrap}>
-            <div className={styles.pageController} onClick={this.beforePage}>上一页</div>
-            <div className={styles.pageController} onClick={() => this.nextPage(resultRecord.length)}>下一页</div>
+            {
+              page > 0 &&
+              <div className={styles.pageController} onClick={this.beforePage}>上一页</div>
+            }
+            {
+              resultRecord.length > (page * size + size) &&
+              <div className={styles.pageController} onClick={() => this.nextPage(resultRecord.length)}>下一页</div>
+            }
           </div>
         </div>
       </div>

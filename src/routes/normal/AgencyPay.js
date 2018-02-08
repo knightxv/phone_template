@@ -1,14 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
-import ScrollTop from '@/components/ScrollTop';
 
 import BaseComponent from '@/core/BaseComponent';
 import classnames from 'classnames';
-import { StickyContainer, Sticky } from 'react-sticky';
 import LongPress from '@/components/LongPress';
 import { Button, Icon, NavBar } from '@/components/lazyComponent/antd';
-import { ScrollListView } from '@/components/lazyComponent/ScrollListView';
-import { Title, WhiteSpace } from '@/components/styleComponent';
+import { Title } from '@/components/styleComponent';
 import styles from './AgencyPay.less';
 
 // const goodsIds = [1, 2, 3, 4, 5, 6];
@@ -115,7 +112,7 @@ class AgencyPay extends BaseComponent {
         <Title>购买钻石</Title>
         <NavBar
           title="购买钻石"
-          onClick={this.router.back}
+          onClick={() => this.router.go('/homePage')}
         />
         <div className={styles.contentContainer}>
           <div>

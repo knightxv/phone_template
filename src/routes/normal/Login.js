@@ -22,7 +22,72 @@ class Login extends BaseComponent {
       loginID,
       password,
     };
+    // this.test();
   }
+  // test = () => {
+  //   function nQueen(n) {
+  //     const isValidQueen = (row, col, subList) => {
+  //       return !subList.some((item) => {
+  //         return item[1] === col || Math.abs(col - row) === Math.abs(item[1] - item[0]);
+  //       });
+  //     };
+  //     const rowHasValid = (currentRow, subList) => {
+  //       let isRowValid = false;
+  //       for (let i = 0; i < n; i++) {
+  //         if (isValidQueen(currentRow, i, subList)) {
+  //           isRowValid = true;
+  //           return isRowValid;
+  //         }
+  //       }
+  //       return isRowValid;
+  //     };
+  //     const backTrade = (result, subList, putFirRowCol, col) => {
+  //       if (col >= n) {
+  //         result.push(subList);
+  //         return;
+  //       }
+  //       for (let i = 0; i < n - 1; i++) { // current row
+  //         if (rowHasValid(i, subList)) {
+
+  //         } else {
+  //           return;
+  //         }
+  //       }
+  //     };
+  //     const firstColBackTrade = (result, putFirRowCol) => {
+  //       if (putFirRowCol >= n) {
+  //         return;
+  //       }
+  //       const resultCol = []; // 把第一个放在某列的结果放置resultCol
+  //       backTrade(resultCol, [], putFirRowCol, 1);
+  //       result.concat(resultCol);
+  //       firstColBackTrade(result, putFirRowCol + 1);
+  //     };
+  //     const res = [];
+  //     // 把Q放在列，并从行开始尝试 PutFirRowCol(在一行的哪一列放置Q)
+  //     firstColBackTrade(res, 0);
+  //     return res;
+  //   }
+  //   console.log(nQueen(4));
+  //   // function kuohao(n) {
+  //   //   const backTrade = (result, subList, left, right) => {
+  //   //     if (left === 0 && right === 0) {
+  //   //       result.push(subList);
+  //   //       return;
+  //   //     }
+  //   //     if (left > 0) {
+  //   //       backTrade(result, `${subList}(`, left - 1, right);
+  //   //     }
+  //   //     if (right > left) {
+  //   //       backTrade(result, `${subList})`, left, right - 1);
+  //   //     }
+  //   //   };
+  //   //   const result = [];
+  //   //   backTrade(result, '', n, n);
+  //   //   return result;
+  //   // }
+  //   // console.log(kuohao(3));
+  // }
   // 登录
   login = async () => {
     const { loginID, password } = this.state;
@@ -88,7 +153,7 @@ class Login extends BaseComponent {
       <div className={styles.container}>
         <Title>代理登录</Title>
         <Helmet>
-          <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
+          <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js" />
         </Helmet>
         <div className={styles.contentContainer}>
           <div>
@@ -131,24 +196,24 @@ class Login extends BaseComponent {
                 >申请代理</span>
               </div>
             </div>
+            {
+              (this.helps.system() === 'PC' || this.helps.isWeixinBrowser()) &&
+              <div className={styles.wechatLoginWrap}>
+                <div className={styles.loginLineWrap}>
+                  <div className={styles.line} />
+                  <div className={styles.loginTip}>其他登入方式</div>
+                  <div className={styles.line} />
+                </div>
+                <div
+                  className={styles.wechatLogin}
+                  onClick={this.wechatLogin}
+                >
+                  <IconImg className={styles.wxLoginIcon} src={wxIcon} />
+                  <span className={styles.wechatLoginLabel}>微信登录</span>
+                </div>
+              </div>
+            }
           </div>
-          {
-            (this.helps.system() === 'PC' || this.helps.isWeixinBrowser()) &&
-            <div className={styles.wechatLoginWrap}>
-              <div className={styles.loginLineWrap}>
-                <div className={styles.line}></div>
-                <div className={styles.loginTip}>其他登入方式</div>
-                <div className={styles.line}></div>
-              </div>
-              <div
-                className={styles.wechatLogin}
-                onClick={this.wechatLogin}
-              >
-                <IconImg className={styles.wxLoginIcon} src={wxIcon} />
-                <span className={styles.wechatLoginLabel}>微信登录</span>
-              </div>
-            </div>
-          }
         </div>
       </div>
     );
