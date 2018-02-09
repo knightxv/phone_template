@@ -39,7 +39,7 @@ class TurnDiaForAgentRecord extends BaseComponent {
       {
         timeLabel: '今天',
         startTimeStamp: toDayFirstStamp,
-        endTimeStamp: new Date().getTime(),
+        endTimeStamp: toDayFirstStamp + 86400000,
       },
       {
         timeLabel: '昨天',
@@ -49,7 +49,7 @@ class TurnDiaForAgentRecord extends BaseComponent {
       {
         timeLabel: '本月',
         startTimeStamp: this.helps.getMonthTimeStamp(),
-        endTimeStamp: new Date().getTime(),
+        endTimeStamp: toDayFirstStamp + 86400000,
       },
       {
         timeLabel: '全部',
