@@ -246,6 +246,10 @@ function RouterConfig({ history, app }) {
       component: () => import('./routes/normal/WechatBindPhone'),
     },
     {
+      path: '/agentNotice',
+      component: () => import('./routes/normal/AgentNotice'),
+    },
+    {
       path: '/inviteAgentMiddle',
       component: () => import('./routes/normal/InviteAgentMiddle'),
     },
