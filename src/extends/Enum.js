@@ -75,6 +75,7 @@ export const htmlTextType = {
   agreen_page: 4, // 推广协议
   cashTip: 6, // 提现提示
   myUnderAgentNotice: 7, // 我的下级代理的公告
+  agentNotice: 8, // 代理须知
 };
 
 export default exports;

@@ -140,7 +140,7 @@ class Register extends BaseComponent {
                 clear
                 value={pCode}
                 onChange={value => this.setState({ pCode: value })}
-                placeholder="请输入代理的邀请码(邀请码绑定后无法更改)"
+                placeholder="请输入代理的邀请码(绑定后无法更改)"
               />
             </div>
             <div className={styles.btnWrap}>
