@@ -6,7 +6,7 @@ import { remoteUrl, httpDebug } from '@/config/index';
 const webHttpConfig = {
   // getConfigUrl: '/config',
   // httpConfigKey: 'JavaWebPublicServerUrl',
-  isDebug: httpDebug,
+  isDebug: true,
   getFetchUrl() {
     return remoteUrl;
   },

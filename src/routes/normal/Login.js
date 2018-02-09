@@ -41,8 +41,18 @@ class Login extends BaseComponent {
     // 保存账号密码(不存localstorage,微信会自动清除)
     this.router.go('/homePage');
   }
-  navigateToRegister = () => {
+  navigateToRegister = async () => {
     const { pCode } = this.router.getQuery();
+    const { agentNotice } = this.Enum.htmlTextType;
+    const res = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', {
+      type: agentNotice,
+    });
+    if (res.isSuccess && res.data.htmlText) {
+      this.router.go('/agentNotice', {
+        pCode: pCode || '',
+        redirect: '/register',
+      });
+    }
     if (pCode) {
       this.router.go('/register', {
         pCode,
