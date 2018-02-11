@@ -21,10 +21,12 @@ class BindFail extends BaseComponent {
       <div className={styles.container}>
         <Title>绑定详情</Title>
         <div className={styles.contentContainer}>
-          <Icon type="cross-circle-o" color="red" size="lg" />
-          <div className={styles.failLabel}>账号绑定失败</div>
-          <div className={styles.failTip}>账号已创建后暂不支持重新绑定邀请码</div>
-          <Button onClick={() => this.router.go('/homePage')}>直接登录</Button>
+          <div className={styles.contentWrap}>
+            <Icon type="cross-circle-o" color="red" size="lg" />
+            <div className={styles.failLabel}>账号绑定失败</div>
+            <div className={styles.failTip}>账号已创建后暂不支持重新绑定邀请码</div>
+            <Button onClick={() => this.router.go('/homePage')}>直接登录</Button>
+          </div>
         </div>
       </div>
     );
