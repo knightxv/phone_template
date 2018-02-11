@@ -22,4 +22,11 @@ routes为路由文件。添加路由，定义在routes文件夹底下路由然后由router.js引用。
 vendor.js提取一些公用的文件，应用的文件会被打包在common.js文件和common.css上。
 
 
+*如果遇到微信浏览器缓存html文件的情况（可以试试在html标签加上manifest="IGNORE.manifest",试试可不可以解决）
+根据HTML5 W3C规范，解析器下载manifest header 404/410时，缓存即失效
+（见 http://www.w3.org/TR/html5/browsers.html#downloading-or-updating-an-application-cache "5.7.4 Downloading or updating an application cache > 5.If fetching the manifest fails due to a 404 or 410"）
+该方法对其它有自己缓存机制和缓存规则的应用也有奇效。
+
+
+
 
