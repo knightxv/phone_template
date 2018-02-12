@@ -555,7 +555,7 @@ class HomePage extends BaseComponent {
         visible={sharePlayerVisible}
         onClose={this.toggleSharePlayertImg}
       >
-        <div className={styles.sharePicker} onClick={this.toggleShareAgentImg}>
+        <div className={styles.sharePicker} onClick={this.toggleSharePlayertImg}>
           <img className={styles.shareImg} src={IconSource.sharePlayer} />
         </div>
       </SlideUpModal>
