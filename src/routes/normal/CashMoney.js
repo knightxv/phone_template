@@ -11,7 +11,7 @@ class AgencyExtractMoney extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
-      cashTip: '注:每天最多提现1次,工作日24小时内到账,节假日可能会延期,提现异常请咨询客服,微信号:xxxxx',
+      cashTip: '',
       cashMoney: '', // 提现金额
       bankCardName: '',
       cardNumber: '',
