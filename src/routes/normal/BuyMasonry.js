@@ -100,6 +100,15 @@ class BuyMasonry extends BaseComponent {
       goodsId: shopId,
     };
     const res = await this.http.webHttp.get('/spreadApi/balanceRecharge', params);
+    // 手动update
+    const updateRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
+    if (updateRes.isSuccess) {
+      this.props.dispatch({ type: 'agent/updateAppInfo',
+        payload: {
+          ...updateRes.data,
+        },
+      });
+    }
     if (res.isSuccess) {
       const { orderId } = res.data;
       // this.message.info(res.info || '充值成功');

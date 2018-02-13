@@ -101,6 +101,15 @@ class PayToTurnDiaForPlayer extends BaseComponent {
       isSaveCommon: isAutoSave,
     };
     const res = await this.http.webHttp.get('/spreadApi/giveDiamond', params);
+    // 手动update
+    const updateRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
+    if (updateRes.isSuccess) {
+      this.props.dispatch({ type: 'agent/updateAppInfo',
+        payload: {
+          ...updateRes.data,
+        },
+      });
+    }
     if (res.isSuccess) {
       const { orderId } = res.data;
       this.router.go('/orderForAgentTurnDiaForPlayer', {
@@ -119,6 +128,7 @@ class PayToTurnDiaForPlayer extends BaseComponent {
     } else {
       this.message.info(res.info || '赠送失败');
     }
+
   }
   // 微信不支持支付提示
   togglePayTipPicker = () => {

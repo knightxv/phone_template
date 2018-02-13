@@ -33,6 +33,15 @@ class PayToTurnDiaForAgent extends BaseComponent {
       diamond,
       isSaveCommon: isAutoSave,
     });
+    // 手动update
+    const updateRes = await this.http.webHttp.get('/spreadApi/getUserInfo');
+    if (updateRes.isSuccess) {
+      this.props.dispatch({ type: 'agent/updateAppInfo',
+        payload: {
+          ...updateRes.data,
+        },
+      });
+    }
     if (res.isSuccess) {
       const { orderId } = res.data;
       this.router.go('/orderForAgentTurnDiaForAgent', {
