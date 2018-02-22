@@ -93,7 +93,7 @@ export default {
         //   },
         // });
         // 重新刷新页面获取用户信息
-        const whitePathName = [ '/homePage' ]; // 哪些路由不需要重新获取个人信息
+        const whitePathName = ['/homePage', 'buyMasonry', 'payToTurnDiaForPlayer', 'payToTurnDiaForAgent']; // 哪些路由不需要重新获取个人信息
         const pathName = history.location.pathname;
         if (whitePathName.indexOf(pathName) === -1) {
           const res = await fetch(`${remoteUrl}/spreadApi/getUserInfo`, {
