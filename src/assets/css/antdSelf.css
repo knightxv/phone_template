@@ -53,39 +53,41 @@
 :global(.am-list-item .am-input-control input) {
     font-size: 0.32rem;
 }
-:global(.am-modal-content) {
-    background: none;
-}
+
 :global(.am-button-warning) {
     background: #f86e21;
     color: #fff;
 }
 :global(.am-button-primary) {
-    background: #295bac;
-    border: 1px solid #295bac;
+    background: #4889db;
+    border: 1px solid #4889db;
     color: #fff;
 }
 :global(.am-button) {
-    font-size: .34rem;
-    height: .8rem;
-    line-height: .8rem;
+    font-size: .36rem;
+    height: .9rem;
+    line-height: .9rem;
 }
 :global(.am-button-small) {
-    font-size: .3rem;
+    font-size: .28rem;
     height: .6rem;
     line-height: .6rem;
 }
-:global(.am-modal.am-modal-transparent .am-modal-content .am-modal-body) {
+
+/* :global(.am-modal.am-modal-transparent .am-modal-content .am-modal-body) {
     height: 100vh;
     width: 100vw;
     padding: 0;
+}
+:global(.am-modal-content) {
+    background: none;
 }
 :global(.am-modal.am-modal-transparent .am-modal-content) {
     padding-top: 0;
 }
 :global(.am-modal-transparent) {
     width: 100vw!important;
-}
+} */
 :global(.am-action-sheet-share-list-item) {
     display: flex;
     flex-direction: column;
@@ -107,7 +109,13 @@
     color: red;
 }
 :global(.am-action-sheet-share-list-item) {
-    width: 2.2rem;
+    width: 2.5rem;
+    margin-right: 0;
+}
+:global(.am-action-sheet-share-list-item-icon) {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: .3rem;
 }
 :global(.am-action-sheet-message) {
     margin: 0;
@@ -117,5 +125,21 @@
     font-size: .34rem;
 }
 :global(.am-action-sheet-share-list) {
-    padding-left: .15rem;
+    padding-left: 0rem;
+}
+:global(.am-button-primary.am-button-disabled) {
+    color: #fefefe;
+    background-color: #d3d6db;
+}
+
+/* action sheet message */
+:global(.am-action-sheet-message) {
+    color: #fff;
+    background-color: #4889db;
+}
+:global(.am-action-sheet-share-cancel-button) {
+    display: none;
+}
+:global(.am-modal-body) {
+    color: #000;
 }

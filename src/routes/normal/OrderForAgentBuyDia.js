@@ -3,9 +3,14 @@ import { connect } from 'dva';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import BaseComponent from '@/core/BaseComponent';
+import PayIcon from '@/components/PayIcon';
 import { Button, NavBar } from '@/components/lazyComponent/antd';
-import { Title, WhiteSpace } from '@/components/styleComponent';
-import styles from './TurnDiaForAgentOrderDetail.less';
+import { Title, IconImg } from '@/components/styleComponent';
+import styles from './OrderDetail.less';
+
+const imgSource = {
+  masonry: require('../../assets/zuanshi.png'),
+};
 
 class OrderForAgentBuyDia extends BaseComponent {
   constructor(props) {
@@ -47,12 +52,11 @@ class OrderForAgentBuyDia extends BaseComponent {
       orderPayMoney,
       payCountBefore,
       payCountAfter,
-      orderUserId,
       payType,
+      orderUserId,
     } = this.state;
     const payDateTime = new Date(createTime).format('yyyy-MM-dd hh:mm:ss');
     const orderPayMoneyLabel = this.helps.parseFloatMoney(orderPayMoney);
-    const orderCountLabel = orderCount;
     const payTypeLabel = this.Enum.payTypeLabel[payType];
     return (
       <div className={styles.container}>
@@ -60,57 +64,85 @@ class OrderForAgentBuyDia extends BaseComponent {
         <NavBar
           title="订单详情"
         />
-        <WhiteSpace />
-        <div className={styles.payInfoWrap}>
-          <div className={styles.orderInfoRowItem}>
-            <div>
-              <div className={styles.payInfoTitle}>订单号</div>
-              <span className={styles.orderIdLabel}>{ orderId }</span>
+        <div className={styles.contentContainer}>
+          <div>
+            <div className={styles.blockContainer}>
+              <div className={styles.orderInfoRowItem}>
+                <div className={styles.payInfoTitle}>订单号</div>
+                <span className={styles.orderIdLabel}>{ orderId }</span>
+                <CopyToClipboard
+                  text={orderId}
+                  onCopy={this.copyOrderId}
+                >
+                  <div className={styles.copyBtn}>复制订单号</div>
+                </CopyToClipboard>
+              </div>
+              <div className={styles.masonryInfoWrap}>
+                <div className={styles.masonryIconWrap}>
+                  <IconImg className={styles.masonryIcon} src={imgSource.masonry} />
+                </div>
+                <div className={styles.masonryInfo}>
+                  <div className={styles.masonryCountLabel}>{ orderCount }钻石</div>
+                  <div className={styles.masonryMoenyLabel}>￥{ orderPayMoneyLabel }</div>
+                </div>
+              </div>
+              <div className={styles.orderRowItemWrap}>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    订单状态
+                  </div>
+                  <div className={styles.colorGreen}>
+                    购买成功
+                  </div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    付款方式
+                  </div>
+                  <div className={styles.payTypeItemWrap}>
+                    <PayIcon payType={payType} />{ payTypeLabel }
+                  </div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    购钻时间
+                  </div>
+                  <div>
+                    { payDateTime }
+                  </div>
+                </div>
+              </div>
+              <div className={styles.orderRowItemWrap} style={{ border: 'none' }}>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    购钻代理ID
+                  </div>
+                  <div className={styles.colorOrange}>
+                    { orderUserId }
+                  </div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    购钻前账户钻石数
+                  </div>
+                  <div className={styles.colorOrange}>
+                    { payCountBefore }
+                  </div>
+                </div>
+                <div className={styles.orderRowItem}>
+                  <div>
+                    购钻后账户钻石数
+                  </div>
+                  <div className={styles.colorOrange}>
+                    { payCountAfter }
+                  </div>
+                </div>
+              </div>
             </div>
-            <CopyToClipboard
-              text={orderId}
-              onCopy={this.copyOrderId}
-            >
-              <Button className={styles.copyBtn}>复制订单号</Button>
-            </CopyToClipboard>
           </div>
-          <div className={styles.orderInfoRowItem}>
-            <div>
-              <div className={styles.payInfoTitle}>购钻账户</div>
-              <span className={styles.orderIdLabel}>{ orderUserId }</span>
-            </div>
-            <div>
-              <div>购买前:<span className={styles.count}>{ payCountBefore }</span>个</div>
-              <div>购买后:<span className={styles.count}>{ payCountAfter }</span>个</div>
-            </div>
+          <div className={styles.btnWrap}>
+            <Button type="red" onClick={() => this.router.go('/agencyPay')}>关闭</Button>
           </div>
-          <div className={styles.orderInfoItem}>
-            <div className={styles.payInfoTitle}>购钻数量</div>
-            <div className={styles.orderIdLabel}>
-              <span className={styles.count}>{ orderCountLabel }</span>个
-            </div>
-          </div>
-          <div className={styles.orderInfoItem}>
-            <div className={styles.payInfoTitle}>购钻价格</div>
-            <div className={styles.orderIdLabel}>
-              <span className={styles.count}>￥{ orderPayMoneyLabel }</span>
-            </div>
-          </div>
-          <div className={styles.orderInfoItem}>
-            <div className={styles.payInfoTitle}>支付方式</div>
-            <div className={styles.orderIdLabel}>
-              { payTypeLabel }支付
-            </div>
-          </div>
-          <div className={styles.orderTimeItem}>
-            <div className={styles.payInfoTitle}>付款时间</div>
-            <div className={styles.orderIdLabel}>
-              { payDateTime }
-            </div>
-          </div>
-        </div>
-        <div className={styles.backBtnWrap}>
-          <Button onClick={() => this.router.go('/homePage')}>完成</Button>
         </div>
       </div>
     );

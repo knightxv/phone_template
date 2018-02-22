@@ -1,22 +1,30 @@
 @import "../../base/less/base.less";
 
-.playerInputWrap {
-    margin-top: 0.2rem;
+.inputWrapItem {
+    margin-top: 0.1rem;
     background: #fff;
+    .borBot();
 }
 .playerName {
-    padding: .15rem 0rem .15rem 1.8rem;
-    font-size: .26rem;
+    padding: .2rem 0.3rem;
     .borTop();
 }
 
 .playerNotFind {
-    padding: .15rem 0rem .15rem 1.8rem;
-    font-size: .26rem;
-    color: red;
-    .borTop();
+  padding: .2rem 0.3rem;
+  color: red;
+  .borTop();
 }
-
+.masonryCountLabel {
+  color: @gray;
+  padding: .1rem .3rem .2rem;
+}
+.inputWrapItemDiamond {
+  margin-bottom: 1rem;
+}
+.masonryCount {
+  color: @orange;
+}
 .masonrySelect {
     width: 1.5rem;
     height: 0.6rem;
@@ -75,20 +83,6 @@
     background: #fff;
 }
 
-.priceCount {
-    color: #ff9500;
-}
-
-.payBtnWrap {
-    margin: 0.5rem .3rem 0;
-}
-
-.payBtn {
-    width: 100%;
-    margin-top: .2rem;
-    margin-bottom: 2rem;
-}
-
 .rechargeTitle {
     border-top: 1px solid #eee;
     line-height: 0.8rem;
@@ -103,50 +97,6 @@
     height: 0.42rem;
     margin-right: 0.26rem;
     display: block;
-}
-
-.listWrap {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
-.priceTip {
-    padding: 0.12rem 0.2rem;
-    color: @gray;
-    font-size: .28rem;
-}
-.priceWrap {
-    padding: 0rem 0.2rem;
-}
-
-.count {
-    color: @countAdd;
-}
-.money {
-    color: @moneyColor;
-} 
-.recordHeader {
-    .flexRow(space-between);
-    background: #fff;
-    padding: .1rem .2rem;
-    font-size: .34rem;
-}
-
-.recordRowItem {
-    .flexRow(space-between);
-    padding: .1rem 0 .1rem 0.2rem;
-    .borTop();
-}
-
-.recordItemCountLabel {
-    .flexRow();
-}
-
-.recordItemTime {
-    padding-top: .1rem;
-    color: @gray;
-    font-size: .28rem;
 }
 
 // picker common start
@@ -176,10 +126,11 @@
 .pickerHeader {
     .flexRow(space-between);
     .borBot();
+    background: @baseColor;
+    color: #fff;
     padding: .1rem 0;
 }
 .pickerTitle {
-    font-weight: 600;
     font-size: .36rem;
 }
 .iconRight {
@@ -198,7 +149,7 @@
 .playersItemWrap {
     .flexRow();
     background: #fff;
-    padding: .2rem 0;
+    padding: .05rem 0;
     .borBot();
 }
 .playersItem {
@@ -220,4 +171,49 @@
     background: red;
     color: #fff;
     border: 1px solid red;
+}
+.goodsWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background: @bgColor;
+  margin-right: .1rem;
+  padding: .2rem;
+  .textHide();
+}
+.systemGiftSelect {
+  color: @orange!important;
+}
+
+.goodsSelect {
+  color: #fff;
+  background: @baseColor;
+}
+.goodLabel {
+  font-size: .28rem;
+  padding-bottom: .2rem;
+  .textHide();
+}
+.goodPrice {
+  font-size: 0.24rem;
+}
+.payTip {
+  color: @orange;
+  text-align: center;
+  line-height: .6rem;
+  // height: .6rem;
+  padding: 0.2rem .3rem 0;
+}
+.systemGift {
+  color: @baseColor;
+}
+
+.borderBtn {
+  .border(@baseColor);
+  color: @baseColor;
+  font-size: .24rem;
+  padding: .15rem;
+  border-radius: .1rem;
 }

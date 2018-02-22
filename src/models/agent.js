@@ -2,8 +2,10 @@
 
 import fetch from 'dva/fetch';
 import { routerRedux } from 'dva/router';
-import socketManage from '../extends/Socket';
+import querystring from 'querystring';
 import { remoteUrl } from '@/config/index';
+import socketManage from '../extends/Socket';
+import wechatSdkManage from '../extends/wechatSdk';
 
 const delay = (time = 1000) => {
   return new Promise((resolve) => {
@@ -17,7 +19,7 @@ export default {
   namespace: 'agent',
   state: {
     // userName: '',
-    
+
     // inviteCode: 0, // 邀请码
     // masonry: 0, // 砖石
     // rechargeOfToday: 0, // 今日充值
@@ -38,6 +40,7 @@ export default {
 
     //*del loginID: '',
     //*del password: '',
+    stepRebateAddedRate: 0,
 
     // getVerifyCodeElseTime: 0, // 获取验证码剩余的时间（0代表可以重新获取）
   },
@@ -90,7 +93,7 @@ export default {
         //   },
         // });
         // 重新刷新页面获取用户信息
-        const whitePathName = [ '/homePage' ]; // 哪些路由不需要重新获取个人信息
+        const whitePathName = ['/homePage', 'buyMasonry', 'payToTurnDiaForPlayer', 'payToTurnDiaForAgent']; // 哪些路由不需要重新获取个人信息
         const pathName = history.location.pathname;
         if (whitePathName.indexOf(pathName) === -1) {
           const res = await fetch(`${remoteUrl}/spreadApi/getUserInfo`, {
@@ -115,6 +118,30 @@ export default {
             dispatch(routerRedux.push('/login'));
           }
         }
+        // 默认分享登录页
+        const origin = window.location.origin;
+        const noPortOrigin = origin.replace(/:\d+/, '');
+        // const gameListRes = await fetch(`${remoteUrl}/spreadApi/getGameList`, {
+        //   method: 'GET',
+        //   mode: 'cors',
+        //   credentials: 'include',
+        // }).then(res => res.json());
+        // let gameName = '';
+        // if (gameListRes.isSuccess && gameListRes.data[0]) {
+        //   gameName = gameListRes.data[0].gameName;
+        // }
+        const inviteLink = 'http://hulema.com';
+        const queryLink = {
+          redirect: inviteLink,
+        };
+        const linkQueryStr = querystring.stringify(queryLink);
+        const shareInfo = {
+          title: '胡了吗游戏中心',
+          link: `${noPortOrigin}/generalManage/redirect.html?${linkQueryStr}`,
+          imgUrl: `${noPortOrigin}/generalManage/static/adang_logo.jpg`,
+          desc: '胡了吗的网址',
+        };
+        await wechatSdkManage.shareLink(shareInfo);
       },
   },
 };

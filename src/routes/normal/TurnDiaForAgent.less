@@ -1,18 +1,17 @@
 @import "../../base/less/base.less";
 
-.playerInputWrap {
-    margin-top: 0.2rem;
-    background: #fff;
+.inputContainer {
+  margin-top: .3rem;
 }
+
 .playerName {
-    padding: .15rem 0rem .15rem 1.8rem;
-    font-size: .26rem;
-    .borTop();
+  padding: .2rem 0.3rem;
+  .borTop();
+
 }
 
 .playerNotFind {
-    padding: .15rem 0rem .15rem 1.8rem;
-    font-size: .26rem;
+    padding: .2rem 0.3rem;
     color: red;
     .borTop();
 }
@@ -74,19 +73,18 @@
     color: #000;
     background: #fff;
 }
-
-.priceCount {
-    color: #ff9500;
+.masonryTip {
+  color: @gray;
+  padding: .2rem 0 0 .3rem;
 }
-
-.payBtnWrap {
-    margin: 0.5rem .3rem 0;
+.count {
+  padding-top: .2rem;
+  color: @orange;
 }
-
-.payBtn {
-    width: 100%;
-    margin-top: .2rem;
-    margin-bottom: 2rem;
+.searchInputWrap {
+  background: #fff;
+  padding: .15rem .2rem;
+  .borBot();
 }
 
 .rechargeTitle {
@@ -104,7 +102,6 @@
     margin-right: 0.26rem;
     display: block;
 }
-
 .listWrap {
     display: flex;
     flex-direction: column;
@@ -116,16 +113,7 @@
     color: @gray;
     font-size: .28rem;
 }
-.priceWrap {
-    padding: 0rem 0.2rem;
-}
 
-.count {
-    color: @countAdd;
-}
-.money {
-    color: @moneyColor;
-} 
 .recordHeader {
     .flexRow(space-between);
     background: #fff;
@@ -177,9 +165,10 @@
     .flexRow(space-between);
     .borBot();
     padding: .1rem 0;
+    background: @baseColor;
+    color: #fff;
 }
 .pickerTitle {
-    font-weight: 600;
     font-size: .36rem;
 }
 .iconRight {
@@ -221,3 +210,16 @@
     color: #fff;
     border: 1px solid red;
 }
+
+.rowAgentName {
+  .textHide();
+}
+
+.borderBtn {
+  .border(@baseColor);
+  color: @baseColor;
+  font-size: .24rem;
+  padding: .15rem;
+  border-radius: .1rem;
+}
+

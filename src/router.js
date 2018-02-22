@@ -60,6 +60,27 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
+      path: '/cashInfo',
+      component: () => import('./routes/normal/CashInfo'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
+      path: '/cashOrderDetail',
+      component: () => import('./routes/normal/CashOrderDetail'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
+      path: '/cashRecord',
+      component: () => import('./routes/normal/CashRecord'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
       path: '/agencyPay',
       component: () => import('./routes/normal/AgencyPay'),
       models: () => [
@@ -96,11 +117,29 @@ function RouterConfig({ history, app }) {
       // ],
     },
     {
+      path: '/buyMasonryOrderDetail',
+      component: () => import('./routes/normal/BuyMasonryOrderDetail'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
+      path: '/buyMasonryRecord',
+      component: () => import('./routes/normal/BuyMasonryRecord'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
       path: '/turnDiaForAgent',
       component: () => import('./routes/normal/TurnDiaForAgent'),
       models: () => [
         import('./models/agent'),
       ],
+    },
+    {
+      path: '/orderForAgentTurnDiaForAgent',
+      component: () => import('./routes/normal/OrderForAgentTurnDiaForAgent'),
     },
     {
       path: '/payToTurnDiaForAgent',
@@ -124,15 +163,15 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
-      path: '/buyDiaOrderStatu',
-      component: () => import('./routes/normal/BuyDiaOrderStatu'),
+      path: '/turnDiaForPlayer',
+      component: () => import('./routes/normal/TurnDiaForPlayer'),
       models: () => [
         import('./models/agent'),
       ],
     },
     {
-      path: '/turnDiaForPlayer',
-      component: () => import('./routes/normal/TurnDiaForPlayer'),
+      path: '/turnDiaForPlayerRecord',
+      component: () => import('./routes/normal/TurnDiaForPlayerRecord'),
       models: () => [
         import('./models/agent'),
       ],
@@ -152,11 +191,15 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
+      path: '/turnDiaForAgentRecord',
+      component: () => import('./routes/normal/TurnDiaForAgentRecord'),
+      models: () => [
+        import('./models/agent'),
+      ],
+    },
+    {
       path: '/orderForAgentBuyDia',
       component: () => import('./routes/normal/OrderForAgentBuyDia'),
-      // models: () => [
-      //   import('./models/agent'),
-      // ],
     },
     {
       path: '/bindFail',
@@ -188,8 +231,8 @@ function RouterConfig({ history, app }) {
       ],
     },
     {
-      path: '/setInfo',
-      component: () => import('./routes/normal/SetInfo'),
+      path: '/stepRebateAdded',
+      component: () => import('./routes/normal/StepRebateAdded'),
       models: () => [
         import('./models/agent'),
       ],
@@ -201,6 +244,10 @@ function RouterConfig({ history, app }) {
     {
       path: '/wechatBindPhone',
       component: () => import('./routes/normal/WechatBindPhone'),
+    },
+    {
+      path: '/agentNotice',
+      component: () => import('./routes/normal/AgentNotice'),
     },
     {
       path: '/inviteAgentMiddle',
@@ -262,11 +309,6 @@ function RouterConfig({ history, app }) {
       models: () => [
         import('./models/general'),
       ],
-    },
-    // 公用
-    {
-      path: '/noticeDetail',
-      component: () => import('./routes/NoticeDetail'),
     },
     {
       path: '/wechatAuth',

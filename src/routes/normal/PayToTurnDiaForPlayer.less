@@ -1,24 +1,8 @@
 @import "../../base/less/base.less";
 
-.container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-.contentContainer {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.buyBtnWrap {
-    margin-bottom: .2rem;
-    padding: .2rem;
-}
-
 .masonryIcon {
-    width: 1.4rem;
-    height: 1.2rem;
+    width: 1.1rem;
+    height: 1.1rem;
     display: block;
     background: #fff;
     margin: 0 .2rem;
@@ -31,32 +15,35 @@
     font-size: .28rem;
 }
 .headerInfoWrap {
-    .flexRow(space-between);
-    margin: .2rem .3rem;
-    padding: .2rem 0.3rem;
-    .border();
-    border-radius: .2rem;
-    background: #fff;
+    .flexRow();
     align-items: stretch;
+    padding: .2rem 0;
 }
 .masonryInfo {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: .2rem 0rem;
 }
 .masonryCountLabel {
-    color: #000;
-    font-weight: 600;
-    font-size: .38rem;
+  font-size: .38rem;
+  color: #000;
 }
 .masonryMoenyLabel {
     color: @moneyColor;
+    font-size: .28rem;
+}
+
+.rowItemTitle {
+  color: @baseColor;
 }
 .rowItemWrap {
     .borTop();
-    padding: .2rem .2rem;
-    background: #fff;
-    .flexRow(space-between);
+  }
+.rowItem {
+  padding: .2rem .2rem;
+  background: #fff;
+  .flexRow(space-between);
 }
 
 .payItem {
@@ -159,7 +146,7 @@
     height: .3rem;
 }
 .autoSaveWrap {
-    padding-left: .2rem;
+    padding: .2rem 0;
 }
 .saveTip {
     color: @gray;

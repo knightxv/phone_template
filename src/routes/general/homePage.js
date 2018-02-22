@@ -5,7 +5,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import BaseComponent from '@/core/BaseComponent';
 import Button from '@/components/antdComponent/Button';
 import { WingBlank, WhiteSpace, FlexRow, FlexRowBetween, TitleIcon, Title } from '@/components/styleComponent';
-import styles from './homePage.css';
+import styles from './homePage.less';
 
 import { Row, Col } from '../../helps/antdComponent';
 
@@ -38,10 +38,7 @@ class HomePage extends BaseComponent {
     this.navigate('/general/commissionRecord');
   }
   navigateToCashMoeny = () => {
-    this.navigate('/general/cashMoeny');
-  }
-  navigateToCashMoenyRecord = () => {
-    this.navigate('/general/cashRecord');
+    this.router.go('/cashMoney');
   }
   async componentWillMount() {
     const res = await this.http.webHttp.get('/spreadApi/general/getUserInfo');
@@ -84,7 +81,7 @@ class HomePage extends BaseComponent {
       <div>
         <Title>合伙人</Title>
         <WingBlank className={`${styles.optionBtnWrap} borderBottom`}>
-          <div className={styles.title}></div>
+          <div className={styles.title} />
           <FlexRow>
             <div className={styles.optionBtn} onClick={this.navigateToEditPas}>修改密码</div>
             <div className={styles.optionBtn} onClick={this.navigateToQuit}>退出</div>
@@ -93,8 +90,8 @@ class HomePage extends BaseComponent {
         {
           notice
           && <WingBlank className={`${styles.itemContainer}`}>
-          <p className={styles.noticeTitle}>公告通知：</p>
-          <p className={styles.notice} dangerouslySetInnerHTML={noticeHtml} />
+            <p className={styles.noticeTitle}>公告通知：</p>
+            <p className={styles.notice} dangerouslySetInnerHTML={noticeHtml} />
           </WingBlank>
         }
         <WhiteSpace />
@@ -108,7 +105,9 @@ class HomePage extends BaseComponent {
                     text={inviteCode}
                     onCopy={this.onCopy}
                   >
-                    <Button className={styles.copyBtn}>复制</Button>
+                    <div className={styles.btnWrap}>
+                      <Button>复制</Button>
+                    </div>
                   </CopyToClipboard>
                 </WingBlank>
               </FlexRowBetween>
@@ -156,9 +155,8 @@ class HomePage extends BaseComponent {
             <WingBlank>
               <FlexRowBetween className={styles.cashWrap}>
                 <div>余额：<span className="moneyColor">{canCashCountFloat}元</span></div>
-                <div style={{ marginLeft: 10 }}>
-                  <Button className={styles.cashBtn} onClick={this.navigateToCashMoeny}>提现</Button>
-                  <Button className={styles.cashBtn} onClick={this.navigateToCashMoenyRecord}>提现记录</Button>
+                <div className={styles.btnWrap}>
+                  <Button onClick={this.navigateToCashMoeny}>提现</Button>
                 </div>
               </FlexRowBetween>
             </WingBlank>

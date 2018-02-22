@@ -18,9 +18,7 @@
 
 .userInfoContainer {
     .flexRow(space-between);
-    color: #fff;
     padding: .2rem;
-    border-bottom: 1px solid #eee;
 }
 .userInfoWrap {
     .flexRow();
@@ -77,8 +75,8 @@
 }
 
 .titleIconImg {
-    width: .5rem;
-    height: .5rem;
+    width: .6rem;
+    height: .6rem;
     margin-right: .2rem;
 }
 
@@ -117,50 +115,41 @@
 }
 
 .userNameLabel {
-    color: #fff;
     padding-bottom: .16rem;
+    font-size: .4rem;
 }
 
 .saleDiamondsLabel {
     color: #fff;
 }
 
-
-.btnWrap {
-    padding: 0 .2rem;
-    margin-top: .2rem;
-}
 .optionEditBtn {
     width: 100%;
     padding: 0 .2rem;
 }
 .optionQuitBtn {
-    background: #c11717;
+    background: @red;
     color: #fff;
+    .border(@red);
 }
 
 .headerModule {
-    background: @baseColor;
+  // background: @baseColor;
 }
 .prizeLabel {
-    color: #fff;
     padding-top: .1rem;
+
 }
 .countContainer {
     display: flex;
     flex-direction: row;
-}
-.countWrap {
-    flex: 1;
-    padding: .2rem .2rem;
+    justify-content: space-between;
     background: @baseColor;
     color: #fff;
-    .borRig();
+    padding: .2rem .2rem;
+    font-size: .36rem;
 }
 
-.btnContainer {
-    padding-bottom: .2rem;
-}
 .homePageHeader {
     background: @baseColor!important;
     color: #fff;
@@ -168,9 +157,7 @@
 .shareIcon {
     width: 100%;
     height: 100%;
-    padding: .2rem;
     display: block;
-    background: #fff;
 }
 .payPicker {
     color: #333;
@@ -199,6 +186,20 @@
 }
 
 .noticeLabel {
+  span {
     color: #ff9500!important;
     background: none!important;
+  }
+}
+
+.itemModule {
+    .flexRow(space-between);
+    .borBot();
+    padding: 0 .2rem;
+}
+
+.noticeWrap {
+  flex: 1;
+  text-align: left;
+  padding: .2rem;
 }

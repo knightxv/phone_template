@@ -1,12 +1,28 @@
-@bgColor: #fff;
+@bgColor: #f2f2f2;
 @gray: #b8b8b8;
+@grayBg: #f2f2f2;
 @borderColor: #eee;
-@baseColor: #295bac;
+@baseColor: #4889db;
 @countAdd: #017f01;
-@red: #db344a;
+@assist: #8391a6;
+@red: #eb725d;
 @countSub: #db344a;
 @moneyColor: #ff9900;
 @greenTip: #017f01;
+@orange: #ee9080;
+
+.colorBase {
+  color: @baseColor;
+}
+.colorGray {
+  color: @gray;
+}
+.colorOrange {
+  color: @orange;
+}
+.colorGreen {
+  color: @greenTip;
+}
 
 .textHide() {
     overflow: hidden;
@@ -29,15 +45,66 @@
 .border(@color: @borderColor) {
     border: 1px solid @color;
 }
-.borLef() {
+.borLef(@color: @borderColor) {
     border-left: 1px solid @borderColor;
 }
-.borTop() {
+.borTop(@color: @borderColor) {
     border-top: 1px solid @borderColor;
 }
-.borRig() {
+.borRig(@color: @borderColor) {
     border-right: 1px solid @borderColor;
 }
-.borBot() {
+.borBot(@color: @borderColor) {
     border-bottom: 1px solid @borderColor;
+}
+
+.blockContainer {
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.3);
+}
+.blockWrap {
+  background: #fff;
+  border-radius: 3px;
+  margin: .2rem 0 0;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.3);
+}
+.blockInputWrap {
+  padding: 0 .2rem .2rem;
+}
+
+.inputWrap {
+  background: #fff;
+  padding: 0.4rem 0 0;
+  .borBot();
+}
+
+.btnWrap {
+  padding: 0 .2rem;
+  margin-top: .2rem;
+}
+
+.linkLabel {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.verticalContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.contentContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: .1rem .2rem;
 }

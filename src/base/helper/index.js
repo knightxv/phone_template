@@ -83,6 +83,15 @@ export function removeCookie(name) {
 }
 
 
+// 得到天(0:0:0)的时间戳(不传默认今天)
+export const getDayTimeStamp = (timeStamp) => {
+  let now = new Date();
+  if (timeStamp) {
+    now = new Date(timeStamp);
+  }
+  const monthLabel = now.format('yyyy/MM/dd');
+  return new Date(monthLabel).getTime();
+};
 // 得到本月一号的时间
 export const getMonthTimeStamp = (timeStamp) => {
   let now = new Date();

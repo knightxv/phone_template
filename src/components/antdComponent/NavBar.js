@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Icon } from './Icon';
+import Icon from './Icon';
 
 const NavBarWrap = styled.div`
 display: flex;
@@ -15,7 +15,7 @@ width: 100%;
 max-width: 750px;
 top: 0;
 z-index: 999;
-background: #295bac;
+background: #4889db;
 `;
 const NavBarSideWrap = styled.div`
 min-width: 36px;
@@ -38,7 +38,7 @@ z-index: -1;
 
 const DefaultNavbar = ({ title, onClick, right, className }) => {
   return (
-    <div>
+    <div style={{ height: '1rem' }}>
       <NavBarWrap className={className}>
         <NavBarSideWrap>
           {
@@ -56,7 +56,6 @@ const DefaultNavbar = ({ title, onClick, right, className }) => {
           { right }
         </NavBarSideWrap>
       </NavBarWrap>
-      <div style={{ height: '1rem' }} />
     </div>
   );
 };

@@ -14,10 +14,12 @@ export const powerEnum = {
   AgentBuyDiawechatPay: 15, // 微信支付(代理购买钻石)
   AgentBuyDiaAliPay: 16, // 支付宝支付(代理购买钻石)
   AgentBuyDiabanlancePay: 17, // 余额支付(直接转钻)(代理购买钻石)
+  ylzfForAgentBuyDia: 34, // 银联支付(代理购买钻石)
 
   AgentTurnDiaToPlayerDirect: 1, // 直接转卡(赠送)
   wechatPayForAgentTurnDiaToPlayer: 20, // 代理给玩家转钻（微信支付）
   AliPayForAgentTurnDiaToPlayer: 21, // 代理给玩家转钻（支付宝支付）
+  ylzfForAgentTurnDiaToPlayer: 35, // 代理给玩家转钻（银联支付）
 
   iAgentTurnDiaToAgent: 23, // 总代理直接代理转钻
   playerRange: 19, // 0所有 1下级
@@ -39,14 +41,20 @@ export const AgentType = {
 export const payType = {
   WECHAT: 0,
   ALI: 1,
-  MANAGE: 4,
-  BALANCE: 5,
+  YLZF: 2, // 银联支付
+  IOS_PAY: 3, // 苹果支付
+  MANAGE: 4, // 管理后台虚拟订单
+  BALANCE: 5, // 余额支付
+  returnDirection: 6, // 直接转卡
 };
 export const payTypeLabel = {
   [payType.WECHAT]: '微信',
   [payType.ALI]: '支付宝',
+  [payType.YLZF]: '银联支付',
+  [payType.IOS_PAY]: '苹果支付',
   [payType.MANAGE]: '和客服购买',
-  [payType.BALANCE]: '使用余额购买',
+  [payType.BALANCE]: '余额购买',
+  [payType.returnDirection]: '直接转钻',
 };
 
 export const resolveStatus = {
@@ -65,6 +73,9 @@ export const htmlTextType = {
   notice_normalAgency: 2, // 代理公告
   notice_generalManage: 3, // 总代理公告
   agreen_page: 4, // 推广协议
+  cashTip: 6, // 提现提示
+  myUnderAgentNotice: 7, // 我的下级代理的公告
+  agentNotice: 8, // 代理须知
 };
 
 export default exports;

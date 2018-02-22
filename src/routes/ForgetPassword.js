@@ -20,7 +20,7 @@ class ForgetPassword extends BaseComponent {
     };
   }
   async componentWillMount() {
-    
+
   }
   checkPhoneValid = () => {
     const { phone } = this.state;
@@ -98,48 +98,50 @@ class ForgetPassword extends BaseComponent {
           onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
-          <div className={styles.inputWrap}>
-            <InputItem
-              clear
-              value={phone}
-              onChange={value => this.setState({ phone: value })}
-              placeholder="请输入手机号码"
-            />
+          <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
+            <div className={styles.inputWrap}>
+              <InputItem
+                clear
+                value={phone}
+                onChange={value => this.setState({ phone: value })}
+                placeholder="请输入手机号码"
+              />
+            </div>
+            <div className={styles.inputWrap}>
+              <InputItem
+                clear
+                value={verifyCode}
+                onChange={value => this.setState({ verifyCode: value })}
+                placeholder="请输入短信验证码"
+                extra={<div
+                  className={classnames({ [styles.verifyCodeBtn]: true, [styles.verifyCodeDisable]: !isCanGetVerifyCode })}
+                  onClick={this.getVerifyCode}
+                >
+                  { !isShowElseTime ? '获取验证码' : `重新发送(${getVerifyCodeElseTime}s)` }
+              </div>}
+              />
+            </div>
+            <div className={styles.inputWrap}>
+              <InputItem
+                clear
+                value={newPwd}
+                type="password"
+                onChange={value => this.setState({ newPwd: value })}
+                placeholder="请输入新的密码"
+              />
+            </div>
+            <div className={styles.inputWrap}>
+              <InputItem
+                value={rePwd}
+                type="password"
+                onChange={value => this.setState({ rePwd: value })}
+                placeholder="请确认密码"
+              />
+            </div>
+            <div className={styles.btnWrap}>
+              <Button onClick={this.reSetPwd}>确定</Button>
+            </div>
           </div>
-          <div className={styles.inputWrap}>
-            <InputItem
-              clear
-              value={verifyCode}
-              onChange={value => this.setState({ verifyCode: value })}
-              placeholder="请输入短信验证码"
-              extra={<div
-                className={classnames({ [styles.verifyCodeBtn]: true, [styles.verifyCodeDisable]: !isCanGetVerifyCode })}
-                onClick={this.getVerifyCode}
-              >
-                { !isShowElseTime ? '获取验证码' : `重新发送(${getVerifyCodeElseTime}s)` }
-             </div>}
-            />
-          </div>
-          <div className={styles.inputWrap}>
-            <InputItem
-              clear
-              value={newPwd}
-              type="password"
-              onChange={value => this.setState({ newPwd: value })}
-              placeholder="请输入新的密码"
-            />
-          </div>
-          <div className={styles.inputWrap}>
-            <InputItem
-              value={rePwd}
-              type="password"
-              onChange={value => this.setState({ rePwd: value })}
-              placeholder="请确认密码"
-            />
-          </div>
-        </div>
-        <div className={styles.confimBtnWrap}>
-          <Button onClick={this.reSetPwd}>确定</Button>
         </div>
       </div>
     );

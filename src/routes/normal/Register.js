@@ -110,7 +110,7 @@ class Register extends BaseComponent {
           onClick={this.router.back}
         />
         <div className={styles.contentContainer}>
-          <div>
+          <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
             <div className={styles.inputWrap}>
               <InputItem
                 clear
@@ -140,10 +140,10 @@ class Register extends BaseComponent {
                 clear
                 value={pCode}
                 onChange={value => this.setState({ pCode: value })}
-                placeholder="请输入代理的邀请码(选填)"
+                placeholder="请输入代理的邀请码(绑定后无法更改)"
               />
             </div>
-            <div className={styles.registerWrap}>
+            <div className={styles.btnWrap}>
               <Button
                 disabled={btnDisabled}
                 style={{ width: '100%' }}

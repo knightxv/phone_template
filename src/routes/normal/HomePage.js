@@ -7,10 +7,12 @@ import querystring from 'querystring';
 // import PropTypes from 'prop-types';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import NoticeBar from '@/components/antdComponent/NoticeBar';
-import { Button, Icon, Modal, NavBar } from '@/components/lazyComponent/antd';
+import { Button, Icon, NavBar } from '@/components/lazyComponent/antd';
 // import {} from ''
+import CloseModal from '@/components/Modal/CloseModal';
+import SlideUpModal from '@/components/Modal/SlideUpModal';
 import Avatar from '@/components/Avatar';
-import { Title, WhiteSpace, FlexRowBetweenWingSpace, FlexRow, IconImg } from '@/components/styleComponent';
+import { Title, FlexRow, IconImg } from '@/components/styleComponent';
 import styles from './HomePage.less';
 import wechatSdkManage from '../../extends/wechatSdk';
 
@@ -31,6 +33,7 @@ const IconSource = {
   share: require('../../assets/share_friend.png'),
   shareAgent: require('../../assets/shareAgent.png'),
   sharePlayer: require('../../assets/sharePlayer.png'),
+  ewfl: require('../../assets/ewfl.png'),
 };
 
 class HomePage extends BaseComponent {
@@ -42,14 +45,15 @@ class HomePage extends BaseComponent {
       priceInfoVisible: false, // 奖励说明是否显示
       shareAgentVisible: false, // 分享代理的图片
       sharePlayerVisible: false, // 分享玩家的图片
+      isShowNotice: false, // 是否显示公告
     };
   }
   powerManage = () => {
     return {
       havePowerToBanlance: this.hasPowerSome('banlance'),
-      havePowerToRechargeToPlayer: this.hasPowerSome('AgentTurnDiaToPlayerDirect', 'wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer'),
+      havePowerToRechargeToPlayer: this.hasPowerSome('AgentTurnDiaToPlayerDirect', 'wechatPayForAgentTurnDiaToPlayer', 'AliPayForAgentTurnDiaToPlayer', 'ylzfForAgentTurnDiaToPlayer'),
       havePowerToRechargeToAgent: this.hasPower('iAgentTurnDiaToAgent'),
-      havePowerToBuyDia: this.hasPowerSome('AgentBuyDiawechatPay', 'AgentBuyDiaAliPay', 'AgentBuyDiabanlancePay'), // 是否有购买钻石的权限
+      havePowerToBuyDia: this.hasPowerSome('AgentBuyDiawechatPay', 'AgentBuyDiaAliPay', 'AgentBuyDiabanlancePay', 'ylzfForAgentBuyDia'), // 是否有购买钻石的权限
     };
   }
   async componentWillMount() {
@@ -103,10 +107,10 @@ class HomePage extends BaseComponent {
     await this.http.webHttp.get('/spreadApi/logout');
     this.navigate('/login');
   }
-  // 跳转到公告详情
-  navigateNotice = async () => {
-    this.navigate('/noticeDetail');
-  }
+  // // 跳转到公告详情
+  // navigateNotice = async () => {
+  //   this.navigate('/noticeDetail');
+  // }
   editPas = () => {
     this.navigate('/EditAgencyPsd');
   }
@@ -146,22 +150,24 @@ class HomePage extends BaseComponent {
           onClick={() => this.navigate('/inviteToAgent')}
           src={IconSource.sys}
         />,
-        title: '查看二维码',
+        title: '二维码',
       },
-      {
+    ];
+    if (this.helps.isWeixinBrowser()) {
+      dataList.push({
+        icon: <img onClick={this.shareAgentLink} className={styles.shareIcon} src={IconSource.share} />,
+        title: '分享给朋友',
+      });
+    }
+    if (!this.helps.isWeixinBrowser()) {
+      dataList.push({
         icon: <CopyToClipboard
           text={inviteLink}
           onCopy={this.copyResult}
         >
           <img className={styles.shareIcon} src={IconSource.link} />
         </CopyToClipboard>,
-        title: '复制链接',
-      },
-    ];
-    if (this.helps.isWeixinBrowser()) {
-      dataList.push({
-        icon: <img onClick={this.shareAgentLink} className={styles.shareIcon} src={IconSource.share} />,
-        title: '分享链接',
+        title: '复制邀请链接',
       });
     }
     ActionSheet.showShareActionSheetWithOptions({
@@ -223,7 +229,7 @@ class HomePage extends BaseComponent {
       desc: '高收入、零成本做代理，年薪百万不是梦',
     };
     await wechatSdkManage.shareLink(shareInfo);
-    this.toggleSharePlayertImg();
+    this.toggleShareAgentImg();
   }
   // 分享玩家链接
   sharePlayerLink = async () => {
@@ -309,16 +315,7 @@ class HomePage extends BaseComponent {
           onClick={() => this.navigate('/inviteToPlayer')}
           src={IconSource.sys}
         />,
-        title: '查看二维码',
-      },
-      {
-        icon: <CopyToClipboard
-          text={inviteLink}
-          onCopy={this.copyResult}
-        >
-          <img className={styles.shareIcon} src={IconSource.link} />
-        </CopyToClipboard>,
-        title: '复制链接',
+        title: '二维码',
       },
     ];
     if (this.helps.isWeixinBrowser()) {
@@ -327,14 +324,22 @@ class HomePage extends BaseComponent {
         title: '分享链接',
       });
     }
+    if (!this.helps.isWeixinBrowser()) {
+      dataList.push({
+        icon: <CopyToClipboard
+          text={inviteLink}
+          onCopy={this.copyResult}
+        >
+          <img className={styles.shareIcon} src={IconSource.link} />
+        </CopyToClipboard>,
+        title: '复制邀请链接',
+      });
+    }
     ActionSheet.showShareActionSheetWithOptions({
       options: dataList,
       // title: 'title',
       message: '邀请下级玩家',
     });
-  }
-  setUserInfo = () => {
-    this.router.go('/setInfo');
   }
   toggleShareAgentImg = () => {
     this.setState({
@@ -346,11 +351,16 @@ class HomePage extends BaseComponent {
       sharePlayerVisible: !this.state.sharePlayerVisible,
     });
   }
+  toggleShowNotice = () => {
+    this.setState({
+      isShowNotice: !this.state.isShowNotice,
+    });
+  }
   render() {
-    const { noticeInfo, priceInfoVisible, shareAgentVisible, sharePlayerVisible } = this.state;
+    const { noticeInfo, priceInfoVisible, shareAgentVisible, sharePlayerVisible, isShowNotice } = this.state;
     const notiveInfoHtml = this.helps.createMarkup(noticeInfo);
     const noticeVisible = !!noticeInfo;
-    const { inviteCode, canCashCount, masonry, userName, avatar,
+    const { inviteCode, canCashCount, masonry, userName, avatar, stepRebateAddedRate,
     // balancePayToday, savePlayerCount, saveAgentCount, myUnderAgentCount, myPlayerCount,
     // masonryIncomeToday, masonryPayToday, balanceIncomeToday, saleDiamondsOfThisMonth,
     // rechargeOfToday, rechargeOfYesterDay, cashCountlog, ranking,
@@ -370,7 +380,8 @@ class HomePage extends BaseComponent {
       havePowerToBuyDia,
       havePowerToBanlance,
     } = power;
-
+    const hasPowerTurnDiaForMoney = this.hasPowerTurnDiaForMoney();
+    const returnDiaForPlayerTip = hasPowerTurnDiaForMoney ? '替玩家购钻' : '给玩家转钻';
     return (<div>
       <Title>代理中心</Title>
       <NavBar
@@ -379,23 +390,16 @@ class HomePage extends BaseComponent {
       {
         noticeVisible
         && <NoticeBar
-          onClick={this.navigateNotice}
+          onClick={this.toggleShowNotice}
         >
-          <FlexRow>
+          {/* <FlexRow>
             <span className={styles.noticeLabel} dangerouslySetInnerHTML={notiveInfoHtml} />
-          </FlexRow>
+          </FlexRow> */}
+          <div className={styles.noticeLabel} dangerouslySetInnerHTML={notiveInfoHtml} />
         </NoticeBar>
       }
       <div className={styles.headerModule}>
-        <FlexRowBetweenWingSpace>
-          {/* <div className={styles.titleWrap}>
-              我的排名:<span className={styles.rankColor}>{ isRankingShow ? ranking : '未上榜'}</span>
-          </div> */}
-          {
-            priceInfoVisible && <p className={styles.prizeLabel} onClick={() => this.navigate('/rankExplain')}>奖励规则</p>
-          }
-        </FlexRowBetweenWingSpace>
-        <div className={styles.userInfoContainer} onClick={this.setUserInfo}>
+        <div className={styles.userInfoContainer}>
           <div className={styles.userInfoWrap}>
             <Avatar src={avatar} className={styles.userAvatar} />
             <div className={styles.userInfo}>
@@ -406,7 +410,7 @@ class HomePage extends BaseComponent {
             </div>
           </div>
           <div>
-            <Icon type="right" />
+            {/* <Icon type="right" /> */}
           </div>
         </div>
       </div>
@@ -421,158 +425,148 @@ class HomePage extends BaseComponent {
           </div>
         }
       </div>
-      <div className={styles.module}>
-        {/* 购买钻石 */}
-        {
-          havePowerToBuyDia &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/agencyPay')}>
+      <div className={styles.contentContainer}>
+        <div className={styles.blockWrap}>
+          {/* 购买钻石 */}
+          {
+            havePowerToBuyDia &&
+            <div className={styles.itemModule} onClick={() => this.navigate('/agencyPay')}>
+              <FlexRow className={styles.navigateTitleWrap}>
+                <IconImg className={styles.titleIconImg} src={IconSource.buyDia} />
+                <span>购买钻石</span>
+              </FlexRow>
+              <Icon type="right" />
+            </div>
+          }
+          {/* 给玩家充钻 */}
+          {
+            havePowerToRechargeToPlayer &&
+            <div className={styles.itemModule} onClick={() => this.goToSelectGame('/turnDiaForPlayer')}>
+              <FlexRow className={styles.navigateTitleWrap}>
+                <IconImg className={styles.titleIconImg} src={IconSource.turnDia_play} />
+                <span>{ returnDiaForPlayerTip }</span>
+              </FlexRow>
+              <Icon type="right" />
+            </div>
+          }
+          {/* 给代理转钻 */}
+          {
+            havePowerToRechargeToAgent &&
+            <div className={styles.itemModule} onClick={() => this.navigate('/turnDiaForAgent')}>
+              <FlexRow className={styles.navigateTitleWrap}>
+                <IconImg className={styles.titleIconImg} src={IconSource.turnDia_agent} />
+                <span>给代理转钻</span>
+              </FlexRow>
+              <Icon type="right" />
+            </div>
+          }
+        </div>
+        <div className={styles.blockWrap}>
+          {/* 邀请成为我的下级代理 */}
+          <div className={styles.itemModule} onClick={this.showShareAgentAction}>
             <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.buyDia} />
-              <span>购买钻石</span>
+              <IconImg className={styles.titleIconImg} src={IconSource.invite} />
+              <span>邀请下级代理</span>
             </FlexRow>
             <Icon type="right" />
-          </FlexRowBetweenWingSpace>
-        }
-        {/* 给玩家充钻 */}
-        {
-          havePowerToRechargeToPlayer &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.goToSelectGame('/turnDiaForPlayer')}>
+          </div>
+          {/* 邀请成为我的下级玩家 */}
+          <div className={styles.itemModule} onClick={this.showSharePlayerAction}>
             <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.turnDia_play} />
-              <span>替玩家购钻</span>
+              <IconImg className={styles.titleIconImg} src={IconSource.invite_player} />
+              <span>邀请下级玩家</span>
             </FlexRow>
             <Icon type="right" />
-            {/* <FlexRow className={styles.titleWrap}>
-              <p>{savePlayerCount || 0}人</p>
-            </FlexRow> */}
-          </FlexRowBetweenWingSpace>
-        }
-        {/* 给代理充钻 */}
-        {
-          havePowerToRechargeToAgent &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/turnDiaForAgent')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.turnDia_agent} />
-              <span>给代理充钻</span>
-            </FlexRow>
-            <Icon type="right" />
-            {/* <FlexRow className={styles.titleWrap}>
-              <p>{saveAgentCount || 0}人</p>
-            </FlexRow> */}
-          </FlexRowBetweenWingSpace>
-        }
-
-        {/* 钻石变化记录 */}
-        {/* {
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/masonryDerail')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.wanjiachongzhi} />
-              <span>钻石变化记录</span>
-            </FlexRow>
-            <Icon type="right" />
-          </FlexRowBetweenWingSpace>
-        } */}
-      </div>
-      <WhiteSpace />
-      <div className={styles.module}>
-        {/* 邀请成为我的下级代理 */}
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={this.showShareAgentAction}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.invite} />
-            <span>邀请下级代理</span>
-          </FlexRow>
-          <Icon type="right" />
-          {/* <FlexRow className={styles.titleWrap}>
-          <Icon type="right" />
-        </FlexRow> */}
-        </FlexRowBetweenWingSpace>
-        {/* 邀请成为我的下级玩家 */}
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={this.showSharePlayerAction}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.invite_player} />
-            <span>邀请下级玩家</span>
-          </FlexRow>
-          <Icon type="right" />
-          {/* <FlexRow className={styles.titleWrap}>
-          <Icon type="right" />
-        </FlexRow> */}
-        </FlexRowBetweenWingSpace>
+          </div>
+        </div>
         {/* 代理阶梯返利 */}
         {
-        this.hasPower('stepRebate') &&
-        <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/stepRebate')}>
-          <FlexRow className={styles.navigateTitleWrap}>
-            <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
-            <span>代理阶梯返利</span>
-          </FlexRow>
-          <Icon type="right" />
-        </FlexRowBetweenWingSpace>
-      }
-      </div>
-
-      { havePowerToBanlance && <WhiteSpace /> }
-      { havePowerToBanlance &&
-        <div className={styles.module}>
-          {/* 提现 */}
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/cashMoney')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.bank} />
-              <span>提现</span>
-            </FlexRow>
-            <Icon type="right" />
-          </FlexRowBetweenWingSpace>
-        </div>
-      }
-      <WhiteSpace />
-      <div className={styles.module}>
-        {/* 查看下级钻石抽成情况 */}
+          (this.hasPower('stepRebate') || this.hasPower('underAgentPercentage')) &&
+          <div className={styles.blockWrap}>
+            {
+              this.hasPower('stepRebate') &&
+              <div>
+                <div className={styles.itemModule} onClick={() => this.navigate('/stepRebate')}>
+                  <FlexRow className={styles.navigateTitleWrap}>
+                    <IconImg className={styles.titleIconImg} src={IconSource.fanli} />
+                    <span>代理阶梯返利</span>
+                  </FlexRow>
+                  <Icon type="right" />
+                </div>
+                {
+                  stepRebateAddedRate != 0 &&
+                  (<div className={styles.itemModule} onClick={() => this.navigate('/stepRebateAdded')}>
+                    <FlexRow className={styles.navigateTitleWrap}>
+                      <IconImg className={styles.titleIconImg} src={IconSource.ewfl} />
+                      <span>代理阶梯返利额外返点</span>
+                    </FlexRow>
+                    <Icon type="right" />
+                  </div>)
+                }
+              </div>
+            }
+            {
+              this.hasPower('underAgentPercentage') &&
+              <div className={styles.itemModule} onClick={() => this.navigate('/myUnderAgent')}>
+                <FlexRow className={styles.navigateTitleWrap}>
+                  <IconImg className={styles.titleIconImg} src={IconSource.xjfl} />
+                  <span>查看下级钻石抽成情况</span>
+                </FlexRow>
+                <Icon type="right" />
+              </div>
+            }
+          </div>
+          }
+        {/* 提现 */}
         {
-          this.hasPower('underAgentPercentage') &&
-          <FlexRowBetweenWingSpace className={styles.borderBottom} onClick={() => this.navigate('/myUnderAgent')}>
-            <FlexRow className={styles.navigateTitleWrap}>
-              <IconImg className={styles.titleIconImg} src={IconSource.xjfl} />
-              <span>查看下级钻石抽成情况</span>
-            </FlexRow>
-            <Icon type="right" />
-            {/* <FlexRow className={styles.titleWrap}>
-              <p>{myUnderAgentCount}人</p>
-              <Icon type="right" />
-            </FlexRow> */}
-          </FlexRowBetweenWingSpace>
+          havePowerToBanlance &&
+          (<div>
+            <div className={styles.blockWrap}>
+              <div className={styles.itemModule} onClick={() => this.navigate('/cashMoney')}>
+                <FlexRow className={styles.navigateTitleWrap}>
+                  <IconImg className={styles.titleIconImg} src={IconSource.bank} />
+                  <span>提现</span>
+                </FlexRow>
+                <Icon type="right" />
+              </div>
+            </div>
+          </div>)
         }
-      </div>
-      <div className={styles.btnContainer}>
-        <div className={styles.btnWrap}>
-          <Button className={styles.optionEditBtn} onClick={this.editPas}>修改密码</Button>
-        </div>
-        <div className={styles.btnWrap}>
-          <Button type="danger" className={styles.optionQuitBtn} onClick={this.logout}>退出</Button>
+        <div className={styles.btnContainer}>
+          <div className={styles.btnWrap}>
+            <Button className={styles.optionEditBtn} onClick={this.editPas}>修改密码</Button>
+          </div>
+          <div className={styles.btnWrap}>
+            <Button type="red" className={styles.optionQuitBtn} onClick={this.logout}>安全退出</Button>
+          </div>
         </div>
       </div>
       {/* 分享代理 */}
-      <Modal
-        transparent
-        maskClosable
-        className={styles.payModal}
+      <SlideUpModal
         visible={shareAgentVisible}
         onClose={this.toggleShareAgentImg}
       >
-        <div onClick={this.toggleShareAgentImg} className={styles.payPicker}>
+        <div className={styles.sharePicker} onClick={this.toggleShareAgentImg}>
           <img className={styles.shareImg} src={IconSource.shareAgent} />
         </div>
-      </Modal>
+      </SlideUpModal>
       {/* 分享玩家 */}
-      <Modal
-        transparent
-        maskClosable
-        className={styles.payModal}
+      <SlideUpModal
         visible={sharePlayerVisible}
         onClose={this.toggleSharePlayertImg}
       >
-        <div onClick={this.toggleSharePlayertImg} className={styles.sharePicker}>
+        <div className={styles.sharePicker} onClick={this.toggleSharePlayertImg}>
           <img className={styles.shareImg} src={IconSource.sharePlayer} />
         </div>
-      </Modal>
+      </SlideUpModal>
+      {/* 公告 */}
+      <CloseModal
+        className={styles.payModal}
+        visible={isShowNotice}
+        onClose={this.toggleShowNotice}
+      >
+        <div className={styles.noticeWrap} dangerouslySetInnerHTML={notiveInfoHtml} />
+      </CloseModal>
     </div>);
   }
 }

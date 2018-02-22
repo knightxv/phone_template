@@ -9,7 +9,7 @@ class WechatAuth extends BaseComponent {
     };
   }
   async componentWillMount() {
-    const { actionType, headImageUrl, accountID, deleInviter, token } = this.router.getQuery();
+    const { actionType, headImageUrl, accountID, deleInviter, token, nickName, sex, openid } = this.router.getQuery();
     const accountId = accountID;
     const pCode = deleInviter;
     if (typeof accountId === 'undefined') {
@@ -21,7 +21,7 @@ class WechatAuth extends BaseComponent {
     if (actionType === 'pcLogin') {
       const { uuid } = this.router.getQuery();
       const pcLoginRes = await this.http.webHttp.get('/spreadApi/wechat/pcWeChatLogin', {
-        uuid, token, accountId, headImageUrl,
+        uuid, token, accountId, headImageUrl, nickName, sex, openid,
       });
       if (pcLoginRes.isSuccess) {
         // this.message.info('验证成功'); // 跳转登录成功页面
@@ -39,6 +39,9 @@ class WechatAuth extends BaseComponent {
       accountId,
       headImageUrl,
       token,
+      nickName,
+      sex,
+      openid,
     };
     const webRes = await this.http.webHttp.get('/spreadApi/wechat/login', webParams);
     // isRegister 代表已经微信已经绑定账号了
@@ -53,12 +56,20 @@ class WechatAuth extends BaseComponent {
       if (webRes.data.isRegister) {
         this.router.go('/homePage');
       } else {
+        const { agentNotice } = this.Enum.htmlTextType;
+        const res = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', {
+          type: agentNotice,
+        });
+        if (res.isSuccess && res.data.htmlText) {
+          this.router.go('/agentNotice', {
+            redirect: '/wechatBindPhone',
+          });
+          return;
+        }
         this.router.go('/wechatBindPhone');
       }
       return;
     }
-    
-
     // 邀请代理流程
     if (actionType === 'inviteProxy') {
       const isRegister = webRes.data.isRegister;
@@ -69,10 +80,31 @@ class WechatAuth extends BaseComponent {
           // 已经有账号，但是没上级
           const isGoBindPhone = window.confirm('该手机已创建账户，暂无法更换上级邀请码，微信绑定账户后可使用微信快速登录，是否继续绑定账户？');
           if (isGoBindPhone) {
+            const { agentNotice } = this.Enum.htmlTextType;
+            const res = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', {
+              type: agentNotice,
+            });
+            if (res.isSuccess && res.data.htmlText) {
+              this.router.go('/agentNotice', {
+                redirect: '/wechatBindPhone',
+              });
+              return;
+            }
             this.router.go('/wechatBindPhone');
           } else {
             this.router.go('/login');
           }
+          return;
+        }
+        const { agentNotice } = this.Enum.htmlTextType;
+        const res = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', {
+          type: agentNotice,
+        });
+        if (res.isSuccess && res.data.htmlText) {
+          this.router.go('/agentNotice', {
+            pCode,
+            redirect: '/wechatBindPhone',
+          });
           return;
         }
         this.router.go('/wechatBindPhone', {

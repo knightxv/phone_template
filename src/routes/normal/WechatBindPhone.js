@@ -107,10 +107,10 @@ class WechatBindPhone extends BaseComponent {
         </Helmet>
         <NavBar
           title="绑定手机"
-          onClick={this.router.back}
+          onClick={() => this.router.go('/login')}
         />
         <div className={styles.contentContainer}>
-          <div>
+          <div className={classnames(styles.blockContainer, styles.blockInputWrap)}>
             <div className={styles.inputWrap}>
               <InputItem
                 value={phone}
@@ -141,11 +141,11 @@ class WechatBindPhone extends BaseComponent {
                 placeholder="请输入代理的邀请码(已注册账户填写无效)"
               />
             </div>
-            <div className={styles.registerWrap}>
+            <div className={styles.btnWrap}>
               <Button
                 disabled={btnDiabled}
                 onClick={this.register}
-              >确认</Button>
+              >下一步</Button>
             </div>
           </div>
           {

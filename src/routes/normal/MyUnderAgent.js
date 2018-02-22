@@ -15,7 +15,7 @@ class MyUnderAgent extends BaseComponent {
       tableData: [],
       isLoaded: false,
       searchVal: '',
-      notice: '代理填写您的邀请码,该代理充钻您就可以获得10%反钻', // 公告内容
+      notice: '', // 代理填写您的邀请码,该代理充钻您就可以获得10%反钻
     };
   }
   rechargeForAgent = (agentId) => {
@@ -28,6 +28,15 @@ class MyUnderAgent extends BaseComponent {
     if (res.isSuccess) {
       this.setState({
         tableData: res.data,
+      });
+    }
+    const { myUnderAgentNotice } = this.Enum.htmlTextType;
+    const extraRes = await this.http.webHttp.get('/ddm/phone/api/getHtmlText', {
+      type: myUnderAgentNotice,
+    });
+    if (extraRes.isSuccess) {
+      this.setState({
+        notice: extraRes.data.htmlText,
       });
     }
   }
@@ -78,6 +87,13 @@ class MyUnderAgent extends BaseComponent {
       {
         dataIndex: 'agentInviteCode',
         title: '代理ID',
+        render(rowVal) {
+          const { agentInviteCode, underAgentName } = rowVal;
+          return (<div className={styles.rowItemWrap}>
+            <div className={styles.agentName}> { underAgentName } </div>
+            <div> { agentInviteCode } </div>
+          </div>);
+        },
       },
       {
         dataIndex: 'CommissionOfAll',
@@ -149,7 +165,6 @@ class MyUnderAgent extends BaseComponent {
       ...item,
       remark: columnsRemark[i],
     }));
-
     return (
       <div className={styles.container}>
         <Title>我的下级代理</Title>
