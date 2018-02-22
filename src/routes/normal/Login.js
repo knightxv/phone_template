@@ -52,6 +52,7 @@ class Login extends BaseComponent {
         pCode: pCode || '',
         redirect: '/register',
       });
+      return;
     }
     if (pCode) {
       this.router.go('/register', {
